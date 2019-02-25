@@ -1,0 +1,6 @@
+framework module Pods_liblinphoneTester {
+  umbrella header "Pods-liblinphoneTester-umbrella.h"
+
+  export *
+  module * { export * }
+}
