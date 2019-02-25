@@ -155,6 +155,8 @@
 		15D21BE52176E70000FEBED2 /* EditProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15D21BE32176E70000FEBED2 /* EditProfileViewController.xib */; };
 		15D480E621EC8FBE00213F45 /* iPadAccountSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15D480E421EC8FBE00213F45 /* iPadAccountSettingsViewController.m */; };
 		15D480E721EC8FBE00213F45 /* iPadAccountSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15D480E521EC8FBE00213F45 /* iPadAccountSettingsViewController.xib */; };
+		15DD9FD32223A0810073B1BE /* SignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15DD9FD12223A0810073B1BE /* SignInViewController.m */; };
+		15DD9FD42223A0810073B1BE /* SignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15DD9FD22223A0810073B1BE /* SignInViewController.xib */; };
 		15E01DBB2182BC3700C0A40F /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15E01DB92182BC3700C0A40F /* AboutViewController.m */; };
 		15E01DBC2182BC3700C0A40F /* AboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15E01DBA2182BC3700C0A40F /* AboutViewController.xib */; };
 		15E1D8CE21708AE900E23B2C /* add_contact_dialer.png in Resources */ = {isa = PBXBuildFile; fileRef = 15E1D8C721708AE700E23B2C /* add_contact_dialer.png */; };
@@ -1128,6 +1130,9 @@
 		15D480E321EC8FBE00213F45 /* iPadAccountSettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iPadAccountSettingsViewController.h; path = "iPad/Account Settings/iPadAccountSettingsViewController.h"; sourceTree = "<group>"; };
 		15D480E421EC8FBE00213F45 /* iPadAccountSettingsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = iPadAccountSettingsViewController.m; path = "iPad/Account Settings/iPadAccountSettingsViewController.m"; sourceTree = "<group>"; };
 		15D480E521EC8FBE00213F45 /* iPadAccountSettingsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = iPadAccountSettingsViewController.xib; path = "iPad/Account Settings/iPadAccountSettingsViewController.xib"; sourceTree = "<group>"; };
+		15DD9FD02223A0810073B1BE /* SignInViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SignInViewController.h; path = SignIn/SignInViewController.h; sourceTree = "<group>"; };
+		15DD9FD12223A0810073B1BE /* SignInViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = SignInViewController.m; path = SignIn/SignInViewController.m; sourceTree = "<group>"; };
+		15DD9FD22223A0810073B1BE /* SignInViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SignInViewController.xib; path = SignIn/SignInViewController.xib; sourceTree = "<group>"; };
 		15E01DB82182BC3700C0A40F /* AboutViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AboutViewController.h; path = More/AboutViewController.h; sourceTree = "<group>"; };
 		15E01DB92182BC3700C0A40F /* AboutViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AboutViewController.m; path = More/AboutViewController.m; sourceTree = "<group>"; };
 		15E01DBA2182BC3700C0A40F /* AboutViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = AboutViewController.xib; path = More/AboutViewController.xib; sourceTree = "<group>"; };
@@ -2411,6 +2416,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				15DD9FC92223A03B0073B1BE /* SignIn */,
 				156E175521E85A9200C15E79 /* iPad */,
 				15B9C6E821DF5D33009CCD53 /* Drawing */,
 				15E9153C21C4B5210083EC30 /* linphone-Info.plist */,
@@ -2765,6 +2771,16 @@
 				8454876F221863190065E3A4 /* iPadSendLogsViewController.xib */,
 			);
 			name = "Account Settings";
+			sourceTree = "<group>";
+		};
+		15DD9FC92223A03B0073B1BE /* SignIn */ = {
+			isa = PBXGroup;
+			children = (
+				15DD9FD02223A0810073B1BE /* SignInViewController.h */,
+				15DD9FD12223A0810073B1BE /* SignInViewController.m */,
+				15DD9FD22223A0810073B1BE /* SignInViewController.xib */,
+			);
+			name = SignIn;
 			sourceTree = "<group>";
 		};
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
@@ -4611,6 +4627,7 @@
 				84E07EF92025E3160000CD12 /* silence.mp3 in Resources */,
 				63E27A321C4FECD000D332AE /* LaunchScreen.xib in Resources */,
 				15B9C6F521DF67D8009CCD53 /* ic_controls.png in Resources */,
+				15DD9FD42223A0810073B1BE /* SignInViewController.xib in Resources */,
 				848C5D9221F4313200094D7C /* ic_muted_gray.png in Resources */,
 				15C5A5FE219AAF5600FDD6C5 /* NewHistoryDetailCell.xib in Resources */,
 				636316D41A1DEC650009B839 /* SettingsView.xib in Resources */,
@@ -5019,6 +5036,7 @@
 				842C73052027744D009C4F9C /* YBHud.m in Sources */,
 				843ED6831FB66BBC005FE1C1 /* CallnexSwitchButton.m in Sources */,
 				84C1E2371FAEBAE100EED0B9 /* BEMAnimationManager.m in Sources */,
+				15DD9FD32223A0810073B1BE /* SignInViewController.m in Sources */,
 				1521E0B821EF3B810085EAB1 /* iPadDialerViewController.m in Sources */,
 				84E286C71FC9E1AC009CBA27 /* SDWebImageDecoder.m in Sources */,
 				84B889E51FAF6C1D008D88C5 /* PhoneBookObject.m in Sources */,
