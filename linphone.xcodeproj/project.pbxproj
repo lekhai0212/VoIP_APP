@@ -18,6 +18,11 @@
 		1521E0BE21EF3C260085EAB1 /* iPadCallHistoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1521E0BC21EF3C260085EAB1 /* iPadCallHistoryViewController.xib */; };
 		1523A3C521FB134D00C40F44 /* ic_save.png in Resources */ = {isa = PBXBuildFile; fileRef = 1523A3BE21FB134C00C40F44 /* ic_save.png */; };
 		152F22361B15E889008C0621 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 152F22351B15E889008C0621 /* libxml2.dylib */; };
+		1536BA9D2224E11A00D810BE /* LanguageUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 1536BA9C2224E11A00D810BE /* LanguageUtil.m */; };
+		1536BAA72224EC6000D810BE /* ic_lock.png in Resources */ = {isa = PBXBuildFile; fileRef = 1536BAA52224EC5D00D810BE /* ic_lock.png */; };
+		1536BAA82224EC6000D810BE /* ic_user.png in Resources */ = {isa = PBXBuildFile; fileRef = 1536BAA62224EC5F00D810BE /* ic_user.png */; };
+		1536BAAA2224EDF900D810BE /* test_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 1536BAA92224EDF600D810BE /* test_logo.png */; };
+		1536BAAC2224F7C300D810BE /* test_logo1.png in Resources */ = {isa = PBXBuildFile; fileRef = 1536BAAB2224F7C300D810BE /* test_logo1.png */; };
 		153D000D2164A67E007B69B3 /* numpad_sharp_default.png in Resources */ = {isa = PBXBuildFile; fileRef = 153DFFFE2164A678007B69B3 /* numpad_sharp_default.png */; };
 		153D000E2164A67E007B69B3 /* numpad_four_default.png in Resources */ = {isa = PBXBuildFile; fileRef = 153DFFFF2164A678007B69B3 /* numpad_four_default.png */; };
 		153D000F2164A67E007B69B3 /* numpad_six_default.png in Resources */ = {isa = PBXBuildFile; fileRef = 153D00002164A679007B69B3 /* numpad_six_default.png */; };
@@ -961,6 +966,13 @@
 		1521E0BC21EF3C260085EAB1 /* iPadCallHistoryViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = iPadCallHistoryViewController.xib; path = iPad/Call/iPadCallHistoryViewController.xib; sourceTree = "<group>"; };
 		1523A3BE21FB134C00C40F44 /* ic_save.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_save.png; sourceTree = "<group>"; };
 		152F22351B15E889008C0621 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		1536BA9B2224E11A00D810BE /* LanguageUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LanguageUtil.h; path = Utils/LanguageUtil.h; sourceTree = "<group>"; };
+		1536BA9C2224E11A00D810BE /* LanguageUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = LanguageUtil.m; path = Utils/LanguageUtil.m; sourceTree = "<group>"; };
+		1536BAA42224E32100D810BE /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1536BAA52224EC5D00D810BE /* ic_lock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_lock.png; sourceTree = "<group>"; };
+		1536BAA62224EC5F00D810BE /* ic_user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_user.png; sourceTree = "<group>"; };
+		1536BAA92224EDF600D810BE /* test_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_logo.png; sourceTree = "<group>"; };
+		1536BAAB2224F7C300D810BE /* test_logo1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_logo1.png; sourceTree = "<group>"; };
 		153D00002164A679007B69B3 /* numpad_six_default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = numpad_six_default.png; path = Resources/images/keypad/numpad_six_default.png; sourceTree = SOURCE_ROOT; };
 		153D00012164A679007B69B3 /* numpad_zero_default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = numpad_zero_default.png; path = Resources/images/keypad/numpad_zero_default.png; sourceTree = SOURCE_ROOT; };
 		153D00022164A679007B69B3 /* call_default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = call_default.png; path = Resources/images/keypad/call_default.png; sourceTree = SOURCE_ROOT; };
@@ -3122,6 +3134,10 @@
 		633FEBE11D3CD5570014B822 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				1536BAA92224EDF600D810BE /* test_logo.png */,
+				1536BAAB2224F7C300D810BE /* test_logo1.png */,
+				1536BAA52224EC5D00D810BE /* ic_lock.png */,
+				1536BAA62224EC5F00D810BE /* ic_user.png */,
 				156910DD21F5AC2A005D20DF /* messi.jpg */,
 				8494CB9722101778001D6FB4 /* ic_dial.png */,
 				8494CB9F22102F1B001D6FB4 /* ic_trash_ipad.png */,
@@ -4121,6 +4137,8 @@
 				1596F1DC21A4FBED005152AF /* WebServiceUtils.m */,
 				15A4333621A7EE4D00055E02 /* WriteLogsUtils.h */,
 				15A4333521A7EE4A00055E02 /* WriteLogsUtils.m */,
+				1536BA9B2224E11A00D810BE /* LanguageUtil.h */,
+				1536BA9C2224E11A00D810BE /* LanguageUtil.m */,
 				1599BB0D21B14E5A00A7903D /* AESCrypt */,
 			);
 			name = Utils;
@@ -4382,6 +4400,7 @@
 				tr,
 				zh_CN,
 				fr,
+				vi,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			productRefGroup = 19C28FACFE9D520D11CA2CBB /* Products */;
@@ -4492,6 +4511,7 @@
 				84E07EF72025DD8A0000CD12 /* callnex_ring.wav in Resources */,
 				84C0018521B1781200105B00 /* file_encrypt.txt in Resources */,
 				841B35922191F1360019BD45 /* ConferenceTableViewCell.xib in Resources */,
+				1536BAA82224EC6000D810BE /* ic_user.png in Resources */,
 				153D00152164A67E007B69B3 /* numpad_clear.png in Resources */,
 				1592762721EC35DB009D22FD /* youtube.png in Resources */,
 				843ED6761FB66A36005FE1C1 /* SettingCell.xib in Resources */,
@@ -4726,6 +4746,7 @@
 				8440F186216BA82000BB559C /* mini_key_5_hover.png in Resources */,
 				84F81BEA21EF86C3009629C9 /* ic_keyboard_black.png in Resources */,
 				84ECF9C0216679A70067B4B6 /* ic_pause_dis.png in Resources */,
+				1536BAA72224EC6000D810BE /* ic_lock.png in Resources */,
 				848C5D9621F436DD00094D7C /* ic_pause_call_gray.png in Resources */,
 				84F81BE921EF86C3009629C9 /* ic_keyboard_white.png in Resources */,
 				84ECF9BD216679A70067B4B6 /* ic_keypad_def.png in Resources */,
@@ -4736,6 +4757,7 @@
 				8429870F21B29D4000150EB0 /* ic_history_bottom_bar_def.png in Resources */,
 				153D004D2164D9D3007B69B3 /* numpad_sharp_hover.png in Resources */,
 				63EC8D391D7438660066547B /* AssistantLinkView.xib in Resources */,
+				1536BAAC2224F7C300D810BE /* test_logo1.png in Resources */,
 				D38187CD15FE346700C3EDCA /* HistoryDetailsView.xib in Resources */,
 				639E9CA61C0DB7F200019A75 /* UIChatCreateCell.xib in Resources */,
 				F0642EF119DAC891009DB336 /* MainStoryboard.storyboard in Resources */,
@@ -4810,6 +4832,7 @@
 				843ED6661FB65989005FE1C1 /* MenuCell.xib in Resources */,
 				8440F18B216BA82000BB559C /* mini_key_4_hover.png in Resources */,
 				84C47CD81FB5E8B60015695E /* UIKContactCell.xib in Resources */,
+				1536BAAA2224EDF900D810BE /* test_logo.png in Resources */,
 				84E87DDB1FC1DE3B0074A54C /* NewContactViewController.xib in Resources */,
 				153D00172164A67E007B69B3 /* hotline_default.png in Resources */,
 				63AADBF51B6A0FF200AA16FD /* linphonerc in Resources */,
@@ -5214,6 +5237,7 @@
 				635775251B6673EC00C8B704 /* HistoryDetailsTableView.m in Sources */,
 				84EFFE071FF3E6B60085A9F4 /* DGActivityIndicatorBallClipRotatePulseAnimation.m in Sources */,
 				156910D221F56E6B005D20DF /* CustomTableView.m in Sources */,
+				1536BA9D2224E11A00D810BE /* LanguageUtil.m in Sources */,
 				84C1E26B1FAEBEA500EED0B9 /* ContactObject.m in Sources */,
 				8454877A221864400065E3A4 /* iPadEditProfileViewController.m in Sources */,
 				84C47CD71FB5E8B60015695E /* UIKContactCell.m in Sources */,
@@ -5610,6 +5634,7 @@
 				63AADBE11B6A0FF200AA16FD /* ru */,
 				63AADBE71B6A0FF200AA16FD /* zh_TW */,
 				8C1C43211E438DB600FE9A91 /* fr */,
+				1536BAA42224E32100D810BE /* vi */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

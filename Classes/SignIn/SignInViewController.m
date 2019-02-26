@@ -12,7 +12,7 @@
 @end
 
 @implementation SignInViewController
-@synthesize imgLogo, lbCompany, viewSignIn, tfAccountID, imgAccountID, tfPassword, imgPassword, icShowPassword, btnSignIn, lbForgotPassword, lbBottom;
+@synthesize imgLogo, lbCompany, viewSignIn, tfAccountID, btnAccountID, tfPassword, btnPassword, icShowPassword, btnSignIn, lbForgotPassword, lbBottom;
 
 #pragma mark - UICompositeViewDelegate Functions
 static UICompositeViewDescription *compositeDescription = nil;
@@ -38,6 +38,8 @@ static UICompositeViewDescription *compositeDescription = nil;
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [self setupUIForView];
+    
+    tfAccountID.text = [[LanguageUtil sharedInstance] getContent:@"Test key"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -56,14 +58,118 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)setupUIForView {
     self.view.backgroundColor = [UIColor colorWithRed:(50/255.0) green:(67/255.0) blue:(92/255.0) alpha:1.0];
     
-    float hTextfield = 38.0;
+    float hTextfield = 42.0;
     float hSignInBTN = 45.0;
     
-    float hSignIn = hTextfield + 10.0 + hTextfield + 20.0 + hSignInBTN + 10.0 + hTextfield;
+    float hSignIn = hTextfield + 20.0 + hTextfield + 30.0 + hSignInBTN + 20.0 + hTextfield;
+    viewSignIn.backgroundColor = UIColor.clearColor;
     [viewSignIn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.view);
-        make.centerY.equalTo(self.view.mas_centerY).offset(50.0);
+        make.centerY.equalTo(self.view.mas_centerY).offset(20);
         make.height.mas_equalTo(hSignIn);
+    }];
+    
+    float padding = 40.0;
+    //  account textfield
+    [tfAccountID mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(viewSignIn);
+        make.left.equalTo(viewSignIn).offset(padding);
+        make.right.equalTo(viewSignIn).offset(-padding);
+        make.height.mas_equalTo(hTextfield);
+    }];
+    tfAccountID.borderStyle = UITextBorderStyleNone;
+    tfAccountID.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, hTextfield, hTextfield)];
+    tfAccountID.leftViewMode = UITextFieldViewModeAlways;
+    
+    UILabel *lbAccount = [[UILabel alloc] init];
+    lbAccount.backgroundColor = [UIColor colorWithRed:(220/255.0) green:(220/255.0)
+                                                 blue:(220/255.0) alpha:1.0];
+    [tfAccountID addSubview: lbAccount];
+    [lbAccount mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(tfAccountID).offset(8.0);
+        make.bottom.right.equalTo(tfAccountID);
+        make.height.mas_equalTo(1.0);
+    }];
+    
+    btnAccountID.enabled = NO;
+    [btnAccountID setImage:[UIImage imageNamed:@"ic_user"] forState:UIControlStateDisabled];
+    btnAccountID.imageEdgeInsets = UIEdgeInsetsMake(8, 8, 8, 8);
+    [btnAccountID mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.bottom.equalTo(tfAccountID);
+        make.width.mas_equalTo(hTextfield);
+    }];
+    
+    //  password textfield
+    [tfPassword mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(tfAccountID.mas_bottom).offset(20.0);
+        make.left.right.equalTo(tfAccountID);
+        make.height.mas_equalTo(hTextfield);
+    }];
+    tfPassword.borderStyle = UITextBorderStyleNone;
+    tfPassword.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, hTextfield, hTextfield)];
+    tfPassword.leftViewMode = UITextFieldViewModeAlways;
+    
+    UILabel *lbPassword = [[UILabel alloc] init];
+    lbPassword.backgroundColor = lbAccount.backgroundColor;
+    [tfPassword addSubview: lbPassword];
+    [lbPassword mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(tfPassword).offset(8.0);
+        make.right.bottom.equalTo(tfPassword);
+        make.height.mas_equalTo(1.0);
+    }];
+    
+    btnPassword.enabled = NO;
+    [btnPassword setImage:[UIImage imageNamed:@"ic_lock"] forState:UIControlStateDisabled];
+    btnPassword.imageEdgeInsets = UIEdgeInsetsMake(8, 8, 8, 8);
+    [btnPassword mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.bottom.equalTo(tfPassword);
+        make.width.mas_equalTo(hTextfield);
+    }];
+    
+    NSString *title = [[LanguageUtil sharedInstance] getContent:@"Show password"];
+    [icShowPassword setTitle:[title uppercaseString] forState:UIControlStateNormal];
+    [icShowPassword mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.right.bottom.equalTo(tfPassword);
+        make.width.mas_equalTo(hTextfield);
+    }];
+    
+    //  signin button
+    NSString *btnTitle = [[[LanguageUtil sharedInstance] getContent:@"Sign In"] uppercaseString];
+    [btnSignIn setTitle:btnTitle forState:UIControlStateNormal];
+    btnSignIn.titleLabel.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightRegular];
+    [btnSignIn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(tfPassword.mas_bottom).offset(30.0);
+        make.left.right.equalTo(tfPassword);
+        make.height.mas_equalTo(hSignInBTN);
+    }];
+    
+    //  signin button
+    lbForgotPassword.text = [[LanguageUtil sharedInstance] getContent:@"Forgot password"];
+    lbForgotPassword.textColor = [UIColor colorWithRed:(235/255.0) green:(235/255.0)
+                                                  blue:(235/255.0) alpha:1.0];
+    lbForgotPassword.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightThin];
+    [lbForgotPassword mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(btnSignIn.mas_bottom).offset(20.0);
+        make.left.right.equalTo(tfPassword);
+        make.height.mas_equalTo(hTextfield);
+    }];
+    
+    //  header
+    float top = ((SCREEN_HEIGHT - hSignIn)/2 - 160.0)/2;
+    [imgLogo mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.view.mas_centerX);
+        make.top.equalTo(self.view).offset(top);
+        make.width.height.mas_equalTo(160.0);
+    }];
+    
+    lbCompany.text = [[LanguageUtil sharedInstance] getContent:@"CLOUDPBX"];
+    lbCompany.textColor = [UIColor colorWithRed:(240/255.0) green:(240/255.0)
+                                                  blue:(240/255.0) alpha:1.0];
+    lbCompany.font = [UIFont systemFontOfSize:24.0 weight:UIFontWeightThin];
+    [lbCompany mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(imgLogo.mas_bottom).offsetof(z, <#d#>);
+        make.left.right.equalTo(self.view);
+        make.height.mas_equalTo(40.0);
     }];
 }
 

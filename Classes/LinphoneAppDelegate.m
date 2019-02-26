@@ -511,20 +511,7 @@ void onUncaughtException(NSException* exception)
     listNumber = [[NSArray alloc] initWithObjects: @"+", @"0", @"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", nil];
     
     //  Set default language for app if haven't setted yet
-    NSString *curLanguage = [[NSUserDefaults standardUserDefaults] objectForKey:language_key];
-    if (curLanguage == nil) {
-        NSString * devLanguage = [[NSLocale preferredLanguages] firstObject];
-        if (![AppUtils isNullOrEmpty: devLanguage] && [devLanguage hasPrefix:@"vi"]) {
-            curLanguage = key_vi;
-        }else{
-            curLanguage = key_en;
-        }
-        [[NSUserDefaults standardUserDefaults] setObject:curLanguage forKey:language_key];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-    
-    localization = [HMLocalization sharedInstance];
-    [localization setLanguage: curLanguage];
+    [[LanguageUtil sharedInstance] setCustomLanguage: key_vi];
     
     if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0")){
         UNUserNotificationCenter *notifiCenter = [UNUserNotificationCenter currentNotificationCenter];

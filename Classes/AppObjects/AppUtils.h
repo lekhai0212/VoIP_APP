@@ -120,5 +120,6 @@
 + (void)showDetailViewWithController: (UIViewController *)detailVC;
 + (void)setSelected: (BOOL)selected forButton: (UIButton *)button;
 + (NSString *)getTypeOfPhone: (NSString *)typePhone;
++ (UIImage *)imageWithImage:(UIImage *)sourceImage scaledToSize:(CGSize)targetSize;
 
 @end

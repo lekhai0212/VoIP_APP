@@ -15,10 +15,11 @@
 
 @property (weak, nonatomic) IBOutlet UIView *viewSignIn;
 @property (weak, nonatomic) IBOutlet UITextField *tfAccountID;
-@property (weak, nonatomic) IBOutlet UIImageView *imgAccountID;
+@property (weak, nonatomic) IBOutlet UIButton *btnAccountID;
 
 @property (weak, nonatomic) IBOutlet UITextField *tfPassword;
-@property (weak, nonatomic) IBOutlet UIImageView *imgPassword;
+@property (weak, nonatomic) IBOutlet UIButton *btnPassword;
+
 @property (weak, nonatomic) IBOutlet UIButton *icShowPassword;
 @property (weak, nonatomic) IBOutlet UIButton *btnSignIn;
 @property (weak, nonatomic) IBOutlet UILabel *lbForgotPassword;

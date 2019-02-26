@@ -211,3 +211,10 @@
 "Not logged in" = "Not logged in"
 "PBX account" = "PBX account"
 "Do you want to call to hotline for assistance?" = "Do you want to call to hotline for assistance?"
+
+
+
+"Show password" = "Show"
+"Hide password" = "Hide"
+"Sign In" = "Sign In"
+"Forgot password" = "Forgot password"
