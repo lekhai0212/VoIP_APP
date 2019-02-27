@@ -490,6 +490,7 @@
 		8442A36B1FB13C0F00F08F11 /* ContactsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8442A3691FB13C0F00F08F11 /* ContactsViewController.xib */; };
 		8442A3791FB13D0D00F08F11 /* PBXContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8442A3771FB13D0D00F08F11 /* PBXContactsViewController.m */; };
 		8442A37A1FB13D0D00F08F11 /* PBXContactsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8442A3781FB13D0D00F08F11 /* PBXContactsViewController.xib */; };
+		8444C41A22262C4500D11166 /* bg_button_login.png in Resources */ = {isa = PBXBuildFile; fileRef = 8444C41322262C4400D11166 /* bg_button_login.png */; };
 		845056CC1FE596200035B6B3 /* OutgoingCallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 845056CA1FE596200035B6B3 /* OutgoingCallViewController.m */; };
 		845056CD1FE596200035B6B3 /* OutgoingCallViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 845056CB1FE596200035B6B3 /* OutgoingCallViewController.xib */; };
 		84515E67200EEE1A007246E9 /* msg.wav in Resources */ = {isa = PBXBuildFile; fileRef = 84515E66200EEE19007246E9 /* msg.wav */; };
@@ -1571,6 +1572,7 @@
 		8442A3761FB13D0D00F08F11 /* PBXContactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PBXContactsViewController.h; path = Contacts/PBXContactsViewController.h; sourceTree = "<group>"; };
 		8442A3771FB13D0D00F08F11 /* PBXContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PBXContactsViewController.m; path = Contacts/PBXContactsViewController.m; sourceTree = "<group>"; };
 		8442A3781FB13D0D00F08F11 /* PBXContactsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PBXContactsViewController.xib; path = Contacts/PBXContactsViewController.xib; sourceTree = "<group>"; };
+		8444C41322262C4400D11166 /* bg_button_login.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_button_login.png; sourceTree = "<group>"; };
 		844DEF071FE8D3410047A358 /* Intents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Intents.framework; path = System/Library/Frameworks/Intents.framework; sourceTree = SDKROOT; };
 		845056C91FE596200035B6B3 /* OutgoingCallViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OutgoingCallViewController.h; sourceTree = "<group>"; };
 		845056CA1FE596200035B6B3 /* OutgoingCallViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OutgoingCallViewController.m; sourceTree = "<group>"; };
@@ -3134,6 +3136,7 @@
 		633FEBE11D3CD5570014B822 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				8444C41322262C4400D11166 /* bg_button_login.png */,
 				1536BAA92224EDF600D810BE /* test_logo.png */,
 				1536BAAB2224F7C300D810BE /* test_logo1.png */,
 				1536BAA52224EC5D00D810BE /* ic_lock.png */,
@@ -4717,6 +4720,7 @@
 				84ECF9C6216679A70067B4B6 /* ic_addcall_dis.png in Resources */,
 				15F2E5FC216B575D0076CB1F /* background_more.png in Resources */,
 				153D00382164D537007B69B3 /* menu_keypad_act.png in Resources */,
+				8444C41A22262C4500D11166 /* bg_button_login.png in Resources */,
 				15B292C121FC0AF4005B6568 /* ic_speaker_ble_def.png in Resources */,
 				159E08842179E9130056E2BB /* ic_not_check.png in Resources */,
 				1592762621EC35DB009D22FD /* headset.png in Resources */,
