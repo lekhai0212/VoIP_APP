@@ -150,6 +150,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     btnSignIn.titleLabel.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightRegular];
     btnSignIn.backgroundColor = [UIColor colorWithRed:(73/255.0) green:(207/255.0)
                                                  blue:(246/255.0) alpha:1.0];
+    btnSignIn.layer.cornerRadius = 5.0;
     [btnSignIn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(tfPassword.mas_bottom).offset(30.0);
         make.left.right.equalTo(tfPassword);
