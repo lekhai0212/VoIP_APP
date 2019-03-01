@@ -226,7 +226,7 @@
 {
     AccountState curState = [SipUtils getStateOfDefaultProxyConfig];
     if (curState != eAccountOn) {
-        NSString *content = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Can not make call now. Perhaps you have not signed your account yet!"];
+        NSString *content = [[LanguageUtil sharedInstance] getContent:@"Can not make call now. Perhaps you have not signed your account yet!"];
         [[LinphoneAppDelegate sharedInstance].window makeToast:content duration:3.0 position:CSToastPositionCenter];
         
         return NO;
@@ -240,14 +240,14 @@
     {
         BOOL networkReady = [DeviceUtils checkNetworkAvailable];
         if (!networkReady) {
-            NSString *content = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Please check your internet connection!"];
+            NSString *content = [[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"];
             [[LinphoneAppDelegate sharedInstance].window makeToast:content duration:2.0 position:CSToastPositionCenter];
             
             return NO;
         }
         
         if ([phoneNumber isEqualToString: USERNAME]) {
-            NSString *content = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Can not make call with yourself"];
+            NSString *content = [[LanguageUtil sharedInstance] getContent:@"Can not make call with yourself"];
             [[LinphoneAppDelegate sharedInstance].window makeToast:content duration:2.0 position:CSToastPositionCenter];
             return NO;
         }
@@ -274,7 +274,7 @@
         }
         return YES;
     }else{
-        NSString *content = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Phone number can not empty!"];
+        NSString *content = [[LanguageUtil sharedInstance] getContent:@"Phone number can not empty!"];
         [[LinphoneAppDelegate sharedInstance].window makeToast:content duration:2.0 position:CSToastPositionCenter];
     }
     return NO;
@@ -386,7 +386,7 @@
 }
 
 + (NSString *)displayNameForAddress:(const LinphoneAddress *)addr {
-    NSString *ret = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Unknown"];
+    NSString *ret = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
     const char *lDisplayName = linphone_address_get_display_name(addr);
     const char *lUserName = linphone_address_get_username(addr);
     if (lDisplayName) {

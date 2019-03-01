@@ -20,7 +20,7 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
-    self.title = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"More"];
+    self.title = [[LanguageUtil sharedInstance] getContent:@"More"];
 }
 
 @end

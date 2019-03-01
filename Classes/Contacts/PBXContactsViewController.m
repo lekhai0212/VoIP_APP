@@ -86,12 +86,12 @@
                 _tbContacts.hidden = YES;
                 _lbContacts.hidden = NO;
                 
-                _lbContacts.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"No contacts"];
+                _lbContacts.text = [[LanguageUtil sharedInstance] getContent:@"No contacts"];
             }
         }else{
             _tbContacts.hidden = YES;
             _lbContacts.hidden = NO;
-            _lbContacts.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"You have not synced pbx contacts"];
+            _lbContacts.text = [[LanguageUtil sharedInstance] getContent:@"You have not synced pbx contacts"];
         }
     }else{
         if ([LinphoneAppDelegate sharedInstance].pbxContacts != nil) {
@@ -109,7 +109,7 @@
             _tbContacts.hidden = YES;
             _lbContacts.hidden = NO;
             
-            _lbContacts.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"No contacts"];
+            _lbContacts.text = [[LanguageUtil sharedInstance] getContent:@"No contacts"];
         }
     }
     
@@ -150,7 +150,7 @@
 #pragma mark - my functions
 
 - (void)showContentWithCurrentLanguage {
-    _lbContacts.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"No contacts"];
+    _lbContacts.text = [[LanguageUtil sharedInstance] getContent:@"No contacts"];
 }
 
 //  setup thông tin cho tableview

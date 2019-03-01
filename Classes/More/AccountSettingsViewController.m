@@ -13,7 +13,6 @@
 #import "ManagerPasswordViewController.h"
 
 @interface AccountSettingsViewController (){
-    LinphoneAppDelegate *appDelegate;
     AccountState stateAccount;
 }
 @end
@@ -46,7 +45,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)viewDidLoad {
     [super viewDidLoad];
     //  my code here
-    appDelegate = (LinphoneAppDelegate *)[[UIApplication sharedApplication] delegate];
     [self autoLayoutForMainView];
 }
 
@@ -55,7 +53,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     [WriteLogsUtils writeForGoToScreen:@"AccountSettingsViewController"];
     
-    _lbHeader.text = [appDelegate.localization localizedStringForKey:@"Account settings"];
+    _lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"Account settings"];
     stateAccount = [SipUtils getStateOfDefaultProxyConfig];
     [_tbContent reloadData];
 }
@@ -97,7 +95,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     //  Header view
     [_viewHeader mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self.view);
-        make.height.mas_equalTo(appDelegate._hRegistrationState);
+        make.height.mas_equalTo([LinphoneAppDelegate sharedInstance]._hRegistrationState);
     }];
     
     [bgHeader mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -105,7 +103,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
     
     [_lbHeader mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_viewHeader).offset(appDelegate._hStatus);
+        make.top.equalTo(_viewHeader).offset([LinphoneAppDelegate sharedInstance]._hStatus);
         make.bottom.equalTo(_viewHeader);
         make.centerX.equalTo(_viewHeader.mas_centerX);
         make.width.mas_equalTo(200);
@@ -153,18 +151,18 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     switch (indexPath.section) {
         case 0:{
-            cell.lbTitle.text = [appDelegate.localization localizedStringForKey:@"PBX account"];
+            cell.lbTitle.text = [[LanguageUtil sharedInstance] getContent:@"PBX account"];
             
             switch (stateAccount) {
                 case eAccountNone:
-                    cell.lbDescription.text = [appDelegate.localization localizedStringForKey:@"No account"];
+                    cell.lbDescription.text = [[LanguageUtil sharedInstance] getContent:@"No account"];
                     break;
                 case eAccountOff:{
-                    cell.lbDescription.text = [appDelegate.localization localizedStringForKey:@"Disabled"];
+                    cell.lbDescription.text = [[LanguageUtil sharedInstance] getContent:@"Disabled"];
                     break;
                 }
                 case eAccountOn:{
-                    cell.lbDescription.text = [appDelegate.localization localizedStringForKey:@"Enabled"];
+                    cell.lbDescription.text = [[LanguageUtil sharedInstance] getContent:@"Enabled"];
                     break;
                 }
             }
@@ -172,7 +170,7 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case 1:{
-            cell.lbTitle.text = [appDelegate.localization localizedStringForKey:@"Change password"];
+            cell.lbTitle.text = [[LanguageUtil sharedInstance] getContent:@"Change password"];
             [cell.lbTitle mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.left.equalTo(cell).offset(10);
                 make.right.equalTo(cell.imgArrow).offset(-10);
@@ -190,13 +188,13 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] indexPath row = %d", __FUNCTION__, (int)indexPath.row] toFilePath:appDelegate.logFilePath];
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] indexPath row = %d", __FUNCTION__, (int)indexPath.row] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     if (indexPath.section == 0) {
         [[PhoneMainView instance] changeCurrentView:[PBXSettingViewController compositeViewDescription] push:YES];
     }else if (indexPath.section == 1){
         if (stateAccount == eAccountNone) {
-            [self.view makeToast:[appDelegate.localization localizedStringForKey:@"No account"] duration:3.0 position:CSToastPositionCenter];
+            [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"No account"] duration:3.0 position:CSToastPositionCenter];
         }else{
             [[PhoneMainView instance] changeCurrentView:[ManagerPasswordViewController compositeViewDescription] push:YES];
         }

@@ -170,21 +170,22 @@
 
 - (void)setBackgroundForTabBarButton
 {
-    [_historyButton setBackgroundImage:[UIImage imageNamed: [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:img_menu_history_def]] forState:UIControlStateNormal];
-    [_historyButton setBackgroundImage:[UIImage imageNamed: [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:img_menu_history_act]] forState:UIControlStateHighlighted];
-    [_historyButton setBackgroundImage:[UIImage imageNamed: [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:img_menu_history_act]] forState:UIControlStateSelected];
     
-    [_contactsButton setBackgroundImage:[UIImage imageNamed: [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:img_menu_contacts_def]] forState:UIControlStateNormal];
-    [_contactsButton setBackgroundImage:[UIImage imageNamed: [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:img_menu_contacts_act]] forState:UIControlStateHighlighted];
-    [_contactsButton setBackgroundImage:[UIImage imageNamed: [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:img_menu_contacts_act]] forState:UIControlStateSelected];
+    [_historyButton setBackgroundImage:[UIImage imageNamed: [[LanguageUtil sharedInstance] getContent: img_menu_history_def]] forState:UIControlStateNormal];
+    [_historyButton setBackgroundImage:[UIImage imageNamed: [[LanguageUtil sharedInstance] getContent: img_menu_history_act]] forState:UIControlStateHighlighted];
+    [_historyButton setBackgroundImage:[UIImage imageNamed: [[LanguageUtil sharedInstance] getContent: img_menu_history_act]] forState:UIControlStateSelected];
     
-    [_dialerButton setBackgroundImage:[UIImage imageNamed:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:img_menu_keypad_def]] forState:UIControlStateNormal];
-    [_dialerButton setBackgroundImage:[UIImage imageNamed:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:img_menu_keypad_act]] forState:UIControlStateHighlighted];
-    [_dialerButton setBackgroundImage:[UIImage imageNamed:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:img_menu_keypad_act]] forState:UIControlStateSelected];
+    [_contactsButton setBackgroundImage:[UIImage imageNamed: [[LanguageUtil sharedInstance] getContent: img_menu_contacts_def]] forState:UIControlStateNormal];
+    [_contactsButton setBackgroundImage:[UIImage imageNamed: [[LanguageUtil sharedInstance] getContent: img_menu_contacts_act]] forState:UIControlStateHighlighted];
+    [_contactsButton setBackgroundImage:[UIImage imageNamed: [[LanguageUtil sharedInstance] getContent: img_menu_contacts_act]] forState:UIControlStateSelected];
     
-    [_moreButton setBackgroundImage:[UIImage imageNamed: [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:img_menu_more_def]] forState:UIControlStateNormal];
-    [_moreButton setBackgroundImage:[UIImage imageNamed: [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:img_menu_more_act]] forState:UIControlStateHighlighted];
-    [_moreButton setBackgroundImage:[UIImage imageNamed: [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:img_menu_more_act]] forState:UIControlStateSelected];
+    [_dialerButton setBackgroundImage:[UIImage imageNamed:[[LanguageUtil sharedInstance] getContent: img_menu_keypad_def]] forState:UIControlStateNormal];
+    [_dialerButton setBackgroundImage:[UIImage imageNamed:[[LanguageUtil sharedInstance] getContent: img_menu_keypad_act]] forState:UIControlStateHighlighted];
+    [_dialerButton setBackgroundImage:[UIImage imageNamed:[[LanguageUtil sharedInstance] getContent: img_menu_keypad_act]] forState:UIControlStateSelected];
+    
+    [_moreButton setBackgroundImage:[UIImage imageNamed: [[LanguageUtil sharedInstance] getContent: img_menu_more_def]] forState:UIControlStateNormal];
+    [_moreButton setBackgroundImage:[UIImage imageNamed: [[LanguageUtil sharedInstance] getContent: img_menu_more_act]] forState:UIControlStateHighlighted];
+    [_moreButton setBackgroundImage:[UIImage imageNamed: [[LanguageUtil sharedInstance] getContent: img_menu_more_act]] forState:UIControlStateSelected];
 }
 
 

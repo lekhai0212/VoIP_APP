@@ -113,7 +113,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     }
     
     //  set title for button login with phone number
-    NSString *phoneContent = [NSString stringWithFormat:@" %@", [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Register with phone number"]];
+    NSString *phoneContent = [NSString stringWithFormat:@" %@", [[LanguageUtil sharedInstance] getContent:@"Register with phone number"]];
     NSAttributedString *phoneStr = [self createAttributeStringWithContent:phoneContent imageName:@"ic_phone_login.png" isLeadImage:YES withHeight:22.0];
     [btnLoginWithPhone setAttributedTitle:phoneStr forState:UIControlStateNormal];
     
@@ -404,7 +404,8 @@ static UICompositeViewDescription *compositeDescription = nil;
         btnScanFromPhoto.layer.cornerRadius = btnScanFromPhoto.frame.size.height/2;
         btnScanFromPhoto.layer.borderColor = btnScanFromPhoto.backgroundColor.CGColor;
         btnScanFromPhoto.layer.borderWidth = 1.0;
-        [btnScanFromPhoto setTitle:[appDelegate.localization localizedStringForKey:@"SCAN FROM PHOTO"]
+        
+        [btnScanFromPhoto setTitle:[[LanguageUtil sharedInstance] getContent:@"SCAN FROM PHOTO"]
                           forState:UIControlStateNormal];
         btnScanFromPhoto.titleLabel.font = [UIFont systemFontOfSize: 16.0];
         [btnScanFromPhoto addTarget:self
@@ -431,7 +432,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Clear proxy config with networkReady = %d", __FUNCTION__, networkReady] toFilePath:appDelegate.logFilePath];
     
     if (!networkReady) {
-        [self.view makeToast:[appDelegate.localization localizedStringForKey:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
+        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
         return;
     }
     
@@ -451,22 +452,22 @@ static UICompositeViewDescription *compositeDescription = nil;
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Save proxy config with networkReady = %d", __FUNCTION__, networkReady] toFilePath:appDelegate.logFilePath];
     
     if (!networkReady) {
-        [self.view makeToast:[appDelegate.localization localizedStringForKey:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
+        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
         return;
     }
     
     if ([_tfServerID.text isEqualToString:@""]) {
-        [self.view makeToast:[appDelegate.localization localizedStringForKey:@"Server ID can't empty"] duration:2.0 position:CSToastPositionCenter];
+        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Server ID can't empty"] duration:2.0 position:CSToastPositionCenter];
         return;
     }
     
     if ([_tfAccount.text isEqualToString:@""]){
-        [self.view makeToast:[appDelegate.localization localizedStringForKey:@"Account can't empty"] duration:2.0 position:CSToastPositionCenter];
+        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Account can't empty"] duration:2.0 position:CSToastPositionCenter];
         return;
     }
     
     if ([_tfPassword.text isEqualToString:@""]){
-        [self.view makeToast:[appDelegate.localization localizedStringForKey:@"Password can't empty"] duration:2.0 position:CSToastPositionCenter];
+        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Password can't empty"] duration:2.0 position:CSToastPositionCenter];
         return;
     }
     
@@ -481,7 +482,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         [self getInfoForPBXWithServerName: _tfServerID.text];
         
     }else{
-        [self.view makeToast:[appDelegate.localization localizedStringForKey:@"This account is being registered"] duration:2.0 position:CSToastPositionCenter];
+        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"This account is being registered"] duration:2.0 position:CSToastPositionCenter];
     }
 }
 
@@ -490,16 +491,16 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (void)showContentForView {
-    _lbTitle.text = [appDelegate.localization localizedStringForKey:@"PBX account"];
+    _lbTitle.text = [[LanguageUtil sharedInstance] getContent:@"PBX account"];
     
-    _lbPBX.text = [appDelegate.localization localizedStringForKey:@"PBX"];
-    _lbServerID.text = [appDelegate.localization localizedStringForKey:@"Server ID"];
-    _lbAccount.text = [appDelegate.localization localizedStringForKey:@"Account"];
-    _lbPassword.text = [appDelegate.localization localizedStringForKey:@"Password"];
+    _lbPBX.text = [[LanguageUtil sharedInstance] getContent:@"PBX"];
+    _lbServerID.text = [[LanguageUtil sharedInstance] getContent:@"Server ID"];
+    _lbAccount.text = [[LanguageUtil sharedInstance] getContent:@"Account"];
+    _lbPassword.text = [[LanguageUtil sharedInstance] getContent:@"Password"];
     
-    [_btnClear setTitle:[appDelegate.localization localizedStringForKey:@"Clear"]
+    [_btnClear setTitle:[[LanguageUtil sharedInstance] getContent:@"Clear"]
                forState:UIControlStateNormal];
-    [_btnSave setTitle:[appDelegate.localization localizedStringForKey:@"Save"]
+    [_btnSave setTitle:[[LanguageUtil sharedInstance] getContent:@"Save"]
               forState:UIControlStateNormal];
 }
 
@@ -553,7 +554,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     if ([link isEqualToString:getServerInfoFunc]) {
         [self.view makeToast:error duration:2.0 position:CSToastPositionCenter];
     }else if ([link isEqualToString: ChangeCustomerIOSToken]){
-        [self.view makeToast:[appDelegate.localization localizedStringForKey:@"Can not update push token"]
+        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Can not update push token"]
                     duration:2.0 position:CSToastPositionCenter];
         
         [self whenRegisterPBXSuccessfully];
@@ -610,7 +611,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         
         [self registerPBXAccount:accountPBX password:passwordPBX ipAddress:ipPBX port:portPBX];
     }else{
-        [self.view makeToast:[appDelegate.localization localizedStringForKey:@"Please check your information again!"] duration:2.0 position:CSToastPositionCenter];
+        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your information again!"] duration:2.0 position:CSToastPositionCenter];
     }
 }
 
@@ -776,7 +777,7 @@ static UICompositeViewDescription *compositeDescription = nil;
                         [_icWaiting stopAnimating];
                         
                         linphone_core_remove_proxy_config(LC, proxy);
-                        [self.view makeToast:[appDelegate.localization localizedStringForKey:@"Please check your information again!"] duration:2.0 position:CSToastPositionCenter];
+                        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your information again!"] duration:2.0 position:CSToastPositionCenter];
                     }else{
                         
                     }
@@ -824,7 +825,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     [swAccount setUIForEnableStateWithActionTarget: NO];
     
-    [self.view makeToast:[appDelegate.localization localizedStringForKey:@"Your account was registered successful."]
+    [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Your account was registered successful."]
                 duration:2.0 position:CSToastPositionCenter];
 }
 
@@ -842,7 +843,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     [swAccount setUIForEnableStateWithActionTarget: NO];
     
-    [self.view makeToast:[appDelegate.localization localizedStringForKey:@"Your account was enabled successful"]
+    [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Your account was enabled successful"]
                 duration:2.0 position:CSToastPositionCenter];
 }
 
@@ -860,7 +861,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     [swAccount setUIForDisableStateWithActionTarget: NO];
     
-    [self.view makeToast:[appDelegate.localization localizedStringForKey:@"Your account was disabled successful"]
+    [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Your account was disabled successful"]
                 duration:2.0 position:CSToastPositionCenter];
 }
 
@@ -871,7 +872,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     [_icWaiting stopAnimating];
     _icWaiting.hidden = YES;
     
-    [self.view makeToast:[appDelegate.localization localizedStringForKey:@"Register PBX failed"]
+    [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Register PBX failed"]
                 duration:2.0 position:CSToastPositionCenter];
     [timeoutTimer invalidate];
     timeoutTimer = nil;
@@ -908,7 +909,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     [swAccount setUIForDisableStateWithActionTarget: NO];
     
-    [self.view makeToast:[appDelegate.localization localizedStringForKey:@"Your account was removed"]
+    [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Your account was removed"]
                 duration:2.0 position:CSToastPositionCenter];
     [self performSelector:@selector(popCurrentView) withObject:nil afterDelay:2.0];
 }
@@ -960,7 +961,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     [_icWaiting stopAnimating];
     _icWaiting.hidden = YES;
     
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[appDelegate.localization localizedStringForKey:@"Notification"] message:[appDelegate.localization localizedStringForKey:@"Can not find QR Code!"] delegate:self cancelButtonTitle:[appDelegate.localization localizedStringForKey:@"Close"] otherButtonTitles: nil];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Notification"] message:[[LanguageUtil sharedInstance] getContent:@"Can not find QR Code!"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Close"] otherButtonTitles: nil];
     [alertView show];
 }
 
@@ -1000,14 +1001,14 @@ static UICompositeViewDescription *compositeDescription = nil;
                 _icWaiting.hidden = YES;
                 [_icWaiting stopAnimating];
                 
-                [self.view makeToast:[appDelegate.localization localizedStringForKey:@"This account is being registered"] duration:2.0 position:CSToastPositionCenter];
+                [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"This account is being registered"] duration:2.0 position:CSToastPositionCenter];
             }
         }
     }else{
         [_icWaiting stopAnimating];
         _icWaiting.hidden = YES;
         
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[appDelegate.localization localizedStringForKey:@"Notifications"] message:[appDelegate.localization localizedStringForKey:@"Can not find QR Code!"] delegate:self cancelButtonTitle:[appDelegate.localization localizedStringForKey:@"Close"] otherButtonTitles: nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Notifications"] message:[[LanguageUtil sharedInstance] getContent:@"Can not find QR Code!"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Close"] otherButtonTitles: nil];
         [alertView show];
     }
 }
@@ -1026,7 +1027,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         
         BOOL networkReady = [DeviceUtils checkNetworkAvailable];
         if (!networkReady) {
-            [self.view makeToast:[appDelegate.localization localizedStringForKey:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
+            [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
             return;
         }
         
@@ -1059,7 +1060,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         
         BOOL networkReady = [DeviceUtils checkNetworkAvailable];
         if (!networkReady) {
-            [self.view makeToast:[appDelegate.localization localizedStringForKey:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
+            [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
             return;
         }
         
@@ -1083,7 +1084,7 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
     }else{
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[appDelegate.localization localizedStringForKey:@"Notifications"] message:[appDelegate.localization localizedStringForKey:@"Can not find QR Code!"] delegate:self cancelButtonTitle:[appDelegate.localization localizedStringForKey:@"Close"] otherButtonTitles: nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Notifications"] message:[[LanguageUtil sharedInstance] getContent:@"Can not find QR Code!"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Close"] otherButtonTitles: nil];
         [alertView show];
     }
 }
@@ -1112,7 +1113,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (IBAction)btnLoginWithPhonePress:(UIButton *)sender {
-    [self.view makeToast:[appDelegate.localization localizedStringForKey:@"This feature have not supported yet. Please try later!"] duration:2.0 position:CSToastPositionCenter];
+    [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"This feature have not supported yet. Please try later!"] duration:2.0 position:CSToastPositionCenter];
     return;
     NSArray *toplevelObject = [[NSBundle mainBundle] loadNibNamed:@"RegisterPBXWithPhoneView" owner:nil options:nil];
     for(id currentObject in toplevelObject){
@@ -1219,7 +1220,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] with networkReady = %d", __FUNCTION__, networkReady] toFilePath:appDelegate.logFilePath];
     
     if (!networkReady) {
-        [self.view makeToast:[appDelegate.localization localizedStringForKey:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
+        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
         return;
     }
     
@@ -1236,7 +1237,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Enable proxy config with accountId = %@", __FUNCTION__, [SipUtils getAccountIdOfDefaultProxyConfig]] toFilePath:appDelegate.logFilePath];
     }else{
         [swAccount setUIForDisableStateWithActionTarget: NO];
-        [self.view makeToast:[appDelegate.localization localizedStringForKey:@"You have not signed your account yet"] duration:2.0 position:CSToastPositionCenter];
+        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"You have not signed your account yet"] duration:2.0 position:CSToastPositionCenter];
         
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Can not enable with defaultConfig = NULL", __FUNCTION__] toFilePath:appDelegate.logFilePath];
     }
@@ -1248,7 +1249,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] with networkReady = %d", __FUNCTION__, networkReady] toFilePath:appDelegate.logFilePath];
     
     if (!networkReady) {
-        [self.view makeToast:[appDelegate.localization localizedStringForKey:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
+        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
         return;
     }
     

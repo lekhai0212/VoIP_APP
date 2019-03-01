@@ -213,8 +213,8 @@
 }
 
 - (void)showContentWithCurrentLanguage {
-    [btnPBX setTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"PBX"] forState:UIControlStateNormal];
-    [btnAll setTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Contacts"] forState:UIControlStateNormal];
+    [btnPBX setTitle:[[LanguageUtil sharedInstance] getContent:@"PBX"] forState:UIControlStateNormal];
+    [btnAll setTitle:[[LanguageUtil sharedInstance] getContent:@"Contacts"] forState:UIControlStateNormal];
 }
 
 - (void)setupUIForView {
@@ -243,7 +243,7 @@
     }];
     
     btnPBX.backgroundColor = IPAD_SELECT_TAB_BG_COLOR;
-    [btnPBX setTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"PBX"] forState:UIControlStateNormal];
+    [btnPBX setTitle:[[LanguageUtil sharedInstance] getContent:@"PBX"] forState:UIControlStateNormal];
     [btnPBX setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     [btnPBX mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(viewHeader.mas_centerX);
@@ -253,7 +253,7 @@
     }];
     
     btnAll.backgroundColor = UIColor.clearColor;
-    [btnAll setTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Contacts"] forState:UIControlStateNormal];
+    [btnAll setTitle:[[LanguageUtil sharedInstance] getContent:@"Contacts"] forState:UIControlStateNormal];
     [btnAll setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     [btnAll mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(viewHeader.mas_centerX);
@@ -271,9 +271,9 @@
     tfSearch.clipsToBounds = YES;
     tfSearch.textColor = UIColor.whiteColor;
     if ([tfSearch respondsToSelector:@selector(setAttributedPlaceholder:)]) {
-        tfSearch.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Search..."] attributes:@{NSForegroundColorAttributeName: [UIColor colorWithRed:(230/255.0) green:(230/255.0) blue:(230/255.0) alpha:1.0]}];
+        tfSearch.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[[LanguageUtil sharedInstance] getContent:@"Search..."] attributes:@{NSForegroundColorAttributeName: [UIColor colorWithRed:(230/255.0) green:(230/255.0) blue:(230/255.0) alpha:1.0]}];
     } else {
-        tfSearch.placeholder = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Search..."];
+        tfSearch.placeholder = [[LanguageUtil sharedInstance] getContent:@"Search..."];
     }
     [tfSearch addTarget:self
                  action:@selector(onSearchContactChange:)
@@ -525,7 +525,7 @@
         // Tên contact
         if (contact._fullName != nil) {
             if ([contact._fullName isEqualToString: @""]) {
-                cell.name.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Unknown"];
+                cell.name.text = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
             }else{
                 cell.name.text = contact._fullName;
             }
@@ -810,21 +810,21 @@
     if (!networkReady) {
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Error: Device can not access to network", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
         
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
         return;
     }
     
     if ([LinphoneAppDelegate sharedInstance]._isSyncing) {
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] PBX contacts is being synchronized!", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
         
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"PBX contacts is being synchronized!"] duration:2.0 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"PBX contacts is being synchronized!"] duration:2.0 position:CSToastPositionCenter];
         return;
     }else{
         NSString *service = [[NSUserDefaults standardUserDefaults] objectForKey:PBX_SERVER];
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] service = %@", __FUNCTION__, service] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
         
         if ([service isKindOfClass:[NSNull class]] || service == nil || [service isEqualToString: @""]) {
-            [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"No account"] duration:2.0 position:CSToastPositionCenter];
+            [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"No account"] duration:2.0 position:CSToastPositionCenter];
             return;
         }
         [[LinphoneAppDelegate sharedInstance] showWaiting: YES];
@@ -865,7 +865,7 @@
     [[LinphoneAppDelegate sharedInstance] showWaiting: NO];
     
     if ([link isEqualToString:getServerContacts]) {
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Error"] duration:2.0 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Error"] duration:2.0 position:CSToastPositionCenter];
     }
 }
 
@@ -1108,7 +1108,7 @@
     [[LinphoneAppDelegate sharedInstance] set_isSyncing: false];
     [icSync.layer removeAllAnimations];
     
-    [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Successful"] duration:2.0 position:CSToastPositionCenter];
+    [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Successful"] duration:2.0 position:CSToastPositionCenter];
     
     [self showAndReloadContactList];
     [tbContacts reloadData];

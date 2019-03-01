@@ -123,7 +123,7 @@
 }
 
 - (void)showContentWithCurrentLanguage {
-    _lbNoCalls.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"No call in your history"];
+    _lbNoCalls.text = [[LanguageUtil sharedInstance] getContent:@"No call in your history"];
 }
 
 //  Click trên button Edit
@@ -166,7 +166,7 @@
     cell._phoneNumber = aCall._phoneNumber;
     
     if ([aCall._phoneNumber isEqualToString: hotline]) {
-        cell._lbName.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Hotline"];
+        cell._lbName.text = [[LanguageUtil sharedInstance] getContent:@"Hotline"];
         cell._imgAvatar.image = [UIImage imageNamed:@"hotline_avatar.png"];
         
         [cell updateFrameForHotline: YES];
@@ -177,7 +177,7 @@
         cell._lbPhone.hidden = NO;
         
         if ([AppUtils isNullOrEmpty: aCall._phoneName]) {
-            cell._lbName.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Unknown"];
+            cell._lbName.text = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
         }else{
             cell._lbName.text = aCall._phoneName;
         }
@@ -316,11 +316,11 @@
     NSString *currentDate = [[listCalls objectAtIndex: section] valueForKey:@"title"];
     NSString *today = [AppUtils checkTodayForHistoryCall: currentDate];
     if ([today isEqualToString: @"Today"]) {
-        titleHeader =  [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"TODAY"];
+        titleHeader =  [[LanguageUtil sharedInstance] getContent:@"TODAY"];
     }else{
         NSString *yesterday = [AppUtils checkYesterdayForHistoryCall:currentDate];
         if ([yesterday isEqualToString:@"Yesterday"]) {
-            titleHeader =  [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"YESTERDAY"];
+            titleHeader =  [[LanguageUtil sharedInstance] getContent:@"YESTERDAY"];
         }else{
             titleHeader = currentDate;
         }
@@ -354,7 +354,7 @@
         }
         return;
     }
-    [self.view makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"The phone number can not empty"] duration:2.0 position:CSToastPositionCenter];
+    [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"The phone number can not empty"] duration:2.0 position:CSToastPositionCenter];
 }
 
 - (void)deleteHistoryCallsPressed: (NSNotification *)notif {

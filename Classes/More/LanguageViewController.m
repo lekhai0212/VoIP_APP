@@ -78,7 +78,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 #pragma mark - my functions
 
 - (void)showContentOfCurrentLanguage {
-    _lbHeader.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Change language"];
+    _lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"Change language"];
     [self createDataForLanguageView];
 }
 
@@ -90,13 +90,13 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     LanguageObject *viLang = [[LanguageObject alloc] init];
     viLang._code = @"vi";
-    viLang._title = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Vietnamese"];
+    viLang._title = [[LanguageUtil sharedInstance] getContent:@"Vietnamese"];
     viLang._flag = @"flag_vietnam";
     [listLanguage addObject: viLang];
     
     LanguageObject *enLang = [[LanguageObject alloc] init];
     enLang._code = @"en";
-    enLang._title = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"English"];
+    enLang._title = [[LanguageUtil sharedInstance] getContent:@"English"];
     enLang._flag = @"flag_usa";
     [listLanguage addObject: enLang];
     

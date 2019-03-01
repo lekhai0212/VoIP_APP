@@ -54,7 +54,7 @@
         
         phone = [searchs lastObject];
         
-        NSString *strOR = [NSString stringWithFormat:@" %@ ", [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"or"]];
+        NSString *strOR = [NSString stringWithFormat:@" %@ ", [[LanguageUtil sharedInstance] getContent:@"or"]];
         [attrResult appendAttributedString:[[NSAttributedString alloc] initWithString: strOR]];
         
         NSMutableAttributedString *secondAttr = [[NSMutableAttributedString alloc] initWithString: phone.name];
@@ -70,13 +70,13 @@
         [str1 addAttribute: NSFontAttributeName value: font range: NSMakeRange(0, phone.name.length)];
         [attrResult appendAttributedString:str1];
         
-        NSString *strAND = [NSString stringWithFormat:@" %@ ", [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"and"]];
+        NSString *strAND = [NSString stringWithFormat:@" %@ ", [[LanguageUtil sharedInstance] getContent:@"and"]];
         NSMutableAttributedString * attrAnd = [[NSMutableAttributedString alloc] initWithString:strAND];
         [attrAnd addAttribute: NSFontAttributeName value: [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0]
                         range: NSMakeRange(0, strAND.length)];
         [attrResult appendAttributedString:attrAnd];
         
-        NSString *strOthers = [NSString stringWithFormat:@"%d %@", (int)searchs.count-1, [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"others"]];
+        NSString *strOthers = [NSString stringWithFormat:@"%d %@", (int)searchs.count-1, [[LanguageUtil sharedInstance] getContent:@"others"]];
         NSMutableAttributedString * str2 = [[NSMutableAttributedString alloc] initWithString:strOthers];
         [str2 addAttribute: NSLinkAttributeName value: @"others" range: NSMakeRange(0, strOthers.length)];
         [str2 addAttribute:NSUnderlineStyleAttributeName value:@(NSUnderlineStyleNone) range:NSMakeRange(0, strOthers.length)];

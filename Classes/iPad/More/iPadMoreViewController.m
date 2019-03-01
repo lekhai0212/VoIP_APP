@@ -58,14 +58,14 @@ typedef enum ipadMoreType{
 }
 
 - (void)showContentWithCurrentLanguage {
-    self.title = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"More"];
+    self.title = [[LanguageUtil sharedInstance] getContent:@"More"];
     [self createDataForMenuView];
     [tbMenu reloadData];
 }
 
 //  Khoi tao du lieu cho view
 - (void)createDataForMenuView {
-    listTitle = [[NSMutableArray alloc] initWithObjects: [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Account settings"], [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Settings"], [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Feedback"], [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Privacy Policy"], [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Introduction"], [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Send logs"], [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"About"], nil];
+    listTitle = [[NSMutableArray alloc] initWithObjects: [[LanguageUtil sharedInstance] getContent:@"Account settings"], [[LanguageUtil sharedInstance] getContent:@"Settings"], [[LanguageUtil sharedInstance] getContent:@"Feedback"], [[LanguageUtil sharedInstance] getContent:@"Privacy Policy"], [[LanguageUtil sharedInstance] getContent:@"Introduction"], [[LanguageUtil sharedInstance] getContent:@"Send logs"], [[LanguageUtil sharedInstance] getContent:@"About"], nil];
     
     listIcon = [[NSMutableArray alloc] initWithObjects: @"ic_setup.png", @"ic_setting.png", @"ic_support.png", @"ic_term.png", @"ic_introduce.png", @"ic_send_logs.png", @"ic_info.png", nil];
 }
@@ -106,10 +106,10 @@ typedef enum ipadMoreType{
         if ([SipUtils getStateOfDefaultProxyConfig] != eAccountNone)
         {
             NSString *accountID = [SipUtils getAccountIdOfDefaultProxyConfig];
-            curCell.lbAccName.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"PBX account"];
+            curCell.lbAccName.text = [[LanguageUtil sharedInstance] getContent:@"PBX account"];
             curCell.lbAccPhone.text = accountID;
         }else{
-            curCell.lbAccName.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Not logged in"];
+            curCell.lbAccName.text = [[LanguageUtil sharedInstance] getContent:@"Not logged in"];
             curCell.lbAccPhone.text = @"N/A";
         }
     }

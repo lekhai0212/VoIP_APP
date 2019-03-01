@@ -28,7 +28,7 @@
         make.width.height.mas_equalTo(35.0);
     }];
     
-    _tfPhone.placeholder = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Phone number"];
+    _tfPhone.placeholder = [[LanguageUtil sharedInstance] getContent:@"Phone number"];
     _tfPhone.font = [UIFont fontWithName:HelveticaNeue size:17.0];
     _tfPhone.textColor = [UIColor colorWithRed:(50/255.0) green:(50/255.0)
                                           blue:(50/255.0) alpha:1.0];

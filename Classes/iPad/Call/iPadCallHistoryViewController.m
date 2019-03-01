@@ -63,9 +63,9 @@
 }
 
 - (void)showContentWithCurrentLanguage {
-    self.title = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Calls detail"];
-    [btnCall setTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Call"] forState:UIControlStateNormal];
-    [btnSendMessage setTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Send message"] forState:UIControlStateNormal];
+    self.title = [[LanguageUtil sharedInstance] getContent:@"Calls detail"];
+    [btnCall setTitle:[[LanguageUtil sharedInstance] getContent:@"Call"] forState:UIControlStateNormal];
+    [btnSendMessage setTitle:[[LanguageUtil sharedInstance] getContent:@"Send message"] forState:UIControlStateNormal];
 }
 
 - (void)setupUIForView
@@ -126,7 +126,7 @@
     
     UIFont *btnFont = [UIFont systemFontOfSize:18.0 weight:UIFontWeightRegular];
     
-    CGSize textSize = [AppUtils getSizeWithText:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Call"] withFont:btnFont];
+    CGSize textSize = [AppUtils getSizeWithText:[[LanguageUtil sharedInstance] getContent:@"Call"] withFont:btnFont];
     if (textSize.width < 60) {
         textSize.width = 60.0;
     }
@@ -144,7 +144,7 @@
         make.height.mas_equalTo(3*hAvatar/8);
     }];
     
-    textSize = [AppUtils getSizeWithText:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Send message"] withFont:btnFont];
+    textSize = [AppUtils getSizeWithText:[[LanguageUtil sharedInstance] getContent:@"Send message"] withFont:btnFont];
     if (textSize.width < 60) {
         textSize.width = 60.0;
     }
@@ -177,11 +177,11 @@
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     if ([phoneNumber isEqualToString:USERNAME]) {
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"You can not add yourself to contact list"] duration:2.0 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"You can not add yourself to contact list"] duration:2.0 position:CSToastPositionCenter];
         return;
     }
     
-    UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:phoneNumber delegate:self cancelButtonTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles: [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Create new contact"], [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Add to existing contact"], nil];
+    UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:phoneNumber delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles: [[LanguageUtil sharedInstance] getContent:@"Create new contact"], [[LanguageUtil sharedInstance] getContent:@"Add to existing contact"], nil];
     popupAddContact.tag = 100;
     [popupAddContact showFromRect:viewInfo.bounds inView:viewInfo animated:YES];
 }
@@ -235,12 +235,12 @@
 {
     //  check if is call with hotline
     if ([phoneNumber isEqualToString: hotline]) {
-        lbName.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Hotline"];
+        lbName.text = [[LanguageUtil sharedInstance] getContent:@"Hotline"];
         imgAvatar.image = [UIImage imageNamed:@"hotline_avatar.png"];
         lbPhone.hidden = YES;
     }else{
         PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: phoneNumber];
-        lbName.text = ![AppUtils isNullOrEmpty:contact.name] ? contact.name : [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Unknown"];
+        lbName.text = ![AppUtils isNullOrEmpty:contact.name] ? contact.name : [[LanguageUtil sharedInstance] getContent:@"Unknown"];
         lbPhone.text = phoneNumber;
         lbPhone.hidden = NO;
         
@@ -318,7 +318,7 @@
     }else{
         NSString *phone = [AppUtils removeAllSpecialInString: phoneNumber];
         if ([AppUtils isNullOrEmpty: phone]) {
-            [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"The phone number can not empty"] duration:2.0 position:CSToastPositionCenter];
+            [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"The phone number can not empty"] duration:2.0 position:CSToastPositionCenter];
             return;
         }else{
             BOOL result = [SipUtils makeCallWithPhoneNumber: phone];
@@ -331,7 +331,7 @@
     
 
 - (IBAction)btnSendMessagePressed:(UIButton *)sender {
-    [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"We have not supported this feature yet. Please try later!"] duration:2.0 position:CSToastPositionCenter];
+    [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"We have not supported this feature yet. Please try later!"] duration:2.0 position:CSToastPositionCenter];
 }
 
 //  [Khai Le - 13/02/2019]
@@ -392,7 +392,7 @@
         cell.lbDuration.text = @"";
     }else{
         if (aCall._duration < 60) {
-            cell.lbDuration.text = [NSString stringWithFormat:@"%d %@", aCall._duration, [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"sec"]];
+            cell.lbDuration.text = [NSString stringWithFormat:@"%d %@", aCall._duration, [[LanguageUtil sharedInstance] getContent:@"sec"]];
         }else{
             int hour = aCall._duration/3600;
             int minutes = (aCall._duration - hour*3600)/60;
@@ -401,33 +401,33 @@
             NSString *str = @"";
             if (hour > 0) {
                 if (hour == 1) {
-                    str = [NSString stringWithFormat:@"%ld %@", (long)hour, [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"hour"]];
+                    str = [NSString stringWithFormat:@"%ld %@", (long)hour, [[LanguageUtil sharedInstance] getContent:@"hour"]];
                 }else{
-                    str = [NSString stringWithFormat:@"%ld %@", (long)hour, [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"hours"]];
+                    str = [NSString stringWithFormat:@"%ld %@", (long)hour, [[LanguageUtil sharedInstance] getContent:@"hours"]];
                 }
             }
             
             if (minutes > 0) {
                 if (![str isEqualToString:@""]) {
                     if (minutes == 1) {
-                        str = [NSString stringWithFormat:@"%@ %d %@", str, minutes, [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"minute"]];
+                        str = [NSString stringWithFormat:@"%@ %d %@", str, minutes, [[LanguageUtil sharedInstance] getContent:@"minute"]];
                     }else{
-                        str = [NSString stringWithFormat:@"%@ %d %@", str, minutes, [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"minutes"]];
+                        str = [NSString stringWithFormat:@"%@ %d %@", str, minutes, [[LanguageUtil sharedInstance] getContent:@"minutes"]];
                     }
                 }else{
                     if (minutes == 1) {
-                        str = [NSString stringWithFormat:@"%d %@", minutes, [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"minute"]];
+                        str = [NSString stringWithFormat:@"%d %@", minutes, [[LanguageUtil sharedInstance] getContent:@"minute"]];
                     }else{
-                        str = [NSString stringWithFormat:@"%d %@", minutes, [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"minutes"]];
+                        str = [NSString stringWithFormat:@"%d %@", minutes, [[LanguageUtil sharedInstance] getContent:@"minutes"]];
                     }
                 }
             }
             
             if (seconds > 0) {
                 if (![str isEqualToString:@""]) {
-                    str = [NSString stringWithFormat:@"%@ %d %@", str, seconds, [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"sec"]];
+                    str = [NSString stringWithFormat:@"%@ %d %@", str, seconds, [[LanguageUtil sharedInstance] getContent:@"sec"]];
                 }else{
-                    str = [NSString stringWithFormat:@"%d %@", seconds, [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"sec"]];
+                    str = [NSString stringWithFormat:@"%d %@", seconds, [[LanguageUtil sharedInstance] getContent:@"sec"]];
                 }
             }
             cell.lbDuration.text = str;
@@ -435,9 +435,9 @@
     }
     
     if ([aCall._status isEqualToString: aborted_call] || [aCall._status isEqualToString: declined_call]) {
-        cell.lbCallType.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Aborted call"];
+        cell.lbCallType.text = [[LanguageUtil sharedInstance] getContent:@"Aborted call"];
     }else if ([aCall._status isEqualToString: missed_call]){
-        cell.lbCallType.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Missed call"];
+        cell.lbCallType.text = [[LanguageUtil sharedInstance] getContent:@"Missed call"];
     }else{
         cell.lbCallType.text = @"";
     }
@@ -457,10 +457,10 @@
     if (![dateStr isEqualToString:@"Today"]) {
         dateStr = [AppUtils checkYesterdayForHistoryCall: aCall._date];
         if ([dateStr isEqualToString:@"Yesterday"]) {
-            dateStr = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Yesterday"];
+            dateStr = [[LanguageUtil sharedInstance] getContent:@"Yesterday"];
         }
     }else{
-        dateStr = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Today"];
+        dateStr = [[LanguageUtil sharedInstance] getContent:@"Today"];
     }
     
     return cell;

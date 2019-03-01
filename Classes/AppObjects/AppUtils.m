@@ -783,9 +783,11 @@
     NSDate *date = [NSDate dateWithTimeIntervalSince1970: timeInterval];
     NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar];
     if ([calendar isDateInToday:date]) {
-        return [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Today"];
+        return [[LanguageUtil sharedInstance] getContent:@"Today"];
+        
     } else if ([calendar isDateInYesterday:date]) {
-        return [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Yesterday"];
+        return [[LanguageUtil sharedInstance] getContent:@"Yesterday"];
+        
     } else {
         NSString *formattedDateString = [dateFormatter stringFromDate:date];
         return formattedDateString;
@@ -834,7 +836,7 @@
     
     NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:attachment];
     
-    NSString *content = [NSString stringWithFormat:@" %@ %@", [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Version"], [AppUtils getAppVersionWithBuildVersion: NO]];
+    NSString *content = [NSString stringWithFormat:@" %@ %@", [[LanguageUtil sharedInstance] getContent:@"Version"], [AppUtils getAppVersionWithBuildVersion: NO]];
     NSMutableAttributedString *contentString = [[NSMutableAttributedString alloc] initWithString:content];
     
     NSMutableAttributedString *verString = [[NSMutableAttributedString alloc] initWithAttributedString: attachmentString];
@@ -928,33 +930,33 @@
     NSString *result = @"";
     if (hour > 0) {
         if (hour == 1) {
-            result = [NSString stringWithFormat:@"%ld %@", (long)hour, [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"hour"]];
+            result = [NSString stringWithFormat:@"%ld %@", (long)hour, [[LanguageUtil sharedInstance] getContent:@"hour"]];
         }else{
-            result = [NSString stringWithFormat:@"%ld %@", (long)hour, [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"hours"]];
+            result = [NSString stringWithFormat:@"%ld %@", (long)hour, [[LanguageUtil sharedInstance] getContent:@"hours"]];
         }
     }
     
     if (minutes > 0) {
         if (![result isEqualToString:@""]) {
             if (minutes == 1) {
-                result = [NSString stringWithFormat:@"%@ %d %@", result, minutes, [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"minute"]];
+                result = [NSString stringWithFormat:@"%@ %d %@", result, minutes, [[LanguageUtil sharedInstance] getContent:@"minute"]];
             }else{
-                result = [NSString stringWithFormat:@"%@ %d %@", result, minutes, [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"minutes"]];
+                result = [NSString stringWithFormat:@"%@ %d %@", result, minutes, [[LanguageUtil sharedInstance] getContent:@"minutes"]];
             }
         }else{
             if (minutes == 1) {
-                result = [NSString stringWithFormat:@"%d %@", minutes, [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"minute"]];
+                result = [NSString stringWithFormat:@"%d %@", minutes, [[LanguageUtil sharedInstance] getContent:@"minute"]];
             }else{
-                result = [NSString stringWithFormat:@"%d %@", minutes, [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"minutes"]];
+                result = [NSString stringWithFormat:@"%d %@", minutes, [[LanguageUtil sharedInstance] getContent:@"minutes"]];
             }
         }
     }
     
     if (seconds > 0) {
         if (![result isEqualToString:@""]) {
-            result = [NSString stringWithFormat:@"%@ %d %@", result, seconds, [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"sec"]];
+            result = [NSString stringWithFormat:@"%@ %d %@", result, seconds, [[LanguageUtil sharedInstance] getContent:@"sec"]];
         }else{
-            result = [NSString stringWithFormat:@"%d %@", seconds, [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"sec"]];
+            result = [NSString stringWithFormat:@"%d %@", seconds, [[LanguageUtil sharedInstance] getContent:@"sec"]];
         }
     }
     return result;

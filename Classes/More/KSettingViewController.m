@@ -72,17 +72,17 @@ static UICompositeViewDescription *compositeDescription = nil;
 #pragma mark - My functions
 
 - (void)showContentWithCurrentLanguage {
-    _lbHeader.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Settings"];
+    _lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"Settings"];
     
     listTitle = [[NSMutableArray alloc] init];
-    [listTitle addObject:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Change language"]];
+    [listTitle addObject:[[LanguageUtil sharedInstance] getContent:@"Change language"]];
     
     if (([LinphoneAppDelegate sharedInstance].enableForTest)) {
-        [listTitle addObject:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Call settings"]];
+        [listTitle addObject:[[LanguageUtil sharedInstance] getContent:@"Call settings"]];
     }
     
     if (([LinphoneAppDelegate sharedInstance].supportVoice)) {
-        [listTitle addObject:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Voice control"]];
+        [listTitle addObject:[[LanguageUtil sharedInstance] getContent:@"Voice control"]];
     }
     
     [_tbSettings reloadData];
@@ -155,7 +155,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     NSString *content = [listTitle objectAtIndex: indexPath.row];
     cell._lbTitle.text = content;
-    if ([content isEqualToString:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Voice control"]]) {
+    if ([content isEqualToString:[[LanguageUtil sharedInstance] getContent:@"Voice control"]]) {
         cell._iconArrow.hidden = YES;
         
         BOOL state = NO;

@@ -77,7 +77,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     if (phoneNumber != nil && ![phoneNumber isEqualToString:@""]) {
         [SipUtils makeCallWithPhoneNumber: phoneNumber];
     }else{
-        [self.view makeToast:[appDelegate.localization localizedStringForKey:@"The phone number can not empty"] duration:2.0 position:CSToastPositionCenter];
+        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"The phone number can not empty"] duration:2.0 position:CSToastPositionCenter];
     }
 }
 
@@ -112,14 +112,14 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)showContentWithCurrentLanguage {
     if (!newLayout) {
-        _lbHeader.text = [appDelegate.localization localizedStringForKey:@"Calls detail"];
+        _lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"Calls detail"];
     }else{
         if (![AppUtils isNullOrEmpty: phoneNumber]) {
             PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: phoneNumber];
             if (![AppUtils isNullOrEmpty:contact.name]) {
                 _lbHeader.text = contact.name;
             }else{
-                _lbHeader.text = [appDelegate.localization localizedStringForKey:@"Calls detail"];
+                _lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"Calls detail"];
             }
         }
     }
@@ -131,7 +131,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     //  check if is call with hotline
     if (!newLayout) {
         if ([phoneNumber isEqualToString: hotline]) {
-            NSMutableAttributedString *contentAttr = [[NSMutableAttributedString alloc] initWithString:[appDelegate.localization localizedStringForKey:@"Hotline"]];
+            NSMutableAttributedString *contentAttr = [[NSMutableAttributedString alloc] initWithString:[[LanguageUtil sharedInstance] getContent:@"Hotline"]];
             [contentAttr addAttribute:NSFontAttributeName value:[UIFont fontWithName:MYRIADPRO_BOLD size:18.0] range:NSMakeRange(0, contentAttr.length)];
             [contentAttr addAttribute:NSForegroundColorAttributeName value:UIColor.orangeColor range:NSMakeRange(0, contentAttr.length)];
             _lbName.attributedText = contentAttr;
@@ -171,14 +171,14 @@ static UICompositeViewDescription *compositeDescription = nil;
         }
     }else{
         if ([phoneNumber isEqualToString: hotline]) {
-            _lbName.text = [appDelegate.localization localizedStringForKey:@"Hotline"];
+            _lbName.text = [[LanguageUtil sharedInstance] getContent:@"Hotline"];
             _imgAvatar.image = [UIImage imageNamed:@"hotline_avatar.png"];
         }else{
             PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: phoneNumber];
             if (![AppUtils isNullOrEmpty:contact.name]) {
                 _lbHeader.text = contact.name;
             }else{
-                _lbHeader.text = [appDelegate.localization localizedStringForKey:@"Calls detail"];
+                _lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"Calls detail"];
             }
             
             if (![AppUtils isNullOrEmpty: contact.avatar]) {
@@ -335,11 +335,11 @@ static UICompositeViewDescription *compositeDescription = nil;
     dateFormatter.dateFormat = @"dd/MM/yyyy";
     
     if ([strTime isEqualToString:[dateFormatter stringFromDate:yesterday] ]) {
-        return [appDelegate.localization localizedStringForKey:@"Yesterday"];
+        return [[LanguageUtil sharedInstance] getContent:@"Yesterday"];
     }
     
     if ([strTime isEqualToString:[dateFormatter stringFromDate:today]]) {
-        return [appDelegate.localization localizedStringForKey:@"Today"];
+        return [[LanguageUtil sharedInstance] getContent:@"Today"];
     }
     
     return strTime;
@@ -380,10 +380,10 @@ static UICompositeViewDescription *compositeDescription = nil;
             if (![dateStr isEqualToString:@"Today"]) {
                 dateStr = [AppUtils checkYesterdayForHistoryCall: aCall._date];
                 if ([dateStr isEqualToString:@"Yesterday"]) {
-                    dateStr = [appDelegate.localization localizedStringForKey:@"Yesterday"];
+                    dateStr = [[LanguageUtil sharedInstance] getContent:@"Yesterday"];
                 }
             }else{
-                dateStr = [appDelegate.localization localizedStringForKey:@"Today"];
+                dateStr = [[LanguageUtil sharedInstance] getContent:@"Today"];
             }
             cell.viewContent.hidden = YES;
             cell.lbTitle.hidden = NO;
@@ -397,7 +397,7 @@ static UICompositeViewDescription *compositeDescription = nil;
             if ([aCall._status isEqualToString: success_call])
             {
                 if (aCall._duration < 60) {
-                    cell.lbDuration.text = [NSString stringWithFormat:@"%d %@", aCall._duration, [appDelegate.localization localizedStringForKey:@"sec"]];
+                    cell.lbDuration.text = [NSString stringWithFormat:@"%d %@", aCall._duration, [[LanguageUtil sharedInstance] getContent:@"sec"]];
                 }else{
                     int hour = aCall._duration/3600;
                     int minutes = (aCall._duration - hour*3600)/60;
@@ -406,33 +406,33 @@ static UICompositeViewDescription *compositeDescription = nil;
                     NSString *str = @"";
                     if (hour > 0) {
                         if (hour == 1) {
-                            str = [NSString stringWithFormat:@"%ld %@", (long)hour, [appDelegate.localization localizedStringForKey:@"hour"]];
+                            str = [NSString stringWithFormat:@"%ld %@", (long)hour, [[LanguageUtil sharedInstance] getContent:@"hour"]];
                         }else{
-                            str = [NSString stringWithFormat:@"%ld %@", (long)hour, [appDelegate.localization localizedStringForKey:@"hours"]];
+                            str = [NSString stringWithFormat:@"%ld %@", (long)hour, [[LanguageUtil sharedInstance] getContent:@"hours"]];
                         }
                     }
                     
                     if (minutes > 0) {
                         if (![str isEqualToString:@""]) {
                             if (minutes == 1) {
-                                str = [NSString stringWithFormat:@"%@ %d %@", str, minutes, [appDelegate.localization localizedStringForKey:@"minute"]];
+                                str = [NSString stringWithFormat:@"%@ %d %@", str, minutes, [[LanguageUtil sharedInstance] getContent:@"minute"]];
                             }else{
-                                str = [NSString stringWithFormat:@"%@ %d %@", str, minutes, [appDelegate.localization localizedStringForKey:@"minutes"]];
+                                str = [NSString stringWithFormat:@"%@ %d %@", str, minutes, [[LanguageUtil sharedInstance] getContent:@"minutes"]];
                             }
                         }else{
                             if (minutes == 1) {
-                                str = [NSString stringWithFormat:@"%d %@", minutes, [appDelegate.localization localizedStringForKey:@"minute"]];
+                                str = [NSString stringWithFormat:@"%d %@", minutes, [[LanguageUtil sharedInstance] getContent:@"minute"]];
                             }else{
-                                str = [NSString stringWithFormat:@"%d %@", minutes, [appDelegate.localization localizedStringForKey:@"minutes"]];
+                                str = [NSString stringWithFormat:@"%d %@", minutes, [[LanguageUtil sharedInstance] getContent:@"minutes"]];
                             }
                         }
                     }
                     
                     if (seconds > 0) {
                         if (![str isEqualToString:@""]) {
-                            str = [NSString stringWithFormat:@"%@ %d %@", str, seconds, [appDelegate.localization localizedStringForKey:@"sec"]];
+                            str = [NSString stringWithFormat:@"%@ %d %@", str, seconds, [[LanguageUtil sharedInstance] getContent:@"sec"]];
                         }else{
-                            str = [NSString stringWithFormat:@"%d %@", seconds, [appDelegate.localization localizedStringForKey:@"sec"]];
+                            str = [NSString stringWithFormat:@"%d %@", seconds, [[LanguageUtil sharedInstance] getContent:@"sec"]];
                         }
                     }
                     cell.lbDuration.text = str;
@@ -440,20 +440,20 @@ static UICompositeViewDescription *compositeDescription = nil;
                 
                 if ([aCall._callDirection isEqualToString:@"Incomming"]) {
                     cell.imgStatus.image = [UIImage imageNamed:@"ic_call_incoming.png"];
-                    cell.lbStateCall.text = [appDelegate.localization localizedStringForKey:@"Incoming call"];
+                    cell.lbStateCall.text = [[LanguageUtil sharedInstance] getContent:@"Incoming call"];
                 }else{
                     cell.imgStatus.image = [UIImage imageNamed:@"ic_call_outgoing.png"];
-                    cell.lbStateCall.text = [appDelegate.localization localizedStringForKey:@"Outgoing call"];
+                    cell.lbStateCall.text = [[LanguageUtil sharedInstance] getContent:@"Outgoing call"];
                 }
             }else{
                 if ([aCall._status isEqualToString: aborted_call] || [aCall._status isEqualToString: declined_call]) {
-                    cell.lbStateCall.text = [appDelegate.localization localizedStringForKey:@"Aborted call"];
+                    cell.lbStateCall.text = [[LanguageUtil sharedInstance] getContent:@"Aborted call"];
                     cell.lbDuration.text = @"";
                 }else{
-                    cell.lbStateCall.text = [appDelegate.localization localizedStringForKey:@"Missed call"];
+                    cell.lbStateCall.text = [[LanguageUtil sharedInstance] getContent:@"Missed call"];
                 }
                 cell.imgStatus.image = [UIImage imageNamed:@"ic_call_missed.png"];
-                cell.lbDuration.text = [NSString stringWithFormat:@"%d %@", aCall._duration, [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"sec"]];
+                cell.lbDuration.text = [NSString stringWithFormat:@"%d %@", aCall._duration, [[LanguageUtil sharedInstance] getContent:@"sec"]];
             }
         }
         return cell;
@@ -475,7 +475,7 @@ static UICompositeViewDescription *compositeDescription = nil;
             cell.lbDuration.text = @"";
         }else{
             if (aCall._duration < 60) {
-                cell.lbDuration.text = [NSString stringWithFormat:@"%d %@", aCall._duration, [appDelegate.localization localizedStringForKey:@"sec"]];
+                cell.lbDuration.text = [NSString stringWithFormat:@"%d %@", aCall._duration, [[LanguageUtil sharedInstance] getContent:@"sec"]];
             }else{
                 int hour = aCall._duration/3600;
                 int minutes = (aCall._duration - hour*3600)/60;
@@ -484,33 +484,33 @@ static UICompositeViewDescription *compositeDescription = nil;
                 NSString *str = @"";
                 if (hour > 0) {
                     if (hour == 1) {
-                        str = [NSString stringWithFormat:@"%ld %@", (long)hour, [appDelegate.localization localizedStringForKey:@"hour"]];
+                        str = [NSString stringWithFormat:@"%ld %@", (long)hour, [[LanguageUtil sharedInstance] getContent:@"hour"]];
                     }else{
-                        str = [NSString stringWithFormat:@"%ld %@", (long)hour, [appDelegate.localization localizedStringForKey:@"hours"]];
+                        str = [NSString stringWithFormat:@"%ld %@", (long)hour, [[LanguageUtil sharedInstance] getContent:@"hours"]];
                     }
                 }
                 
                 if (minutes > 0) {
                     if (![str isEqualToString:@""]) {
                         if (minutes == 1) {
-                            str = [NSString stringWithFormat:@"%@ %d %@", str, minutes, [appDelegate.localization localizedStringForKey:@"minute"]];
+                            str = [NSString stringWithFormat:@"%@ %d %@", str, minutes, [[LanguageUtil sharedInstance] getContent:@"minute"]];
                         }else{
-                            str = [NSString stringWithFormat:@"%@ %d %@", str, minutes, [appDelegate.localization localizedStringForKey:@"minutes"]];
+                            str = [NSString stringWithFormat:@"%@ %d %@", str, minutes, [[LanguageUtil sharedInstance] getContent:@"minutes"]];
                         }
                     }else{
                         if (minutes == 1) {
-                            str = [NSString stringWithFormat:@"%d %@", minutes, [appDelegate.localization localizedStringForKey:@"minute"]];
+                            str = [NSString stringWithFormat:@"%d %@", minutes, [[LanguageUtil sharedInstance] getContent:@"minute"]];
                         }else{
-                            str = [NSString stringWithFormat:@"%d %@", minutes, [appDelegate.localization localizedStringForKey:@"minutes"]];
+                            str = [NSString stringWithFormat:@"%d %@", minutes, [[LanguageUtil sharedInstance] getContent:@"minutes"]];
                         }
                     }
                 }
                 
                 if (seconds > 0) {
                     if (![str isEqualToString:@""]) {
-                        str = [NSString stringWithFormat:@"%@ %d %@", str, seconds, [appDelegate.localization localizedStringForKey:@"sec"]];
+                        str = [NSString stringWithFormat:@"%@ %d %@", str, seconds, [[LanguageUtil sharedInstance] getContent:@"sec"]];
                     }else{
-                        str = [NSString stringWithFormat:@"%d %@", seconds, [appDelegate.localization localizedStringForKey:@"sec"]];
+                        str = [NSString stringWithFormat:@"%d %@", seconds, [[LanguageUtil sharedInstance] getContent:@"sec"]];
                     }
                 }
                 cell.lbDuration.text = str;
@@ -518,9 +518,9 @@ static UICompositeViewDescription *compositeDescription = nil;
         }
         
         if ([aCall._status isEqualToString: aborted_call] || [aCall._status isEqualToString: declined_call]) {
-            cell.lbState.text = [appDelegate.localization localizedStringForKey:@"Aborted call"];
+            cell.lbState.text = [[LanguageUtil sharedInstance] getContent:@"Aborted call"];
         }else if ([aCall._status isEqualToString: missed_call]){
-            cell.lbState.text = [appDelegate.localization localizedStringForKey:@"Missed call"];
+            cell.lbState.text = [[LanguageUtil sharedInstance] getContent:@"Missed call"];
         }else{
             cell.lbState.text = @"";
         }
@@ -540,10 +540,10 @@ static UICompositeViewDescription *compositeDescription = nil;
         if (![dateStr isEqualToString:@"Today"]) {
             dateStr = [AppUtils checkYesterdayForHistoryCall: aCall._date];
             if ([dateStr isEqualToString:@"Yesterday"]) {
-                dateStr = [appDelegate.localization localizedStringForKey:@"Yesterday"];
+                dateStr = [[LanguageUtil sharedInstance] getContent:@"Yesterday"];
             }
         }else{
-            dateStr = [appDelegate.localization localizedStringForKey:@"Today"];
+            dateStr = [[LanguageUtil sharedInstance] getContent:@"Today"];
         }
         cell.lbDate.text = dateStr;
         
@@ -557,9 +557,9 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (IBAction)_iconAddNewClicked:(UIButton *)sender {
-    UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:phoneNumber delegate:self cancelButtonTitle:[appDelegate.localization localizedStringForKey:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles:
-                                      [appDelegate.localization localizedStringForKey:@"Create new contact"],
-                                      [appDelegate.localization localizedStringForKey:@"Add to existing contact"],
+    UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:phoneNumber delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles:
+                                      [[LanguageUtil sharedInstance] getContent:@"Create new contact"],
+                                      [[LanguageUtil sharedInstance] getContent:@"Add to existing contact"],
                                       nil];
     popupAddContact.tag = 100;
     [popupAddContact showInView:self.view];

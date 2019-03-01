@@ -46,7 +46,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     [WriteLogsUtils writeForGoToScreen:@"IntroduceViewController"];
     
-    _lbIntroduce.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Introduction"];
+    _lbIntroduce.text = [[LanguageUtil sharedInstance] getContent:@"Introduction"];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

@@ -218,3 +218,4 @@
 "Hide password" = "Hide"
 "Sign In" = "Sign In"
 "Forgot password" = "Forgot password"
+"Please fill full information" = "Please fill full information"

@@ -171,7 +171,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     [_speakerButton setHidden: YES];
     
     //  Added by Khai Le on 06/10/2018
-    _durationLabel.text = [appDelegate.localization localizedStringForKey:@"Calling"];
+    _durationLabel.text = [[LanguageUtil sharedInstance] getContent:@"Calling"];
     _durationLabel.textColor = UIColor.whiteColor;
     
     [self addScrollview];
@@ -255,7 +255,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         _callView.hidden = NO;
         _conferenceView.hidden = YES;
         if (count == 0) {
-            _durationLabel.text = [appDelegate.localization localizedStringForKey:@"Calling"];
+            _durationLabel.text = [[LanguageUtil sharedInstance] getContent:@"Calling"];
             _durationLabel.textColor = UIColor.whiteColor;
         }else{
             LinphoneCall *curCall = linphone_core_get_current_call([LinphoneManager getLc]);
@@ -495,8 +495,8 @@ static UICompositeViewDescription *compositeDescription = nil;
             //  Hide call quality value if have not connected yet
             viewKeypad.lbQualityValue.hidden = YES;
         }else if(quality < 1) {
-            NSString *qualityValue = [appDelegate.localization localizedStringForKey:@"Worse"];
-            NSString *quality = [NSString stringWithFormat:@"%@: %@", [appDelegate.localization localizedStringForKey:@"Quality"], qualityValue];
+            NSString *qualityValue = [[LanguageUtil sharedInstance] getContent:@"Worse"];
+            NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Quality"], qualityValue];
             NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString: quality];
             [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, quality.length)];
             [attr addAttribute:NSForegroundColorAttributeName value:UIColor.redColor range:NSMakeRange(quality.length-qualityValue.length, qualityValue.length)];
@@ -506,8 +506,8 @@ static UICompositeViewDescription *compositeDescription = nil;
             viewKeypad.lbQualityValue.hidden = NO;
             
         } else if (quality < 2) {
-            NSString *qualityValue = [appDelegate.localization localizedStringForKey:@"Very low"];
-            NSString *quality = [NSString stringWithFormat:@"%@: %@", [appDelegate.localization localizedStringForKey:@"Quality"], qualityValue];
+            NSString *qualityValue = [[LanguageUtil sharedInstance] getContent:@"Very low"];
+            NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Quality"], qualityValue];
             NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString: quality];
             [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, quality.length)];
             [attr addAttribute:NSForegroundColorAttributeName value:UIColor.orangeColor range:NSMakeRange(quality.length-qualityValue.length, qualityValue.length)];
@@ -517,8 +517,8 @@ static UICompositeViewDescription *compositeDescription = nil;
             viewKeypad.lbQualityValue.hidden = NO;
             
         } else if (quality < 3) {
-            NSString *qualityValue = [appDelegate.localization localizedStringForKey:@"Low"];
-            NSString *quality = [NSString stringWithFormat:@"%@: %@", [appDelegate.localization localizedStringForKey:@"Quality"], qualityValue];
+            NSString *qualityValue = [[LanguageUtil sharedInstance] getContent:@"Low"];
+            NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Quality"], qualityValue];
             NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString: quality];
             [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, quality.length)];
             [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(quality.length-qualityValue.length, qualityValue.length)];
@@ -528,8 +528,8 @@ static UICompositeViewDescription *compositeDescription = nil;
             viewKeypad.lbQualityValue.hidden = NO;
             
         } else if(quality < 4){
-            NSString *qualityValue = [appDelegate.localization localizedStringForKey:@"Average"];
-            NSString *quality = [NSString stringWithFormat:@"%@: %@", [appDelegate.localization localizedStringForKey:@"Quality"], qualityValue];
+            NSString *qualityValue = [[LanguageUtil sharedInstance] getContent:@"Average"];
+            NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Quality"], qualityValue];
             NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString: quality];
             [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, quality.length)];
             [attr addAttribute:NSForegroundColorAttributeName value:UIColor.greenColor range:NSMakeRange(quality.length-qualityValue.length, qualityValue.length)];
@@ -539,8 +539,8 @@ static UICompositeViewDescription *compositeDescription = nil;
             viewKeypad.lbQualityValue.hidden = NO;
             
         } else{
-            NSString *qualityValue = [appDelegate.localization localizedStringForKey:@"Good"];
-            NSString *quality = [NSString stringWithFormat:@"%@: %@", [appDelegate.localization localizedStringForKey:@"Quality"], qualityValue];
+            NSString *qualityValue = [[LanguageUtil sharedInstance] getContent:@"Good"];
+            NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Quality"], qualityValue];
             NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString: quality];
             [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, quality.length)];
             [attr addAttribute:NSForegroundColorAttributeName value:UIColor.greenColor range:NSMakeRange(quality.length-qualityValue.length, qualityValue.length)];
@@ -698,7 +698,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 	switch (state) {
         case LinphoneCallOutgoingRinging:{
-            _durationLabel.text = [appDelegate.localization localizedStringForKey:@"Ringing"];
+            _durationLabel.text = [[LanguageUtil sharedInstance] getContent:@"Ringing"];
             _durationLabel.textColor = UIColor.whiteColor;
             
             [self getPhoneNumberOfCall];
@@ -710,7 +710,7 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case LinphoneCallOutgoingProgress:{
-            _durationLabel.text = [appDelegate.localization localizedStringForKey:@"Calling"];
+            _durationLabel.text = [[LanguageUtil sharedInstance] getContent:@"Calling"];
             _durationLabel.textColor = UIColor.whiteColor;
             
             break;
@@ -1195,7 +1195,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.width.mas_equalTo(wFeatureIcon+marginX);
     }];
     lbKeypad.backgroundColor = UIColor.clearColor;
-    lbKeypad.text = [appDelegate.localization localizedStringForKey:@"Keypad"];
+    lbKeypad.text = [[LanguageUtil sharedInstance] getContent:@"Keypad"];
     
     [_numpadButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(lbKeypad.mas_top);
@@ -1228,7 +1228,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.width.equalTo(lbKeypad.mas_width);
     }];
     lbMute.backgroundColor = UIColor.clearColor;
-    lbMute.text = [appDelegate.localization localizedStringForKey:@"Mute"];
+    lbMute.text = [[LanguageUtil sharedInstance] getContent:@"Mute"];
     
     //  speaker
     [_speakerButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -1250,7 +1250,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.width.equalTo(lbKeypad.mas_width);
     }];
     lbSpeaker.backgroundColor = UIColor.clearColor;
-    lbSpeaker.text = [appDelegate.localization localizedStringForKey:@"Speaker"];
+    lbSpeaker.text = [[LanguageUtil sharedInstance] getContent:@"Speaker"];
     
     //  Hold call
     [_callPauseButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -1272,7 +1272,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.width.equalTo(lbKeypad.mas_width);
     }];
     lbPause.backgroundColor = UIColor.clearColor;
-    lbPause.text = [appDelegate.localization localizedStringForKey:@"Hold"];
+    lbPause.text = [[LanguageUtil sharedInstance] getContent:@"Hold"];
     
     //  Add call
     [icAddCall mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -1297,7 +1297,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.width.equalTo(lbKeypad.mas_width);
     }];
     lbAddCall.backgroundColor = UIColor.clearColor;
-    lbAddCall.text = [appDelegate.localization localizedStringForKey:@"Add call"];
+    lbAddCall.text = [[LanguageUtil sharedInstance] getContent:@"Add call"];
     
     //  transfer call
     [_optionsTransferButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -1321,7 +1321,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.width.equalTo(lbKeypad.mas_width);
     }];
     lbTransfer.backgroundColor = UIColor.clearColor;
-    lbTransfer.text = [appDelegate.localization localizedStringForKey:@"Transfer"];
+    lbTransfer.text = [[LanguageUtil sharedInstance] getContent:@"Transfer"];
 }
 
 /*----- Click vao button conference trong scrollView  -----*/
@@ -1440,7 +1440,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.top.left.bottom.right.equalTo(_callView);
     }];
     
-    _lbQuality.text = [appDelegate.localization localizedStringForKey: @"Quality"];
+    _lbQuality.text = [[LanguageUtil sharedInstance] getContent:@"Quality"];
     _lbQuality.backgroundColor = UIColor.clearColor;
     _lbQuality.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
     _lbQuality.textColor = UIColor.whiteColor;
@@ -1593,7 +1593,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     [collectionConference setBackgroundColor:[UIColor clearColor]];
     collectionConference.hidden = YES;
     
-    [btnAddCallConf setTitle:[appDelegate.localization localizedStringForKey:@"CN_TEXT_ADD_CONFERENCE"]
+    [btnAddCallConf setTitle:[[LanguageUtil sharedInstance] getContent:@"CN_TEXT_ADD_CONFERENCE"]
                     forState:UIControlStateNormal];
     [btnAddCallConf setBackgroundImage:[UIImage imageNamed:@"btn_add_conf_over.png"]
                               forState:UIControlStateHighlighted];
@@ -1781,7 +1781,7 @@ static UICompositeViewDescription *compositeDescription = nil;
                 lMessage = [NSString stringWithFormat:NSLocalizedString(@"%@ is not registered.", nil), lUserName];
                 break;
             case LinphoneReasonBusy:
-                _durationLabel.text = [appDelegate.localization localizedStringForKey:@"The user is busy"];
+                _durationLabel.text = [[LanguageUtil sharedInstance] getContent:@"The user is busy"];
                 _durationLabel.textColor = UIColor.whiteColor;
                 break;
             default:
@@ -1822,7 +1822,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     if ([LinphoneAppDelegate sharedInstance].callTransfered) {
         [LinphoneAppDelegate sharedInstance].callTransfered = NO;
         
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Your call has been transfered"] duration:3.0 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Your call has been transfered"] duration:3.0 position:CSToastPositionCenter];
     }
 }
 
@@ -1921,7 +1921,7 @@ static UICompositeViewDescription *compositeDescription = nil;
                          toFilePath:appDelegate.logFilePath];
     
     if (!appDelegate.enableForTest) {
-        [self.view makeToast:[appDelegate.localization localizedStringForKey:@"This feature have not supported yet. Please try later!"] duration:2.0 position:CSToastPositionCenter];
+        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"This feature have not supported yet. Please try later!"] duration:2.0 position:CSToastPositionCenter];
         return;
     }
     

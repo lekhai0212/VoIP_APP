@@ -51,12 +51,12 @@
         if (state) {
             btnThumb.frame = CGRectMake(frame.size.width-border-wIcon, border, wIcon, wIcon);
             lbState.frame = CGRectMake(0, border, frame.size.width-(2*border+wIcon), frame.size.height-border);
-            lbState.text = [[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"ON"] uppercaseString];
+            lbState.text = [[[LanguageUtil sharedInstance] getContent:@"ON"] uppercaseString];
             lbBackground.backgroundColor = bgOn;
         }else{
             btnThumb.frame = CGRectMake(border, border, wIcon, wIcon);
             lbState.frame = CGRectMake(btnThumb.frame.origin.x+btnThumb.frame.size.width, border, frame.size.width-(2*border+wIcon), frame.size.height-border);
-            lbState.text = [[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"OFF"] uppercaseString];
+            lbState.text = [[[LanguageUtil sharedInstance] getContent:@"OFF"] uppercaseString];
             lbBackground.backgroundColor = bgOff;
         }
     }
@@ -110,7 +110,7 @@
         btnThumb.frame = CGRectMake(border, border, wIcon, wIcon);
         lbState.frame = CGRectMake(btnThumb.frame.origin.x+btnThumb.frame.size.width, border, self.frame.size.width-(2*border+wIcon), self.frame.size.height-border);
         
-        lbState.text = [[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"OFF"] uppercaseString];
+        lbState.text = [[[LanguageUtil sharedInstance] getContent:@"OFF"] uppercaseString];
         lbBackground.backgroundColor = bgOff;
     } completion:^(BOOL finished) {
         curState = NO;
@@ -125,7 +125,7 @@
     [UIView animateWithDuration:0.2 animations:^{
         btnThumb.frame = CGRectMake(self.frame.size.width-border-wIcon, border, wIcon, wIcon);
         lbState.frame = CGRectMake(0, border, self.frame.size.width-(2*border+wIcon), self.frame.size.height-border);
-        lbState.text = [[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"ON"] uppercaseString];
+        lbState.text = [[[LanguageUtil sharedInstance] getContent:@"ON"] uppercaseString];
         lbBackground.backgroundColor = bgOn;
     }completion:^(BOOL finished) {
         curState = YES;

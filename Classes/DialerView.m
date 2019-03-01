@@ -309,11 +309,13 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (IBAction)onAddContactClick:(id)event {
     if ([_addressField.text isEqualToString:USERNAME]) {
-        [self.view makeToast:[appDelegate.localization localizedStringForKey:@"You can not add yourself to contact list"] duration:2.0 position:CSToastPositionCenter];
+        NSString *content = [[LanguageUtil sharedInstance] getContent:@"You can not add yourself to contact list"];
+        [self.view makeToast:content duration:2.0 position:CSToastPositionCenter];
         return;
     }
     
-    UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:_addressField.text delegate:self cancelButtonTitle:[appDelegate.localization localizedStringForKey:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles: [appDelegate.localization localizedStringForKey:@"Create new contact"], [appDelegate.localization localizedStringForKey:@"Add to existing contact"], nil];
+    NSString *cancelText = [[LanguageUtil sharedInstance] getContent:@"Cancel"];
+    UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:_addressField.text delegate:self cancelButtonTitle:cancelText destructiveButtonTitle:nil otherButtonTitles: [[LanguageUtil sharedInstance] getContent:@"Create new contact"], [[LanguageUtil sharedInstance] getContent:@"Add to existing contact"], nil];
     popupAddContact.tag = 100;
     [popupAddContact showInView:self.view];
 }
@@ -438,7 +440,10 @@ static UICompositeViewDescription *compositeDescription = nil;
 {
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Do you want to call to hotline for assistance?"] delegate:self cancelButtonTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Close"] otherButtonTitles: [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Call"], nil];
+    
+    
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[[LanguageUtil sharedInstance] getContent:@"Do you want to call to hotline for assistance?"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Close"] otherButtonTitles: [[LanguageUtil sharedInstance] getContent:@"Call"], nil];
     alert.delegate = self;
     alert.tag = 3;
     [alert show];
@@ -479,7 +484,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 {
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] OH SHITTTTTTTTT!", __FUNCTION__] toFilePath:appDelegate.logFilePath];
     
-    _lbStatus.text = [appDelegate.localization localizedStringForKey:@"No network"];
+    _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"No network"];
     _lbStatus.textColor = UIColor.orangeColor;
 }
 
@@ -858,7 +863,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     switch (state) {
         case LinphoneRegistrationOk: {
             _lbStatus.textColor = UIColor.greenColor;
-            _lbStatus.text = [appDelegate.localization localizedStringForKey:@"Online"];
+            _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Online"];
             break;
         }
         case LinphoneRegistrationNone:{
@@ -872,15 +877,15 @@ static UICompositeViewDescription *compositeDescription = nil;
         case LinphoneRegistrationFailed: {
             _lbStatus.textColor = UIColor.orangeColor;
             if ([SipUtils getStateOfDefaultProxyConfig] == eAccountOff) {
-                _lbStatus.text = [appDelegate.localization localizedStringForKey:@"Disabled"];
+                _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Disabled"];
             }else{
-                _lbStatus.text = [appDelegate.localization localizedStringForKey:@"Offline"];
+                _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Offline"];
             }
             break;
         }
         case LinphoneRegistrationProgress: {
             _lbStatus.textColor = UIColor.whiteColor;
-            _lbStatus.text = [appDelegate.localization localizedStringForKey:@"Connecting"];
+            _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Connecting"];
             break;
         }
         default:
@@ -912,7 +917,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     AccountState curState = [SipUtils getStateOfDefaultProxyConfig];
     if (curState == eAccountNone) {
         _lbAccount.text = @"";
-        _lbStatus.text = [appDelegate.localization localizedStringForKey:@"No account"];
+        _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"No account"];
         _lbStatus.textColor = UIColor.orangeColor;
         
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] NONE ACCOUNT", __FUNCTION__] toFilePath:appDelegate.logFilePath];
@@ -920,7 +925,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         NSString *accountID = [SipUtils getAccountIdOfDefaultProxyConfig];
         _lbAccount.text = accountID;
         if (curState == eAccountOff) {
-            _lbStatus.text = [appDelegate.localization localizedStringForKey:@"Disabled"];
+            _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Disabled"];
             _lbStatus.textColor = UIColor.orangeColor;
             
             [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] AccountId = %@, state is OFF", __FUNCTION__, accountID] toFilePath:appDelegate.logFilePath];
@@ -929,10 +934,10 @@ static UICompositeViewDescription *compositeDescription = nil;
             if (state == LinphoneRegistrationOk) {
                 //  account on
                 _lbStatus.textColor = UIColor.greenColor;
-                _lbStatus.text = [appDelegate.localization localizedStringForKey:@"Online"];
+                _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Online"];
             }else{
                 _lbStatus.textColor = UIColor.orangeColor;
-                _lbStatus.text = [appDelegate.localization localizedStringForKey:@"Offline"];
+                _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Offline"];
             }
             
             [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] AccountId = %@, state is ON", __FUNCTION__, accountID] toFilePath:appDelegate.logFilePath];
@@ -956,7 +961,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)whenNetworkChanged {
     NetworkStatus internetStatus = [appDelegate.internetReachable currentReachabilityStatus];
     if (internetStatus == NotReachable) {
-        _lbStatus.text = [appDelegate.localization localizedStringForKey:@"No network"];
+        _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"No network"];
         _lbStatus.textColor = UIColor.orangeColor;
     }else{
         [self checkAccountForApp];
@@ -970,16 +975,16 @@ static UICompositeViewDescription *compositeDescription = nil;
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
     
     if ([LinphoneManager instance].connectivity == none){
-        [self.view makeToast:[appDelegate.localization localizedStringForKey:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
+        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
         return;
     }
     
     AccountState curState = [SipUtils getStateOfDefaultProxyConfig];
     //  No account
     if (curState == eAccountNone) {
-        NSString *content = [NSString stringWithFormat:@"%@", [appDelegate.localization localizedStringForKey:@"You have not set up an account yet. Do you want to setup now?"]];
+        NSString *content = [[LanguageUtil sharedInstance] getContent:@"You have not set up an account yet. Do you want to setup now?"];
         
-        UIAlertView *alertAcc = [[UIAlertView alloc] initWithTitle:nil message:content delegate:self cancelButtonTitle:[appDelegate.localization localizedStringForKey:@"Cancel"] otherButtonTitles: [appDelegate.localization localizedStringForKey:@"Go to settings"], nil];
+        UIAlertView *alertAcc = [[UIAlertView alloc] initWithTitle:nil message:content delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] otherButtonTitles: [[LanguageUtil sharedInstance] getContent:@"Go to settings"], nil];
         alertAcc.delegate = self;
         alertAcc.tag = 1;
         [alertAcc show];
@@ -988,7 +993,9 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     //  account was disabled
     if (curState == eAccountOff) {
-        UIAlertView *alertAcc = [[UIAlertView alloc] initWithTitle:nil message:[appDelegate.localization localizedStringForKey:@"Do you want to enable this account?"] delegate:self cancelButtonTitle:[appDelegate.localization localizedStringForKey:@"No"] otherButtonTitles: [appDelegate.localization localizedStringForKey:@"Yes"], nil];
+        
+        
+        UIAlertView *alertAcc = [[UIAlertView alloc] initWithTitle:nil message:[[LanguageUtil sharedInstance] getContent:@"Do you want to enable this account?"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"No"] otherButtonTitles: [[LanguageUtil sharedInstance] getContent:@"Yes"], nil];
         alertAcc.delegate = self;
         alertAcc.tag = 2;
         [alertAcc show];
@@ -1004,9 +1011,9 @@ static UICompositeViewDescription *compositeDescription = nil;
     if (needSetting == nil){
         LinphoneProxyConfig *defaultConfig = linphone_core_get_default_proxy_config(LC);
         if (defaultConfig == NULL) {
-            NSString *content = [NSString stringWithFormat:@"%@", [appDelegate.localization localizedStringForKey:@"You have not set up an account yet. Do you want to setup now?"]];
+            NSString *content = [[LanguageUtil sharedInstance] getContent:@"You have not set up an account yet. Do you want to setup now?"];
             
-            UIAlertView *alertAcc = [[UIAlertView alloc] initWithTitle:nil message:content delegate:self cancelButtonTitle:[appDelegate.localization localizedStringForKey:@"Cancel"] otherButtonTitles: [appDelegate.localization localizedStringForKey:@"Go to settings?"], nil];
+            UIAlertView *alertAcc = [[UIAlertView alloc] initWithTitle:nil message:content delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] otherButtonTitles: [[LanguageUtil sharedInstance] getContent:@"Go to settings?"], nil];
             [alertAcc show];
         }
         [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"SHOWED_SETTINGS_ACCOUNT_FOR_FIRST"];

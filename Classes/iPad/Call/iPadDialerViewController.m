@@ -173,9 +173,9 @@
 }
 
 - (void)showContentWithCurrentLanguage {
-    lbNoCalls.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"No call in your history"];
-    [btnAll setTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"All"] forState:UIControlStateNormal];
-    [btnMissed setTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Missed"] forState:UIControlStateNormal];
+    lbNoCalls.text = [[LanguageUtil sharedInstance] getContent:@"No call in your history"];
+    [btnAll setTitle:[[LanguageUtil sharedInstance] getContent:@"All"] forState:UIControlStateNormal];
+    [btnMissed setTitle:[[LanguageUtil sharedInstance] getContent:@"Missed"] forState:UIControlStateNormal];
 }
 
 //  Cập nhật trạng thái của các icon trên header
@@ -261,7 +261,7 @@
         make.width.height.mas_equalTo(100.0);
     }];
     
-    lbNoCalls.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"No call in your history"];
+    lbNoCalls.text = [[LanguageUtil sharedInstance] getContent:@"No call in your history"];
     lbNoCalls.textColor = GRAY_COLOR;
     lbNoCalls.font = [UIFont systemFontOfSize:20.0 weight:UIFontWeightThin];
     [lbNoCalls mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -330,7 +330,7 @@
     //  cell._phoneNumber = aCall._phoneNumber;
     
     if ([aCall._phoneNumber isEqualToString: hotline]) {
-        cell.lbName.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Hotline"];
+        cell.lbName.text = [[LanguageUtil sharedInstance] getContent:@"Hotline"];
         cell.imgAvatar.image = [UIImage imageNamed:@"hotline_avatar.png"];
         
         cell.lbNumber.hidden = YES;
@@ -338,7 +338,7 @@
         cell.lbNumber.hidden = NO;
         
         if ([AppUtils isNullOrEmpty: aCall._phoneName]) {
-            cell.lbName.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Unknown"];
+            cell.lbName.text = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
         }else{
             cell.lbName.text = aCall._phoneName;
         }
@@ -433,11 +433,11 @@
     NSString *currentDate = [[listCalls objectAtIndex: section] valueForKey:@"title"];
     NSString *today = [AppUtils checkTodayForHistoryCall: currentDate];
     if ([today isEqualToString: @"Today"]) {
-        titleHeader =  [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"TODAY"];
+        titleHeader =  [[LanguageUtil sharedInstance] getContent:@"TODAY"];
     }else{
         NSString *yesterday = [AppUtils checkYesterdayForHistoryCall:currentDate];
         if ([yesterday isEqualToString:@"Yesterday"]) {
-            titleHeader =  [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"YESTERDAY"];
+            titleHeader =  [[LanguageUtil sharedInstance] getContent:@"YESTERDAY"];
         }else{
             titleHeader = currentDate;
         }

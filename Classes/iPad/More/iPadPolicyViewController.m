@@ -25,7 +25,7 @@
     
     [WriteLogsUtils writeForGoToScreen:@"iPadPolicyViewController"];
     
-    self.title = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Privacy Policy"];
+    self.title = [[LanguageUtil sharedInstance] getContent:@"Privacy Policy"];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

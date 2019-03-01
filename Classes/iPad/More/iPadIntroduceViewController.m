@@ -24,7 +24,7 @@
     [super viewWillAppear: animated];
     
     [WriteLogsUtils writeForGoToScreen:@"iPadIntroduceViewController"];
-    self.title = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Introduction"];
+    self.title = [[LanguageUtil sharedInstance] getContent:@"Introduction"];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

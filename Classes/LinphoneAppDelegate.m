@@ -574,7 +574,8 @@ void onUncaughtException(NSException* exception)
     }
     
     if (IS_IPHONE || IS_IPOD) {
-        [[PhoneMainView instance] changeCurrentView:[SignInViewController compositeViewDescription]];
+        //  [[PhoneMainView instance] changeCurrentView:[SignInViewController compositeViewDescription]];
+        [[PhoneMainView instance] changeCurrentView:[DialerView compositeViewDescription]];
         [PhoneMainView.instance updateStatusBar:nil];
     }else{
         contactType = eContactPBX;
@@ -1993,45 +1994,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
 }
 
-//- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
-//{
-//    INInteraction *interaction = userActivity.interaction;
-//    if (interaction != nil) {
-//        INStartAudioCallIntent *startAudioCallIntent = (INStartAudioCallIntent *)interaction.intent;
-//        if (startAudioCallIntent != nil && startAudioCallIntent.contacts.count > 0) {
-//            INPerson *contact = startAudioCallIntent.contacts[0];
-//            if (contact != nil) {
-//                INPersonHandle *personHandle = contact.personHandle;
-//                NSString *phoneNumber = personHandle.value;
-//                if (![AppUtils isNullOrEmpty: phoneNumber])
-//                {
-//                    phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
-//                    if ([AppUtils isNullOrEmpty: phoneNumber]) {
-//                        [self showSplashScreenOnView: NO];
-//                    }else{
-//                        [self showSplashScreenOnView: YES];
-//
-//                        [[NSUserDefaults standardUserDefaults] setObject:phoneNumber forKey:UserActivity];
-//                        [[NSUserDefaults standardUserDefaults] synchronize];
-//                    }
-//                }
-//            }
-//        }
-//    }
-//    return YES;
-//}
-
-- (void)showSplashScreenOnView: (BOOL)show {
-    if (splashScreen == nil) {
-        UINib *nib = [UINib nibWithNibName:@"LaunchScreen" bundle:nil];
-        splashScreen = [[nib instantiateWithOwner:self options:nil] objectAtIndex:0];
-        [self.window addSubview:splashScreen];
-    }
-    splashScreen.frame = [UIScreen mainScreen].bounds;
-    splashScreen.hidden = !show;
-}
-
--(BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
 {
     INInteraction *interaction = userActivity.interaction;
     if (interaction != nil) {
@@ -2058,6 +2021,44 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
     return YES;
 }
+
+- (void)showSplashScreenOnView: (BOOL)show {
+    if (splashScreen == nil) {
+        UINib *nib = [UINib nibWithNibName:@"LaunchScreen" bundle:nil];
+        splashScreen = [[nib instantiateWithOwner:self options:nil] objectAtIndex:0];
+        [self.window addSubview:splashScreen];
+    }
+    splashScreen.frame = [UIScreen mainScreen].bounds;
+    splashScreen.hidden = !show;
+}
+
+//-(BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+//{
+//    INInteraction *interaction = userActivity.interaction;
+//    if (interaction != nil) {
+//        INStartAudioCallIntent *startAudioCallIntent = (INStartAudioCallIntent *)interaction.intent;
+//        if (startAudioCallIntent != nil && startAudioCallIntent.contacts.count > 0) {
+//            INPerson *contact = startAudioCallIntent.contacts[0];
+//            if (contact != nil) {
+//                INPersonHandle *personHandle = contact.personHandle;
+//                NSString *phoneNumber = personHandle.value;
+//                if (![AppUtils isNullOrEmpty: phoneNumber])
+//                {
+//                    phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
+//                    if ([AppUtils isNullOrEmpty: phoneNumber]) {
+//                        [self showSplashScreenOnView: NO];
+//                    }else{
+//                        [self showSplashScreenOnView: YES];
+//
+//                        [[NSUserDefaults standardUserDefaults] setObject:phoneNumber forKey:UserActivity];
+//                        [[NSUserDefaults standardUserDefaults] synchronize];
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    return YES;
+//}
 
 
 #pragma mark - sync contact xmpp
@@ -2344,7 +2345,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
     switch (tabBarController.selectedIndex) {
         case 0:{
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] ---> selected tab Dialer: index = %lu", __FUNCTION__, tabBarController.selectedIndex] toFilePath:logFilePath];
+            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] ---> selected tab Dialer: index = %d", __FUNCTION__, (int)tabBarController.selectedIndex] toFilePath:logFilePath];
             
             iPadKeypadViewController *contentVC = [[iPadKeypadViewController alloc] initWithNibName:@"iPadKeypadViewController" bundle:nil];
             
@@ -2355,7 +2356,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             break;
         }
         case 1:{
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] ---> selected tab Contacts: index = %lu", __FUNCTION__, tabBarController.selectedIndex] toFilePath:logFilePath];
+            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] ---> selected tab Contacts: index = %d", __FUNCTION__, (int)tabBarController.selectedIndex] toFilePath:logFilePath];
             
             iPadNotChooseContactViewController *contentVC = [[iPadNotChooseContactViewController alloc] initWithNibName:@"iPadNotChooseContactViewController" bundle:nil];
             UINavigationController *detailVC = [AppUtils createNavigationWithController: contentVC];

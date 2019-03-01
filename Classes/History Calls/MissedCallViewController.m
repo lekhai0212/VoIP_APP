@@ -120,7 +120,7 @@
 }
 
 - (void)showContentWithCurrentMessage {
-    _lbNoCalls.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"No missed call in your history"];
+    _lbNoCalls.text = [[LanguageUtil sharedInstance] getContent:@"No missed call in your history"];
 }
 
 //  Click trên button Edit
@@ -178,7 +178,7 @@
     cell._phoneNumber = aCall._phoneNumber;
     
     if ([aCall._phoneNumber isEqualToString: hotline]) {
-        cell._lbName.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Hotline"];
+        cell._lbName.text = [[LanguageUtil sharedInstance] getContent:@"Hotline"];
         cell._imgAvatar.image = [UIImage imageNamed:@"hotline_avatar.png"];
         
         [cell updateFrameForHotline: YES];
@@ -228,7 +228,7 @@
     
     cell.lbTime.text = aCall._callTime;
     if (aCall.duration < 60) {
-        cell.lbDuration.text = [NSString stringWithFormat:@"%ld %@", aCall.duration, [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"sec"]];
+        cell.lbDuration.text = [NSString stringWithFormat:@"%ld %@", aCall.duration, [[LanguageUtil sharedInstance] getContent:@"sec"]];
     }else{
         cell.lbDuration.text = [NSString stringWithFormat:@"%ld s", aCall.duration];
     }
@@ -328,11 +328,11 @@
     NSString *currentDate = [[listCalls objectAtIndex: section] valueForKey:@"title"];
     NSString *today = [AppUtils checkTodayForHistoryCall: currentDate];
     if ([today isEqualToString: @"Today"]) {
-        titleHeader =  [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"TODAY"];
+        titleHeader =  [[LanguageUtil sharedInstance] getContent:@"TODAY"];
     }else{
         NSString *yesterday = [AppUtils checkYesterdayForHistoryCall:currentDate];
         if ([yesterday isEqualToString:@"Yesterday"]) {
-            titleHeader =  [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"YESTERDAY"];
+            titleHeader =  [[LanguageUtil sharedInstance] getContent:@"YESTERDAY"];
         }else{
             titleHeader = currentDate;
         }
@@ -370,7 +370,7 @@
         }
         return;
     }
-    [self.view makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"The phone number can not empty"]
+    [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"The phone number can not empty"]
                 duration:2.0 position:CSToastPositionCenter];
 }
 

@@ -196,8 +196,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 #pragma mark - My functions
 
 - (void)showContentWithCurrentLanguage {
-    [_iconAll setTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"All"] forState:UIControlStateNormal];
-    [_iconMissed setTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Missed"] forState:UIControlStateNormal];
+    [_iconAll setTitle:[[LanguageUtil sharedInstance] getContent:@"All"] forState:UIControlStateNormal];
+    [_iconMissed setTitle:[[LanguageUtil sharedInstance] getContent:@"Missed"] forState:UIControlStateNormal];
 }
 
 //  Reset lại các UI khi vào màn hình
@@ -240,7 +240,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
     
     _iconAll.backgroundColor = [UIColor colorWithRed:0.169 green:0.53 blue:0.949 alpha:1.0];
-    [_iconAll setTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"All"] forState:UIControlStateNormal];
+    [_iconAll setTitle:[[LanguageUtil sharedInstance] getContent:@"All"] forState:UIControlStateNormal];
     [_iconAll setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     [_iconAll mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_viewHeader).offset([LinphoneAppDelegate sharedInstance]._hStatus+5);
@@ -250,7 +250,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
     
     _iconMissed.backgroundColor = UIColor.clearColor;
-    [_iconMissed setTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Missed"] forState:UIControlStateNormal];
+    [_iconMissed setTitle:[[LanguageUtil sharedInstance] getContent:@"Missed"] forState:UIControlStateNormal];
     [_iconMissed setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     [_iconMissed mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_viewHeader.mas_centerX);

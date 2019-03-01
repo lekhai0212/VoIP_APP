@@ -56,8 +56,8 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     icSend.enabled = NO;
     
-    [icSend setTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Send"] forState:UIControlStateNormal];
-    [icSend setTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Send"] forState:UIControlStateDisabled];
+    [icSend setTitle:[[LanguageUtil sharedInstance] getContent:@"Send"] forState:UIControlStateNormal];
+    [icSend setTitle:[[LanguageUtil sharedInstance] getContent:@"Send"] forState:UIControlStateDisabled];
     
     if (listSelect == nil) {
         listSelect = [[NSMutableArray alloc] init];
@@ -91,7 +91,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     if ([MFMailComposeViewController canSendMail]) {
         BOOL networkReady = [DeviceUtils checkNetworkAvailable];
         if (!networkReady) {
-            [self.view makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
+            [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
             return;
         }
         
@@ -122,7 +122,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         
         [self presentViewController:mc animated:YES completion:NULL];
     }else{
-        [self.view makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Can not send email. Please check your email account again!"]
+        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Can not send email. Please check your email account again!"]
                     duration:3.0 position:CSToastPositionCenter];
     }
 }
@@ -230,9 +230,9 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
 {
     if (error) {
-        [self.view makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Failed to send email. Please check again!"] duration:4.0 position:CSToastPositionCenter];
+        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Failed to send email. Please check again!"] duration:4.0 position:CSToastPositionCenter];
     }else{
-        [self.view makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Your email was sent. Thank you!"] duration:4.0 position:CSToastPositionCenter];
+        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Your email was sent. Thank you!"] duration:4.0 position:CSToastPositionCenter];
     }
     [self performSelector:@selector(goBack) withObject:nil afterDelay:2.0];
 }

@@ -29,7 +29,7 @@
         make.top.left.bottom.right.equalTo(viewHeader);
     }];
     
-    lbHeader.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Register with phone number"];
+    lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"Register with phone number"];
     lbHeader.textColor = UIColor.whiteColor;
     [lbHeader mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(viewHeader).offset([LinphoneAppDelegate sharedInstance]._hStatus);
@@ -52,7 +52,7 @@
     }];
     
     //  Content
-    lbPhoneNumber.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Input phone number"];
+    lbPhoneNumber.text = [[LanguageUtil sharedInstance] getContent:@"Input phone number"];
     lbPhoneNumber.textColor = [UIColor colorWithRed:(80/255.0) green:(80/255.0)
                                                blue:(80/255.0) alpha:1.0];
     lbPhoneNumber.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
@@ -108,7 +108,7 @@
     
     //  button login with phone number
     
-    [btnContinue setTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Continue"]
+    [btnContinue setTitle:[[LanguageUtil sharedInstance] getContent:@"Continue"]
                  forState:UIControlStateNormal];
     UIImage *bgDisable = [AppUtils imageWithColor:[UIColor colorWithRed:(200/255.0) green:(200/255.0)
                                                                    blue:(200/255.0) alpha:1.0]

@@ -139,11 +139,11 @@
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     if ([addressField.text isEqualToString:USERNAME]) {
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"You can not add yourself to contact list"] duration:2.0 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"You can not add yourself to contact list"] duration:2.0 position:CSToastPositionCenter];
         return;
     }
     
-    UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:addressField.text delegate:self cancelButtonTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles: [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Create new contact"], [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Add to existing contact"], nil];
+    UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:addressField.text delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles: [[LanguageUtil sharedInstance] getContent:@"Create new contact"], [[LanguageUtil sharedInstance] getContent:@"Add to existing contact"], nil];
     popupAddContact.tag = 100;
     [popupAddContact showFromRect:addressField.bounds inView:addressField animated:YES];
     //  [popupAddContact showInView:self.view];
@@ -169,7 +169,7 @@
 - (IBAction)btnHotlineClicked:(UIButton *)sender {
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Do you want to call to hotline for assistance?"] delegate:self cancelButtonTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Close"] otherButtonTitles: [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Call"], nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[[LanguageUtil sharedInstance] getContent:@"Do you want to call to hotline for assistance?"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Close"] otherButtonTitles: [[LanguageUtil sharedInstance] getContent:@"Call"], nil];
     alert.delegate = self;
     alert.tag = 3;
     [alert show];
@@ -529,7 +529,7 @@
     AccountState curState = [SipUtils getStateOfDefaultProxyConfig];
     if (curState == eAccountNone) {
         lbAccount.text = @"";
-        lbStatus.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"No account"];
+        lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"No account"];
         lbStatus.textColor = UIColor.orangeColor;
         
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] NONE ACCOUNT", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
@@ -537,7 +537,7 @@
         NSString *accountID = [SipUtils getAccountIdOfDefaultProxyConfig];
         lbAccount.text = accountID;
         if (curState == eAccountOff) {
-            lbStatus.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Disabled"];
+            lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Disabled"];
             lbStatus.textColor = UIColor.orangeColor;
             [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] AccountId = %@, state is OFF", __FUNCTION__, accountID] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
         }else{
@@ -545,15 +545,15 @@
             if (state == LinphoneRegistrationOk) {
                 //  account on
                 lbStatus.textColor = UIColor.greenColor;
-                lbStatus.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Online"];
+                lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Online"];
             }else{
                 if (![DeviceUtils checkNetworkAvailable]) {
                     lbStatus.textColor = UIColor.orangeColor;
-                    lbStatus.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"No network"];
+                    lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"No network"];
                     
                 }else{
                     lbStatus.textColor = UIColor.orangeColor;
-                    lbStatus.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Offline"];
+                    lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Offline"];
                 }
             }
             
@@ -595,14 +595,14 @@
 - (void)networkDown {
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] OH SHITTTTTTTTT!", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
-    lbStatus.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"No network"];
+    lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"No network"];
     lbStatus.textColor = UIColor.orangeColor;
 }
 
 - (void)whenNetworkChanged {
     NetworkStatus internetStatus = [[LinphoneAppDelegate sharedInstance].internetReachable currentReachabilityStatus];
     if (internetStatus == NotReachable) {
-        lbStatus.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"No network"];
+        lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"No network"];
         lbStatus.textColor = UIColor.orangeColor;
     }else{
         [self checkAccountForApp];
@@ -616,20 +616,20 @@
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     if ([LinphoneManager instance].connectivity == none){
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
         return;
     }
     
     AccountState curState = [SipUtils getStateOfDefaultProxyConfig];
     //  No account
     if (curState == eAccountNone) {
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"You have not set up an account yet. Do you want to setup now?"] duration:2.5 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"You have not set up an account yet. Do you want to setup now?"] duration:2.5 position:CSToastPositionCenter];
         return;
     }
     
     //  account was disabled
     if (curState == eAccountOff) {
-        UIAlertView *alertAcc = [[UIAlertView alloc] initWithTitle:nil message:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Do you want to enable this account?"] delegate:self cancelButtonTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"No"] otherButtonTitles: [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Yes"], nil];
+        UIAlertView *alertAcc = [[UIAlertView alloc] initWithTitle:nil message:[[LanguageUtil sharedInstance] getContent:@"Do you want to enable this account?"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"No"] otherButtonTitles: [[LanguageUtil sharedInstance] getContent:@"Yes"], nil];
         alertAcc.delegate = self;
         alertAcc.tag = 2;
         [alertAcc show];
@@ -686,7 +686,7 @@
     switch (state) {
         case LinphoneRegistrationOk: {
             lbStatus.textColor = UIColor.greenColor;
-            lbStatus.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Online"];
+            lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Online"];
             break;
         }
         case LinphoneRegistrationNone:{
@@ -700,15 +700,15 @@
         case LinphoneRegistrationFailed: {
             lbStatus.textColor = UIColor.orangeColor;
             if ([SipUtils getStateOfDefaultProxyConfig] == eAccountOff) {
-                lbStatus.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Disabled"];
+                lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Disabled"];
             }else{
-                lbStatus.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Offline"];
+                lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Offline"];
             }
             break;
         }
         case LinphoneRegistrationProgress: {
             lbStatus.textColor = UIColor.whiteColor;
-            lbStatus.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Connecting"];
+            lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Connecting"];
             break;
         }
         default:

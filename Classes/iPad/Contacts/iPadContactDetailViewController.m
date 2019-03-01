@@ -36,7 +36,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
-    self.title = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Contact info"];
+    self.title = [[LanguageUtil sharedInstance] getContent:@"Contact info"];
     [self registerNotifications];
     
     self.navigationItem.rightBarButtonItem = nil;
@@ -93,7 +93,7 @@
     [btnCall setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     
     if ([AppUtils isNullOrEmpty: detailsPBXContact._number]) {
-        [self.view makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"The phone number can not empty"] duration:2.0 position:CSToastPositionCenter];
+        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"The phone number can not empty"] duration:2.0 position:CSToastPositionCenter];
     }else{
         NSString *number = [AppUtils removeAllSpecialInString: detailsPBXContact._number];
         if (![AppUtils isNullOrEmpty: number]) {
@@ -206,7 +206,7 @@
     }];
     
     UIFont *btnFont = [UIFont systemFontOfSize:18.0 weight:UIFontWeightThin];
-    CGSize textSize = [AppUtils getSizeWithText:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Call"] withFont:btnFont];
+    CGSize textSize = [AppUtils getSizeWithText:[[LanguageUtil sharedInstance] getContent:@"Call"] withFont:btnFont];
     if (textSize.width < 60) {
         textSize.width = 60.0;
     }
@@ -224,7 +224,7 @@
         make.height.mas_equalTo(40.0);
     }];
     
-    textSize = [AppUtils getSizeWithText:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Send message"] withFont:btnFont];
+    textSize = [AppUtils getSizeWithText:[[LanguageUtil sharedInstance] getContent:@"Send message"] withFont:btnFont];
     if (textSize.width < 60) {
         textSize.width = 60.0;
     }
@@ -347,15 +347,15 @@
             
             if (indexPath.row == detailsContact._listPhone.count) {
                 if (detailsContact._company != nil && ![detailsContact._company isEqualToString:@""]) {
-                    cell.lbTitle.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Company"];
+                    cell.lbTitle.text = [[LanguageUtil sharedInstance] getContent:@"Company"];
                     cell.lbValue.text = detailsContact._company;
                 }else if (detailsContact._email != nil && ![detailsContact._email isEqualToString:@""]){
-                    cell.lbTitle.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Email"];
+                    cell.lbTitle.text = [[LanguageUtil sharedInstance] getContent:@"Email"];
                     cell.lbValue.text = detailsContact._email;
                 }
             }else if (indexPath.row == detailsContact._listPhone.count + 1){
                 if (detailsContact._email != nil && ![detailsContact._email isEqualToString:@""]){
-                    cell.lbTitle.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Email"];
+                    cell.lbTitle.text = [[LanguageUtil sharedInstance] getContent:@"Email"];
                     cell.lbValue.text = detailsContact._email;
                 }
             }
@@ -396,7 +396,7 @@
             [SipUtils makeCallWithPhoneNumber: number];
         }
     }else{
-        [self.view makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"The phone number can not empty"] duration:2.0 position:CSToastPositionCenter];
+        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"The phone number can not empty"] duration:2.0 position:CSToastPositionCenter];
     }
 }
 
@@ -413,7 +413,7 @@
     btnDeleteContact.layer.borderColor = btnDeleteContact.backgroundColor.CGColor;
     btnDeleteContact.layer.borderWidth = 1.0;
     [btnDeleteContact setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
-    [btnDeleteContact setTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Delete contact"] forState:UIControlStateNormal];
+    [btnDeleteContact setTitle:[[LanguageUtil sharedInstance] getContent:@"Delete contact"] forState:UIControlStateNormal];
     btnDeleteContact.titleLabel.font = [UIFont systemFontOfSize:22.0 weight:UIFontWeightThin];
     [viewFooter addSubview: btnDeleteContact];
     
@@ -445,7 +445,7 @@
     btnDeleteContact.backgroundColor = UIColor.redColor;
     [btnDeleteContact setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Delete contact"] message:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Are you sure, you want to delete this contact?"] delegate:self cancelButtonTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Cancel"] otherButtonTitles:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Accept"], nil];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Delete contact"] message:[[LanguageUtil sharedInstance] getContent:@"Are you sure, you want to delete this contact?"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] otherButtonTitles:[[LanguageUtil sharedInstance] getContent:@"Accept"], nil];
     alertView.delegate = self;
     [alertView show];
 }
@@ -460,7 +460,7 @@
         // Remove khỏi addressbook
         BOOL result = [ContactUtils deleteContactFromPhoneWithId: detailsContact._id_contact];
         if(result){
-            NSString *msgContent = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Contact has been deleted"];
+            NSString *msgContent = [[LanguageUtil sharedInstance] getContent:@"Contact has been deleted"];
             [[LinphoneAppDelegate sharedInstance].window makeToast:msgContent duration:2.0 position:CSToastPositionCenter];
             
             [self updateContactListAfterDeleteContact: detailsContact];
@@ -468,7 +468,7 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:reloadContactsAfterDeleteForIpad
                                                                 object:nil];
         }else{
-            NSString *msgContent = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Failed"];
+            NSString *msgContent = [[LanguageUtil sharedInstance] getContent:@"Failed"];
             [[LinphoneAppDelegate sharedInstance].window makeToast:msgContent duration:2.0 position:CSToastPositionCenter];
         }
         [[LinphoneAppDelegate sharedInstance] showWaiting: NO];

@@ -48,7 +48,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     [WriteLogsUtils writeForGoToScreen:@"PolicyViewController"];
     
-    _lbHeader.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Privacy Policy"];
+    _lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"Privacy Policy"];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

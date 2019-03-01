@@ -50,7 +50,16 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (IBAction)btnSignInPress:(UIButton *)sender {
+    if ([AppUtils isNullOrEmpty: tfAccountID.text] || [AppUtils isNullOrEmpty: tfPassword.text]) {
+        NSString *content = [[LanguageUtil sharedInstance] getContent:@"Please fill full information"];
+        [self.view makeToast:content duration:2.0 position:CSToastPositionCenter];
+        return;
+    }
     
+    //  start register pbx
+    NSString *domain = @"";
+    NSString *port = @"";
+    [SipUtils registerPBXAccount:tfAccountID.text password:tfPassword.text ipAddress:domain port:port];
 }
 
 - (void)whenTapOnScreen {

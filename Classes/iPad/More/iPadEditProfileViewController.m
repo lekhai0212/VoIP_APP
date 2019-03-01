@@ -32,8 +32,8 @@
 - (void)viewWillAppear:(BOOL)animated {
     [WriteLogsUtils writeForGoToScreen: @"iPadEditProfileViewController"];
     
-    self.title = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Edit profile"];
-    tfName.placeholder = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Account name"];
+    self.title = [[LanguageUtil sharedInstance] getContent:@"Edit profile"];
+    tfName.placeholder = [[LanguageUtil sharedInstance] getContent:@"Account name"];
     
     accountID = [SipUtils getAccountIdOfDefaultProxyConfig];
     
@@ -99,7 +99,7 @@
     
     //  cancel button
     btnReset.titleLabel.font = [UIFont systemFontOfSize:20.0 weight:UIFontWeightRegular];
-    [btnReset setTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Cancel"] forState:UIControlStateNormal];
+    [btnReset setTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] forState:UIControlStateNormal];
     btnReset.backgroundColor = [UIColor colorWithRed:(250/255.0) green:(80/255.0)
                                                 blue:(80/255.0) alpha:1.0];
     [btnReset setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
@@ -114,7 +114,7 @@
     }];
     
     btnSave.titleLabel.font = [UIFont systemFontOfSize:20.0 weight:UIFontWeightRegular];
-    [btnSave setTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Save"]
+    [btnSave setTitle:[[LanguageUtil sharedInstance] getContent:@"Save"]
              forState:UIControlStateNormal];
     btnSave.backgroundColor = IPAD_HEADER_BG_COLOR;
     [btnSave setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
@@ -132,7 +132,7 @@
     [self.view endEditing: YES];
     
     if ([LinphoneManager instance].connectivity == none){
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
         return;
     }
     
@@ -154,7 +154,7 @@
         }else {
             [self saveProfileNameForUser];
             
-            NSString *content = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Profile name has been updated"];
+            NSString *content = [[LanguageUtil sharedInstance] getContent:@"Profile name has been updated"];
             [[LinphoneAppDelegate sharedInstance].window makeToast:content duration:2.0 position:CSToastPositionCenter];
         }
     }
@@ -172,17 +172,17 @@
     LinphoneAppDelegate *appDelegate = [LinphoneAppDelegate sharedInstance];
     
     if (myAvatar != nil && ![myAvatar isEqualToString:@""]) {
-        UIActionSheet *popupAvatar = [[UIActionSheet alloc] initWithTitle:[appDelegate.localization localizedStringForKey:@"Options"] delegate:self cancelButtonTitle:[appDelegate.localization localizedStringForKey:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles:
-                                          [appDelegate.localization localizedStringForKey:@"Gallery"],
-                                          [appDelegate.localization localizedStringForKey:@"Camera"],
-                                          [appDelegate.localization localizedStringForKey:@"Remove Avatar"],
+        UIActionSheet *popupAvatar = [[UIActionSheet alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Options"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles:
+                                          [[LanguageUtil sharedInstance] getContent:@"Gallery"],
+                                          [[LanguageUtil sharedInstance] getContent:@"Camera"],
+                                          [[LanguageUtil sharedInstance] getContent:@"Remove Avatar"],
                                           nil];
         popupAvatar.tag = 100;
         [popupAvatar showFromRect:btnAvatar.bounds inView:btnAvatar animated:YES];
     }else{
-        UIActionSheet *popupAvatar = [[UIActionSheet alloc] initWithTitle:[appDelegate.localization localizedStringForKey:@"Options"] delegate:self cancelButtonTitle:[appDelegate.localization localizedStringForKey:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles:
-                                          [appDelegate.localization localizedStringForKey:@"Gallery"],
-                                          [appDelegate.localization localizedStringForKey:@"Camera"],
+        UIActionSheet *popupAvatar = [[UIActionSheet alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Options"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles:
+                                          [[LanguageUtil sharedInstance] getContent:@"Gallery"],
+                                          [[LanguageUtil sharedInstance] getContent:@"Camera"],
                                           nil];
         popupAvatar.tag = 101;
         [popupAvatar showFromRect:btnAvatar.bounds inView:btnAvatar animated:YES];
@@ -198,12 +198,12 @@
                 [[LinphoneAppDelegate sharedInstance] showWaiting: NO];
                 
                 if (uploadSession.uploadError != nil) {
-                    [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Failed. Please try later!"] duration:2.0 position:CSToastPositionCenter];
+                    [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Failed. Please try later!"] duration:2.0 position:CSToastPositionCenter];
                 }else{
                     if (isRemoveAvatar) {
-                        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Your avatar has been removed"] duration:2.0 position:CSToastPositionCenter];
+                        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Your avatar has been removed"] duration:2.0 position:CSToastPositionCenter];
                     }else{
-                        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Your avatar has been uploaded"] duration:2.0 position:CSToastPositionCenter];
+                        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Your avatar has been uploaded"] duration:2.0 position:CSToastPositionCenter];
                     }
                     
                     //  save avatar to get from local

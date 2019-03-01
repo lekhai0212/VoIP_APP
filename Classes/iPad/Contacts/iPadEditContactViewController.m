@@ -47,7 +47,7 @@
         {
             ContactDetailObj *aPhone = [[ContactDetailObj alloc] init];
             aPhone._iconStr = @"btn_contacts_mobile.png";
-            aPhone._titleStr = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:type_phone_mobile];
+            aPhone._titleStr = [[LanguageUtil sharedInstance] getContent:type_phone_mobile];
             aPhone._valueStr = curPhoneNumber;
             aPhone._buttonStr = @"contact_detail_icon_call.png";
             aPhone._typePhone = type_phone_mobile;
@@ -206,10 +206,10 @@
 }
 
 - (void)showContentWithCurrentLanguage {
-    self.title = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Edit contact"];
-    tfName.placeholder = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Fullname"];
-    tfEmail.placeholder = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Email"];
-    tfCompany.placeholder = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Company"];
+    self.title = [[LanguageUtil sharedInstance] getContent:@"Edit contact"];
+    tfName.placeholder = [[LanguageUtil sharedInstance] getContent:@"Fullname"];
+    tfEmail.placeholder = [[LanguageUtil sharedInstance] getContent:@"Email"];
+    tfCompany.placeholder = [[LanguageUtil sharedInstance] getContent:@"Company"];
 }
 
 - (void)whenTapOnMainScreen {
@@ -310,7 +310,7 @@
     
     /*  [Khai Le]
     btnCancel = [[UIButton alloc] init];
-    [btnCancel setTitle:[appDelegate.localization localizedStringForKey:@"Cancel"]
+    [btnCancel setTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"]
                forState:UIControlStateNormal];
     
     btnCancel.backgroundColor = [UIColor colorWithRed:(210/255.0) green:(51/255.0)
@@ -327,7 +327,7 @@
     }];
     
     btnSave = [[UIButton alloc] init];
-    [btnSave setTitle:[appDelegate.localization localizedStringForKey:@"Save"]
+    [btnSave setTitle:[[LanguageUtil sharedInstance] getContent:@"Save"]
              forState:UIControlStateNormal];
     btnSave.backgroundColor = [UIColor colorWithRed:(20/255.0) green:(129/255.0)
                                                blue:(211/255.0) alpha:1.0];
@@ -452,26 +452,26 @@
             {
                 aPhone._typePhone = type_phone_work;
                 aPhone._iconStr = @"btn_contacts_work.png";
-                aPhone._titleStr = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:type_phone_work];
+                aPhone._titleStr = [[LanguageUtil sharedInstance] getContent:type_phone_work];
                 
             }else if ([type isEqualToString:type_phone_fax]){
                 aPhone._typePhone = type_phone_fax;
                 aPhone._iconStr = @"btn_contacts_fax.png";
-                aPhone._titleStr = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:type_phone_fax];
+                aPhone._titleStr = [[LanguageUtil sharedInstance] getContent:type_phone_fax];
                 
             }else if ([type isEqualToString:type_phone_home]){
                 aPhone._typePhone = type_phone_home;
                 aPhone._iconStr = @"btn_contacts_home.png";
-                aPhone._titleStr = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:type_phone_home];
+                aPhone._titleStr = [[LanguageUtil sharedInstance] getContent:type_phone_home];
                 
             }else{
                 aPhone._typePhone = type_phone_mobile;
                 aPhone._iconStr = @"btn_contacts_mobile.png";
-                aPhone._titleStr = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:type_phone_mobile];
+                aPhone._titleStr = [[LanguageUtil sharedInstance] getContent:type_phone_mobile];
             }
             [detailsContact._listPhone addObject: aPhone];
         }else{
-            [self.view makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Please input phone number"]
+            [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Please input phone number"]
                         duration:2.0 position:CSToastPositionCenter];
         }
     }else if ([sender.currentTitle isEqualToString:@"Remove"]){
@@ -576,13 +576,13 @@
     
     BOOL isSaved = ABAddressBookSave (addressBook,&anError);
     if(isSaved){
-        NSString *content = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Contact has been updated"];
+        NSString *content = [[LanguageUtil sharedInstance] getContent:@"Contact has been updated"];
         
         [[LinphoneAppDelegate sharedInstance].window makeToast:content duration:2.0 position:CSToastPositionCenter];
     }
     
     if (anError != NULL) {
-        NSString *content = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Failed. Please try later!"];
+        NSString *content = [[LanguageUtil sharedInstance] getContent:@"Failed. Please try later!"];
         
         [[LinphoneAppDelegate sharedInstance].window makeToast:content duration:2.0 position:CSToastPositionCenter];
     }
@@ -613,16 +613,16 @@
     [self.view endEditing: YES];
     
     if ([LinphoneAppDelegate sharedInstance]._dataCrop != nil || (detailsContact._avatar != nil && ![detailsContact._avatar isEqualToString:@""])) {
-        UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Options"] delegate:self cancelButtonTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles:
-                                          [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Gallery"],
-                                          [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Camera"],
-                                          [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Remove Avatar"],
+        UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Options"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles:
+                                          [[LanguageUtil sharedInstance] getContent:@"Gallery"],
+                                          [[LanguageUtil sharedInstance] getContent:@"Camera"],
+                                          [[LanguageUtil sharedInstance] getContent:@"Remove Avatar"],
                                           nil];
         popupAddContact.tag = 100;
         //  [popupAddContact showInView:self.view];
         [popupAddContact showFromRect:imgAvatar.bounds inView:imgAvatar animated:YES];
     }else{
-        UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Options"] delegate:self cancelButtonTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles: [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Gallery"], [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Camera"],
+        UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Options"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles: [[LanguageUtil sharedInstance] getContent:@"Gallery"], [[LanguageUtil sharedInstance] getContent:@"Camera"],
                                           nil];
         popupAddContact.tag = 101;
         //  [popupAddContact showInView:self.view];

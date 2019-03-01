@@ -152,7 +152,7 @@
     //  khong co lien he
     _lbNoContacts.font = textFont;
     _lbNoContacts.textColor = UIColor.grayColor;
-    _lbNoContacts.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"No contacts"];
+    _lbNoContacts.text = [[LanguageUtil sharedInstance] getContent:@"No contacts"];
 }
 
 - (void)getSectionsForContactsList: (NSMutableArray *)contactList {
@@ -202,7 +202,7 @@
 
 - (NSString *)subTowString: (NSString *)str1 andString: (NSString *)str2{
     if ([str1 isEqualToString: @""] && [str2 isEqualToString: @""]) {
-        return [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Unknown"];
+        return [[LanguageUtil sharedInstance] getContent:@"Unknown"];
     }else if ([str1 isEqualToString: @""] && ![str2 isEqualToString: @""]){
         return str2;
     }else if (![str1 isEqualToString: @""] && [str2 isEqualToString: @""]){
@@ -245,7 +245,7 @@
     // Tên contact
     if (contact._fullName != nil) {
         if ([contact._fullName isEqualToString: @""]) {
-            cell.name.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Unknown"];
+            cell.name.text = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
         }else{
             cell.name.text = contact._fullName;
         }

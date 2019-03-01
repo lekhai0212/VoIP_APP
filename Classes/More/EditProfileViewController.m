@@ -58,8 +58,8 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     accountID = [SipUtils getAccountIdOfDefaultProxyConfig];
     
-    lbHeader.text = [appDelegate.localization localizedStringForKey:@"Edit profile"];
-    tfAccountName.placeholder = [appDelegate.localization localizedStringForKey:@"Account name"];
+    lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"Edit profile"];
+    tfAccountName.placeholder = [[LanguageUtil sharedInstance] getContent:@"Account name"];
     
     if (![AppUtils isNullOrEmpty: accountID]) {
         NSString *pbxKeyName = [NSString stringWithFormat:@"%@_%@", @"pbxName", accountID];
@@ -98,17 +98,17 @@ static UICompositeViewDescription *compositeDescription = nil;
     [self.view endEditing: YES];
     
     if (myAvatar != nil && ![myAvatar isEqualToString:@""]) {
-        UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:[appDelegate.localization localizedStringForKey:@"Options"] delegate:self cancelButtonTitle:[appDelegate.localization localizedStringForKey:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles:
-                                          [appDelegate.localization localizedStringForKey:@"Gallery"],
-                                          [appDelegate.localization localizedStringForKey:@"Camera"],
-                                          [appDelegate.localization localizedStringForKey:@"Remove Avatar"],
+        UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Options"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles:
+                                          [[LanguageUtil sharedInstance] getContent:@"Gallery"],
+                                          [[LanguageUtil sharedInstance] getContent:@"Camera"],
+                                          [[LanguageUtil sharedInstance] getContent:@"Remove Avatar"],
                                           nil];
         popupAddContact.tag = 100;
         [popupAddContact showInView:self.view];
     }else{
-        UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:[appDelegate.localization localizedStringForKey:@"Options"] delegate:self cancelButtonTitle:[appDelegate.localization localizedStringForKey:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles:
-                                          [appDelegate.localization localizedStringForKey:@"Gallery"],
-                                          [appDelegate.localization localizedStringForKey:@"Camera"],
+        UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Options"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles:
+                                          [[LanguageUtil sharedInstance] getContent:@"Gallery"],
+                                          [[LanguageUtil sharedInstance] getContent:@"Camera"],
                                           nil];
         popupAddContact.tag = 101;
         [popupAddContact showInView:self.view];
@@ -123,7 +123,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     [self.view endEditing: YES];
     
     if ([LinphoneManager instance].connectivity == none){
-        [self.view makeToast:[appDelegate.localization localizedStringForKey:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
+        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
         return;
     }
     
@@ -221,7 +221,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     //  cancel button
     btnCancel.titleLabel.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
-    [btnCancel setTitle:[appDelegate.localization localizedStringForKey:@"Cancel"]
+    [btnCancel setTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"]
                forState:UIControlStateNormal];
     btnCancel.backgroundColor = [UIColor colorWithRed:(250/255.0) green:(80/255.0)
                                                  blue:(80/255.0) alpha:1.0];
@@ -237,7 +237,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
     
     btnSave.titleLabel.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
-    [btnSave setTitle:[appDelegate.localization localizedStringForKey:@"Save"]
+    [btnSave setTitle:[[LanguageUtil sharedInstance] getContent:@"Save"]
              forState:UIControlStateNormal];
     [btnSave setBackgroundImage:[UIImage imageNamed:@"bg_button.png"]
                        forState:UIControlStateNormal];
@@ -400,12 +400,12 @@ static UICompositeViewDescription *compositeDescription = nil;
                 [icWaiting stopAnimating];
                 
                 if (uploadSession.uploadError != nil) {
-                    [self.view makeToast:[appDelegate.localization localizedStringForKey:@"Failed. Please try later!"] duration:2.0 position:CSToastPositionCenter];
+                    [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Failed. Please try later!"] duration:2.0 position:CSToastPositionCenter];
                 }else{
                     if (isRemoveAvatar) {
-                        [self.view makeToast:[appDelegate.localization localizedStringForKey:@"Your avatar has been removed"] duration:2.0 position:CSToastPositionCenter];
+                        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Your avatar has been removed"] duration:2.0 position:CSToastPositionCenter];
                     }else{
-                        [self.view makeToast:[appDelegate.localization localizedStringForKey:@"Your avatar has been uploaded"] duration:2.0 position:CSToastPositionCenter];
+                        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Your avatar has been uploaded"] duration:2.0 position:CSToastPositionCenter];
                     }
                     
                     //  save avatar to get from local

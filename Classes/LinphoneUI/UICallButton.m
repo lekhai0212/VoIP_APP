@@ -61,7 +61,7 @@
 - (void)touchUp:(id)sender {
     BOOL networkReady = [DeviceUtils checkNetworkAvailable];
     if (!networkReady) {
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
         return;
     }
     
@@ -71,7 +71,7 @@
         if (![phoneNumber isEqualToString: @""])
         {
             if ([phoneNumber isEqualToString: hotline]) {
-                addressField.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Hotline"];
+                addressField.text = [[LanguageUtil sharedInstance] getContent:@"Hotline"];
             }else{
                 addressField.text = phoneNumber;
             }
@@ -92,7 +92,7 @@
     
     BOOL success = [SipUtils makeCallWithPhoneNumber: address];
     if (!success) {
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Can not make call now. Perhaps you have not signed your account yet!"] duration:3.0 position:CSToastPositionCenter];
+        [[LanguageUtil sharedInstance] getContent:@"Can not make call now. Perhaps you have not signed your account yet!"];
         return;
     }
     

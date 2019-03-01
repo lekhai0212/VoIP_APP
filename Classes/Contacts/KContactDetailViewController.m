@@ -88,7 +88,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     [WriteLogsUtils writeForGoToScreen: @"KContactDetailViewController"];
     
-    _lbTitle.text = [appDelegate.localization localizedStringForKey:@"Contact info"];
+    _lbTitle.text = [[LanguageUtil sharedInstance] getContent:@"Contact info"];
     
     // Tắt màn hình cảm biến
     UIDevice *device = [UIDevice currentDevice];
@@ -107,7 +107,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     [self displayContactInformation];
     [_tbContactInfo reloadData];
     
-    [btnDelete setTitle:[appDelegate.localization localizedStringForKey:@"Delete contact"]
+    [btnDelete setTitle:[[LanguageUtil sharedInstance] getContent:@"Delete contact"]
                forState:UIControlStateNormal];
 }
 
@@ -341,15 +341,15 @@ static UICompositeViewDescription *compositeDescription = nil;
         
         if (indexPath.row == detailsContact._listPhone.count) {
             if (detailsContact._company != nil && ![detailsContact._company isEqualToString:@""]) {
-                cell.lbTitle.text = [appDelegate.localization localizedStringForKey:@"Company"];
+                cell.lbTitle.text = [[LanguageUtil sharedInstance] getContent:@"Company"];
                 cell.lbValue.text = detailsContact._company;
             }else if (detailsContact._email != nil && ![detailsContact._email isEqualToString:@""]){
-                cell.lbTitle.text = [appDelegate.localization localizedStringForKey:@"Email"];
+                cell.lbTitle.text = [[LanguageUtil sharedInstance] getContent:@"Email"];
                 cell.lbValue.text = detailsContact._email;
             }
         }else if (indexPath.row == detailsContact._listPhone.count + 1){
             if (detailsContact._email != nil && ![detailsContact._email isEqualToString:@""]){
-                cell.lbTitle.text = [appDelegate.localization localizedStringForKey:@"Email"];
+                cell.lbTitle.text = [[LanguageUtil sharedInstance] getContent:@"Email"];
                 cell.lbValue.text = detailsContact._email;
             }
         }
@@ -373,7 +373,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         if(result){
             [self updateContactListAfterDeleteContact: detailsContact];
             
-            NSString *msgContent = [appDelegate.localization localizedStringForKey:@"Contact has been deleted"];
+            NSString *msgContent = [[LanguageUtil sharedInstance] getContent:@"Contact has been deleted"];
             [self.view makeToast:msgContent duration:2.0 position:CSToastPositionCenter];
         }
         [waitingHud dismissAnimated:YES];
@@ -422,7 +422,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         btnDelete.backgroundColor = [UIColor colorWithRed:(202/255.0) green:(212/255.0)
                                                      blue:(223/255.0) alpha:1.0];
         [btnDelete setTitleColor:UIColor.redColor forState:UIControlStateNormal];
-        [btnDelete setTitle:[appDelegate.localization localizedStringForKey:@"Delete contact"]
+        [btnDelete setTitle:[[LanguageUtil sharedInstance] getContent:@"Delete contact"]
                    forState:UIControlStateNormal];
         btnDelete.titleLabel.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:20.0];
         [footerView addSubview: btnDelete];
@@ -449,7 +449,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
                          toFilePath:appDelegate.logFilePath];
     
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[appDelegate.localization localizedStringForKey:@"Delete contact"] message:[appDelegate.localization localizedStringForKey:@"Are you sure, you want to delete this contact?"] delegate:self cancelButtonTitle:[appDelegate.localization localizedStringForKey:@"Cancel"] otherButtonTitles:[appDelegate.localization localizedStringForKey:@"Accept"], nil];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Delete contact"] message:[[LanguageUtil sharedInstance] getContent:@"Are you sure, you want to delete this contact?"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] otherButtonTitles:[[LanguageUtil sharedInstance] getContent:@"Accept"], nil];
     alertView.delegate = self;
     [alertView show];
 }
@@ -464,7 +464,7 @@ static UICompositeViewDescription *compositeDescription = nil;
             [SipUtils makeCallWithPhoneNumber: number];
         }
     }else{
-        [self.view makeToast:[appDelegate.localization localizedStringForKey:@"The phone number can not empty"]
+        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"The phone number can not empty"]
                     duration:2.0 position:CSToastPositionCenter];
     }
 }

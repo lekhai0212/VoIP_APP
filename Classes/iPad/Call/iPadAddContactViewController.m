@@ -47,10 +47,10 @@
     
     [self setupUIForView];
     
-    btnCancel = [[UIBarButtonItem alloc] initWithTitle:[appDelegate.localization localizedStringForKey:@"Cancel"] style:UIBarButtonItemStyleDone target:self action:@selector(btnCancelPress)];
+    btnCancel = [[UIBarButtonItem alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] style:UIBarButtonItemStyleDone target:self action:@selector(btnCancelPress)];
     self.navigationItem.leftBarButtonItem = btnCancel;
     
-    btnSave = [[UIBarButtonItem alloc] initWithTitle:[appDelegate.localization localizedStringForKey:@"Save"] style:UIBarButtonItemStyleDone target:self action:@selector(saveContactPressed)];
+    btnSave = [[UIBarButtonItem alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Save"] style:UIBarButtonItemStyleDone target:self action:@selector(saveContactPressed)];
     self.navigationItem.rightBarButtonItem = btnSave;
 }
 
@@ -75,7 +75,7 @@
     {
         ContactDetailObj *aPhone = [[ContactDetailObj alloc] init];
         aPhone._iconStr = @"btn_contacts_mobile.png";
-        aPhone._titleStr = [appDelegate.localization localizedStringForKey:type_phone_mobile];
+        aPhone._titleStr = [[LanguageUtil sharedInstance] getContent:type_phone_mobile];
         aPhone._valueStr = currentPhoneNumber;
         aPhone._buttonStr = @"contact_detail_icon_call.png";
         aPhone._typePhone = type_phone_mobile;
@@ -117,18 +117,18 @@
 - (IBAction)btnAvatarPressed:(UIButton *)sender {
     [self.view endEditing: YES];
     if (appDelegate._dataCrop != nil) {
-        UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:[appDelegate.localization localizedStringForKey:@"Options"] delegate:self cancelButtonTitle:[appDelegate.localization localizedStringForKey:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles:
-                                          [appDelegate.localization localizedStringForKey:@"Gallery"],
-                                          [appDelegate.localization localizedStringForKey:@"Camera"],
-                                          [appDelegate.localization localizedStringForKey:@"Remove Avatar"],
+        UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Options"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles:
+                                          [[LanguageUtil sharedInstance] getContent:@"Gallery"],
+                                          [[LanguageUtil sharedInstance] getContent:@"Camera"],
+                                          [[LanguageUtil sharedInstance] getContent:@"Remove Avatar"],
                                           nil];
         popupAddContact.tag = 100;
         [popupAddContact showFromRect:imgAvatar.bounds inView:imgAvatar animated:YES];
         
     }else{
-        UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:[appDelegate.localization localizedStringForKey:@"Options"] delegate:self cancelButtonTitle:[appDelegate.localization localizedStringForKey:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles:
-                                          [appDelegate.localization localizedStringForKey:@"Gallery"],
-                                          [appDelegate.localization localizedStringForKey:@"Camera"],
+        UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Options"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles:
+                                          [[LanguageUtil sharedInstance] getContent:@"Gallery"],
+                                          [[LanguageUtil sharedInstance] getContent:@"Camera"],
                                           nil];
         popupAddContact.tag = 101;
         [popupAddContact showFromRect:imgAvatar.bounds inView:imgAvatar animated:YES];
@@ -145,7 +145,7 @@
     
     if ([AppUtils isNullOrEmpty:appDelegate._newContact._firstName] && [AppUtils isNullOrEmpty:appDelegate._newContact._lastName])
     {
-        [appDelegate.window makeToast:[appDelegate.localization localizedStringForKey:@"Contact name can not empty!"] duration:2.0 position:CSToastPositionCenter];
+        [appDelegate.window makeToast:[[LanguageUtil sharedInstance] getContent:@"Contact name can not empty!"] duration:2.0 position:CSToastPositionCenter];
         return;
     }
     [appDelegate showWaiting: YES];
@@ -165,7 +165,7 @@
 }
 
 - (void)showContentWithCurrentLanguage {
-    self.title = [appDelegate.localization localizedStringForKey: @"Add contact"];
+    self.title = [[LanguageUtil sharedInstance] getContent:@"Add contact"];
 }
 
 - (void)whenTapOnMainScreen {
@@ -223,7 +223,7 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:reloadHistoryCallForIpad object: nil];
     [self btnCancelPress];
     
-    [appDelegate.window makeToast:[appDelegate.localization localizedStringForKey:@"Successful"] duration:1.0 position:CSToastPositionCenter];
+    [appDelegate.window makeToast:[[LanguageUtil sharedInstance] getContent:@"Successful"] duration:1.0 position:CSToastPositionCenter];
     
 }
 
@@ -281,7 +281,7 @@
         }
         switch (indexPath.row) {
             case ROW_CONTACT_NAME:{
-                cell.lbTitle.text = [appDelegate.localization localizedStringForKey:@"Fullname"];
+                cell.lbTitle.text = [[LanguageUtil sharedInstance] getContent:@"Fullname"];
                 cell.tfContent.text = [ContactUtils getFullnameOfContactIfExists];
                 [cell.tfContent addTarget:self
                                    action:@selector(whenTextfieldFullnameChanged:)
@@ -289,7 +289,7 @@
                 break;
             }
             case ROW_CONTACT_EMAIL:{
-                cell.lbTitle.text = [appDelegate.localization localizedStringForKey:@"Email"];
+                cell.lbTitle.text = [[LanguageUtil sharedInstance] getContent:@"Email"];
                 cell.tfContent.tag = 100;
                 cell.tfContent.keyboardType = UIKeyboardTypeEmailAddress;
                 [cell.tfContent addTarget:self
@@ -305,7 +305,7 @@
                 break;
             }
             case ROW_CONTACT_COMPANY:{
-                cell.lbTitle.text = [appDelegate.localization localizedStringForKey:@"Company"];
+                cell.lbTitle.text = [[LanguageUtil sharedInstance] getContent:@"Company"];
                 cell.tfContent.tag = 101;
                 [cell.tfContent addTarget:self
                                    action:@selector(whenTextfieldChanged:)
@@ -434,26 +434,26 @@
                 {
                     aPhone._typePhone = type_phone_work;
                     aPhone._iconStr = @"btn_contacts_work.png";
-                    aPhone._titleStr = [appDelegate.localization localizedStringForKey:type_phone_work];
+                    aPhone._titleStr = [[LanguageUtil sharedInstance] getContent:type_phone_work];
                     
                 }else if ([type isEqualToString:type_phone_fax]){
                     aPhone._typePhone = type_phone_fax;
                     aPhone._iconStr = @"btn_contacts_fax.png";
-                    aPhone._titleStr = [appDelegate.localization localizedStringForKey:type_phone_fax];
+                    aPhone._titleStr = [[LanguageUtil sharedInstance] getContent:type_phone_fax];
                     
                 }else if ([type isEqualToString:type_phone_home]){
                     aPhone._typePhone = type_phone_home;
                     aPhone._iconStr = @"btn_contacts_home.png";
-                    aPhone._titleStr = [appDelegate.localization localizedStringForKey:type_phone_home];
+                    aPhone._titleStr = [[LanguageUtil sharedInstance] getContent:type_phone_home];
                     
                 }else{
                     aPhone._typePhone = type_phone_mobile;
                     aPhone._iconStr = @"btn_contacts_mobile.png";
-                    aPhone._titleStr = [appDelegate.localization localizedStringForKey:type_phone_mobile];
+                    aPhone._titleStr = [[LanguageUtil sharedInstance] getContent:type_phone_mobile];
                 }
                 [appDelegate._newContact._listPhone addObject: aPhone];
             }else{
-                [self.view makeToast:[appDelegate.localization localizedStringForKey:@"Please input phone number"]
+                [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Please input phone number"]
                             duration:2.0 position:CSToastPositionCenter];
             }
         }else if ([sender.currentTitle isEqualToString:@"Remove"]){

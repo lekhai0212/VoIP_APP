@@ -411,11 +411,11 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
 - (void)showContentWithCurrentLanguage
 {
     if (IS_IPHONE || IS_IPOD) {
-        _lbHeader.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Crop picture"];
+        _lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"Crop picture"];
     }else{
-        self.title = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Crop picture"];
+        self.title = [[LanguageUtil sharedInstance] getContent:@"Crop picture"];
     }
-    [_btnSave setTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Save"]
+    [_btnSave setTitle:[[LanguageUtil sharedInstance] getContent:@"Save"]
               forState:UIControlStateNormal];
 }
 

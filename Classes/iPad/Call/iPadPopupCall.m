@@ -84,7 +84,7 @@
                   action:@selector(onNumpadClick)
         forControlEvents:UIControlEventTouchUpInside];
     
-    lbKeypad.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Keypad"];
+    lbKeypad.text = [[LanguageUtil sharedInstance] getContent:@"Keypad"];
     lbKeypad.backgroundColor = UIColor.clearColor;
     lbKeypad.font = [UIFont fontWithName:HelveticaNeue size:15.0];
     [lbKeypad mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -106,7 +106,7 @@
     btnMute.enabled = NO;
     btnMute.delegate = self;
     
-    lbMute.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Mute"];
+    lbMute.text = [[LanguageUtil sharedInstance] getContent:@"Mute"];
     lbMute.backgroundColor = UIColor.clearColor;
     lbMute.font = lbKeypad.font;
     [lbMute mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -127,7 +127,7 @@
     btnSpeaker.enabled = NO;
     btnSpeaker.delegate = self;
     
-    lbSpeaker.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Speaker"];
+    lbSpeaker.text = [[LanguageUtil sharedInstance] getContent:@"Speaker"];
     lbSpeaker.backgroundColor = UIColor.clearColor;
     lbSpeaker.font = lbKeypad.font;
     [lbSpeaker mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -148,7 +148,7 @@
     btnHoldCall.enabled = NO;
     btnHoldCall.delegate = self;
     
-    lbHoldCall.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Hold"];
+    lbHoldCall.text = [[LanguageUtil sharedInstance] getContent:@"Hold"];
     lbHoldCall.backgroundColor = UIColor.clearColor;
     lbHoldCall.font = lbKeypad.font;
     [lbHoldCall mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -171,7 +171,7 @@
                   action:@selector(onAddCallClick:)
         forControlEvents:UIControlEventTouchUpInside];
     
-    lbAddCall.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Add call"];
+    lbAddCall.text = [[LanguageUtil sharedInstance] getContent:@"Add call"];
     lbAddCall.backgroundColor = UIColor.clearColor;
     lbAddCall.font = lbKeypad.font;
     [lbAddCall mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -191,7 +191,7 @@
     [self setButton:btnTransfer selected:NO];
     btnTransfer.enabled = NO;
     
-    lbTransfer.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Transfer"];
+    lbTransfer.text = [[LanguageUtil sharedInstance] getContent:@"Transfer"];
     lbTransfer.backgroundColor = UIColor.clearColor;
     lbTransfer.font = lbKeypad.font;
     [lbTransfer mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -269,7 +269,7 @@
     }];
     
     //  set text is calling for first
-    lbTime.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Calling"];
+    lbTime.text = [[LanguageUtil sharedInstance] getContent:@"Calling"];
     lbTime.textColor = UIColor.whiteColor;
     
     [self finishLoaded];
@@ -331,7 +331,7 @@
                          toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     if (![LinphoneAppDelegate sharedInstance].enableForTest) {
-        [self makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"This feature have not supported yet. Please try later!"] duration:2.0 position:CSToastPositionCenter];
+        [self makeToast:[[LanguageUtil sharedInstance] getContent:@"This feature have not supported yet. Please try later!"] duration:2.0 position:CSToastPositionCenter];
         return;
     }
     
@@ -386,7 +386,7 @@
     //  [self btnHideKeypadPressed];
     
     if (count == 0) {
-        lbTime.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Calling"];
+        lbTime.text = [[LanguageUtil sharedInstance] getContent:@"Calling"];
         lbTime.textColor = UIColor.whiteColor;
     }else{
         LinphoneCall *curCall = linphone_core_get_current_call([LinphoneManager getLc]);
@@ -396,7 +396,7 @@
         }else{
             LinphoneCallState callState = (curCall != NULL) ? linphone_call_get_state(curCall) : 0;
             if (callState == LinphoneCallOutgoingProgress) {
-                lbTime.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Calling"];
+                lbTime.text = [[LanguageUtil sharedInstance] getContent:@"Calling"];
                 lbTime.textColor = UIColor.whiteColor;
             }
             callDirection = linphone_call_get_dir(curCall);
@@ -434,8 +434,8 @@
         //  [Khai Le]
         //  viewKeypad.lbQualityValue.hidden = YES;
     }else if(quality < 1) {
-        NSString *qualityValue = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Worse"];
-        NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Quality"], qualityValue];
+        NSString *qualityValue = [[LanguageUtil sharedInstance] getContent:@"Worse"];
+        NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Quality"], qualityValue];
         NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString: quality];
         [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, quality.length)];
         [attr addAttribute:NSForegroundColorAttributeName value:UIColor.redColor range:NSMakeRange(quality.length-qualityValue.length, qualityValue.length)];
@@ -446,8 +446,8 @@
         //  viewKeypad.lbQualityValue.hidden = NO;
         
     } else if (quality < 2) {
-        NSString *qualityValue = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Very low"];
-        NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Quality"], qualityValue];
+        NSString *qualityValue = [[LanguageUtil sharedInstance] getContent:@"Very low"];
+        NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Quality"], qualityValue];
         NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString: quality];
         [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, quality.length)];
         [attr addAttribute:NSForegroundColorAttributeName value:UIColor.orangeColor range:NSMakeRange(quality.length-qualityValue.length, qualityValue.length)];
@@ -458,8 +458,8 @@
         //  viewKeypad.lbQualityValue.hidden = NO;
         
     } else if (quality < 3) {
-        NSString *qualityValue = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Low"];
-        NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Quality"], qualityValue];
+        NSString *qualityValue = [[LanguageUtil sharedInstance] getContent:@"Low"];
+        NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Quality"], qualityValue];
         NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString: quality];
         [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, quality.length)];
         [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(quality.length-qualityValue.length, qualityValue.length)];
@@ -470,8 +470,8 @@
         //  viewKeypad.lbQualityValue.hidden = NO;
         
     } else if(quality < 4){
-        NSString *qualityValue = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Average"];
-        NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Quality"], qualityValue];
+        NSString *qualityValue = [[LanguageUtil sharedInstance] getContent:@"Average"];
+        NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Quality"], qualityValue];
         NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString: quality];
         [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, quality.length)];
         [attr addAttribute:NSForegroundColorAttributeName value:UIColor.greenColor range:NSMakeRange(quality.length-qualityValue.length, qualityValue.length)];
@@ -482,8 +482,8 @@
         //  viewKeypad.lbQualityValue.hidden = NO;
         
     } else{
-        NSString *qualityValue = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Good"];
-        NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Quality"], qualityValue];
+        NSString *qualityValue = [[LanguageUtil sharedInstance] getContent:@"Good"];
+        NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Quality"], qualityValue];
         NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString: quality];
         [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, quality.length)];
         [attr addAttribute:NSForegroundColorAttributeName value:UIColor.greenColor range:NSMakeRange(quality.length-qualityValue.length, qualityValue.length)];
@@ -734,7 +734,7 @@
     
     switch (state) {
         case LinphoneCallOutgoingRinging:{
-            lbTime.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Ringing"];
+            lbTime.text = [[LanguageUtil sharedInstance] getContent:@"Ringing"];
             lbTime.textColor = UIColor.whiteColor;
             
             [self getPhoneNumberOfCall];
@@ -746,7 +746,7 @@
             break;
         }
         case LinphoneCallOutgoingProgress:{
-            lbTime.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Calling"];
+            lbTime.text = [[LanguageUtil sharedInstance] getContent:@"Calling"];
             lbTime.textColor = UIColor.whiteColor;
             
             //  [Khai Le -14/02/2019]
@@ -942,7 +942,7 @@
     if ([LinphoneAppDelegate sharedInstance].callTransfered) {
         [LinphoneAppDelegate sharedInstance].callTransfered = NO;
         
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Your call has been transfered"] duration:3.0 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Your call has been transfered"] duration:3.0 position:CSToastPositionCenter];
     }
 }
 
@@ -979,7 +979,7 @@
                 lMessage = [NSString stringWithFormat:NSLocalizedString(@"%@ is not registered.", nil), lUserName];
                 break;
             case LinphoneReasonBusy:
-                lbTime.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"The user is busy"];
+                lbTime.text = [[LanguageUtil sharedInstance] getContent:@"The user is busy"];
                 lbTime.textColor = UIColor.whiteColor;
                 break;
             default:
