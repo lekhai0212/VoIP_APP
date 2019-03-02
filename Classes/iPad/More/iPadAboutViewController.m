@@ -23,8 +23,8 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
     
-    self.title = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"About"];
-    [btnCheckForUpdate setTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Check for update"] forState:UIControlStateNormal];
+    self.title = [[LanguageUtil sharedInstance] getContent:@"About"];
+    [btnCheckForUpdate setTitle:[[LanguageUtil sharedInstance] getContent:@"Check for update"] forState:UIControlStateNormal];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -24,8 +24,8 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
     
-    lbContent.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Have not choosen contact"];
-    self.title = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Contacts"];
+    lbContent.text = [[LanguageUtil sharedInstance] getContent:@"Have not choosen contact"];
+    self.title = [[LanguageUtil sharedInstance] getContent:@"Contacts"];
 }
 
 - (void)setupUIForView {

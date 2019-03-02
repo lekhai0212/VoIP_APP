@@ -90,7 +90,7 @@
     }
     
     //  set title for button login with phone number
-    NSString *phoneContent = [NSString stringWithFormat:@" %@", [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Register with phone number"]];
+    NSString *phoneContent = [NSString stringWithFormat:@" %@", [[LanguageUtil sharedInstance] getContent:@"Register with phone number"]];
     NSAttributedString *phoneStr = [self createAttributeStringWithContent:phoneContent imageName:@"ic_phone_login.png" isLeadImage:YES withHeight:22.0];
     [btnLoginWithPhone setAttributedTitle:phoneStr forState:UIControlStateNormal];
     
@@ -137,7 +137,7 @@
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Clear proxy config with networkReady = %d", __FUNCTION__, networkReady] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     if (!networkReady) {
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your internet"] duration:2.0 position:CSToastPositionCenter];
         return;
     }
     
@@ -156,22 +156,22 @@
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Save proxy config with networkReady = %d", __FUNCTION__, networkReady] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     if (!networkReady) {
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
         return;
     }
     
     if ([tfServerID.text isEqualToString:@""]) {
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Server ID can't empty"] duration:2.0 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Server ID can't empty"] duration:2.0 position:CSToastPositionCenter];
         return;
     }
     
     if ([tfAccount.text isEqualToString:@""]){
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Account can't empty"] duration:2.0 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Account can't empty"] duration:2.0 position:CSToastPositionCenter];
         return;
     }
     
     if ([tfPassword.text isEqualToString:@""]){
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Password can't empty"] duration:2.0 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Password can't empty"] duration:2.0 position:CSToastPositionCenter];
         return;
     }
     
@@ -185,12 +185,12 @@
         [self getInfoForPBXWithServerName: tfServerID.text];
         
     }else{
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"This account is being registered"] duration:2.0 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"This account is being registered"] duration:2.0 position:CSToastPositionCenter];
     }
 }
 
 - (IBAction)btnLoginWithPhonePressed:(UIButton *)sender {
-    [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"This feature have not supported yet. Please try later!"] duration:2.0 position:CSToastPositionCenter];
+    [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"This feature have not supported yet. Please try later!"] duration:2.0 position:CSToastPositionCenter];
     return;
     NSArray *toplevelObject = [[NSBundle mainBundle] loadNibNamed:@"RegisterPBXWithPhoneView" owner:nil options:nil];
     for(id currentObject in toplevelObject){
@@ -210,16 +210,16 @@
 }
 
 - (void)showContentForView {
-    self.title = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"PBX account"];
+    self.title = [[LanguageUtil sharedInstance] getContent:@"PBX account"];
     
-    lbPBX.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"PBX"];
-    lbServerID.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Server ID"];
-    lbAccount.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Account"];
-    lbPassword.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Password"];
+    lbPBX.text = [[LanguageUtil sharedInstance] getContent:@"PBX"];
+    lbServerID.text = [[LanguageUtil sharedInstance] getContent:@"Server ID"];
+    lbAccount.text = [[LanguageUtil sharedInstance] getContent:@"Account"];
+    lbPassword.text = [[LanguageUtil sharedInstance] getContent:@"Password"];
     
-    [btnClear setTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Clear"]
+    [btnClear setTitle:[[LanguageUtil sharedInstance] getContent:@"Clear"]
                forState:UIControlStateNormal];
-    [btnSave setTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Save"]
+    [btnSave setTitle:[[LanguageUtil sharedInstance] getContent:@"Save"]
               forState:UIControlStateNormal];
 }
 
@@ -454,7 +454,7 @@
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] with networkReady = %d", __FUNCTION__, networkReady] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     if (!networkReady) {
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
         return;
     }
     
@@ -471,7 +471,7 @@
     }else{
         [swAccount setUIForDisableStateWithActionTarget: NO];
         
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"You have not signed your account yet"] duration:2.0 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"You have not signed your account yet"] duration:2.0 position:CSToastPositionCenter];
         
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Can not enable with defaultConfig = NULL", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     }
@@ -483,7 +483,7 @@
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] with networkReady = %d", __FUNCTION__, networkReady] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     if (!networkReady) {
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
         return;
     }
     
@@ -677,7 +677,7 @@
                         [[LinphoneAppDelegate sharedInstance] showWaiting: NO];
                         
                         linphone_core_remove_proxy_config(LC, proxy);
-                        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Please check your information again!"] duration:2.0 position:CSToastPositionCenter];
+                        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your information again!"] duration:2.0 position:CSToastPositionCenter];
                     }else{
                         
                     }
@@ -745,7 +745,7 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:reloadProfileContentForIpad
                                                         object:nil];
     
-    [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Your account was removed"] duration:2.0 position:CSToastPositionCenter];
+    [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Your account was removed"] duration:2.0 position:CSToastPositionCenter];
     [self performSelector:@selector(popCurrentView) withObject:nil afterDelay:2.0];
 }
 
@@ -789,7 +789,7 @@
     
     [[NSNotificationCenter defaultCenter] postNotificationName:reloadProfileContentForIpad object:nil];
     
-    [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Your account was registered successful."] duration:2.0 position:CSToastPositionCenter];
+    [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Your account was registered successful."] duration:2.0 position:CSToastPositionCenter];
     [self performSelector:@selector(popCurrentView) withObject:nil afterDelay:2.0];
 }
 
@@ -805,7 +805,7 @@
     
     [swAccount setUIForEnableStateWithActionTarget: NO];
     
-    [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Your account was enabled successful"] duration:2.0 position:CSToastPositionCenter];
+    [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Your account was enabled successful"] duration:2.0 position:CSToastPositionCenter];
 }
 
 - (void)updateCustomerTokenIOSForPBX: (NSString *)pbxService andUsername: (NSString *)pbxUsername withTokenValue: (NSString *)tokenValue
@@ -857,7 +857,7 @@
     if ([link isEqualToString:getServerInfoFunc]) {
         [[LinphoneAppDelegate sharedInstance].window makeToast:error duration:2.0 position:CSToastPositionCenter];
     }else if ([link isEqualToString: ChangeCustomerIOSToken]){
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Can not update push token"] duration:2.0 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Can not update push token"] duration:2.0 position:CSToastPositionCenter];
         
         [self whenRegisterPBXSuccessfully];
     }
@@ -913,7 +913,7 @@
         
         [self registerPBXAccount:accountPBX password:passwordPBX ipAddress:ipPBX port:portPBX];
     }else{
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Please check your information again!"] duration:2.0 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your information again!"] duration:2.0 position:CSToastPositionCenter];
     }
 }
 
@@ -930,7 +930,7 @@
     
     [swAccount setUIForDisableStateWithActionTarget: NO];
     
-    [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Your account was disabled successful"] duration:2.0 position:CSToastPositionCenter];
+    [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Your account was disabled successful"] duration:2.0 position:CSToastPositionCenter];
 }
 
 - (void)registerPBXTimeOut {
@@ -938,7 +938,7 @@
     
     [[LinphoneAppDelegate sharedInstance] showWaiting: NO];
     
-    [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Register PBX failed"] duration:2.0 position:CSToastPositionCenter];
+    [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Register PBX failed"] duration:2.0 position:CSToastPositionCenter];
     [timeoutTimer invalidate];
     timeoutTimer = nil;
 }
@@ -956,7 +956,7 @@
     }
     [[LinphoneAppDelegate sharedInstance] showWaiting: NO];
     
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Notification"] message:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Can not find QR Code!"] delegate:self cancelButtonTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Close"] otherButtonTitles: nil];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Notification"] message:[[LanguageUtil sharedInstance] getContent:@"Can not find QR Code!"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Close"] otherButtonTitles: nil];
     [alertView show];
 }
 
@@ -993,13 +993,13 @@
             }else{
                 [[LinphoneAppDelegate sharedInstance] showWaiting: NO];
                 
-                [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"This account is being registered"] duration:2.0 position:CSToastPositionCenter];
+                [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"This account is being registered"] duration:2.0 position:CSToastPositionCenter];
             }
         }
     }else{
         [[LinphoneAppDelegate sharedInstance] showWaiting: NO];
         
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Notifications"] message:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Can not find QR Code!"] delegate:self cancelButtonTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Close"] otherButtonTitles: nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Notifications"] message:[[LanguageUtil sharedInstance] getContent:@"Can not find QR Code!"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Close"] otherButtonTitles: nil];
         [alertView show];
     }
 }
@@ -1064,7 +1064,7 @@
         btnScanFromPhoto.layer.cornerRadius = 38.0/2;
         btnScanFromPhoto.layer.borderColor = btnScanFromPhoto.backgroundColor.CGColor;
         btnScanFromPhoto.layer.borderWidth = 1.0;
-        [btnScanFromPhoto setTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"SCAN FROM PHOTO"] forState:UIControlStateNormal];
+        [btnScanFromPhoto setTitle:[[LanguageUtil sharedInstance] getContent:@"SCAN FROM PHOTO"] forState:UIControlStateNormal];
         btnScanFromPhoto.titleLabel.font = [UIFont systemFontOfSize: 16.0];
         [btnScanFromPhoto addTarget:self
                              action:@selector(btnScanFromPhotoPressed)
@@ -1134,7 +1134,7 @@
         
         BOOL networkReady = [DeviceUtils checkNetworkAvailable];
         if (!networkReady) {
-            [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
+            [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
             return;
         }
         
@@ -1151,7 +1151,7 @@
         
         BOOL networkReady = [DeviceUtils checkNetworkAvailable];
         if (!networkReady) {
-            [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
+            [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
             return;
         }
         
@@ -1174,7 +1174,7 @@
             break;
         }
     }else{
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Notifications"] message:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Can not find QR Code!"] delegate:self cancelButtonTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Close"] otherButtonTitles: nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Notifications"] message:[[LanguageUtil sharedInstance] getContent:@"Can not find QR Code!"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Close"] otherButtonTitles: nil];
         [alertView show];
     }
 }

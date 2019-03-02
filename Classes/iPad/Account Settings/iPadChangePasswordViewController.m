@@ -91,10 +91,10 @@
         [self performSelector:@selector(updateBorderColor:) withObject:tfConfirmPassword afterDelay:1.5];
     }
     else if (![tfConfirmPassword.text isEqualToString:tfNewPassword.text]){
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Confirm password not match"] duration:2.0 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Confirm password not match"] duration:2.0 position:CSToastPositionCenter];
     }
     else if (![tfPassword.text isEqualToString:PASSWORD]){
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Current password not correct"] duration:2.0 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Current password not correct"] duration:2.0 position:CSToastPositionCenter];
     }else {
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] linphone_core_clear_proxy_config", __FUNCTION__]
                              toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
@@ -113,18 +113,18 @@
 
 - (void)showContentForView {
     
-    self.title = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Change password"];
-    lbPassword.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Current password"];
-    lbNewPassword.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"New password"];
-    lbConfirmPassword.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Confirm password"];
-    lbPasswordDesc.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Password are at least 6 characters long"];
+    self.title = [[LanguageUtil sharedInstance] getContent:@"Change password"];
+    lbPassword.text = [[LanguageUtil sharedInstance] getContent:@"Current password"];
+    lbNewPassword.text = [[LanguageUtil sharedInstance] getContent:@"New password"];
+    lbConfirmPassword.text = [[LanguageUtil sharedInstance] getContent:@"Confirm password"];
+    lbPasswordDesc.text = [[LanguageUtil sharedInstance] getContent:@"Password are at least 6 characters long"];
     
-    tfPassword.placeholder = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Input password"];
-    tfNewPassword.placeholder = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Input password"];
-    tfConfirmPassword.placeholder = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Input password"];
+    tfPassword.placeholder = [[LanguageUtil sharedInstance] getContent:@"Input password"];
+    tfNewPassword.placeholder = [[LanguageUtil sharedInstance] getContent:@"Input password"];
+    tfConfirmPassword.placeholder = [[LanguageUtil sharedInstance] getContent:@"Input password"];
     
-    [btnCancel setTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Reset"] forState:UIControlStateNormal];
-    [btnSave setTitle:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Save"] forState:UIControlStateNormal];
+    [btnCancel setTitle:[[LanguageUtil sharedInstance] getContent:@"Reset"] forState:UIControlStateNormal];
+    [btnSave setTitle:[[LanguageUtil sharedInstance] getContent:@"Save"] forState:UIControlStateNormal];
 }
 
 - (void)setupUIForView {
@@ -248,7 +248,7 @@
     
     [[LinphoneAppDelegate sharedInstance] showWaiting: NO];
     
-    [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Your password has been updated successful"] duration:2.0 position:CSToastPositionCenter];
+    [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Your password has been updated successful"] duration:2.0 position:CSToastPositionCenter];
     
     tfPassword.text = @"";
     tfNewPassword.text = @"";
@@ -374,7 +374,7 @@
         
         [self registerPBXAccount:USERNAME password:passwordPBX ipAddress:ipPBX port:portPBX];
     }else{
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Please check your information again!"] duration:2.0 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your information again!"] duration:2.0 position:CSToastPositionCenter];
     }
 }
 

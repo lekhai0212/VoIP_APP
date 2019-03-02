@@ -574,8 +574,8 @@ void onUncaughtException(NSException* exception)
     }
     
     if (IS_IPHONE || IS_IPOD) {
-        //  [[PhoneMainView instance] changeCurrentView:[SignInViewController compositeViewDescription]];
-        [[PhoneMainView instance] changeCurrentView:[DialerView compositeViewDescription]];
+        [[PhoneMainView instance] changeCurrentView:[SignInViewController compositeViewDescription]];
+        //  [[PhoneMainView instance] changeCurrentView:[DialerView compositeViewDescription]];
         [PhoneMainView.instance updateStatusBar:nil];
     }else{
         contactType = eContactPBX;

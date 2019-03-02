@@ -47,7 +47,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    self.title = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Choose contact"];
+    self.title = [[LanguageUtil sharedInstance] getContent:@"Choose contact"];
     
     if (![LinphoneAppDelegate sharedInstance].contactLoaded) {
         if (activityIndicatorView == nil) {
@@ -123,9 +123,9 @@
     tfSearch.clipsToBounds = YES;
     tfSearch.textColor = UIColor.whiteColor;
     if ([self.tfSearch respondsToSelector:@selector(setAttributedPlaceholder:)]) {
-        tfSearch.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Search..."] attributes:@{NSForegroundColorAttributeName: [UIColor colorWithRed:(230/255.0) green:(230/255.0) blue:(230/255.0) alpha:1.0]}];
+        tfSearch.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[[LanguageUtil sharedInstance] getContent:@"Search..."] attributes:@{NSForegroundColorAttributeName: [UIColor colorWithRed:(230/255.0) green:(230/255.0) blue:(230/255.0) alpha:1.0]}];
     } else {
-        tfSearch.placeholder = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Search..."];
+        tfSearch.placeholder = [[LanguageUtil sharedInstance] getContent:@"Search..."];
     }
     [tfSearch addTarget:self
                  action:@selector(whenTextFieldDidChange:)
@@ -175,7 +175,7 @@
     
     lbNoContact.textColor = UIColor.darkGrayColor;
     lbNoContact.font = [UIFont fontWithName:HelveticaNeue size:15.0];
-    lbNoContact.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"No contacts"];
+    lbNoContact.text = [[LanguageUtil sharedInstance] getContent:@"No contacts"];
     [lbNoContact mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(viewSearch.mas_bottom);
         make.left.bottom.right.equalTo(self.view);
@@ -324,7 +324,7 @@
     // Tên contact
     if (contact._fullName != nil) {
         if ([contact._fullName isEqualToString: @""]) {
-            cell.name.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Unknown"];
+            cell.name.text = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
         }else{
             cell.name.text = contact._fullName;
         }

@@ -38,6 +38,23 @@ static UICompositeViewDescription *compositeDescription = nil;
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [self setupUIForView];
+    
+    tfAccountID.text = @"nhcla150";
+    tfPassword.text = @"f7NnFKI1Kv";
+    
+    /*
+    nhanhoa.cloudcall.vn:51000
+    nhcla150/f7NnFKI1Kv
+    nhcla151/5obr8jHH2q
+    nhcla152/FNn1bHF12z
+    nhcla153/qkprudKnm9 */
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear: animated];
+    
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(registrationUpdateEvent:)
+                                               name:kLinphoneRegistrationUpdate object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -57,8 +74,8 @@ static UICompositeViewDescription *compositeDescription = nil;
     }
     
     //  start register pbx
-    NSString *domain = @"";
-    NSString *port = @"";
+    NSString *domain = @"nhanhoa.cloudcall.vn";
+    NSString *port = @"51000";
     [SipUtils registerPBXAccount:tfAccountID.text password:tfPassword.text ipAddress:domain port:port];
 }
 
@@ -88,6 +105,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     float padding = 40.0;
     //  account textfield
+    tfAccountID.textColor = textColor;
     [tfAccountID mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(viewSignIn);
         make.left.equalTo(viewSignIn).offset(padding);
@@ -116,6 +134,8 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
     
     //  password textfield
+    tfPassword.secureTextEntry = YES;
+    tfPassword.textColor = textColor;
     [tfPassword mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(tfAccountID.mas_bottom).offset(20.0);
         make.left.right.equalTo(tfAccountID);
@@ -184,7 +204,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.width.height.mas_equalTo(160.0);
     }];
     
-    lbCompany.text = [[LanguageUtil sharedInstance] getContent:@"CLOUDPBX"];
+    lbCompany.text = [[LanguageUtil sharedInstance] getContent:@"CLOUDCALL.VN"];
     lbCompany.textColor = textColor;
     lbCompany.font = [UIFont systemFontOfSize:24.0 weight:UIFontWeightThin];
     [lbCompany mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -193,13 +213,51 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.height.mas_equalTo(40.0);
     }];
     
-    lbBottom.text = [[LanguageUtil sharedInstance] getContent:@"Phát triển bởi CloudPBX"];
+    lbBottom.text = [[LanguageUtil sharedInstance] getContent:@"Phát triển bởi CloudCall"];
     lbBottom.textColor = textColor;
     lbBottom.font = [UIFont systemFontOfSize:16.0 weight:UIFontWeightThin];
     [lbBottom mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.equalTo(self.view);
         make.height.mas_equalTo(40.0);
     }];
+}
+
+- (void)registrationUpdateEvent:(NSNotification *)notif {
+    NSString *message = [notif.userInfo objectForKey:@"message"];
+    [self registrationUpdate:[[notif.userInfo objectForKey:@"state"] intValue]
+                    forProxy:[[notif.userInfo objectForKeyedSubscript:@"cfg"] pointerValue]
+                     message:message];
+}
+
+- (void)registrationUpdate:(LinphoneRegistrationState)state forProxy:(LinphoneProxyConfig *)proxy message:(NSString *)message
+{
+    switch (state) {
+        case LinphoneRegistrationOk:
+        {
+            NSLog(@"LinphoneRegistrationOk");
+            break;
+        }
+        case LinphoneRegistrationNone:{
+            NSLog(@"LinphoneRegistrationNone");
+            
+            break;
+        }
+        case LinphoneRegistrationCleared: {
+            NSLog(@"LinphoneRegistrationCleared");
+            break;
+        }
+        case LinphoneRegistrationFailed:
+        {
+            NSLog(@"LinphoneRegistrationFailed");
+            break;
+        }
+        case LinphoneRegistrationProgress: {
+            NSLog(@"LinphoneRegistrationProgress");
+            break;
+        }
+        default:
+            break;
+    }
 }
 
 @end

@@ -169,8 +169,6 @@
 - (IBAction)btnAvatarPress:(UIButton *)sender {
     [self.view endEditing: YES];
     
-    LinphoneAppDelegate *appDelegate = [LinphoneAppDelegate sharedInstance];
-    
     if (myAvatar != nil && ![myAvatar isEqualToString:@""]) {
         UIActionSheet *popupAvatar = [[UIActionSheet alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Options"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles:
                                           [[LanguageUtil sharedInstance] getContent:@"Gallery"],

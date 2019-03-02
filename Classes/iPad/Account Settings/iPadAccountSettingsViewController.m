@@ -31,7 +31,7 @@
     
     [WriteLogsUtils writeForGoToScreen:@"iPadAccountSettingsViewController"];
     
-    self.title = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Account settings"];
+    self.title = [[LanguageUtil sharedInstance] getContent:@"Account settings"];
     stateAccount = [SipUtils getStateOfDefaultProxyConfig];
     [tbSettings reloadData];
 }
@@ -83,18 +83,18 @@
     
     switch (indexPath.row) {
         case 0:{
-            cell.lbTitle.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"PBX account"];
+            cell.lbTitle.text = [[LanguageUtil sharedInstance] getContent:@"PBX account"];
             
             switch (stateAccount) {
                 case eAccountNone:
-                    cell.lbDescription.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"No account"];
+                    cell.lbDescription.text = [[LanguageUtil sharedInstance] getContent:@"No account"];
                     break;
                 case eAccountOff:{
-                    cell.lbDescription.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Disabled"];
+                    cell.lbDescription.text = [[LanguageUtil sharedInstance] getContent:@"Disabled"];
                     break;
                 }
                 case eAccountOn:{
-                    cell.lbDescription.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Enabled"];
+                    cell.lbDescription.text = [[LanguageUtil sharedInstance] getContent:@"Enabled"];
                     break;
                 }
             }
@@ -110,7 +110,7 @@
             break;
         }
         case 1:{
-            cell.lbTitle.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Change password"];
+            cell.lbTitle.text = [[LanguageUtil sharedInstance] getContent:@"Change password"];
             [cell.lbTitle mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.left.equalTo(cell).offset(10);
                 make.right.equalTo(cell.imgArrow).offset(-10);
@@ -148,7 +148,7 @@
 
     }else if (indexPath.row == 1){
         if (stateAccount == eAccountNone) {
-            [self.view makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"No account"] duration:3.0 position:CSToastPositionCenter];
+            [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"No account"] duration:3.0 position:CSToastPositionCenter];
         }else{
             UIBarButtonItem *newBackButton = [[UIBarButtonItem alloc] initWithTitle:@" " style:UIBarButtonItemStylePlain target:nil action:nil];
             self.navigationItem.backBarButtonItem = newBackButton;
