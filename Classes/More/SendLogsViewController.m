@@ -55,7 +55,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     [WriteLogsUtils clearLogFilesAfterExpireTime: DAY_FOR_LOGS*24*3600];
     
     icSend.enabled = NO;
-    
+    lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"Send logs"];
     [icSend setTitle:[[LanguageUtil sharedInstance] getContent:@"Send"] forState:UIControlStateNormal];
     [icSend setTitle:[[LanguageUtil sharedInstance] getContent:@"Send"] forState:UIControlStateDisabled];
     

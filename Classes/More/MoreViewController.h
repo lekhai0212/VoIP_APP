@@ -12,12 +12,8 @@
 enum moreValue{
     eSettingsAccount,
     eSettings,
-    eFeedback,
-    ePolicy,
-    eIntroduce,
     eSendLogs,
-    eAbout,
-    eDrawLine,
+    eAbout
 };
 
 enum stateLogout {

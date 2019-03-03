@@ -219,3 +219,6 @@
 "Sign In" = "Đăng nhập"
 "Forgot password" = "Quên mật khẩu"
 "Please fill full information" = "Vui lòng nhập đầy đủ thông tin"
+
+"Please check sign in information" = "Vui lòng kiểm tra thông tin đăng nhập"
+"Choose ringtone" = "Chọn nhạc chuông"

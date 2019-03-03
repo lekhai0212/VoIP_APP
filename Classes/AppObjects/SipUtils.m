@@ -397,4 +397,58 @@
     return ret;
 }
 
+//  Call quality
++ (NSMutableAttributedString *)getQualityOfCall: (LinphoneCall *)call
+{
+    //  FIXME double check call state before computing, may cause core dump
+    float quality = linphone_call_get_average_quality(call);
+    if (quality < 0) {
+        //  Hide call quality value if have not connected yet
+        return nil;
+    }else if(quality < 1) {
+        NSString *qualityValue = [[LanguageUtil sharedInstance] getContent:@"Worse"];
+        NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Quality"], qualityValue];
+        NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString: quality];
+        [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, quality.length)];
+        [attr addAttribute:NSForegroundColorAttributeName value:UIColor.redColor range:NSMakeRange(quality.length-qualityValue.length, qualityValue.length)];
+        
+        return attr;
+    } else if (quality < 2) {
+        NSString *qualityValue = [[LanguageUtil sharedInstance] getContent:@"Very low"];
+        NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Quality"], qualityValue];
+        NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString: quality];
+        [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, quality.length)];
+        [attr addAttribute:NSForegroundColorAttributeName value:UIColor.orangeColor range:NSMakeRange(quality.length-qualityValue.length, qualityValue.length)];
+        
+        return attr;
+        
+    } else if (quality < 3) {
+        NSString *qualityValue = [[LanguageUtil sharedInstance] getContent:@"Low"];
+        NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Quality"], qualityValue];
+        NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString: quality];
+        [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, quality.length)];
+        [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(quality.length-qualityValue.length, qualityValue.length)];
+        
+        return attr;
+        
+    } else if(quality < 4){
+        NSString *qualityValue = [[LanguageUtil sharedInstance] getContent:@"Average"];
+        NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Quality"], qualityValue];
+        NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString: quality];
+        [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, quality.length)];
+        [attr addAttribute:NSForegroundColorAttributeName value:UIColor.greenColor range:NSMakeRange(quality.length-qualityValue.length, qualityValue.length)];
+        
+        return attr;
+        
+    } else{
+        NSString *qualityValue = [[LanguageUtil sharedInstance] getContent:@"Good"];
+        NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Quality"], qualityValue];
+        NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString: quality];
+        [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, quality.length)];
+        [attr addAttribute:NSForegroundColorAttributeName value:UIColor.greenColor range:NSMakeRange(quality.length-qualityValue.length, qualityValue.length)];
+        
+        return attr;
+    }
+}
+
 @end

@@ -154,8 +154,11 @@
 - (void)provider:(CXProvider *)provider performSetMutedCallAction:(nonnull CXSetMutedCallAction *)action {
 	[action fulfill];
 	if ([[PhoneMainView.instance currentView] equal:CallView.compositeViewDescription]) {
+        NSLog(@"Debug");
+        /*
 		CallView *view = (CallView *)[PhoneMainView.instance popToView:CallView.compositeViewDescription];
 		[view.microButton toggle];
+        */
 	}
 }
 

@@ -330,10 +330,8 @@
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
                          toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
-    if (![LinphoneAppDelegate sharedInstance].enableForTest) {
-        [self makeToast:[[LanguageUtil sharedInstance] getContent:@"This feature have not supported yet. Please try later!"] duration:2.0 position:CSToastPositionCenter];
-        return;
-    }
+    [self makeToast:[[LanguageUtil sharedInstance] getContent:@"This feature have not supported yet. Please try later!"] duration:2.0 position:CSToastPositionCenter];
+    return;
     
     DialerView *view = VIEW(DialerView);
     [view setAddress:@""];

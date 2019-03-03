@@ -41,7 +41,6 @@
 
 @property (weak, nonatomic) IBOutlet UIView *_viewTopBar;
 @property (weak, nonatomic) IBOutlet UIIconButton *_iconBackView;
-@property (nonatomic, strong) HMLocalization *localization;
 @property (nonatomic, strong) UIFont *textFont;
 - (NSSet *)findHiddenKeys;
 

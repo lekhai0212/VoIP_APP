@@ -276,9 +276,9 @@ INIT_WITH_COMMON_CF {
 	// iOS7 transparent background is *really* transparent: with an alpha != 0
 	// it messes up the transitions. Use non-transparent BG for iOS7
 	if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
-		[view setBackgroundColor:LINPHONE_SETTINGS_BG_IOS7];
+        view.backgroundColor = UIColor.whiteColor;
 	else
-		[view setBackgroundColor:[UIColor clearColor]];
+        view.backgroundColor = UIColor.clearColor;
 }
 
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
@@ -333,7 +333,7 @@ INIT_WITH_COMMON_CF {
 @end
 
 @implementation SettingsView
-@synthesize _viewTopBar, _iconBackView, localization, textFont;
+@synthesize _viewTopBar, _iconBackView, textFont;
 
 #pragma mark - UICompositeViewDelegate Functions
 
@@ -370,12 +370,13 @@ static UICompositeViewDescription *compositeDescription = nil;
 
     //  setup for all view
     [self setupFrameUIForView];
-    
-	[_navigationController.view setBackgroundColor:[UIColor clearColor]];
-
+    _navigationController.view.backgroundColor = UIColor.clearColor;
+	
 	_navigationController.view.frame = self.subView.frame;
 	[_navigationController pushViewController:_settingsController animated:FALSE];
 	[self.view addSubview:_navigationController.view];
+    
+    [self setupFrameUIForView];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -393,14 +394,17 @@ static UICompositeViewDescription *compositeDescription = nil;
 	[self recomputeAccountLabelsAndSync];
 
 	// Set observer
-	[NSNotificationCenter.defaultCenter addObserver:self
-										   selector:@selector(appSettingChanged:)
-											   name:kIASKAppSettingChanged
-											 object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(appSettingChanged:)
+											   name:kIASKAppSettingChanged object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [settingsStore synchronize];
+}
+
+-(void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    _navigationController.view.frame = self.subView.frame;
 }
 
 #pragma mark - Account Creator callbacks
@@ -612,13 +616,12 @@ void update_hash_cbs(LinphoneAccountCreator *creator, LinphoneAccountCreatorStat
 	}
 
 #ifndef DEBUG
-    //  Close by Khai Le on 29/11/2017
-	//  [hiddenKeys addObject:@"debug_actions_group"];
-	//  [hiddenKeys addObject:@"release_button"];
-	//  [hiddenKeys addObject:@"clear_cache_button"];
-	//  [hiddenKeys addObject:@"battery_alert_button"];
-	//  [hiddenKeys addObject:@"enable_auto_answer_preference"];
-	//  [hiddenKeys addObject:@"flush_images_button"];
+    [hiddenKeys addObject:@"debug_actions_group"];
+	[hiddenKeys addObject:@"release_button"];
+	[hiddenKeys addObject:@"clear_cache_button"];
+	[hiddenKeys addObject:@"battery_alert_button"];
+	[hiddenKeys addObject:@"enable_auto_answer_preference"];
+	[hiddenKeys addObject:@"flush_images_button"];
 #endif
 
 	int debugLevel = [LinphoneManager.instance lpConfigIntForKey:@"debugenable_preference"];
@@ -744,7 +747,7 @@ void update_hash_cbs(LinphoneAccountCreator *creator, LinphoneAccountCreatorStat
     if (sender.file == nil || [sender.file isEqualToString:@"Root"]) {
         _backButton.hidden = YES;
         [_iconBackView setHidden: NO];
-        _titleLabel.text = [localization localizedStringForKey:@"App settings"];
+        _titleLabel.text = [[LanguageUtil sharedInstance] getContent:@"Call settings"];
     }else{
         _backButton.hidden = NO;
         [_iconBackView setHidden: YES];
@@ -1101,7 +1104,30 @@ void update_hash_cbs(LinphoneAccountCreator *creator, LinphoneAccountCreatorStat
 #pragma mark - my functions
 
 - (void)setupFrameUIForView {
-    localization = [HMLocalization sharedInstance];
+    [_viewTopBar mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.right.equalTo(self.view);
+        make.height.mas_equalTo([LinphoneAppDelegate sharedInstance]._hRegistrationState);
+    }];
+    
+    [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_viewTopBar).offset([LinphoneAppDelegate sharedInstance]._hStatus);
+        make.bottom.equalTo(_viewTopBar);
+        make.centerX.equalTo(_viewTopBar.mas_centerX);
+        make.width.mas_equalTo(200.0);
+    }];
+    
+    [_backButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_viewTopBar).offset([LinphoneAppDelegate sharedInstance]._hStatus+5.0);
+        make.left.equalTo(_viewTopBar);
+        make.width.height.mas_equalTo(HEADER_ICON_WIDTH);
+    }];
+    
+    [_subView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_viewTopBar.mas_bottom);
+        make.left.bottom.right.equalTo(self.view);
+    }];
+    
+    
     
     if (SCREEN_WIDTH > 320) {
         textFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
@@ -1110,24 +1136,6 @@ void update_hash_cbs(LinphoneAccountCreator *creator, LinphoneAccountCreatorStat
         textFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
         [_titleLabel setFont:[UIFont fontWithName:HelveticaNeue size:18.0]];
     }
-    /*  Leo Kelvin
-    [self.view setBackgroundColor:[UIColor lightGrayColor]];
-    //  view top bar
-    [_viewTopBar setFrame: CGRectMake(0, 0, SCREEN_WIDTH, [LinphoneAppDelegate sharedInstance]._hHeader)];
-    [_backButton setFrame: CGRectMake(0, ([LinphoneAppDelegate sharedInstance]._hHeader-40.0)/2, 40.0, 40.0)];
-    [_backButton setBackgroundImage:[UIImage imageNamed:@"ic_back_act.png"]
-                         forState:UIControlStateHighlighted];
-    
-    [_iconBackView setFrame: _backButton.frame];
-    [_iconBackView setBackgroundImage:[UIImage imageNamed:@"ic_back_act.png"]
-                         forState:UIControlStateHighlighted];
-    
-    [_titleLabel setFrame: CGRectMake(_backButton.frame.origin.x+_backButton.frame.size.width+5, 0, (_viewTopBar.frame.size.width-2*_backButton.frame.size.width-10), [LinphoneAppDelegate sharedInstance]._hHeader)];
-    
-    //  sub view
-    [_subView setFrame: CGRectMake(0, _viewTopBar.frame.origin.y+_viewTopBar.frame.size.height, SCREEN_WIDTH, SCREEN_HEIGHT-(_viewTopBar.frame.origin.y+_viewTopBar.frame.size.height))];
-    [_subView setBackgroundColor: [UIColor redColor]];
-    */
 }
 
 @end

@@ -139,7 +139,6 @@ typedef enum{
 @property (nonatomic, strong) NSMutableArray *listInfoPhoneNumber;
 
 //  [Khai le - 05/11/2018]
-@property (nonatomic, assign) BOOL enableForTest;
 @property (nonatomic, strong) NSString *logFilePath;
 @property (nonatomic, assign) BOOL supportLoginWithPhoneNumber;
 

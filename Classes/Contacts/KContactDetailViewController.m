@@ -114,7 +114,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 -(void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     
-    [self setupFooterForTableView];
+    //  [self setupFooterForTableView];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -199,6 +199,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.width.height.mas_equalTo(HEADER_ICON_WIDTH);
     }];
     
+    _iconEdit.hidden = YES;
     _iconEdit.imageEdgeInsets = UIEdgeInsetsMake(7, 7, 7, 7);
     [_iconEdit mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_iconBack);

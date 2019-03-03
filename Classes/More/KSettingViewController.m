@@ -77,9 +77,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     listTitle = [[NSMutableArray alloc] init];
     [listTitle addObject:[[LanguageUtil sharedInstance] getContent:@"Change language"]];
     
-    if (([LinphoneAppDelegate sharedInstance].enableForTest)) {
-        [listTitle addObject:[[LanguageUtil sharedInstance] getContent:@"Call settings"]];
-    }
+    [listTitle addObject:[[LanguageUtil sharedInstance] getContent:@"Call settings"]];
     
     if (([LinphoneAppDelegate sharedInstance].supportVoice)) {
         [listTitle addObject:[[LanguageUtil sharedInstance] getContent:@"Voice control"]];
@@ -182,10 +180,8 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case 1:{
-            if ([LinphoneAppDelegate sharedInstance].enableForTest) {
-                [[PhoneMainView instance] changeCurrentView:[SettingsView compositeViewDescription]
-                                                       push:true];
-            }
+            [[PhoneMainView instance] changeCurrentView:[SettingsView compositeViewDescription]
+                                                   push:true];
             break;
         }
         case 2:{

@@ -547,6 +547,9 @@
 		8494CB9E22101778001D6FB4 /* ic_dial.png in Resources */ = {isa = PBXBuildFile; fileRef = 8494CB9722101778001D6FB4 /* ic_dial.png */; };
 		8494CBA022102F1B001D6FB4 /* ic_trash_ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 8494CB9F22102F1B001D6FB4 /* ic_trash_ipad.png */; };
 		8494CBA222102FA6001D6FB4 /* ic_tick_ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 8494CBA122102FA6001D6FB4 /* ic_tick_ipad.png */; };
+		84969C26222B9191008C7E1B /* AudioCallView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84969C25222B9191008C7E1B /* AudioCallView.m */; };
+		84969C2E222B91A5008C7E1B /* AudioCallView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84969C2D222B91A5008C7E1B /* AudioCallView.xib */; };
+		84969C30222BAF51008C7E1B /* ic_muted_red.png in Resources */ = {isa = PBXBuildFile; fileRef = 84969C2F222BAF51008C7E1B /* ic_muted_red.png */; };
 		84AA051E21855ADD008CA775 /* lauch_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AA051721855ADC008CA775 /* lauch_icon.png */; };
 		84AEA9241FC4FD5500DAA68A /* EditContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AEA9221FC4FD5500DAA68A /* EditContactViewController.m */; };
 		84AEA9251FC4FD5500DAA68A /* EditContactViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84AEA9231FC4FD5500DAA68A /* EditContactViewController.xib */; };
@@ -1679,6 +1682,10 @@
 		8494CB9722101778001D6FB4 /* ic_dial.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_dial.png; sourceTree = "<group>"; };
 		8494CB9F22102F1B001D6FB4 /* ic_trash_ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_trash_ipad.png; sourceTree = "<group>"; };
 		8494CBA122102FA6001D6FB4 /* ic_tick_ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_tick_ipad.png; sourceTree = "<group>"; };
+		84969C24222B9191008C7E1B /* AudioCallView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AudioCallView.h; path = AppUI/AudioCallView.h; sourceTree = "<group>"; };
+		84969C25222B9191008C7E1B /* AudioCallView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AudioCallView.m; path = AppUI/AudioCallView.m; sourceTree = "<group>"; };
+		84969C2D222B91A5008C7E1B /* AudioCallView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = AudioCallView.xib; path = AppUI/AudioCallView.xib; sourceTree = "<group>"; };
+		84969C2F222BAF51008C7E1B /* ic_muted_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_muted_red.png; sourceTree = "<group>"; };
 		84AA051721855ADC008CA775 /* lauch_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lauch_icon.png; sourceTree = "<group>"; };
 		84AEA9211FC4FD5500DAA68A /* EditContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditContactViewController.h; path = Contacts/EditContactViewController.h; sourceTree = "<group>"; };
 		84AEA9221FC4FD5500DAA68A /* EditContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditContactViewController.m; path = Contacts/EditContactViewController.m; sourceTree = "<group>"; };
@@ -3153,6 +3160,7 @@
 				84F81BD721EF8417009629C9 /* ic_muted_black.png */,
 				84F81BD821EF8417009629C9 /* ic_muted_white.png */,
 				848C5D8B21F4313100094D7C /* ic_muted_gray.png */,
+				84969C2F222BAF51008C7E1B /* ic_muted_red.png */,
 				84F81BDC21EF8476009629C9 /* ic_pause_call_black.png */,
 				84F81BDB21EF8475009629C9 /* ic_pause_call_white.png */,
 				848C5D9521F436DD00094D7C /* ic_pause_call_gray.png */,
@@ -3701,6 +3709,9 @@
 				15B4462E219FCA0300FB8DCB /* CustomSwitchButton.m */,
 				156910D921F58BFD005D20DF /* CustomScrollView.h */,
 				156910DA21F58BFD005D20DF /* CustomScrollView.m */,
+				84969C24222B9191008C7E1B /* AudioCallView.h */,
+				84969C25222B9191008C7E1B /* AudioCallView.m */,
+				84969C2D222B91A5008C7E1B /* AudioCallView.xib */,
 			);
 			name = AppUI;
 			sourceTree = "<group>";
@@ -4539,6 +4550,7 @@
 				8414C3CE21EB235500F54DD1 /* call_hotline.png in Resources */,
 				8414C3D421EB23FD00F54DD1 /* facebook.png in Resources */,
 				8404CD5421EDD13000C28E48 /* iPadContactsViewController.xib in Resources */,
+				84969C30222BAF51008C7E1B /* ic_muted_red.png in Resources */,
 				15B292C321FC0AF4005B6568 /* ic_speaker_ble_dis.png in Resources */,
 				1523A3C521FB134D00C40F44 /* ic_save.png in Resources */,
 				84F81BC721EF6AE4009629C9 /* iPadHistoryCallCell.xib in Resources */,
@@ -4639,6 +4651,7 @@
 				8429870D21B29D4000150EB0 /* ic_call_bottom_bar_def.png in Resources */,
 				15EB548221E08C1200636C63 /* bg_transparent.png in Resources */,
 				84C47D171FB632640015695E /* IncomingCallViewController.xib in Resources */,
+				84969C2E222B91A5008C7E1B /* AudioCallView.xib in Resources */,
 				638F1A911C21993D004B8E02 /* UICompositeView~ipad.xib in Resources */,
 				153D00302164D537007B69B3 /* menu_more_en_act.png in Resources */,
 				15EB292321F9BAB00048C459 /* phonebook_empty.png in Resources */,
@@ -5258,6 +5271,7 @@
 				84C1E2601FAEBE4B00EED0B9 /* FMDatabaseAdditions.m in Sources */,
 				843ED6701FB669B1005FE1C1 /* AccountSettingsViewController.m in Sources */,
 				84EFFE0D1FF3E6B60085A9F4 /* DGActivityIndicatorLineScalePartyAnimation.m in Sources */,
+				84969C26222B9191008C7E1B /* AudioCallView.m in Sources */,
 				84548757221851370065E3A4 /* iPadMoreViewController.m in Sources */,
 				84E286C81FC9E1AC009CBA27 /* SDImageCache.m in Sources */,
 				84BCC9E61FC1E162001F26FE /* PECropView.m in Sources */,

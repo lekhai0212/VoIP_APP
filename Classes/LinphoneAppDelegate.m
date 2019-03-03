@@ -89,7 +89,7 @@
 @synthesize fromImagePicker;
 @synthesize _isSyncing;
 @synthesize contactLoaded;
-@synthesize webService, keepAwakeTimer, listNumber, listInfoPhoneNumber, enableForTest, supportLoginWithPhoneNumber, logFilePath, dbQueue, splashScreen;
+@synthesize webService, keepAwakeTimer, listNumber, listInfoPhoneNumber, supportLoginWithPhoneNumber, logFilePath, dbQueue, splashScreen;
 @synthesize supportVoice;
 @synthesize homeSplitVC, contactType, historyType, callTransfered, hNavigation, hasBluetoothEar, ipadWaiting;
 
@@ -458,7 +458,6 @@ void onUncaughtException(NSException* exception)
     
     //  Ghi âm cuộc gọi
     _isSyncing = false;
-    enableForTest = YES;
     supportLoginWithPhoneNumber = NO;
     supportVoice = NO;
     
@@ -566,13 +565,13 @@ void onUncaughtException(NSException* exception)
 	// initialize UI
 	[self.window makeKeyAndVisible];
 	[RootViewManager setupWithPortrait:(PhoneMainView *)self.window.rootViewController];
-	//  [PhoneMainView.instance startUp];
+	[PhoneMainView.instance startUp];
     
     NSDictionary *userActivityDictionary = [launchOptions objectForKey:UIApplicationLaunchOptionsUserActivityDictionaryKey];
     if (userActivityDictionary != nil) {
         [self showSplashScreenOnView: YES];
     }
-    
+    /*
     if (IS_IPHONE || IS_IPOD) {
         [[PhoneMainView instance] changeCurrentView:[SignInViewController compositeViewDescription]];
         //  [[PhoneMainView instance] changeCurrentView:[DialerView compositeViewDescription]];
@@ -590,7 +589,7 @@ void onUncaughtException(NSException* exception)
         [ipadWaiting mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.left.right.bottom.equalTo(self.window);
         }];
-    }
+    }   */
     
     //  Enable all notification type. VoIP Notifications don't present a UI but we will use this to show local nofications later
     UIUserNotificationSettings *notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert| UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
@@ -1994,45 +1993,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
 }
 
-- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
-{
-    INInteraction *interaction = userActivity.interaction;
-    if (interaction != nil) {
-        INStartAudioCallIntent *startAudioCallIntent = (INStartAudioCallIntent *)interaction.intent;
-        if (startAudioCallIntent != nil && startAudioCallIntent.contacts.count > 0) {
-            INPerson *contact = startAudioCallIntent.contacts[0];
-            if (contact != nil) {
-                INPersonHandle *personHandle = contact.personHandle;
-                NSString *phoneNumber = personHandle.value;
-                if (![AppUtils isNullOrEmpty: phoneNumber])
-                {
-                    phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
-                    if ([AppUtils isNullOrEmpty: phoneNumber]) {
-                        [self showSplashScreenOnView: NO];
-                    }else{
-                        [self showSplashScreenOnView: YES];
-
-                        [[NSUserDefaults standardUserDefaults] setObject:phoneNumber forKey:UserActivity];
-                        [[NSUserDefaults standardUserDefaults] synchronize];
-                    }
-                }
-            }
-        }
-    }
-    return YES;
-}
-
-- (void)showSplashScreenOnView: (BOOL)show {
-    if (splashScreen == nil) {
-        UINib *nib = [UINib nibWithNibName:@"LaunchScreen" bundle:nil];
-        splashScreen = [[nib instantiateWithOwner:self options:nil] objectAtIndex:0];
-        [self.window addSubview:splashScreen];
-    }
-    splashScreen.frame = [UIScreen mainScreen].bounds;
-    splashScreen.hidden = !show;
-}
-
-//-(BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+//- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
 //{
 //    INInteraction *interaction = userActivity.interaction;
 //    if (interaction != nil) {
@@ -2060,6 +2021,43 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 //    return YES;
 //}
 
+- (void)showSplashScreenOnView: (BOOL)show {
+    if (splashScreen == nil) {
+        UINib *nib = [UINib nibWithNibName:@"LaunchScreen" bundle:nil];
+        splashScreen = [[nib instantiateWithOwner:self options:nil] objectAtIndex:0];
+        [self.window addSubview:splashScreen];
+    }
+    splashScreen.frame = [UIScreen mainScreen].bounds;
+    splashScreen.hidden = !show;
+}
+
+-(BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+{
+    INInteraction *interaction = userActivity.interaction;
+    if (interaction != nil) {
+        INStartAudioCallIntent *startAudioCallIntent = (INStartAudioCallIntent *)interaction.intent;
+        if (startAudioCallIntent != nil && startAudioCallIntent.contacts.count > 0) {
+            INPerson *contact = startAudioCallIntent.contacts[0];
+            if (contact != nil) {
+                INPersonHandle *personHandle = contact.personHandle;
+                NSString *phoneNumber = personHandle.value;
+                if (![AppUtils isNullOrEmpty: phoneNumber])
+                {
+                    phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
+                    if ([AppUtils isNullOrEmpty: phoneNumber]) {
+                        [self showSplashScreenOnView: NO];
+                    }else{
+                        [self showSplashScreenOnView: YES];
+
+                        [[NSUserDefaults standardUserDefaults] setObject:phoneNumber forKey:UserActivity];
+                        [[NSUserDefaults standardUserDefaults] synchronize];
+                    }
+                }
+            }
+        }
+    }
+    return YES;
+}
 
 #pragma mark - sync contact xmpp
 

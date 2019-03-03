@@ -25,4 +25,7 @@
 + (NSString *)normalizeSipURI:(NSString *)address;
 + (NSString *)displayNameForAddress:(const LinphoneAddress *)addr;
 
+//  Call quality
++ (NSMutableAttributedString *)getQualityOfCall: (LinphoneCall *)call;
+
 @end

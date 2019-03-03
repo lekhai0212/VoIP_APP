@@ -591,7 +591,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     //  Number view
     float hNumber = 100.0;
     float hTextField = 60.0;
-    if ([modelName isEqualToString: IphoneX_1] || [modelName isEqualToString: IphoneX_2] || [modelName isEqualToString: IphoneXR] || [modelName isEqualToString: IphoneXS] || [modelName isEqualToString: IphoneXS_Max1] || [modelName isEqualToString: IphoneXS_Max2] || [modelName isEqualToString: simulator])
+    if ([modelName isEqualToString: IphoneX_1] || [modelName isEqualToString: IphoneX_2] || [modelName isEqualToString: IphoneXR] || [modelName isEqualToString: IphoneXS] || [modelName isEqualToString: IphoneXS_Max1] || [modelName isEqualToString: IphoneXS_Max2])
     {
         hNumber = 120.0;
         hTextField = 80.0;

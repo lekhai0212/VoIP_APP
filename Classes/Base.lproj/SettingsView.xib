@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14269.12" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14252.5"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -34,9 +34,9 @@
                             <rect key="frame" x="0.0" y="0.0" width="375" height="66"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="color_F.png" id="zY6-52-foX">
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background_header.png" id="zY6-52-foX">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="66"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </imageView>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Ccu-go-gvn" userLabel="dialerBackButton" customClass="UIIconButton">
                                     <rect key="frame" x="300" y="0.0" width="75" height="66"/>
@@ -56,15 +56,16 @@
                                     <rect key="frame" x="83" y="0.0" width="209" height="66"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="27"/>
-                                    <color key="textColor" red="0.98766469960000003" green="0.27512490750000002" blue="0.029739789660000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <button opaque="NO" tag="6" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="gTj-vM-UtG" userLabel="backButton" customClass="UIIconButton">
-                                    <rect key="frame" x="0.0" y="0.0" width="75" height="66"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="65" height="65"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <accessibility key="accessibilityConfiguration" label="Back"/>
                                     <inset key="titleEdgeInsets" minX="0.0" minY="18" maxX="0.0" maxY="0.0"/>
-                                    <state key="normal" image="ic_back_def">
+                                    <state key="normal" image="ic_back.png">
                                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </state>
                                     <state key="disabled" image="back_disabled.png"/>
@@ -86,7 +87,7 @@
                 </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-            <point key="canvasLocation" x="-766" y="164"/>
+            <point key="canvasLocation" x="-1226.4000000000001" y="147.07646176911544"/>
         </view>
         <navigationController definesPresentationContext="YES" navigationBarHidden="YES" id="10" userLabel="navigationController" customClass="UINavigationControllerEx">
             <extendedEdge key="edgesForExtendedLayout"/>
@@ -100,15 +101,15 @@
         <viewController autoresizesArchivedViewToFullSize="NO" id="6" userLabel="settingsController" customClass="IASKAppSettingsViewControllerEx">
             <extendedEdge key="edgesForExtendedLayout"/>
             <navigationItem key="navigationItem" id="14" userLabel="settingsItem"/>
-            <point key="canvasLocation" x="-293" y="93"/>
+            <point key="canvasLocation" x="-468.80000000000001" y="83.658170914542737"/>
         </viewController>
     </objects>
     <resources>
         <image name="back_disabled.png" width="24" height="22"/>
+        <image name="background_header.png" width="750" height="130"/>
         <image name="color_E.png" width="2" height="2"/>
-        <image name="color_F.png" width="2" height="2"/>
         <image name="dialer_back_default.png" width="27" height="27"/>
         <image name="dialer_back_disabled.png" width="27" height="27"/>
-        <image name="ic_back_def" width="200" height="200"/>
+        <image name="ic_back.png" width="100" height="100"/>
     </resources>
 </document>

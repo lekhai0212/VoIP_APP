@@ -9,6 +9,11 @@
 #ifndef AppStrings_h
 #define AppStrings_h
 
+#define DOMAIN_DEFAULT  @"nhanhoa.cloudcall.vn"
+#define PORT_DEFAULT    @"51000"
+
+
+
 #define link_appstore   @"https://itunes.apple.com/vn/app/cloudfone-vn/id1445535617?mt=8"
 #define link_introduce  @"https://cloudfone.vn/gioi-thieu-dich-vu-cloudfone/"
 #define link_policy     @"http://dieukhoan.cloudfone.vn/"

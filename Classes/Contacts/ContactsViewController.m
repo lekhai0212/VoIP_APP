@@ -30,7 +30,7 @@
 @end
 
 @implementation ContactsViewController
-@synthesize _pageViewController, _viewHeader, _iconAddNew, _iconAll, _iconPBX, _iconSyncPBXContact, _tfSearch, imgBackground, _icClearSearch;
+@synthesize _pageViewController, _viewHeader, _iconAll, _iconPBX, _iconSyncPBXContact, _tfSearch, imgBackground, _icClearSearch;
 @synthesize _listSyncContact, _phoneForSync;
 
 #pragma mark - UICompositeViewDelegate Functions
@@ -228,20 +228,13 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.width.height.mas_equalTo(hIcon-10);
     }];
     
-    [_iconAddNew mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(_viewHeader.mas_right).offset(-10);
-        make.top.equalTo(_iconSyncPBXContact.mas_top);
-        make.width.equalTo(_iconSyncPBXContact.mas_width);
-        make.height.equalTo(_iconSyncPBXContact.mas_height);
-    }];
-    
     _iconPBX.backgroundColor = SELECT_TAB_BG_COLOR;
     [_iconPBX setTitle:[[LanguageUtil sharedInstance] getContent:@"PBX"] forState:UIControlStateNormal];
     [_iconPBX setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     [_iconPBX mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(_viewHeader.mas_centerX);
-        make.centerY.equalTo(_iconAddNew.mas_centerY);
-        make.height.equalTo(_iconAddNew.mas_height);
+        make.centerY.equalTo(_iconSyncPBXContact.mas_centerY);
+        make.height.equalTo(_iconSyncPBXContact.mas_height);
         make.width.mas_equalTo(SCREEN_WIDTH/4);
     }];
     
@@ -313,12 +306,10 @@ static UICompositeViewDescription *compositeDescription = nil;
 {
     if (view == eContactAll){
         _iconSyncPBXContact.hidden = YES;
-        _iconAddNew.hidden = NO;
         [AppUtils setSelected: YES forButton: _iconAll];
         [AppUtils setSelected: NO forButton: _iconPBX];
     }else{
         _iconSyncPBXContact.hidden = NO;
-        _iconAddNew.hidden = YES;
         [AppUtils setSelected: NO forButton: _iconAll];
         [AppUtils setSelected: YES forButton: _iconPBX];
     }

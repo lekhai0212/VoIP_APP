@@ -39,8 +39,10 @@ static UICompositeViewDescription *compositeDescription = nil;
     // Do any additional setup after loading the view from its nib.
     [self setupUIForView];
     
-    tfAccountID.text = @"nhcla150";
-    tfPassword.text = @"f7NnFKI1Kv";
+    //  tfAccountID.text = @"nhcla150";
+    //  tfPassword.text = @"f7NnFKI1Kv";
+    tfAccountID.text = @"nhcla151";
+    tfPassword.text = @"5obr8jHH2q";
     
     /*
     nhanhoa.cloudcall.vn:51000
@@ -74,9 +76,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     }
     
     //  start register pbx
-    NSString *domain = @"nhanhoa.cloudcall.vn";
-    NSString *port = @"51000";
-    [SipUtils registerPBXAccount:tfAccountID.text password:tfPassword.text ipAddress:domain port:port];
+    [SipUtils registerPBXAccount:tfAccountID.text password:tfPassword.text ipAddress:DOMAIN_DEFAULT port:PORT_DEFAULT];
 }
 
 - (void)whenTapOnScreen {
@@ -234,7 +234,11 @@ static UICompositeViewDescription *compositeDescription = nil;
     switch (state) {
         case LinphoneRegistrationOk:
         {
-            NSLog(@"LinphoneRegistrationOk");
+            [[NSUserDefaults standardUserDefaults] setObject:tfAccountID.text forKey:key_login];
+            [[NSUserDefaults standardUserDefaults] setObject:tfPassword.text forKey:key_password];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
+            [PhoneMainView.instance changeCurrentView:DialerView.compositeViewDescription];
             break;
         }
         case LinphoneRegistrationNone:{
@@ -248,7 +252,8 @@ static UICompositeViewDescription *compositeDescription = nil;
         }
         case LinphoneRegistrationFailed:
         {
-            NSLog(@"LinphoneRegistrationFailed");
+            [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check sign in information"] duration:2.0 position:CSToastPositionCenter];
+            
             break;
         }
         case LinphoneRegistrationProgress: {

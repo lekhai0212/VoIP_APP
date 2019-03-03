@@ -21,6 +21,7 @@
 #import <AudioToolbox/AudioServices.h>
 #import "LinphoneAppDelegate.h"
 #import "PhoneMainView.h"
+#import "SignInViewController.h"
 
 static RootViewManager *rootViewManagerInstance = nil;
 
@@ -529,10 +530,10 @@ static RootViewManager *rootViewManagerInstance = nil;
                 //  Di chuyen den view history neu nguoi dung click vao history tu dien thoai de mo app
                 [self changeCurrentView:CallsHistoryViewController.compositeViewDescription];
             }else{
-                [self changeCurrentView:DialerView.compositeViewDescription];
+                [self changeCurrentView:SignInViewController.compositeViewDescription];
             }
 		} else if ([LinphoneManager.instance lpConfigBoolForKey:@"enable_first_login_view_preference"] == true) {
-            [PhoneMainView.instance changeCurrentView:AssistantView.compositeViewDescription];
+            [PhoneMainView.instance changeCurrentView:SignInViewController.compositeViewDescription];
 		} else {
 			// always start to dialer when testing
 			// Change to default view
@@ -553,13 +554,11 @@ static RootViewManager *rootViewManagerInstance = nil;
                     if (USERNAME != nil && PASSWORD != nil) {
                         [self changeCurrentView:DialerView.compositeViewDescription];
                     }else{
-                        [PhoneMainView.instance changeCurrentView:AssistantView.compositeViewDescription];
+                        [PhoneMainView.instance changeCurrentView:SignInViewController.compositeViewDescription];
                     }
                 }
 			} else {
-				AssistantView *view = VIEW(AssistantView);
-				[PhoneMainView.instance changeCurrentView:view.compositeViewDescription];
-				[view reset];
+				[PhoneMainView.instance changeCurrentView:SignInViewController.compositeViewDescription];
 			}
 		}
 		[self updateApplicationBadgeNumber]; // Update Badge at startup

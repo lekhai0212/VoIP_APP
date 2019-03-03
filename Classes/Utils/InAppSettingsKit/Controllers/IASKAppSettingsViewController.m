@@ -482,12 +482,12 @@ CGRect IASKCGRectSwap(CGRect rect);
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     IASKSpecifier *specifier  = [self.settingsReader specifierForIndexPath:indexPath];
+    /*
     NSString *key = [specifier.specifierDict objectForKey:kIASKKey];
-    //  Add new by Khai Le on 29/11/2017
     if ([key isEqualToString:@"assistant_button"]) {
         return 0;
     }
-    //  ----------
+    */
     
     if ([[specifier type] isEqualToString:kIASKCustomViewSpecifier]) {
 		if ([self.delegate respondsToSelector:@selector(tableView:heightForSpecifier:)]) {

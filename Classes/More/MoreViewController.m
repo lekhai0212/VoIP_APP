@@ -219,9 +219,9 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 //  Khoi tao du lieu cho view
 - (void)createDataForMenuView {
-    listTitle = [[NSMutableArray alloc] initWithObjects: [[LanguageUtil sharedInstance] getContent:@"Account settings"], [[LanguageUtil sharedInstance] getContent:@"Settings"], [[LanguageUtil sharedInstance] getContent:@"Feedback"], [[LanguageUtil sharedInstance] getContent:@"Privacy Policy"], [[LanguageUtil sharedInstance] getContent:@"Introduction"], [[LanguageUtil sharedInstance] getContent:@"Send logs"], [[LanguageUtil sharedInstance] getContent:@"About"], nil];
+    listTitle = [[NSMutableArray alloc] initWithObjects: [[LanguageUtil sharedInstance] getContent:@"Choose ringtone"], [[LanguageUtil sharedInstance] getContent:@"Call settings"], [[LanguageUtil sharedInstance] getContent:@"Send logs"], [[LanguageUtil sharedInstance] getContent:@"About"], nil];
     
-    listIcon = [[NSMutableArray alloc] initWithObjects: @"ic_setup.png", @"ic_setting.png", @"ic_support.png", @"ic_term.png", @"ic_introduce.png", @"ic_send_logs.png", @"ic_info.png", nil];
+    listIcon = [[NSMutableArray alloc] initWithObjects: @"ic_setup.png", @"ic_setting.png", @"ic_send_logs.png", @"ic_info.png", nil];
 }
 
 #pragma mark - uitableview delegate
@@ -257,25 +257,7 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case eSettings:{
-            [[PhoneMainView instance] changeCurrentView:[KSettingViewController compositeViewDescription] push:true];
-            break;
-        }
-        case eFeedback:{
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Go to feedback on App Store", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-            
-            NSURL *linkCloudfoneOnAppStore = [NSURL URLWithString: link_appstore];
-            [[UIApplication sharedApplication] openURL: linkCloudfoneOnAppStore];
-            
-            break;
-        }
-        case ePolicy:{
-            [[PhoneMainView instance] changeCurrentView:[PolicyViewController compositeViewDescription]
-                                                   push:true];
-            break;
-        }
-        case eIntroduce:{
-            [[PhoneMainView instance] changeCurrentView:[IntroduceViewController compositeViewDescription]
-                                                   push:true];
+            [[PhoneMainView instance] changeCurrentView:[SettingsView compositeViewDescription] push:true];
             break;
         }
         case eSendLogs:{
@@ -284,13 +266,7 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case eAbout:{
-            [[PhoneMainView instance] changeCurrentView:[AboutViewController compositeViewDescription]
-                                                   push:true];
-            break;
-        }
-        case eDrawLine:{
-            [[PhoneMainView instance] changeCurrentView:[DrawingViewController compositeViewDescription]
-                                                   push:true];
+            //  [[PhoneMainView instance] changeCurrentView:[AboutViewController compositeViewDescription] push:true];
             break;
         }
         default:
