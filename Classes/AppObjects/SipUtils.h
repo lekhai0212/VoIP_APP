@@ -14,8 +14,8 @@
 + (void)registerPBXAccount: (NSString *)pbxAccount password: (NSString *)password ipAddress: (NSString *)address port: (NSString *)portID;
 
 + (BOOL)makeCallWithPhoneNumber: (NSString *)phoneNumber;
-+ (BOOL)makeAudioCallWithPhoneNumber: (NSString *)phoneNumber;
-+ (BOOL)makeVideoCallWithPhoneNumber: (NSString *)phoneNumber;
++ (void)makeAudioCallWithPhoneNumber: (NSString *)phoneNumber;
++ (void)makeVideoCallWithPhoneNumber: (NSString *)phoneNumber;
 
 + (AccountState)getStateOfDefaultProxyConfig;
 + (NSString *)getAccountIdOfDefaultProxyConfig;

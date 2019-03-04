@@ -12,6 +12,7 @@
 #define DOMAIN_DEFAULT  @"nhanhoa.cloudcall.vn"
 #define PORT_DEFAULT    @"51000"
 
+#define IS_VIDEO_CALL_KEY   @"IS_VIDEO_CALL_KEY"
 
 
 #define link_appstore   @"https://itunes.apple.com/vn/app/cloudfone-vn/id1445535617?mt=8"

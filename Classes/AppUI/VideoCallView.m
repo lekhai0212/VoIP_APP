@@ -36,7 +36,6 @@
         make.width.height.mas_equalTo(40.0);
     }];
     
-    iconHangup.imageEdgeInsets = UIEdgeInsetsMake(12, 12, 12, 12);
     iconHangup.layer.cornerRadius = wIcon/2;
     iconHangup.clipsToBounds = YES;
     [iconHangup mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -91,6 +90,23 @@
     
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(headsetPluginChanged:)
                                                name:@"headsetPluginChanged" object:nil];
+}
+
+- (IBAction)iconOffCameraClick:(UIButton *)sender {
+    BOOL isEnabled = linphone_core_video_preview_enabled(LC);
+    if (isEnabled) {
+        NSLog(@"------> disable video preview");
+        linphone_core_enable_video_preview(LC, NO);
+    }else{
+        NSLog(@"------> enable video preview");
+        linphone_core_enable_video_preview(LC, YES);
+    }
+}
+
+- (IBAction)iconMuteClick:(UIButton *)sender {
+}
+
+- (IBAction)iconWtitchCamClick:(UIButton *)sender {
 }
 
 - (void)headsetPluginChanged: (NSNotification *)notif {
@@ -183,6 +199,11 @@
         return;
     }
     
+    BOOL shouldEnableVideo = (!call || linphone_call_params_video_enabled(linphone_call_get_current_params(call)));
+    if (shouldEnableVideo) {
+        NSLog(@"shouldEnableVideo");
+    }
+    
     switch (state) {
         case LinphoneCallOutgoingRinging:{
             lbDuration.text = [[LanguageUtil sharedInstance] getContent:@"Ringing"];
@@ -201,6 +222,7 @@
             break;
         }
         case LinphoneCallOutgoingInit:{
+            [self showFullLocalCameraPreview: YES];
             
             iconMute.enabled = NO;
             lbQuality.hidden = YES;
@@ -208,6 +230,7 @@
             break;
         }
         case LinphoneCallConnected:{
+            [self showFullLocalCameraPreview: NO];
             lbDuration.font = [UIFont systemFontOfSize:30.0 weight:UIFontWeightThin];
             
             iconMute.enabled = YES;
@@ -338,4 +361,20 @@
     NSLog(@"hideCallView");
 }
 
+- (void)showFullLocalCameraPreview: (BOOL)full {
+    if (full) {
+        [previewVideo mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.left.bottom.right.equalTo(self);
+        }];
+    }else{
+        [previewVideo mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.left.equalTo(self);
+            make.width.mas_equalTo(100.0);
+            make.height.mas_equalTo(135.0);
+        }];
+    }
+}
+
+//  linphone_core_take_preview_snapshot
+//  linphone_call_take_preview_snapshot
 @end

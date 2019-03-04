@@ -90,20 +90,22 @@
     }
     address = [AppUtils removeAllSpecialInString: address];
     
+    [SipUtils makeVideoCallWithPhoneNumber: address];
+    /*
     BOOL success = [SipUtils makeCallWithPhoneNumber: address];
     if (!success) {
         [[LanguageUtil sharedInstance] getContent:@"Can not make call now. Perhaps you have not signed your account yet!"];
         return;
-    }
+    }   */
     
-	if ([address length] > 0) {
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"\n%s -> %@ make call to %@", __FUNCTION__, USERNAME, address] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-        
-		LinphoneAddress *addr = [LinphoneUtils normalizeSipOrPhoneAddress:address];
-		[LinphoneManager.instance call:addr];
-		if (addr)
-			linphone_address_destroy(addr);
-	}
+//    if ([address length] > 0) {
+//        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"\n%s -> %@ make call to %@", __FUNCTION__, USERNAME, address] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+//
+//        LinphoneAddress *addr = [LinphoneUtils normalizeSipOrPhoneAddress:address];
+//        [LinphoneManager.instance call:addr];
+//        if (addr)
+//            linphone_address_destroy(addr);
+//    }
     
     CallView *controller = VIEW(CallView);
     if (controller != nil) {

@@ -34,9 +34,15 @@
 #import "UIRoundedImageView.h"
 #import "UIBouncingView.h"
 
-typedef enum typeCall{
+typedef enum directionCall{
     callIncoming,
     callOutgoing,
+}directionCall;
+
+typedef enum typeCall{
+    eUnknownTypeCall,
+    eAudioCall,
+    eVideoCall,
 }typeCall;
 
 @class VideoView;
@@ -52,13 +58,11 @@ typedef enum typeCall{
 @property (weak, nonatomic) IBOutlet UIImageView *bgCall;
 
 @property(nonatomic, strong) IBOutlet CallPausedTableView *pausedCallsTable;
-@property(weak, nonatomic) IBOutlet UIView *callView;
 
 @property(nonatomic, strong) IBOutlet UIButton *optionsConferenceButton;
 
 @property(nonatomic, strong) IBOutlet UIToggleButton *routesButton;
 @property(nonatomic, strong) IBOutlet UIToggleButton *optionsButton;
-@property(nonatomic, strong) IBOutlet UIHangUpButton *hangupButton;
 @property(nonatomic, strong) IBOutlet UIView *routesView;
 @property(nonatomic, strong) IBOutlet UIView *optionsView;
 @property(nonatomic, strong) IBOutlet UIButton *routesEarpieceButton;
@@ -68,13 +72,8 @@ typedef enum typeCall{
 @property(weak, nonatomic) IBOutlet UILabel *chatNotificationLabel;
 
 @property(weak, nonatomic) IBOutlet UIView *bottomBar;
-@property(weak, nonatomic) IBOutlet UILabel *nameLabel;
-@property(weak, nonatomic) IBOutlet UILabel *durationLabel;
-@property(weak, nonatomic) IBOutlet UIView *pausedByRemoteView;
 
 @property(strong, nonatomic) IBOutlet CallPausedTableView *conferenceCallsTable;
-@property (weak, nonatomic) IBOutlet UIView *videoView;
-
 - (IBAction)onRoutesClick:(id)sender;
 - (IBAction)onRoutesBluetoothClick:(id)sender;
 - (IBAction)onRoutesEarpieceClick:(id)sender;
@@ -86,9 +85,8 @@ typedef enum typeCall{
 - (IBAction)onNumpadClick:(id)sender;
 - (IBAction)onChatClick:(id)sender;
 
-@property (weak, nonatomic) IBOutlet UILabel *_lbQuality;
-
 @property (nonatomic, strong) NSTimer *durationTimer;
 @property (nonatomic, strong) NSString *phoneNumber;
+@property (nonatomic, assign) typeCall typeOfCall;
 
 @end

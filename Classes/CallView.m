@@ -76,9 +76,7 @@ const NSInteger SECURE_BUTTON_TAG = 5;
 	BOOL hiddenVolume;
 }
 @synthesize bgCall;
-@synthesize _lbQuality;
-
-@synthesize durationTimer, phoneNumber;
+@synthesize durationTimer, phoneNumber, typeOfCall;
 
 #pragma mark - Lifecycle Functions
 
@@ -130,10 +128,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 #endif
     singleFingerTap.numberOfTapsRequired = 2;
     singleFingerTap.cancelsTouchesInView = NO;
-
-    //  Added by Khai Le on 06/10/2018
-    _durationLabel.text = [[LanguageUtil sharedInstance] getContent:@"Calling"];
-    _durationLabel.textColor = UIColor.whiteColor;
+    
+    typeOfCall = eUnknownTypeCall;
 }
 
 - (void)dealloc {
@@ -147,8 +143,16 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     // Set windows (warn memory leaks)
     if (videoCallView != nil) {
+        linphone_core_use_preview_window(LC, YES);
+        linphone_core_enable_video_preview(LC, YES);
         linphone_core_set_native_video_window_id(LC, (__bridge void *)(videoCallView.videoView));
         linphone_core_set_native_preview_window_id(LC, (__bridge void *)(videoCallView.previewVideo));
+        
+        LinphoneCall *call = linphone_core_get_current_call(LC);
+        // linphone_call_params_get_used_video_codec return 0 if no video stream enabled
+        if (call != NULL && linphone_call_params_get_used_video_codec(linphone_call_get_current_params(call))) {
+            linphone_call_set_next_video_frame_decoded_callback(call, hideSpinner, (__bridge void *)(self));
+        }
     }
     
     if (LinphoneManager.instance.bluetoothAvailable) {
@@ -163,15 +167,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         
         LinphoneCall *curCall = linphone_core_get_current_call([LinphoneManager getLc]);
         if (curCall != NULL) {
-            LinphoneCallState callState = linphone_call_get_state(curCall);
-            NSLog(@"call state = %d", callState);
-            
-            BOOL videoEnabled = linphone_call_params_video_enabled(linphone_call_get_remote_params(curCall));
-            if (videoEnabled) {
-                [self addVideoCallView];
-            }else{
-                [self addAudioCallView];
-            }
+            [self checkVideoIsEnableInCall: curCall];
         }
     }
     
@@ -192,8 +188,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     _bottomBar.clipsToBounds = YES;
     
 	LinphoneManager.instance.nextCallIsTransfer = NO;
-    _nameLabel.text = @"";
-
+    
 	// Update on show
 	[self hideRoutes:TRUE animated:FALSE];
 	[self hideOptions:TRUE animated:FALSE];
@@ -213,12 +208,10 @@ static UICompositeViewDescription *compositeDescription = nil;
     //  Update address
     [self updateAddress];
     
-    [self btnHideKeypadPressed];
-    
-    _callView.hidden = NO;
     if (count == 0) {
-        _durationLabel.text = [[LanguageUtil sharedInstance] getContent:@"Calling"];
-        _durationLabel.textColor = UIColor.whiteColor;
+        [self checkToDisplayViewForCall];
+//        _durationLabel.text = [[LanguageUtil sharedInstance] getContent:@"Calling"];
+//        _durationLabel.textColor = UIColor.whiteColor;
     }else{
         LinphoneCall *curCall = linphone_core_get_current_call([LinphoneManager getLc]);
         if (curCall == NULL) {
@@ -368,14 +361,9 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
 	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-	[self hideStatusBar:!videoHidden && (_nameLabel.alpha <= 0.f)];
 }
 
 - (void)updateBottomBar:(LinphoneCall *)call state:(LinphoneCallState)state {
-	//  [_speakerButton update];
-	//  [_callPauseButton update];
-	[_hangupButton update];
-
 	_optionsButton.enabled = (!call || !linphone_core_sound_resources_locked(LC));
     //  Closed by Khai Le on 07/10/2018
 	//  _optionsTransferButton.enabled = call && !linphone_core_sound_resources_locked(LC);
@@ -409,19 +397,17 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)callDurationUpdate
 {
-//    int size = linphone_core_get_conference_size(LC);
-//    NSLog(@"KL-----size: %d", size);
-    int duration;
-    list = linphone_core_get_calls([LinphoneManager getLc]);
-    if (list != NULL) {
-        duration = linphone_call_get_duration((LinphoneCall*)list->data);
-        _durationLabel.text = [LinphoneUtils durationToString:duration];
-        _durationLabel.textColor = UIColor.greenColor;
-        _lbQuality.hidden = NO;
-    }else{
-        duration = 0;
-        _lbQuality.hidden = YES;
-    }
+//    int duration;
+//    list = linphone_core_get_calls([LinphoneManager getLc]);
+//    if (list != NULL) {
+//        duration = linphone_call_get_duration((LinphoneCall*)list->data);
+//        _durationLabel.text = [LinphoneUtils durationToString:duration];
+//        _durationLabel.textColor = UIColor.greenColor;
+//        _lbQuality.hidden = NO;
+//    }else{
+//        duration = 0;
+//        _lbQuality.hidden = YES;
+//    }
 }
 
 //  Call quality
@@ -449,16 +435,12 @@ static UICompositeViewDescription *compositeDescription = nil;
             [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, quality.length)];
             [attr addAttribute:NSForegroundColorAttributeName value:UIColor.redColor range:NSMakeRange(quality.length-qualityValue.length, qualityValue.length)];
             
-            _lbQuality.attributedText = attr;
-            
         } else if (quality < 2) {
             NSString *qualityValue = [[LanguageUtil sharedInstance] getContent:@"Very low"];
             NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Quality"], qualityValue];
             NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString: quality];
             [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, quality.length)];
             [attr addAttribute:NSForegroundColorAttributeName value:UIColor.orangeColor range:NSMakeRange(quality.length-qualityValue.length, qualityValue.length)];
-            
-            _lbQuality.attributedText = attr;
             
         } else if (quality < 3) {
             NSString *qualityValue = [[LanguageUtil sharedInstance] getContent:@"Low"];
@@ -467,7 +449,6 @@ static UICompositeViewDescription *compositeDescription = nil;
             [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, quality.length)];
             [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(quality.length-qualityValue.length, qualityValue.length)];
             
-            _lbQuality.attributedText = attr;
             
         } else if(quality < 4){
             NSString *qualityValue = [[LanguageUtil sharedInstance] getContent:@"Average"];
@@ -476,7 +457,6 @@ static UICompositeViewDescription *compositeDescription = nil;
             [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, quality.length)];
             [attr addAttribute:NSForegroundColorAttributeName value:UIColor.greenColor range:NSMakeRange(quality.length-qualityValue.length, qualityValue.length)];
             
-            _lbQuality.attributedText = attr;
             
         } else{
             NSString *qualityValue = [[LanguageUtil sharedInstance] getContent:@"Good"];
@@ -485,7 +465,6 @@ static UICompositeViewDescription *compositeDescription = nil;
             [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, quality.length)];
             [attr addAttribute:NSForegroundColorAttributeName value:UIColor.greenColor range:NSMakeRange(quality.length-qualityValue.length, qualityValue.length)];
             
-            _lbQuality.attributedText = attr;
         }
     }
 }
@@ -569,9 +548,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 		hiddenVolume = FALSE;
 	}
     
-    [self btnHideKeypadPressed];
-    _callView.hidden = NO;
-    
 	static LinphoneCall *currentCall = NULL;
 	if (!currentCall || linphone_core_get_current_call(LC) != currentCall) {
 		currentCall = linphone_core_get_current_call(LC);
@@ -582,14 +558,10 @@ static UICompositeViewDescription *compositeDescription = nil;
 		return;
 	}
 
-	if (state != LinphoneCallPausedByRemote) {
-		_pausedByRemoteView.hidden = YES;
-	}
-
 	switch (state) {
         case LinphoneCallOutgoingRinging:{
-            _durationLabel.text = [[LanguageUtil sharedInstance] getContent:@"Ringing"];
-            _durationLabel.textColor = UIColor.whiteColor;
+//            _durationLabel.text = [[LanguageUtil sharedInstance] getContent:@"Ringing"];
+//            _durationLabel.textColor = UIColor.whiteColor;
             
             [self getPhoneNumberOfCall];
             break;
@@ -600,17 +572,24 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case LinphoneCallOutgoingProgress:{
-            _durationLabel.text = [[LanguageUtil sharedInstance] getContent:@"Calling"];
-            _durationLabel.textColor = UIColor.whiteColor;
+//            _durationLabel.text = [[LanguageUtil sharedInstance] getContent:@"Calling"];
+//            _durationLabel.textColor = UIColor.whiteColor;
             
             break;
         }
         case LinphoneCallOutgoingInit:{
+            [self checkVideoIsEnableInCall: call];
+            
             break;
         }
         case LinphoneCallConnected:{
             //  Check if in call with hotline
-            _lbQuality.hidden = NO;
+            //  _lbQuality.hidden = NO;
+            
+            linphone_call_enable_camera(call, YES);
+            linphone_core_enable_video_preview(LC, YES);
+            linphone_core_set_native_video_window_id(LC, (__bridge void *)(videoCallView.videoView));
+            linphone_core_set_native_preview_window_id(LC, (__bridge void *)(videoCallView.previewVideo));
             
             [self countUpTimeForCall];
             [self updateQualityForCall];
@@ -845,26 +824,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 #pragma mark - My Functions
 
-//  Hide keypad mini
-- (void)btnHideKeypadPressed
-{
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
-                         toFilePath:appDelegate.logFilePath];
-    
-    for (UIView *subView in _callView.subviews) {
-        if (subView.tag == 10) {
-            [UIView animateWithDuration:.35 animations:^{
-                subView.transform = CGAffineTransformMakeScale(1.3, 1.3);
-                subView.alpha = 0.0;
-            } completion:^(BOOL finished) {
-                if (finished) {
-                    [subView removeFromSuperview];
-                }
-            }];
-        }
-    }
-}
-
 /*----- Kết thúc cuộc gọi trong màn hình video call -----*/
 - (void)endVideoCall{
     LinphoneCore* lc = [LinphoneManager getLc];
@@ -878,7 +837,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     [self view]; //Force view load
     PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: phoneNumber];
     NSLog(@"%@", contact.name);
-    _nameLabel.text = contact.name;
 }
 
 //  Kết thúc cuộc gọi hiện tại
@@ -943,8 +901,8 @@ static UICompositeViewDescription *compositeDescription = nil;
                 lMessage = [NSString stringWithFormat:NSLocalizedString(@"%@ is not registered.", nil), lUserName];
                 break;
             case LinphoneReasonBusy:
-                _durationLabel.text = [[LanguageUtil sharedInstance] getContent:@"The user is busy"];
-                _durationLabel.textColor = UIColor.whiteColor;
+//                _durationLabel.text = [[LanguageUtil sharedInstance] getContent:@"The user is busy"];
+//                _durationLabel.textColor = UIColor.whiteColor;
                 break;
             default:
                 if (message != nil) {
@@ -1086,10 +1044,53 @@ static UICompositeViewDescription *compositeDescription = nil;
         
         
         if (videoCallView != nil) {
+            linphone_core_use_preview_window(LC, YES);
+            
+            linphone_core_enable_video_preview(LC, YES);
             linphone_core_set_native_video_window_id(LC, (__bridge void *)(videoCallView.videoView));
             linphone_core_set_native_preview_window_id(LC, (__bridge void *)(videoCallView.previewVideo));
+            
+            LinphoneCall *call = linphone_core_get_current_call(LC);
+            // linphone_call_params_get_used_video_codec return 0 if no video stream enabled
+            if (call != NULL && linphone_call_params_get_used_video_codec(linphone_call_get_current_params(call))) {
+                linphone_call_enable_camera(call, YES);
+                linphone_call_set_next_video_frame_decoded_callback(call, hideSpinner, (__bridge void *)(self));
+            }
         }
     }
 }
 
+- (void)hideSpinnerIndicator:(LinphoneCall *)call {
+    NSLog(@"---------------------_videoWaitingForFirstImage");
+    //  _videoWaitingForFirstImage.hidden = TRUE;
+}
+
+static void hideSpinner(LinphoneCall *call, void *user_data) {
+    CallView *thiz = (__bridge CallView *)user_data;
+    [thiz hideSpinnerIndicator:call];
+}
+
+//  [Khai Le - 05/03/2019]
+- (void)checkToDisplayViewForCall {
+    NSString *value = [[NSUserDefaults standardUserDefaults] objectForKey:IS_VIDEO_CALL_KEY];
+    if (value != nil && [value isEqualToString:@"1"]) {
+        typeOfCall = eVideoCall;
+        [self addVideoCallView];
+    }else{
+        typeOfCall = eAudioCall;
+        [self addAudioCallView];
+    }
+}
+- (void)checkVideoIsEnableInCall: (LinphoneCall *)call {
+    if (typeOfCall == eUnknownTypeCall) {
+        BOOL videoEnabled = linphone_call_params_video_enabled(linphone_call_get_remote_params(call));
+        if (videoEnabled) {
+            typeOfCall = eVideoCall;
+            [self addVideoCallView];
+        }else{
+            typeOfCall = eAudioCall;
+            [self addAudioCallView];
+        }
+    }
+}
 @end

@@ -23,5 +23,8 @@
 
 - (void)setupUIForView;
 - (void)registerNotifications;
+- (IBAction)iconOffCameraClick:(UIButton *)sender;
+- (IBAction)iconMuteClick:(UIButton *)sender;
+- (IBAction)iconWtitchCamClick:(UIButton *)sender;
 
 @end

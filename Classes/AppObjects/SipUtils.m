@@ -280,120 +280,18 @@
     return NO;
 }
 
-+ (BOOL)makeAudioCallWithPhoneNumber: (NSString *)phoneNumber
++ (void)makeAudioCallWithPhoneNumber: (NSString *)phoneNumber
 {
-    AccountState curState = [SipUtils getStateOfDefaultProxyConfig];
-    if (curState != eAccountOn) {
-        NSString *content = [[LanguageUtil sharedInstance] getContent:@"Can not make call now. Perhaps you have not signed your account yet!"];
-        [[LinphoneAppDelegate sharedInstance].window makeToast:content duration:3.0 position:CSToastPositionCenter];
-        
-        return NO;
-    }
-    
-    
-    //  [Khai Le - 27/12/2018]
-    phoneNumber = [self makeValidPhoneNumber: phoneNumber];
-    
-    if (phoneNumber != nil && phoneNumber.length > 0)
-    {
-        BOOL networkReady = [DeviceUtils checkNetworkAvailable];
-        if (!networkReady) {
-            NSString *content = [[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"];
-            [[LinphoneAppDelegate sharedInstance].window makeToast:content duration:2.0 position:CSToastPositionCenter];
-            
-            return NO;
-        }
-        
-        if ([phoneNumber isEqualToString: USERNAME]) {
-            NSString *content = [[LanguageUtil sharedInstance] getContent:@"Can not make call with yourself"];
-            [[LinphoneAppDelegate sharedInstance].window makeToast:content duration:2.0 position:CSToastPositionCenter];
-            return NO;
-        }
-        
-        LinphoneAddress *addr = linphone_core_interpret_url(LC, phoneNumber.UTF8String);
-        if (!addr) {
-            return NO;
-        }
-        
-        [LinphoneManager.instance call:addr];
-        if (addr)
-            linphone_address_destroy(addr);
-        
-        if (IS_IPHONE || IS_IPOD) {
-            CallView *controller = VIEW(CallView);
-            if (controller != nil) {
-                controller.phoneNumber = phoneNumber;
-            }
-            
-            [[PhoneMainView instance] changeCurrentView:[CallView compositeViewDescription] push:TRUE];
-        }else{
-            [[NSNotificationCenter defaultCenter] postNotificationName:showIpadPopupCall
-                                                                object:phoneNumber];
-        }
-        return YES;
-    }else{
-        NSString *content = [[LanguageUtil sharedInstance] getContent:@"Phone number can not empty!"];
-        [[LinphoneAppDelegate sharedInstance].window makeToast:content duration:2.0 position:CSToastPositionCenter];
-    }
-    return NO;
+    [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:IS_VIDEO_CALL_KEY];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    [self makeCallWithPhoneNumber: phoneNumber];
 }
 
-+ (BOOL)makeVideoCallWithPhoneNumber: (NSString *)phoneNumber
++ (void)makeVideoCallWithPhoneNumber: (NSString *)phoneNumber
 {
-    AccountState curState = [SipUtils getStateOfDefaultProxyConfig];
-    if (curState != eAccountOn) {
-        NSString *content = [[LanguageUtil sharedInstance] getContent:@"Can not make call now. Perhaps you have not signed your account yet!"];
-        [[LinphoneAppDelegate sharedInstance].window makeToast:content duration:3.0 position:CSToastPositionCenter];
-        
-        return NO;
-    }
-    
-    
-    //  [Khai Le - 27/12/2018]
-    phoneNumber = [self makeValidPhoneNumber: phoneNumber];
-    
-    if (phoneNumber != nil && phoneNumber.length > 0)
-    {
-        BOOL networkReady = [DeviceUtils checkNetworkAvailable];
-        if (!networkReady) {
-            NSString *content = [[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"];
-            [[LinphoneAppDelegate sharedInstance].window makeToast:content duration:2.0 position:CSToastPositionCenter];
-            
-            return NO;
-        }
-        
-        if ([phoneNumber isEqualToString: USERNAME]) {
-            NSString *content = [[LanguageUtil sharedInstance] getContent:@"Can not make call with yourself"];
-            [[LinphoneAppDelegate sharedInstance].window makeToast:content duration:2.0 position:CSToastPositionCenter];
-            return NO;
-        }
-        
-        LinphoneAddress *addr = linphone_core_interpret_url(LC, phoneNumber.UTF8String);
-        if (!addr) {
-            return NO;
-        }
-        
-        [LinphoneManager.instance call:addr];
-        if (addr)
-            linphone_address_destroy(addr);
-        
-        if (IS_IPHONE || IS_IPOD) {
-            CallView *controller = VIEW(CallView);
-            if (controller != nil) {
-                controller.phoneNumber = phoneNumber;
-            }
-            
-            [[PhoneMainView instance] changeCurrentView:[CallView compositeViewDescription] push:TRUE];
-        }else{
-            [[NSNotificationCenter defaultCenter] postNotificationName:showIpadPopupCall
-                                                                object:phoneNumber];
-        }
-        return YES;
-    }else{
-        NSString *content = [[LanguageUtil sharedInstance] getContent:@"Phone number can not empty!"];
-        [[LinphoneAppDelegate sharedInstance].window makeToast:content duration:2.0 position:CSToastPositionCenter];
-    }
-    return NO;
+    [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:IS_VIDEO_CALL_KEY];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    [self makeCallWithPhoneNumber: phoneNumber];
 }
 
 + (AccountState)getStateOfDefaultProxyConfig {

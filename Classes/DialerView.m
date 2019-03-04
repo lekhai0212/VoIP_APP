@@ -438,10 +438,9 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (IBAction)_btnHotlinePressed:(UIButton *)sender
 {
+    
+    
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-    
-    
-    
     
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[[LanguageUtil sharedInstance] getContent:@"Do you want to call to hotline for assistance?"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Close"] otherButtonTitles: [[LanguageUtil sharedInstance] getContent:@"Call"], nil];
     alert.delegate = self;
