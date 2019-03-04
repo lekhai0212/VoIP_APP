@@ -222,3 +222,5 @@
 
 "Please check sign in information" = "Vui lòng kiểm tra thông tin đăng nhập"
 "Choose ringtone" = "Chọn nhạc chuông"
+"Audio call" = "Gọi audio"
+"Video call" = "Gọi hình"

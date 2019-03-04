@@ -46,6 +46,7 @@
 #import "UIImageView+WebCache.h"
 #import "ConferenceTableViewCell.h"
 #import "AudioCallView.h"
+#import "VideoCallView.h"
 
 #define kMaxRadius 200
 #define kMaxDuration 10
@@ -66,6 +67,7 @@ const NSInteger SECURE_BUTTON_TAG = 5;
     LinphoneCallDir callDirection;
     
     AudioCallView *audioCallView;
+    VideoCallView *videoCallView;
 }
 
 @end
@@ -73,7 +75,7 @@ const NSInteger SECURE_BUTTON_TAG = 5;
 @implementation CallView {
 	BOOL hiddenVolume;
 }
-@synthesize bgCall, lbPhoneNumber;
+@synthesize bgCall;
 @synthesize _lbQuality;
 
 @synthesize durationTimer, phoneNumber;
@@ -120,8 +122,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     //  Add ney by Khai Le on 09/11/2017
     appDelegate = (LinphoneAppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    [self setupUIForView];
-    
 	_routesEarpieceButton.enabled = !IPAD;
 
 // TODO: fixme! video preview frame is too big compared to openGL preview
@@ -134,8 +134,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     //  Added by Khai Le on 06/10/2018
     _durationLabel.text = [[LanguageUtil sharedInstance] getContent:@"Calling"];
     _durationLabel.textColor = UIColor.whiteColor;
-    
-    [self addScrollview];
 }
 
 - (void)dealloc {
@@ -146,8 +144,12 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-
-    [self addAudioCallView];
+    
+    // Set windows (warn memory leaks)
+    if (videoCallView != nil) {
+        linphone_core_set_native_video_window_id(LC, (__bridge void *)(videoCallView.videoView));
+        linphone_core_set_native_preview_window_id(LC, (__bridge void *)(videoCallView.previewVideo));
+    }
     
     if (LinphoneManager.instance.bluetoothAvailable) {
         NSLog(@"Test: BLuetooth da ket noi");
@@ -163,6 +165,13 @@ static UICompositeViewDescription *compositeDescription = nil;
         if (curCall != NULL) {
             LinphoneCallState callState = linphone_call_get_state(curCall);
             NSLog(@"call state = %d", callState);
+            
+            BOOL videoEnabled = linphone_call_params_video_enabled(linphone_call_get_remote_params(curCall));
+            if (videoEnabled) {
+                [self addVideoCallView];
+            }else{
+                [self addAudioCallView];
+            }
         }
     }
     
@@ -173,14 +182,9 @@ static UICompositeViewDescription *compositeDescription = nil;
     //  [Khai le - 03/11/2018]
     PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: phoneNumber];
     if (![AppUtils isNullOrEmpty: contact.avatar]) {
-        _avatarImage.image = [UIImage imageWithData: [NSData dataFromBase64String:contact.avatar]];
+        
     }else{
-        _avatarImage.image = [UIImage imageNamed:@"no_avatar.png"];
-    }
-    
-    if (contact.phoneType == ePBXPhone) {
-        //  Download avatar of user if exists
-        [self checkToDownloadAvatarOfUser: phoneNumber];
+        
     }
     
     //  Leo Kelvin
@@ -231,11 +235,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    
-    self.halo.position = _avatarImage.center;
-    if (_avatarImage.frame.origin.y == appDelegate._hStatus + 35.0 + 10) {
-        self.halo.hidden = NO;
-    }
     
     if (audioCallView != nil) {
         [audioCallView updatePositionHaloView];
@@ -607,12 +606,6 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case LinphoneCallOutgoingInit:{
-            if (self.halo == nil) {
-                [self addAnimationForOutgoingCall];
-            }
-            self.halo.hidden = YES;
-            [self.halo start];
-            
             break;
         }
         case LinphoneCallConnected:{
@@ -621,12 +614,6 @@ static UICompositeViewDescription *compositeDescription = nil;
             
             [self countUpTimeForCall];
             [self updateQualityForCall];
-            
-            //  Stop halo waiting
-            self.halo.hidden = YES;
-            [self.halo start];
-            self.halo = nil;
-            [self.halo removeFromSuperlayer];
             
             break;
         }
@@ -679,12 +666,6 @@ static UICompositeViewDescription *compositeDescription = nil;
                 qualityTimer = nil;
             }
             
-            //  Stop halo waiting
-            self.halo.hidden = YES;
-            [self.halo start];
-            self.halo = nil;
-            [self.halo removeFromSuperlayer];
-            
             break;
         }
         case LinphoneCallError:{
@@ -709,12 +690,6 @@ static UICompositeViewDescription *compositeDescription = nil;
                 [qualityTimer invalidate];
                 qualityTimer = nil;
             }
-            
-            //  Stop halo waiting
-            self.halo.hidden = YES;
-            [self.halo start];
-            self.halo = nil;
-            [self.halo removeFromSuperlayer];
             
             [self performSelector:@selector(hideCallView) withObject:nil afterDelay:2.0];
             break;
@@ -902,158 +877,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)updateAddress {
     [self view]; //Force view load
     PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: phoneNumber];
-    
-    if ([phoneNumber isEqualToString:hotline]) {
-        _avatarImage.image = [UIImage imageNamed:@"hotline_avatar.png"];
-    }else{
-        if ([AppUtils isNullOrEmpty: contact.avatar]) {
-            _avatarImage.image = [UIImage imageNamed:@"no_avatar.png"];
-        }else{
-            _avatarImage.image = [UIImage imageWithData:[NSData dataFromBase64String: contact.avatar]];
-        }
-    }
+    NSLog(@"%@", contact.name);
     _nameLabel.text = contact.name;
-    lbPhoneNumber.text = phoneNumber;
-}
-
-//  add scroll view khi goi
-- (void)addScrollview
-{
-    
-    float wFeatureIcon = 70.0;
-    if (!IS_IPHONE && !IS_IPOD) {
-        wFeatureIcon = 100.0;
-    }else{
-        NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
-        if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE])
-        {
-            wFeatureIcon = 60.0;
-        }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
-        {
-            wFeatureIcon = 70.0;
-        }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
-        {
-            wFeatureIcon = 80.0;
-        }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2])
-        {
-            wFeatureIcon = 80.0;
-        }
-    }
-}
-
-- (void)setupUIForView
-{
-    float bottomHangupIcon = 20.0;
-    
-    float wEndCall = 70.0;
-    float wAvatar = 120.0;
-    float hDuration = 45.0;
-    float margin = 10.0;
-    NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
-    
-    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE])
-    {
-        wEndCall = 60.0;
-        wAvatar = 100.0;
-        hDuration = 30.0;
-        margin = 5.0;
-    }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
-    {
-        wEndCall = 70.0;
-        wAvatar = 120.0;
-        hDuration = 45.0;
-        margin = 10.0;
-    }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
-    {
-        wEndCall = 80.0;
-        wAvatar = 140.0;
-        hDuration = 45.0;
-        margin = 10.0;
-        bottomHangupIcon = 40.0;
-    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2] || [deviceMode isEqualToString: simulator])
-    {
-        wEndCall = 80.0;
-        wAvatar = 140.0;
-        hDuration = 45.0;
-        margin = 10.0;
-        bottomHangupIcon = 40.0;
-    }
-    
-    //  View call binh thuong
-    [_callView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.left.bottom.right.equalTo(self.view);
-    }];
-    
-    [_hangupButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(_callView).offset(-bottomHangupIcon);
-        make.centerX.equalTo(_callView.mas_centerX);
-        make.width.height.mas_equalTo(wEndCall);
-    }];
-    [_hangupButton addTarget:self
-                      action:@selector(btnHangupButtonPressed)
-            forControlEvents:UIControlEventTouchUpInside];
-    
-    [bgCall mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.left.bottom.right.equalTo(_callView);
-    }];
-    
-    _lbQuality.text = [[LanguageUtil sharedInstance] getContent:@"Quality"];
-    _lbQuality.backgroundColor = UIColor.clearColor;
-    _lbQuality.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
-    _lbQuality.textColor = UIColor.whiteColor;
-    _lbQuality.textAlignment = NSTextAlignmentCenter;
-    [_lbQuality mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_callView).offset([LinphoneAppDelegate sharedInstance]._hStatus);
-        make.right.equalTo(_callView).offset(-20);
-        make.left.equalTo(_callView).offset(20);
-        make.height.mas_equalTo(35.0);
-    }];
-    
-    _avatarImage.clipsToBounds = YES;
-    _avatarImage.layer.cornerRadius = wAvatar/2;
-    _avatarImage.layer.borderColor = [UIColor colorWithRed:(45/255.0) green:(136/255.0)
-                                                      blue:(250/255.0) alpha:1.0].CGColor;
-    _avatarImage.layer.borderWidth = 3.0;
-    _avatarImage.backgroundColor = UIColor.clearColor;
-    [_avatarImage mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_lbQuality.mas_bottom).offset(10);
-        make.centerX.equalTo(_callView.mas_centerX);
-        make.width.mas_equalTo(wAvatar);
-        make.height.mas_equalTo(wAvatar);
-    }];
-    
-    
-    [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_avatarImage.mas_bottom).offset(10);
-        make.left.equalTo(_callView).offset(20);
-        make.right.equalTo(_callView).offset(-20);
-        make.height.mas_equalTo(30.0);
-    }];
-    _nameLabel.text = @"";
-    _nameLabel.font = [UIFont systemFontOfSize:28.0 weight:UIFontWeightMedium];
-    _nameLabel.textColor = UIColor.whiteColor;
-    _nameLabel.backgroundColor = UIColor.clearColor;
-    _nameLabel.textAlignment = NSTextAlignmentCenter;
-    
-    [lbPhoneNumber mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_nameLabel.mas_bottom).offset(5);
-        make.left.equalTo(_callView).offset(20);
-        make.right.equalTo(_callView).offset(-20);
-        make.height.mas_equalTo(20.0);
-    }];
-    lbPhoneNumber.textAlignment = NSTextAlignmentCenter;
-    lbPhoneNumber.textColor = [UIColor colorWithRed:(200/255.0) green:(200/255.0)
-                                               blue:(200/255.0) alpha:1.0];
-    lbPhoneNumber.font = [UIFont systemFontOfSize: 16.0];
-    
-    [_durationLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(lbPhoneNumber.mas_bottom).offset(margin);
-        make.left.equalTo(_callView).offset(20);
-        make.right.equalTo(_callView).offset(-20);
-        make.height.mas_equalTo(hDuration);
-    }];
-    _durationLabel.font = [UIFont systemFontOfSize:32.0 weight:UIFontWeightThin];
-    _durationLabel.backgroundColor = UIColor.clearColor;
 }
 
 //  Kết thúc cuộc gọi hiện tại
@@ -1171,39 +996,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     qualityTimer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(callQualityUpdate) userInfo:nil repeats:YES];
 }
 
-- (void)checkToDownloadAvatarOfUser: (NSString *)phone
-{
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] phone number = %@", __FUNCTION__, phone] toFilePath:appDelegate.logFilePath];
-    
-    if (phone.length > 9 || [phone isEqualToString:hotline]) {
-        return;
-    }
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        NSString *pbxServer = [[NSUserDefaults standardUserDefaults] objectForKey:PBX_SERVER];
-        NSString *avatarName = [NSString stringWithFormat:@"%@_%@.png", pbxServer, phone];
-        NSString *linkAvatar = [NSString stringWithFormat:@"%@/%@", link_picture_chat_group, avatarName];
-        NSData *data = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: linkAvatar]];
-        
-        if (data != nil) {
-            NSString *folder = [NSString stringWithFormat:@"/avatars/%@", avatarName];
-            [AppUtils saveFileToFolder:data withName: folder];
-            
-            //  set avatar value for pbx contact list if exists
-            PBXContact *contact = [AppUtils getPBXContactFromListWithPhoneNumber: phoneNumber];
-            if (contact != nil) {
-                if ([data respondsToSelector:@selector(base64EncodedStringWithOptions:)]) {
-                    contact._avatar = [data base64EncodedStringWithOptions: 0];
-                } else {
-                    contact._avatar = [data base64Encoding];
-                }
-            }
-            dispatch_async(dispatch_get_main_queue(), ^(void){
-                _avatarImage.image = [UIImage imageWithData: data];
-            });
-        }
-    });
-}
-
 - (void)headsetPluginChanged: (NSNotification *)notif {
     if (notif.object != nil && [notif.object isKindOfClass:[NSNumber class]]) {
         int routeChangeReason = [notif.object intValue];
@@ -1222,28 +1014,6 @@ static UICompositeViewDescription *compositeDescription = nil;
                                  toFilePath:appDelegate.logFilePath];
         }
     }
-}
-
-- (void)addAnimationForOutgoingCall {
-    LinphoneCall *call = linphone_core_get_current_call(LC);
-    LinphoneCallState state = (call != NULL) ? linphone_call_get_state(call) : 0;
-    
-    if (callDirection == LinphoneCallOutgoing && state != LinphoneCallConnected && state != LinphoneCallStreamsRunning) {
-        // basic setup
-        PulsingHaloLayer *layer = [PulsingHaloLayer layer];
-        self.halo = layer;
-        [_avatarImage.superview.layer insertSublayer:self.halo below:_avatarImage.layer];
-        [self setupInitialValuesWithNumLayer:5 radius:0.8 duration:0.45
-                                       color:[UIColor colorWithRed:(230/255.0) green:(230/255.0) blue:(230/255.0) alpha:0.7]];
-    }
-}
-
-- (void)setupInitialValuesWithNumLayer: (int)numLayer radius: (float)radius duration: (float)duration color: (UIColor *)color
-{
-    self.halo.haloLayerNumber = numLayer;
-    self.halo.radius = radius * kMaxRadius;
-    self.halo.animationDuration = duration * kMaxDuration;
-    [self.halo setBackgroundColor:color.CGColor];
 }
 
 - (NSString *)getPhoneNumberOfCall: (LinphoneCall *)call {
@@ -1300,6 +1070,25 @@ static UICompositeViewDescription *compositeDescription = nil;
         }];
         [audioCallView setupUIForView];
         [audioCallView registerNotifications];
+    }
+}
+
+- (void)addVideoCallView {
+    if (videoCallView == nil) {
+        videoCallView = [[[NSBundle mainBundle] loadNibNamed:@"VideoCallView" owner:nil options:nil] lastObject];
+        [self.view addSubview: videoCallView];
+        [videoCallView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.left.bottom.right.equalTo(self.view);
+        }];
+        
+        [videoCallView setupUIForView];
+        [videoCallView registerNotifications];
+        
+        
+        if (videoCallView != nil) {
+            linphone_core_set_native_video_window_id(LC, (__bridge void *)(videoCallView.videoView));
+            linphone_core_set_native_preview_window_id(LC, (__bridge void *)(videoCallView.previewVideo));
+        }
     }
 }
 

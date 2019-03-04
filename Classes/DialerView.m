@@ -762,6 +762,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.width.height.mas_equalTo(wIcon);
     }];
     
+    
     //  transfer button
     _btnTransferCall.layer.cornerRadius = wIcon/2;
     _btnTransferCall.clipsToBounds = YES;
@@ -833,6 +834,8 @@ static UICompositeViewDescription *compositeDescription = nil;
             default:
                 break;
         }
+    }else if (actionSheet.tag == 101) {
+        
     }
 }
 
@@ -1103,4 +1106,19 @@ static UICompositeViewDescription *compositeDescription = nil;
     tvSearchResult.hidden = YES;
 }
 
+- (BOOL)fillToAddressField {
+    if (![_addressField.text isEqualToString:@""]) {
+        return YES;
+    }else{
+        NSString *phoneNumber = [NSDatabase getLastCallOfUser];
+        if (![phoneNumber isEqualToString: @""]) {
+            if ([phoneNumber isEqualToString: hotline]) {
+                //  addressField.text = [[LanguageUtil sharedInstance] getContent:@"Hotline"];
+            }else{
+                //  addressField.text = phoneNumber;
+            }
+        }
+        return NO;
+    }
+}
 @end

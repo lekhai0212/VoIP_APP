@@ -741,10 +741,15 @@ static void linphone_iphone_display_status(struct _LinphoneCore *lc, const char 
 			NSUUID *uuid = [NSUUID UUID];
 			[LinphoneManager.instance.providerDelegate.calls setObject:callId forKey:uuid];
 			[LinphoneManager.instance.providerDelegate.uuids setObject:uuid forKey:callId];
+            
+            BOOL videoEnabled = linphone_call_params_video_enabled(linphone_call_get_remote_params(call));
+            
 			BOOL video = FALSE;
-			video = (([UIApplication sharedApplication].applicationState != UIApplicationStateBackground) &&
-					 linphone_core_get_video_policy(LC)->automatically_accept &&
-					 linphone_call_params_video_enabled(linphone_call_get_remote_params(call)));
+            //  [Khai Le - 04/03/2019] Update to check video
+			//  video = (([UIApplication sharedApplication].applicationState != UIApplicationStateBackground) && linphone_core_get_video_policy(LC)->automatically_accept && videoEnabled);
+            
+            video = (([UIApplication sharedApplication].applicationState != UIApplicationStateBackground) && videoEnabled);
+            
 			[LinphoneManager.instance.providerDelegate reportIncomingCallwithUUID:uuid handle:address video:video];
 #else
 			[PhoneMainView.instance displayIncomingCall:call];
@@ -2908,6 +2913,7 @@ static int comp_call_state_paused(const LinphoneCall *call, const void *param) {
             [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"%s: User just ended call with phone number %@", __FUNCTION__, phoneNumber] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
             [LinphoneAppDelegate sharedInstance].phoneNumberEnd = @"";
         }else{
+            linphone_call_params_enable_video(lcallParams, TRUE);
             call = linphone_core_invite_address_with_params(theLinphoneCore, addr, lcallParams);
             if (call) {
                 

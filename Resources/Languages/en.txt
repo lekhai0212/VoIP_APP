@@ -222,3 +222,5 @@
 
 "Please check sign in information" = "Please check sign in information"
 "Choose ringtone" = "Choose ringtone"
+"Audio call" = "Audio call"
+"Video call" = "Video call"
