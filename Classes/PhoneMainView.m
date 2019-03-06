@@ -367,6 +367,7 @@ static RootViewManager *rootViewManagerInstance = nil;
 		case LinphoneCallPausedByRemote:
 		case LinphoneCallConnected: {
             NSLog(@"-------> LinphoneCallConnected");
+            videoCallView chua dc khoi tao
             [[LinphoneAppDelegate sharedInstance].videoCallView displayForVideoCallConnected];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"LinphoneCallConnected" object:nil];
             
