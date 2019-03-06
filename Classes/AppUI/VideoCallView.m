@@ -8,8 +8,9 @@
 #import "VideoCallView.h"
 
 @implementation VideoCallView
-@synthesize videoView, previewVideo, iconSwitchCam, iconMute, iconHangup, iconOffCamera, lbQuality, lbDuration;
+@synthesize videoView, previewVideo, iconSwitchCam, iconMute, iconHangup, iconOffCamera, lbQuality, lbDuration, icWaitVideoCamera;
 @synthesize qualityTimer, durationTimer;
+
 
 - (void)setupUIForView {
     float wIcon = [DeviceUtils getSizeOfIconEndCall];
@@ -82,6 +83,13 @@
         make.width.mas_equalTo(180);
         make.height.mas_equalTo(hLabel);
     }];
+    
+    [icWaitVideoCamera mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.mas_centerX);
+        make.centerY.equalTo(self.mas_centerY);
+        make.width.height.mas_equalTo(60.0);
+    }];
+    [icWaitVideoCamera startAnimating];
 }
 
 - (void)registerNotifications {
@@ -201,6 +209,8 @@
     
     BOOL shouldEnableVideo = (!call || linphone_call_params_video_enabled(linphone_call_get_current_params(call)));
     if (shouldEnableVideo) {
+        icWaitVideoCamera.hidden = YES;
+        [icWaitVideoCamera stopAnimating];
         NSLog(@"shouldEnableVideo");
     }
     
@@ -222,15 +232,12 @@
             break;
         }
         case LinphoneCallOutgoingInit:{
-            [self showFullLocalCameraPreview: YES];
-            
             iconMute.enabled = NO;
             lbQuality.hidden = YES;
             
             break;
         }
         case LinphoneCallConnected:{
-            [self showFullLocalCameraPreview: NO];
             lbDuration.font = [UIFont systemFontOfSize:30.0 weight:UIFontWeightThin];
             
             iconMute.enabled = YES;
@@ -373,6 +380,38 @@
             make.height.mas_equalTo(135.0);
         }];
     }
+}
+
+- (void)testChangeCamera {
+    const char *currentCamId = (char *)linphone_core_get_video_device(LC);
+    const char **cameras = linphone_core_get_video_devices(LC);
+    const char *newCamId = NULL;
+    int i;
+    
+    for (i = 0; cameras[i] != NULL; ++i) {
+        if (strcmp(cameras[i], "StaticImage: Static picture") == 0)
+            continue;
+        if (strcmp(cameras[i], currentCamId) != 0) {
+            newCamId = cameras[i];
+            break;
+        }
+    }
+    if (newCamId) {
+        LOGI(@"Switching from [%s] to [%s]", currentCamId, newCamId);
+        linphone_core_set_video_device(LC, newCamId);
+        LinphoneCall *call = linphone_core_get_current_call(LC);
+        if (call != NULL) {
+            linphone_core_update_call(LC, call, NULL);
+        }
+    }
+}
+
+- (IBAction)iconHangupClick:(UIButton *)sender {
+    linphone_core_terminate_all_calls(LC);
+}
+
+- (void)displayForVideoCallConnected {
+    linphone_core_set_native_preview_window_id(LC, (__bridge void *)(previewVideo));
 }
 
 //  linphone_core_take_preview_snapshot

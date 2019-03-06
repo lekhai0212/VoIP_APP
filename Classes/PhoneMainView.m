@@ -344,7 +344,9 @@ static RootViewManager *rootViewManagerInstance = nil;
 	NSString *message = [notif.userInfo objectForKey:@"message"];
 
 	switch (state) {
-		case LinphoneCallIncomingReceived:
+        case LinphoneCallIncomingReceived:{
+            break;
+        }
 		case LinphoneCallIncomingEarlyMedia: {
 			if (linphone_core_get_calls_nb(LC) > 1 ||
 				(floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_9_x_Max)) {
@@ -353,6 +355,7 @@ static RootViewManager *rootViewManagerInstance = nil;
 			break;
 		}
 		case LinphoneCallOutgoingInit: {
+            
             //  Nếu đang có cuộc gọi thì nghĩa là đang gọi conference, nên quay về lại màn hình call
             int count = linphone_core_get_calls_nb([LinphoneManager getLc]);
             if (count > 1) {
@@ -364,6 +367,8 @@ static RootViewManager *rootViewManagerInstance = nil;
 		case LinphoneCallPausedByRemote:
 		case LinphoneCallConnected: {
             NSLog(@"-------> LinphoneCallConnected");
+            [[LinphoneAppDelegate sharedInstance].videoCallView displayForVideoCallConnected];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"LinphoneCallConnected" object:nil];
             
 			if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max && call) {
 				NSString *callId =

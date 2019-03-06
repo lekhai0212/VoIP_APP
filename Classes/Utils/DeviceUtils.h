@@ -19,5 +19,6 @@
 + (void)cleanLogFolder;
 + (NSString *)convertLogFileName: (NSString *)fileName;
 + (float)getSizeOfIconEndCall;
++ (void)testChangeCamera;
 
 @end

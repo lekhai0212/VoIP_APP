@@ -200,6 +200,7 @@
 }
 
 - (void)provider:(CXProvider *)provider performPlayDTMFCallAction:(CXPlayDTMFCallAction *)action {
+    
 	LOGD(@"CallKit : playing DTMF");
 	[action fulfill];
 	NSUUID *call_uuid = action.callUUID;
@@ -235,9 +236,9 @@
 		}
 	}
 
-	_pendingCall = NULL;
-	_pendingAddr = NULL;
-	_pendingCallVideo = FALSE;
+    _pendingCall = NULL;
+    _pendingAddr = NULL;
+    _pendingCallVideo = FALSE;
 }
 
 - (void)provider:(CXProvider *)provider didDeactivateAudioSession:(nonnull AVAudioSession *)audioSession {

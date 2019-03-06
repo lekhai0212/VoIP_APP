@@ -18,6 +18,12 @@
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I2u-6e-3xz">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="Hi1-FN-AII">
+                            <rect key="frame" x="150" y="230" width="20" height="20"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </activityIndicatorView>
+                    </subviews>
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </view>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DHP-4x-aFp">
@@ -25,7 +31,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jDz-1z-IMB">
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jDz-1z-IMB" customClass="UICamSwitch">
                     <rect key="frame" x="22" y="77" width="41" height="41"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" image="switch_cam.png"/>
@@ -41,10 +47,13 @@
                         <action selector="iconOffCameraClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="Ez4-LH-fXs"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p4C-ax-Vfb" customClass="UIHangUpButton">
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p4C-ax-Vfb">
                     <rect key="frame" x="135" y="407" width="50" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" image="decline_call_def.png"/>
+                    <connections>
+                        <action selector="iconHangupClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="S7m-Rm-Bew"/>
+                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hcL-N0-RHl">
                     <rect key="frame" x="260" y="407" width="50" height="50"/>
@@ -72,6 +81,7 @@
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="icWaitVideoCamera" destination="Hi1-FN-AII" id="rI4-Xp-Glg"/>
                 <outlet property="iconHangup" destination="p4C-ax-Vfb" id="Q6O-yk-t65"/>
                 <outlet property="iconMute" destination="hcL-N0-RHl" id="GwG-dA-QCE"/>
                 <outlet property="iconOffCamera" destination="CuA-WM-KJ4" id="zlZ-sp-ePF"/>
@@ -81,7 +91,7 @@
                 <outlet property="previewVideo" destination="DHP-4x-aFp" id="Y13-bD-TgH"/>
                 <outlet property="videoView" destination="I2u-6e-3xz" id="NHA-JL-XaK"/>
             </connections>
-            <point key="canvasLocation" x="-178" y="31"/>
+            <point key="canvasLocation" x="-621" y="-150"/>
         </view>
     </objects>
     <resources>

@@ -137,7 +137,7 @@ struct codec_name_pref_table codec_pref_table[] = {{"speex", 8000, "speex_8k_pre
 												   {"g729", 8000, "g729_preference"},
 												   {"mp4v-es", 90000, "mp4v-es_preference"},
 												   {"h264", 90000, "h264_preference"},
-//                                                   {"vp8", 90000, "vp8_preference"},
+                                                   {"vp8", 90000, "vp8_preference"},
 												   {"mpeg4-generic", 16000, "aaceld_16k_preference"},
 												   {"mpeg4-generic", 22050, "aaceld_22k_preference"},
 												   {"mpeg4-generic", 32000, "aaceld_32k_preference"},
@@ -2794,7 +2794,7 @@ static int comp_call_state_paused(const LinphoneCall *call, const void *param) {
 		linphone_call_params_enable_low_bandwidth(lcallParams, low_bandwidth);
 	}
     
-	linphone_call_params_enable_video(lcallParams, video);
+	//  linphone_call_params_enable_video(lcallParams, video);
     [[LinphoneAppDelegate sharedInstance] set_acceptCall: true];
     
 	linphone_core_accept_call_with_params(theLinphoneCore, call, lcallParams);

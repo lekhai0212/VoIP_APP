@@ -92,6 +92,7 @@
 @synthesize webService, keepAwakeTimer, listNumber, listInfoPhoneNumber, supportLoginWithPhoneNumber, logFilePath, dbQueue, splashScreen;
 @synthesize supportVoice;
 @synthesize homeSplitVC, contactType, historyType, callTransfered, hNavigation, hasBluetoothEar, ipadWaiting;
+@synthesize audioCallView, videoCallView;
 
 #pragma mark - Lifecycle Functions
 

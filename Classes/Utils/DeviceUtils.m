@@ -131,6 +131,30 @@
     return wEndCall;
 }
 
++ (void)testChangeCamera {
+    const char *currentCamId = (char *)linphone_core_get_video_device(LC);
+    const char **cameras = linphone_core_get_video_devices(LC);
+    const char *newCamId = NULL;
+    int i;
+    //  AV Capture: com.apple.avfoundation.avcapturedevice.built-in_video:0
+    //  AV Capture: com.apple.avfoundation.avcapturedevice.built-in_video:1
+    for (i = 0; cameras[i] != NULL; ++i) {
+        if (strcmp(cameras[i], "StaticImage: Static picture") == 0)
+            continue;
+        if (strcmp(cameras[i], currentCamId) != 0) {
+            newCamId = cameras[i];
+            break;
+        }
+    }
+    if (newCamId) {
+        LOGI(@"Switching from [%s] to [%s]", currentCamId, newCamId);
+        linphone_core_set_video_device(LC, newCamId);
+        LinphoneCall *call = linphone_core_get_current_call(LC);
+        if (call != NULL) {
+            linphone_core_update_call(LC, call, NULL);
+        }
+    }
+}
 
 
 @end
