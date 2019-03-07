@@ -224,3 +224,4 @@
 "Choose ringtone" = "Chọn nhạc chuông"
 "Audio call" = "Gọi audio"
 "Video call" = "Gọi hình"
+"Can not detect QRCode. Please check again!" = "Không thể kiểm tra QRCode. Vui lòng kiểm tra lại!"

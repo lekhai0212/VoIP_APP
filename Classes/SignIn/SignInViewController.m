@@ -403,7 +403,7 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
     }else{
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Notifications"] message:[[LanguageUtil sharedInstance] getContent:@"Vui lòng kiểm tra ảnh QRCode của bạn!"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Đóng"] otherButtonTitles: nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:[[LanguageUtil sharedInstance] getContent:@"Can not detect QRCode. Please check again!"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Close"] otherButtonTitles: nil];
         [alertView show];
     }
 }
@@ -433,9 +433,24 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)checkRegistrationInfoFromQRCode: (NSString *)qrcodeResult {
     if (![AppUtils isNullOrEmpty: qrcodeResult]) {
+        NSArray *tmpArr = [qrcodeResult componentsSeparatedByString:@"/"];
+        if (tmpArr != nil) {
+            if (tmpArr.count == 2 || tmpArr.count == 4) {
+                NSString *account = [tmpArr objectAtIndex: 0];
+                NSString *password = [tmpArr objectAtIndex: 1];
+                NSString *domain = DOMAIN_DEFAULT;
+                NSString *port = PORT_DEFAULT;
+                if (tmpArr.count == 4) {
+                    domain = [tmpArr objectAtIndex: 2];
+                    domain = [tmpArr objectAtIndex: 2];
+                }
+            }
+        }
+        
+        
         
     }else{
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Notifications"] message:[[LanguageUtil sharedInstance] getContent:@"Vui lòng kiểm tra ảnh QRCode của bạn!"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Đóng"] otherButtonTitles: nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:[[LanguageUtil sharedInstance] getContent:@"Can not detect QRCode. Please check again!"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Close"] otherButtonTitles: nil];
         [alertView show];
     }
 }

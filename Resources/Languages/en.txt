@@ -224,3 +224,4 @@
 "Choose ringtone" = "Choose ringtone"
 "Audio call" = "Audio call"
 "Video call" = "Video call"
+"Can not detect QRCode. Please check again!" = "Can not detect QRCode. Please check again!"
