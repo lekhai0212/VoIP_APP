@@ -199,7 +199,7 @@
 
 - (void)callUpdate:(LinphoneCall *)call state:(LinphoneCallState)state animated:(BOOL)animated message: (NSString *)message
 {
-    
+    return;
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] The current call state is %d, with message = %@", __FUNCTION__, state, message] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     // Fake call update
@@ -258,33 +258,33 @@
         }
         case LinphoneCallStreamsRunning: {
             // check video
-            if (!linphone_call_params_video_enabled(linphone_call_get_current_params(call))) {
-                const LinphoneCallParams *param = linphone_call_get_current_params(call);
-                const LinphoneCallAppData *callAppData =
-                (__bridge const LinphoneCallAppData *)(linphone_call_get_user_pointer(call));
-                if (state == LinphoneCallStreamsRunning && callAppData->videoRequested &&
-                    linphone_call_params_low_bandwidth_enabled(param)) {
-                }
-            }
+//            if (!linphone_call_params_video_enabled(linphone_call_get_current_params(call))) {
+//                const LinphoneCallParams *param = linphone_call_get_current_params(call);
+//                const LinphoneCallAppData *callAppData =
+//                (__bridge const LinphoneCallAppData *)(linphone_call_get_user_pointer(call));
+//                if (state == LinphoneCallStreamsRunning && callAppData->videoRequested &&
+//                    linphone_call_params_low_bandwidth_enabled(param)) {
+//                }
+//            }
             iconMute.enabled = YES;
             
             break;
         }
         case LinphoneCallUpdatedByRemote: {
-            const LinphoneCallParams *current = linphone_call_get_current_params(call);
-            const LinphoneCallParams *remote = linphone_call_get_remote_params(call);
-            
-            /* remote wants to add video */
-            if ((linphone_core_video_display_enabled(LC) && !linphone_call_params_video_enabled(current) &&
-                 linphone_call_params_video_enabled(remote)) &&
-                (!linphone_core_get_video_policy(LC)->automatically_accept ||
-                 (([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) &&
-                  floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max))) {
-                     linphone_core_defer_call_update(LC, call);
-                     
-                 } else if (linphone_call_params_video_enabled(current) && !linphone_call_params_video_enabled(remote)) {
-                     
-                 }
+//            const LinphoneCallParams *current = linphone_call_get_current_params(call);
+//            const LinphoneCallParams *remote = linphone_call_get_remote_params(call);
+//
+//            /* remote wants to add video */
+//            if ((linphone_core_video_display_enabled(LC) && !linphone_call_params_video_enabled(current) &&
+//                 linphone_call_params_video_enabled(remote)) &&
+//                (!linphone_core_get_video_policy(LC)->automatically_accept ||
+//                 (([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) &&
+//                  floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max))) {
+//                     linphone_core_defer_call_update(LC, call);
+//
+//                 } else if (linphone_call_params_video_enabled(current) && !linphone_call_params_video_enabled(remote)) {
+//
+//                 }
             break;
         }
         case LinphoneCallPausing:
@@ -408,10 +408,6 @@
 
 - (IBAction)iconHangupClick:(UIButton *)sender {
     linphone_core_terminate_all_calls(LC);
-}
-
-- (void)displayForVideoCallConnected {
-    linphone_core_set_native_preview_window_id(LC, (__bridge void *)(previewVideo));
 }
 
 //  linphone_core_take_preview_snapshot

@@ -6,13 +6,20 @@
 //
 
 #import "SignInViewController.h"
+#import <MobileCoreServices/MobileCoreServices.h>
+#import "QRCodeReaderViewController.h"
+#import "QRCodeReader.h"
 
-@interface SignInViewController ()
+@interface SignInViewController (){
+    QRCodeReaderViewController *scanQRCodeVC;
+    UIButton *btnScanFromPhoto;
+    UIActivityIndicatorView *icWaiting;
+}
 
 @end
 
 @implementation SignInViewController
-@synthesize imgLogo, lbCompany, viewSignIn, tfAccountID, btnAccountID, tfPassword, btnPassword, icShowPassword, btnSignIn, lbForgotPassword, lbBottom;
+@synthesize imgLogo, lbCompany, viewSignIn, tfAccountID, btnAccountID, tfPassword, btnPassword, icShowPassword, btnSignIn, lbForgotPassword, btnQRCode;
 
 #pragma mark - UICompositeViewDelegate Functions
 static UICompositeViewDescription *compositeDescription = nil;
@@ -43,6 +50,15 @@ static UICompositeViewDescription *compositeDescription = nil;
     //  tfPassword.text = @"f7NnFKI1Kv";
     tfAccountID.text = @"nhcla151";
     tfPassword.text = @"5obr8jHH2q";
+    
+    icWaiting = [[UIActivityIndicatorView alloc] init];
+    icWaiting.backgroundColor = UIColor.whiteColor;
+    icWaiting.alpha = 0.5;
+    icWaiting.hidden = YES;
+    [self.view addSubview: icWaiting];
+    [icWaiting mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.bottom.right.equalTo(self.view);
+    }];
     
     /*
     nhanhoa.cloudcall.vn:51000
@@ -76,6 +92,9 @@ static UICompositeViewDescription *compositeDescription = nil;
     }
     
     //  start register pbx
+    icWaiting.hidden = NO;
+    [icWaiting startAnimating];
+    
     [SipUtils registerPBXAccount:tfAccountID.text password:tfPassword.text ipAddress:DOMAIN_DEFAULT port:PORT_DEFAULT];
 }
 
@@ -186,13 +205,13 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.height.mas_equalTo(hSignInBTN);
     }];
     
-    //  signin button
-    lbForgotPassword.text = [[LanguageUtil sharedInstance] getContent:@"Forgot password"];
-    lbForgotPassword.textColor = textColor;
-    lbForgotPassword.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightThin];
-    [lbForgotPassword mas_makeConstraints:^(MASConstraintMaker *make) {
+    NSString *btnTitle2 = [[[LanguageUtil sharedInstance] getContent:@"Đăng nhập bằng QRCode"] uppercaseString];
+    [btnQRCode setTitle:btnTitle2 forState:UIControlStateNormal];
+    btnQRCode.titleLabel.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightRegular];
+    btnQRCode.backgroundColor = UIColor.clearColor;
+    [btnQRCode mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(btnSignIn.mas_bottom).offset(20.0);
-        make.left.right.equalTo(tfPassword);
+        make.left.right.equalTo(btnSignIn);
         make.height.mas_equalTo(hTextfield);
     }];
     
@@ -213,12 +232,13 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.height.mas_equalTo(40.0);
     }];
     
-    lbBottom.text = [[LanguageUtil sharedInstance] getContent:@"Phát triển bởi CloudCall"];
-    lbBottom.textColor = textColor;
-    lbBottom.font = [UIFont systemFontOfSize:16.0 weight:UIFontWeightThin];
-    [lbBottom mas_makeConstraints:^(MASConstraintMaker *make) {
+    //  signin button
+    lbForgotPassword.text = [[LanguageUtil sharedInstance] getContent:@"Forgot password"];
+    lbForgotPassword.textColor = textColor;
+    lbForgotPassword.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightThin];
+    [lbForgotPassword mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.equalTo(self.view);
-        make.height.mas_equalTo(40.0);
+        make.height.mas_equalTo(60.0);
     }];
 }
 
@@ -234,6 +254,9 @@ static UICompositeViewDescription *compositeDescription = nil;
     switch (state) {
         case LinphoneRegistrationOk:
         {
+            icWaiting.hidden = YES;
+            [icWaiting stopAnimating];
+            
             [[NSUserDefaults standardUserDefaults] setObject:tfAccountID.text forKey:key_login];
             [[NSUserDefaults standardUserDefaults] setObject:tfPassword.text forKey:key_password];
             [[NSUserDefaults standardUserDefaults] synchronize];
@@ -242,6 +265,10 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case LinphoneRegistrationNone:{
+            icWaiting.hidden = YES;
+            [icWaiting stopAnimating];
+            
+            [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check sign in information"] duration:2.0 position:CSToastPositionCenter];
             NSLog(@"LinphoneRegistrationNone");
             
             break;
@@ -252,6 +279,9 @@ static UICompositeViewDescription *compositeDescription = nil;
         }
         case LinphoneRegistrationFailed:
         {
+            icWaiting.hidden = YES;
+            [icWaiting stopAnimating];
+            
             [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check sign in information"] duration:2.0 position:CSToastPositionCenter];
             
             break;
@@ -262,6 +292,151 @@ static UICompositeViewDescription *compositeDescription = nil;
         }
         default:
             break;
+    }
+}
+
+- (IBAction)btnQRCodePress:(UIButton *)sender {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
+                         toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
+    if ([QRCodeReader supportsMetadataObjectTypes:@[AVMetadataObjectTypeQRCode]]) {
+        QRCodeReader *reader = [QRCodeReader readerWithMetadataObjectTypes:@[AVMetadataObjectTypeQRCode]];
+        scanQRCodeVC = [QRCodeReaderViewController readerWithCancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] codeReader:reader startScanningAtLoad:YES showSwitchCameraButton:YES showTorchButton:YES];
+        scanQRCodeVC.modalPresentationStyle = UIModalPresentationFormSheet;
+        scanQRCodeVC.delegate = self;
+        
+        btnScanFromPhoto = [UIButton buttonWithType: UIButtonTypeCustom];
+        btnScanFromPhoto.frame = CGRectMake((SCREEN_WIDTH-250)/2, SCREEN_HEIGHT-38-60, 250, 38);
+        btnScanFromPhoto.backgroundColor = [UIColor colorWithRed:(2/255.0) green:(164/255.0)
+                                                            blue:(247/255.0) alpha:1.0];
+        [btnScanFromPhoto setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        btnScanFromPhoto.layer.cornerRadius = btnScanFromPhoto.frame.size.height/2;
+        btnScanFromPhoto.layer.borderColor = btnScanFromPhoto.backgroundColor.CGColor;
+        btnScanFromPhoto.layer.borderWidth = 1.0;
+        
+        [btnScanFromPhoto setTitle:[[LanguageUtil sharedInstance] getContent:@"SCAN FROM PHOTO"]
+                          forState:UIControlStateNormal];
+        btnScanFromPhoto.titleLabel.font = [UIFont systemFontOfSize: 16.0];
+        [btnScanFromPhoto addTarget:self
+                             action:@selector(btnScanFromPhotoPressed)
+                   forControlEvents:UIControlEventTouchUpInside];
+        
+        [scanQRCodeVC.view addSubview: btnScanFromPhoto];
+        
+        [scanQRCodeVC setCompletionWithBlock:^(NSString *resultAsString) {
+            NSLog(@"Completion with result: %@", resultAsString);
+        }];
+        [self presentViewController:scanQRCodeVC animated:YES completion:NULL];
+    }
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Reader not supported by the current device" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        
+        [alert show];
+    }
+}
+
+- (void)btnScanFromPhotoPressed {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
+                         toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
+    btnScanFromPhoto.backgroundColor = [UIColor whiteColor];
+    [btnScanFromPhoto setTitleColor:[UIColor colorWithRed:(2/255.0) green:(164/255.0)
+                                                     blue:(247/255.0) alpha:1.0]
+                           forState:UIControlStateNormal];
+    [self performSelector:@selector(choosePictureForScanQRCode) withObject:nil afterDelay:0.05];
+}
+
+- (void)choosePictureForScanQRCode {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
+                         toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
+    btnScanFromPhoto.backgroundColor = [UIColor colorWithRed:(2/255.0) green:(164/255.0)
+                                                        blue:(247/255.0) alpha:1.0];
+    [btnScanFromPhoto setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    
+    UIImagePickerController *pickerController = [[UIImagePickerController alloc] init];
+    pickerController.mediaTypes = [[NSArray alloc] initWithObjects: (NSString *) kUTTypeImage, nil];
+    pickerController.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+    pickerController.allowsEditing = NO;
+    pickerController.delegate = self;
+    [scanQRCodeVC presentViewController:pickerController animated:YES completion:nil];
+}
+
+#pragma mark - Image picker delegate
+- (void)readerDidCancel:(QRCodeReaderViewController *)reader {
+    [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+- (void)reader:(QRCodeReaderViewController *)reader didScanResult:(NSString *)result {
+    [reader stopScanning];
+    
+    [self dismissViewControllerAnimated:YES completion:^{
+        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] result = %@", __FUNCTION__, result]
+                             toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+        
+        
+        icWaiting.hidden = NO;
+        [icWaiting startAnimating];
+        
+        NSLog(@"result: %@", result);
+    }];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
+    [picker dismissViewControllerAnimated:YES completion:^{
+        [self dismissViewControllerAnimated:YES completion:NULL];
+        
+        NSString* type = [info objectForKey:UIImagePickerControllerMediaType];
+        if ([type isEqualToString: (NSString*)kUTTypeImage] ) {
+            UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+            [self getQRCodeContentFromImage: image];
+        }
+    }];
+}
+
+- (void)getQRCodeContentFromImage: (UIImage *)image {
+    NSArray *qrcodeContent = [self detectQRCode: image];
+    if (qrcodeContent != nil && qrcodeContent.count > 0) {
+        for (CIQRCodeFeature* qrFeature in qrcodeContent)
+        {
+            [self checkRegistrationInfoFromQRCode: qrFeature.messageString];
+            break;
+        }
+    }else{
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Notifications"] message:[[LanguageUtil sharedInstance] getContent:@"Vui lòng kiểm tra ảnh QRCode của bạn!"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Đóng"] otherButtonTitles: nil];
+        [alertView show];
+    }
+}
+
+- (NSArray *)detectQRCode:(UIImage *) image
+{
+    @autoreleasepool {
+        CIImage* ciImage = [[CIImage alloc] initWithCGImage: image.CGImage]; // to use if the underlying data is a CGImage
+        NSDictionary* options;
+        CIContext* context = [CIContext context];
+        options = @{ CIDetectorAccuracy : CIDetectorAccuracyHigh }; // Slow but thorough
+        //options = @{ CIDetectorAccuracy : CIDetectorAccuracyLow}; // Fast but superficial
+        
+        CIDetector* qrDetector = [CIDetector detectorOfType:CIDetectorTypeQRCode
+                                                    context:context
+                                                    options:options];
+        if ([[ciImage properties] valueForKey:(NSString*) kCGImagePropertyOrientation] == nil) {
+            options = @{ CIDetectorImageOrientation : @1};
+        } else {
+            options = @{ CIDetectorImageOrientation : [[ciImage properties] valueForKey:(NSString*) kCGImagePropertyOrientation]};
+        }
+        NSArray * features = [qrDetector featuresInImage:ciImage
+                                                 options:options];
+        return features;
+    }
+}
+
+- (void)checkRegistrationInfoFromQRCode: (NSString *)qrcodeResult {
+    if (![AppUtils isNullOrEmpty: qrcodeResult]) {
+        
+    }else{
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Notifications"] message:[[LanguageUtil sharedInstance] getContent:@"Vui lòng kiểm tra ảnh QRCode của bạn!"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Đóng"] otherButtonTitles: nil];
+        [alertView show];
     }
 }
 

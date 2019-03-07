@@ -141,6 +141,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
     
+    typeOfCall = eVideoCall;
+    [self addVideoCallView];
     
     if (LinphoneManager.instance.bluetoothAvailable) {
         NSLog(@"Test: BLuetooth da ket noi");
@@ -154,7 +156,16 @@ static UICompositeViewDescription *compositeDescription = nil;
         
         LinphoneCall *curCall = linphone_core_get_current_call([LinphoneManager getLc]);
         if (curCall != NULL) {
-            [self checkVideoIsEnableInCall: curCall];
+            //  [self checkVideoIsEnableInCall: curCall];
+            
+            
+//            LinphoneCallState state = linphone_call_get_state(curCall);
+//            if (state == LinphoneCallStreamsRunning || state == LinphoneCallConnected) {
+//
+//                linphone_core_set_native_video_window_id(LC, (__bridge void *)([LinphoneAppDelegate sharedInstance].videoCallView.videoView));
+//                linphone_core_set_native_preview_window_id(LC, (__bridge void *)([LinphoneAppDelegate sharedInstance].videoCallView.previewVideo));
+//            }
+//            NSLog(@"%d", state);
         }
     }
     
@@ -192,8 +203,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(headsetPluginChanged:)
                                                name:@"headsetPluginChanged" object:nil];
-    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(whenLinphoneCallConnected)
-                                               name:@"LinphoneCallConnected" object:nil];
     
     
     //  Update address
@@ -217,28 +226,17 @@ static UICompositeViewDescription *compositeDescription = nil;
     }
     
     // Set windows (warn memory leaks)
-    if ([LinphoneAppDelegate sharedInstance].videoCallView != nil) {
-        
-        //  linphone_core_use_preview_window(LC, YES);
-        linphone_core_enable_video_preview(LC, YES);
-        
-        linphone_core_set_native_video_window_id(LC, (__bridge void *)([LinphoneAppDelegate sharedInstance].videoCallView.videoView));
-        linphone_core_set_native_preview_window_id(LC, (__bridge void *)([LinphoneAppDelegate sharedInstance].videoCallView.previewVideo));
-        
-        LinphoneCall *call = linphone_core_get_current_call(LC);
-        // linphone_call_params_get_used_video_codec return 0 if no video stream enabled
-        if (call != NULL && linphone_call_params_get_used_video_codec(linphone_call_get_current_params(call))) {
-            linphone_call_set_next_video_frame_decoded_callback(call, hideSpinner, (__bridge void *)(self));
-        }
-    }
-}
-
-- (void)whenLinphoneCallConnected {
-    LinphoneCall *call = linphone_core_get_current_call(LC);
-    if (call != NULL && call != nil) {
-        //  linphone_call_enable_camera(call, YES);
-    }
-    linphone_core_set_native_preview_window_id(LC, (__bridge void *)([LinphoneAppDelegate sharedInstance].videoCallView.previewVideo));
+//    if ([LinphoneAppDelegate sharedInstance].videoCallView != nil) {
+//        linphone_core_set_native_video_window_id(LC, (__bridge void *)([LinphoneAppDelegate sharedInstance].videoCallView.videoView));
+//        linphone_core_set_native_preview_window_id(LC, (__bridge void *)([LinphoneAppDelegate sharedInstance].videoCallView.previewVideo));
+//
+//
+//        LinphoneCall *call = linphone_core_get_current_call(LC);
+//        // linphone_call_params_get_used_video_codec return 0 if no video stream enabled
+//        if (call != NULL && linphone_call_params_get_used_video_codec(linphone_call_get_current_params(call))) {
+//            linphone_call_set_next_video_frame_decoded_callback(call, hideSpinner, (__bridge void *)(self));
+//        }
+//    }
 }
 
 - (void)viewDidLayoutSubviews {
@@ -289,11 +287,11 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     UIButton *normal = [[UIButton alloc] initWithFrame:CGRectMake(230, 50, 100, 50)];
     normal.backgroundColor = UIColor.redColor;
-    [normal setTitle:@"normal" forState:UIControlStateNormal];
+    [normal setTitle:@"VIDEO" forState:UIControlStateNormal];
     [normal addTarget:self
                action:@selector(testtest2)
      forControlEvents:UIControlEventTouchUpInside];
-    //  [self.view addSubview: normal];
+    [self.view addSubview: normal];
 }
 
 - (AVAudioSessionPortDescription*)bluetoothAudioDevice
@@ -336,6 +334,24 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (void)testtest2 {
+    if (!linphone_core_video_display_enabled(LC))
+        return;
+    
+    LinphoneCall *call = linphone_core_get_current_call(LC);
+    if (call) {
+        LinphoneCallAppData *callAppData = (__bridge LinphoneCallAppData *)linphone_call_get_user_pointer(call);
+        callAppData->videoRequested = TRUE; /* will be used later to notify user if video was not activated because of the linphone core*/
+        //  LinphoneCallParams *call_params = linphone_core_create_call_params(LC,call);
+        LinphoneCallParams* call_params = linphone_call_params_copy(linphone_call_get_current_params(call));
+        
+        linphone_call_params_enable_video(call_params, TRUE);
+        linphone_core_update_call(LC, call, call_params);
+        linphone_call_params_destroy(call_params);
+    } else {
+        NSLog(@"Cannot toggle video button, because no current call");
+    }
+    return;
+    
     [LinphoneManager.instance setSpeakerEnabled:FALSE];
     [self performSelector:@selector(disableBluetooth)
                withObject:nil afterDelay:0.5];
@@ -607,10 +623,8 @@ static UICompositeViewDescription *compositeDescription = nil;
             //  Check if in call with hotline
             //  _lbQuality.hidden = NO;
             
-            //  linphone_call_enable_camera(call, YES);
-            linphone_core_enable_video_preview(LC, YES);
-            linphone_core_set_native_video_window_id(LC, (__bridge void *)([LinphoneAppDelegate sharedInstance].videoCallView.videoView));
-            linphone_core_set_native_preview_window_id(LC, (__bridge void *)([LinphoneAppDelegate sharedInstance].videoCallView.previewVideo));
+            //  linphone_core_set_native_video_window_id(LC, (__bridge void *)([LinphoneAppDelegate sharedInstance].videoCallView.videoView));
+            //  linphone_core_set_native_preview_window_id(LC, (__bridge void *)([LinphoneAppDelegate sharedInstance].videoCallView.previewVideo));
             
             [self countUpTimeForCall];
             [self updateQualityForCall];
@@ -619,14 +633,14 @@ static UICompositeViewDescription *compositeDescription = nil;
         }
 		case LinphoneCallStreamsRunning: {
             // check video
-			if (!linphone_call_params_video_enabled(linphone_call_get_current_params(call))) {
-				const LinphoneCallParams *param = linphone_call_get_current_params(call);
-				const LinphoneCallAppData *callAppData =
-					(__bridge const LinphoneCallAppData *)(linphone_call_get_user_pointer(call));
-				if (state == LinphoneCallStreamsRunning && callAppData->videoRequested &&
-					linphone_call_params_low_bandwidth_enabled(param)) {
-				}
-			}
+//            if (!linphone_call_params_video_enabled(linphone_call_get_current_params(call))) {
+//                const LinphoneCallParams *param = linphone_call_get_current_params(call);
+//                const LinphoneCallAppData *callAppData =
+//                    (__bridge const LinphoneCallAppData *)(linphone_call_get_user_pointer(call));
+//                if (state == LinphoneCallStreamsRunning && callAppData->videoRequested &&
+//                    linphone_call_params_low_bandwidth_enabled(param)) {
+//                }
+//            }
             
 			break;
 		}
@@ -1070,9 +1084,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         [[LinphoneAppDelegate sharedInstance].videoCallView registerNotifications];
         //  [videoCallView testChangeCamera];
         
-        //  linphone_core_use_preview_window(LC, YES);
-        //  linphone_core_enable_video_preview(LC, YES);
-        //  linphone_core_set_native_video_window_id(LC, (__bridge void *)(videoCallView.videoView));
+        linphone_core_set_native_video_window_id(LC, (__bridge void *)([LinphoneAppDelegate sharedInstance].videoCallView.videoView));
         linphone_core_set_native_preview_window_id(LC, (__bridge void *)([LinphoneAppDelegate sharedInstance].videoCallView.previewVideo));
         
         LinphoneCall *call = linphone_core_get_current_call(LC);

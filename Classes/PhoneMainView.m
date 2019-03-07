@@ -367,19 +367,16 @@ static RootViewManager *rootViewManagerInstance = nil;
 		case LinphoneCallPausedByRemote:
 		case LinphoneCallConnected: {
             NSLog(@"-------> LinphoneCallConnected");
-            videoCallView chua dc khoi tao
-            [[LinphoneAppDelegate sharedInstance].videoCallView displayForVideoCallConnected];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"LinphoneCallConnected" object:nil];
             
-			if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max && call) {
-				NSString *callId =
-					[NSString stringWithUTF8String:linphone_call_log_get_call_id(linphone_call_get_call_log(call))];
-				NSUUID *uuid = [LinphoneManager.instance.providerDelegate.uuids objectForKey:callId];
-				if (uuid) {
-					[LinphoneManager.instance.providerDelegate.provider reportOutgoingCallWithUUID:uuid
-																		   startedConnectingAtDate:nil];
-				}
-			}
+//            if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max && call) {
+//                NSString *callId =
+//                    [NSString stringWithUTF8String:linphone_call_log_get_call_id(linphone_call_get_call_log(call))];
+//                NSUUID *uuid = [LinphoneManager.instance.providerDelegate.uuids objectForKey:callId];
+//                if (uuid) {
+//                    [LinphoneManager.instance.providerDelegate.provider reportOutgoingCallWithUUID:uuid
+//                                                                           startedConnectingAtDate:nil];
+//                }
+//            }
 			break;
 		}
 		case LinphoneCallStreamsRunning: {
@@ -389,7 +386,7 @@ static RootViewManager *rootViewManagerInstance = nil;
             }else{
                 NSLog(@"%@ - %@", SHOW_LOGS, @"You are at Callview, don't need go to again!");
             }
-            
+            return;
             //  ------
 			if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max && call) {
 				NSString *callId =
@@ -416,7 +413,7 @@ static RootViewManager *rootViewManagerInstance = nil;
 			const LinphoneCallParams *remote = linphone_call_get_remote_params(call);
 
 			if (linphone_call_params_video_enabled(current) && !linphone_call_params_video_enabled(remote)) {
-				[self changeCurrentView:CallView.compositeViewDescription push:TRUE];
+				//  [self changeCurrentView:CallView.compositeViewDescription push:TRUE];
 			}
 			break;
 		}
@@ -454,7 +451,8 @@ static RootViewManager *rootViewManagerInstance = nil;
 		case LinphoneCallPaused:
 		case LinphoneCallPausing:
 		case LinphoneCallRefered:
-		case LinphoneCallReleased:
+		case LinphoneCallReleased:{
+        }
 			break;
 		case LinphoneCallResuming: {
 			if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max && call) {

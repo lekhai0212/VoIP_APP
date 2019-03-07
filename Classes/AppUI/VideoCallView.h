@@ -30,6 +30,5 @@
 - (IBAction)iconWtitchCamClick:(UIButton *)sender;
 - (void)testChangeCamera;
 - (IBAction)iconHangupClick:(UIButton *)sender;
-- (void)displayForVideoCallConnected;
 
 @end
