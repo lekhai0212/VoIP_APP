@@ -30,6 +30,7 @@
     UIFont *textFont;
     
     int logoutState;
+    UIButton *btnLogOut;
 }
 
 @end
@@ -63,6 +64,16 @@ static UICompositeViewDescription *compositeDescription = nil;
     [super viewDidLoad];
     
     [self createDataForMenuView];
+    
+    btnLogOut = [[UIButton alloc] init];
+    btnLogOut.backgroundColor = [UIColor colorWithRed:(235/255.0) green:(235/255.0)
+                                                 blue:(235/255.0) alpha:1.0];
+    [btnLogOut setTitleColor:UIColor.redColor forState:UIControlStateNormal];
+    [btnLogOut setTitle:@"Đăng xuất" forState:UIControlStateNormal];
+    [btnLogOut addTarget:self
+                  action:@selector(btnSignOutPress)
+        forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview: btnLogOut];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -85,10 +96,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear: animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (IBAction)_btnSignOutPressed:(UIButton *)sender {
-    
 }
 
 #pragma mark - my functions
@@ -199,6 +206,13 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.bottom.equalTo(_imgAvatar.mas_bottom);
     }];
     
+    //  signout button
+    btnLogOut.titleLabel.font = textFont;
+    [btnLogOut mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view);
+        make.bottom.equalTo(self.view);
+        make.height.mas_equalTo(60.0);
+    }];
     
     _tbContent.backgroundColor = UIColor.clearColor;
     [_tbContent mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -313,6 +327,10 @@ static UICompositeViewDescription *compositeDescription = nil;
             });
         }
     });
+}
+
+- (void)btnSignOutPress {
+    ssssss
 }
 
 @end

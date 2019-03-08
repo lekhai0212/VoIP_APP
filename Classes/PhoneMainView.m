@@ -368,15 +368,15 @@ static RootViewManager *rootViewManagerInstance = nil;
 		case LinphoneCallConnected: {
             NSLog(@"-------> LinphoneCallConnected");
             
-//            if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max && call) {
-//                NSString *callId =
-//                    [NSString stringWithUTF8String:linphone_call_log_get_call_id(linphone_call_get_call_log(call))];
-//                NSUUID *uuid = [LinphoneManager.instance.providerDelegate.uuids objectForKey:callId];
-//                if (uuid) {
-//                    [LinphoneManager.instance.providerDelegate.provider reportOutgoingCallWithUUID:uuid
-//                                                                           startedConnectingAtDate:nil];
-//                }
-//            }
+            if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max && call) {
+                NSString *callId =
+                    [NSString stringWithUTF8String:linphone_call_log_get_call_id(linphone_call_get_call_log(call))];
+                NSUUID *uuid = [LinphoneManager.instance.providerDelegate.uuids objectForKey:callId];
+                if (uuid) {
+                    [LinphoneManager.instance.providerDelegate.provider reportOutgoingCallWithUUID:uuid
+                                                                           startedConnectingAtDate:nil];
+                }
+            }
 			break;
 		}
 		case LinphoneCallStreamsRunning: {

@@ -11,23 +11,32 @@
 
 @interface SignInViewController : UIViewController<UICompositeViewDelegate, QRCodeReaderDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
-@property (weak, nonatomic) IBOutlet UIImageView *imgLogo;
-@property (weak, nonatomic) IBOutlet UILabel *lbCompany;
+//  Welcome view
+@property (weak, nonatomic) IBOutlet UIView *viewWelcome;
+@property (weak, nonatomic) IBOutlet UIImageView *bgWelcome;
+@property (weak, nonatomic) IBOutlet UIImageView *imgWelcome;
+@property (weak, nonatomic) IBOutlet UIImageView *imgLogoWelcome;
+@property (weak, nonatomic) IBOutlet UILabel *lbSlogan;
+@property (weak, nonatomic) IBOutlet UIButton *btnStart;
+- (IBAction)btnStartPress:(UIButton *)sender;
 
+//  signin view
 @property (weak, nonatomic) IBOutlet UIView *viewSignIn;
+@property (weak, nonatomic) IBOutlet UIButton *iconBack;
+@property (weak, nonatomic) IBOutlet UIImageView *imgLogo;
+@property (weak, nonatomic) IBOutlet UILabel *lbHeader;
+
 @property (weak, nonatomic) IBOutlet UITextField *tfAccountID;
 @property (weak, nonatomic) IBOutlet UIButton *btnAccountID;
 
 @property (weak, nonatomic) IBOutlet UITextField *tfPassword;
 @property (weak, nonatomic) IBOutlet UIButton *btnPassword;
-
-@property (weak, nonatomic) IBOutlet UIButton *icShowPassword;
+@property (weak, nonatomic) IBOutlet UILabel *lbSepa;
 @property (weak, nonatomic) IBOutlet UIButton *btnSignIn;
-@property (weak, nonatomic) IBOutlet UILabel *lbForgotPassword;
 @property (weak, nonatomic) IBOutlet UIButton *btnQRCode;
-- (IBAction)btnQRCodePress:(UIButton *)sender;
 
-- (IBAction)icShowPasswordPress:(UIButton *)sender;
+- (IBAction)iconBackPress:(UIButton *)sender;
+- (IBAction)btnQRCodePress:(UIButton *)sender;
 - (IBAction)btnSignInPress:(UIButton *)sender;
 
 @end

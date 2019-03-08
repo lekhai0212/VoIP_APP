@@ -2794,7 +2794,7 @@ static int comp_call_state_paused(const LinphoneCall *call, const void *param) {
 		linphone_call_params_enable_low_bandwidth(lcallParams, low_bandwidth);
 	}
     
-	linphone_call_params_enable_video(lcallParams, video);
+	//  linphone_call_params_enable_video(lcallParams, video);
     [[LinphoneAppDelegate sharedInstance] set_acceptCall: true];
     
 	linphone_core_accept_call_with_params(theLinphoneCore, call, lcallParams);

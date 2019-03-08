@@ -19,7 +19,8 @@
 @end
 
 @implementation SignInViewController
-@synthesize imgLogo, lbCompany, viewSignIn, tfAccountID, btnAccountID, tfPassword, btnPassword, icShowPassword, btnSignIn, lbForgotPassword, btnQRCode;
+@synthesize viewWelcome, bgWelcome, imgWelcome, imgLogoWelcome, lbSlogan, btnStart;
+@synthesize viewSignIn, iconBack, imgLogo, lbHeader, btnAccountID, tfAccountID, btnPassword, tfPassword, btnSignIn, lbSepa, btnQRCode;
 
 #pragma mark - UICompositeViewDelegate Functions
 static UICompositeViewDescription *compositeDescription = nil;
@@ -52,6 +53,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     tfPassword.text = @"5obr8jHH2q";
     
     icWaiting = [[UIActivityIndicatorView alloc] init];
+    icWaiting.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
     icWaiting.backgroundColor = UIColor.whiteColor;
     icWaiting.alpha = 0.5;
     icWaiting.hidden = YES;
@@ -98,15 +100,60 @@ static UICompositeViewDescription *compositeDescription = nil;
     [SipUtils registerPBXAccount:tfAccountID.text password:tfPassword.text ipAddress:DOMAIN_DEFAULT port:PORT_DEFAULT];
 }
 
-- (void)whenTapOnScreen {
-    [self.view endEditing: YES];
+- (IBAction)iconBackPress:(UIButton *)sender {
 }
 
 - (void)setupUIForView {
-    self.view.backgroundColor = [UIColor colorWithRed:(50/255.0) green:(67/255.0) blue:(92/255.0) alpha:1.0];
+    //  Welcome view
+    [viewWelcome mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.bottom.right.equalTo(self.view);
+    }];
     
-    UITapGestureRecognizer *tapOnScreen = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(whenTapOnScreen)];
-    [self.view addGestureRecognizer: tapOnScreen];
+    [bgWelcome mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.bottom.right.equalTo(viewWelcome);
+    }];
+    
+    float wImgWelcome = SCREEN_WIDTH*3/5;
+    imgWelcome.clipsToBounds = YES;
+    imgWelcome.layer.cornerRadius = wImgWelcome/2;
+    [imgWelcome mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(viewWelcome.mas_centerX);
+        make.bottom.equalTo(viewWelcome.mas_centerY);
+        make.width.height.mas_equalTo(wImgWelcome);
+    }];
+    
+    UIImage *imgLogo = [UIImage imageNamed:@"logo_white"];
+    float hLogo = 60.0;
+    float wLogo = imgLogo.size.width * hLogo / imgLogo.size.height;
+    [imgLogoWelcome mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(viewWelcome.mas_centerX);
+        make.top.equalTo(imgWelcome.mas_bottom).offset(50.0);
+        make.width.mas_equalTo(wLogo);
+        make.height.mas_equalTo(hLogo);
+    }];
+    
+    NSString *sloganContent = [[LanguageUtil sharedInstance] getContent:@"Dịch vụ tổng đài số hàng đầu Việt Nam.\nCung cấp dịch vụ thoại qua Internet tiên tiến nhất."];
+    CGSize maxSize = [AppUtils getSizeWithText:sloganContent withFont:[UIFont systemFontOfSize:16.0 weight:UIFontWeightRegular] andMaxWidth:(SCREEN_WIDTH-40.0)];
+    
+    lbSlogan.font = [UIFont systemFontOfSize:16.0 weight:UIFontWeightRegular];
+    lbSlogan.text = sloganContent;
+    [lbSlogan mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(viewWelcome.mas_centerX);
+        make.top.equalTo(imgLogoWelcome.mas_bottom).offset(25.0);
+        make.width.mas_equalTo(maxSize.width);
+        make.height.mas_equalTo(maxSize.height);
+    }];
+    
+    
+    btnStart.titleLabel.font = [UIFont systemFontOfSize:16.0 weight:UIFontWeightRegular];
+    [btnStart setTitle:[[LanguageUtil sharedInstance] getContent:@"Start"] forState:UIControlStateNormal];
+    [lbSlogan mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(viewWelcome.mas_centerX);
+        make.top.equalTo(imgLogoWelcome.mas_bottom).offset(25.0);
+        make.width.mas_equalTo(maxSize.width);
+        make.height.mas_equalTo(maxSize.height);
+    }];
+    
     
     float hTextfield = 42.0;
     float hSignInBTN = 45.0;
@@ -265,10 +312,6 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case LinphoneRegistrationNone:{
-            icWaiting.hidden = YES;
-            [icWaiting stopAnimating];
-            
-            [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check sign in information"] duration:2.0 position:CSToastPositionCenter];
             NSLog(@"LinphoneRegistrationNone");
             
             break;
@@ -378,7 +421,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         icWaiting.hidden = NO;
         [icWaiting startAnimating];
         
-        NSLog(@"result: %@", result);
+        [self checkRegistrationInfoFromQRCode: result];
     }];
 }
 
@@ -403,8 +446,7 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
     }else{
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:[[LanguageUtil sharedInstance] getContent:@"Can not detect QRCode. Please check again!"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Close"] otherButtonTitles: nil];
-        [alertView show];
+        [self showDialerQRCodeNotCorrect];
     }
 }
 
@@ -442,17 +484,32 @@ static UICompositeViewDescription *compositeDescription = nil;
                 NSString *port = PORT_DEFAULT;
                 if (tmpArr.count == 4) {
                     domain = [tmpArr objectAtIndex: 2];
-                    domain = [tmpArr objectAtIndex: 2];
+                    port = [tmpArr objectAtIndex: 3];
+                }
+                if (![AppUtils isNullOrEmpty: account] && ![AppUtils isNullOrEmpty: password] && ![AppUtils isNullOrEmpty: domain] && ![AppUtils isNullOrEmpty: port])
+                {
+                    icWaiting.hidden = NO;
+                    [icWaiting startAnimating];
+                    
+                    tfAccountID.text = account;
+                    tfPassword.text = password;
+                    
+                    [SipUtils registerPBXAccount:account password:password ipAddress:domain port:port];
+                    return;
                 }
             }
         }
-        
-        
-        
-    }else{
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:[[LanguageUtil sharedInstance] getContent:@"Can not detect QRCode. Please check again!"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Close"] otherButtonTitles: nil];
-        [alertView show];
     }
+    icWaiting.hidden = YES;
+    [icWaiting stopAnimating];
+    [self showDialerQRCodeNotCorrect];
 }
 
+- (void)showDialerQRCodeNotCorrect {
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:[[LanguageUtil sharedInstance] getContent:@"Can not detect QRCode. Please check again!"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Close"] otherButtonTitles: nil];
+    [alertView show];
+}
+
+- (IBAction)btnStartPress:(UIButton *)sender {
+}
 @end

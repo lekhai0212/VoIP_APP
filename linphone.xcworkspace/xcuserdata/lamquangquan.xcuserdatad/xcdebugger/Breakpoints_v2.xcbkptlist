@@ -154,7 +154,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneManager.m"
-            timestampString = "573619317.832286"
+            timestampString = "573707701.806296"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1535"
@@ -342,28 +342,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneManager.m"
-            timestampString = "573619317.8347"
+            timestampString = "573707701.80715"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "2364"
             endingLineNumber = "2364"
             landmarkName = "-acceptCallForCallId:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Classes/CallView.m"
-            timestampString = "573622747.87186"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1094"
-            endingLineNumber = "1094"
-            landmarkName = "-addVideoCallView"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -390,11 +374,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/AppUI/VideoCallView.m"
-            timestampString = "573619502.921986"
+            timestampString = "573707701.807371"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "391"
-            endingLineNumber = "391"
+            startingLineNumber = "390"
+            endingLineNumber = "390"
             landmarkName = "-testChangeCamera"
             landmarkType = "7">
          </BreakpointContent>
@@ -421,24 +405,8 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Classes/PhoneMainView.m"
-            timestampString = "573620368.436101"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "516"
-            endingLineNumber = "516"
-            landmarkName = "-orientationUpdate:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneManager.m"
-            timestampString = "573619317.836499"
+            timestampString = "573707701.808551"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "2560"
@@ -454,28 +422,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneManager.m"
-            timestampString = "573619317.837199"
+            timestampString = "573707701.808692"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "2607"
             endingLineNumber = "2607"
             landmarkName = "-becomeActive"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Classes/LinphoneAppDelegate.m"
-            timestampString = "573644555.655605"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "157"
-            endingLineNumber = "157"
-            landmarkName = "-applicationDidBecomeActive:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -502,11 +454,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/AppUI/VideoCallView.m"
-            timestampString = "573619502.9245239"
+            timestampString = "573707701.810662"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "401"
-            endingLineNumber = "401"
+            startingLineNumber = "400"
+            endingLineNumber = "400"
             landmarkName = "-testChangeCamera"
             landmarkType = "7">
          </BreakpointContent>
@@ -533,22 +485,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Classes/ProviderDelegate.m"
-            timestampString = "573536007.0987951"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "220"
-            endingLineNumber = "220"
-            landmarkName = "-provider:didActivateAudioSession:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "Classes/PhoneMainView.m"
             timestampString = "573620368.4385231"
             startingColumnNumber = "9223372036854775807"
@@ -566,7 +502,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneUI/UIVideoButton.m"
-            timestampString = "573644555.658174"
+            timestampString = "573707701.812169"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "43"
@@ -582,7 +518,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneUI/UIVideoButton.m"
-            timestampString = "573644555.658946"
+            timestampString = "573707701.813091"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "37"
@@ -598,7 +534,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneUI/UIVideoButton.m"
-            timestampString = "573644555.659537"
+            timestampString = "573707701.8137389"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "60"
@@ -614,12 +550,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/SignIn/SignInViewController.m"
-            timestampString = "573644555.660078"
+            timestampString = "573703658.2334321"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "381"
             endingLineNumber = "381"
-            landmarkName = "-reader:didScanResult:"
+            landmarkName = "-btnScanFromPhotoPressed"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -662,12 +598,44 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/SignIn/SignInViewController.m"
-            timestampString = "573644555.662094"
+            timestampString = "573703658.233654"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "367"
             endingLineNumber = "367"
-            landmarkName = "-readerDidCancel:"
+            landmarkName = "-btnQRCodePress:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Classes/ProviderDelegate.m"
+            timestampString = "573709258.4917819"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "157"
+            endingLineNumber = "157"
+            landmarkName = "-provider:performSetMutedCallAction:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Classes/PhoneMainView.m"
+            timestampString = "573709268.235121"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "362"
+            endingLineNumber = "362"
+            landmarkName = "-callUpdate:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
