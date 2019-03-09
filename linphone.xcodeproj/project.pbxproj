@@ -107,6 +107,8 @@
 		15857C08216E136500DB5237 /* TypePhonePopupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15857C03216E136100DB5237 /* TypePhonePopupView.m */; };
 		15857C09216E136500DB5237 /* TypePhoneCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15857C04216E136200DB5237 /* TypePhoneCell.m */; };
 		15857C0A216E136500DB5237 /* TypePhoneCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15857C06216E136300DB5237 /* TypePhoneCell.xib */; };
+		158A2A322233654100C535E0 /* OutgoingCallViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 158A2A2F2233653E00C535E0 /* OutgoingCallViewController.xib */; };
+		158A2A332233654100C535E0 /* OutgoingCallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 158A2A312233654000C535E0 /* OutgoingCallViewController.m */; };
 		158A87C5217D83720093A641 /* DeviceUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 158A87C4217D83720093A641 /* DeviceUtils.m */; };
 		159002D72168618E00CECB7A /* ic_call_missed.png in Resources */ = {isa = PBXBuildFile; fileRef = 159002CE2168618B00CECB7A /* ic_call_missed.png */; };
 		159002D82168618E00CECB7A /* ic_call_outgoing.png in Resources */ = {isa = PBXBuildFile; fileRef = 159002D52168618C00CECB7A /* ic_call_outgoing.png */; };
@@ -1080,6 +1082,9 @@
 		15857C05216E136300DB5237 /* TypePhoneCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TypePhoneCell.h; path = AppUI/TypePhoneCell.h; sourceTree = "<group>"; };
 		15857C06216E136300DB5237 /* TypePhoneCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TypePhoneCell.xib; path = AppUI/TypePhoneCell.xib; sourceTree = "<group>"; };
 		15857C07216E136400DB5237 /* TypePhonePopupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TypePhonePopupView.h; path = AppUI/TypePhonePopupView.h; sourceTree = "<group>"; };
+		158A2A2F2233653E00C535E0 /* OutgoingCallViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OutgoingCallViewController.xib; sourceTree = "<group>"; };
+		158A2A302233653F00C535E0 /* OutgoingCallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OutgoingCallViewController.h; sourceTree = "<group>"; };
+		158A2A312233654000C535E0 /* OutgoingCallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OutgoingCallViewController.m; sourceTree = "<group>"; };
 		158A87C3217D83720093A641 /* DeviceUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DeviceUtils.h; path = Utils/DeviceUtils.h; sourceTree = "<group>"; };
 		158A87C4217D83720093A641 /* DeviceUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = DeviceUtils.m; path = Utils/DeviceUtils.m; sourceTree = "<group>"; };
 		159002CE2168618B00CECB7A /* ic_call_missed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_call_missed.png; sourceTree = "<group>"; };
@@ -2487,6 +2492,9 @@
 				6352A5721BE0D4B800594C1C /* CallSideMenuView.h */,
 				6352A5731BE0D4B800594C1C /* CallSideMenuView.m */,
 				6352A5741BE0D4B800594C1C /* CallSideMenuView.xib */,
+				158A2A302233653F00C535E0 /* OutgoingCallViewController.h */,
+				158A2A312233654000C535E0 /* OutgoingCallViewController.m */,
+				158A2A2F2233653E00C535E0 /* OutgoingCallViewController.xib */,
 				D3F83EE91582021700336684 /* CallView.h */,
 				D3F83EEA1582021700336684 /* CallView.m */,
 				D381881C15FE3FCA00C3EDCA /* CallView.xib */,
@@ -4605,6 +4613,7 @@
 				1579B72021674989002BECE3 /* ic_add_contact@2x.png in Resources */,
 				15A2B8AD2232600B00DA6342 /* bg_signin.png in Resources */,
 				15A2B8AA22325F6F00DA6342 /* logo_white.png in Resources */,
+				158A2A322233654100C535E0 /* OutgoingCallViewController.xib in Resources */,
 				84B4F0E721E8CD4E00591C50 /* ic_more_bottom_bar_act@2x.png in Resources */,
 				15CAA27821F02A6A00D3739A /* ic_end_call_white.png in Resources */,
 				841F97E71FB4B2DC00A9A8CD /* UIConferenceCell.xib in Resources */,
@@ -5253,6 +5262,7 @@
 				8404CD5321EDD13000C28E48 /* iPadContactsViewController.m in Sources */,
 				D3F795D615A582810077328B /* ChatConversationView.m in Sources */,
 				D32B6E2915A5BC440033019F /* ChatConversationTableView.m in Sources */,
+				158A2A332233654100C535E0 /* OutgoingCallViewController.m in Sources */,
 				D3A8BB7015A6C7D500F96BE5 /* UIChatBubbleTextCell.m in Sources */,
 				15857C08216E136500DB5237 /* TypePhonePopupView.m in Sources */,
 				63D11C531C3D501200E8FCEE /* Log.m in Sources */,

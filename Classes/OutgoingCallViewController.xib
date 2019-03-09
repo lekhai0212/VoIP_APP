@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14269.12" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14252.5"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -27,11 +27,11 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="call-background.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="ZtW-ec-OyG">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="bg-call" translatesAutoresizingMaskIntoConstraints="NO" id="ZtW-ec-OyG">
+                    <rect key="frame" x="0.0" y="-16" width="320" height="496"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="no_avatar.png" translatesAutoresizingMaskIntoConstraints="NO" id="Q5j-rV-2y8">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="default-avatar" translatesAutoresizingMaskIntoConstraints="NO" id="Q5j-rV-2y8">
                     <rect key="frame" x="105" y="37" width="110" height="110"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
@@ -50,9 +50,9 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GMN-rx-6Q2">
-                    <rect key="frame" x="127" y="327" width="67" height="67"/>
+                    <rect key="frame" x="133" y="333" width="55" height="55"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" image="ic_end_call_red.png"/>
+                    <state key="normal" backgroundImage="decline_call_def"/>
                     <connections>
                         <action selector="_btnEndCallPressed:" destination="-1" eventType="touchUpInside" id="vHG-Z7-Ass"/>
                     </connections>
@@ -61,15 +61,15 @@
                     <rect key="frame" x="75" y="216" width="18" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tbn-aC-euS" customClass="UIMutedMicroButton">
-                    <rect key="frame" x="246" y="336" width="49" height="49"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" image="ic_muted_white.png"/>
-                </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RQa-DE-BtC" customClass="UISpeakerButton">
-                    <rect key="frame" x="27" y="346" width="48" height="48"/>
+                    <rect key="frame" x="67" y="343" width="35" height="35"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" image="ic_speaker_white.png"/>
+                    <state key="normal" backgroundImage="call_speaker_on"/>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tbn-aC-euS" customClass="UIMutedMicroButton">
+                    <rect key="frame" x="219" y="343" width="35" height="35"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" backgroundImage="call_microphone_off"/>
                 </button>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -78,11 +78,11 @@
         </view>
     </objects>
     <resources>
-        <image name="call-background.jpg" width="750" height="1334"/>
-        <image name="ic_end_call_red.png" width="120" height="120"/>
-        <image name="ic_muted_white.png" width="128" height="128"/>
-        <image name="ic_speaker_white.png" width="120" height="120"/>
+        <image name="bg-call" width="720" height="1280"/>
+        <image name="call_microphone_off" width="112" height="112"/>
+        <image name="call_speaker_on" width="112" height="112"/>
+        <image name="decline_call_def" width="300" height="300"/>
+        <image name="default-avatar" width="256" height="256"/>
         <image name="icon_ringing" width="256" height="256"/>
-        <image name="no_avatar.png" width="256" height="256"/>
     </resources>
 </document>
