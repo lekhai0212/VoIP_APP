@@ -2,7 +2,7 @@
 "Welcome! SignIn to experience." = "Xin chào!\nĐăng nhập để trải nghiệm."
 "Sign In" = "Đăng nhập"
 "Or sign in with QRCode" = "Hoặc đăng nhập với mã QR"
-
+"Or" = ""
 
 
 "img_menu_history_def"  =   "menu_history_def.png"

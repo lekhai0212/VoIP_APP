@@ -20,5 +20,6 @@
 + (NSString *)convertLogFileName: (NSString *)fileName;
 + (float)getSizeOfIconEndCall;
 + (void)testChangeCamera;
++ (float)getHeightLogoWelcomeForDevice;
 
 @end
