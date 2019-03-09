@@ -330,7 +330,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (void)btnSignOutPress {
-    ssssss
+    
 }
 
 @end

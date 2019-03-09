@@ -555,7 +555,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "381"
             endingLineNumber = "381"
-            landmarkName = "-btnScanFromPhotoPressed"
+            landmarkName = "-btnQRCodePress:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -636,6 +636,22 @@
             startingLineNumber = "362"
             endingLineNumber = "362"
             landmarkName = "-callUpdate:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Classes/PhoneMainView.m"
+            timestampString = "573793466.740522"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "726"
+            endingLineNumber = "726"
+            landmarkName = "-popCurrentView"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

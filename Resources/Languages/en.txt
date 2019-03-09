@@ -1,3 +1,9 @@
+"Start" = "Start"
+"Welcome! SignIn to experience." = "Welcome!\nSignIn to experience."
+"Sign In" = "Sign In"
+"Or sign in with QRCode" = "Or sign in with QRCode"
+
+
 "img_menu_history_def"  =   "menu_history_en_def.png"
 "img_menu_history_act"  =   "menu_history_en_act.png"
 
@@ -216,7 +222,7 @@
 
 "Show password" = "Show"
 "Hide password" = "Hide"
-"Sign In" = "Sign In"
+
 "Forgot password" = "Forgot password"
 "Please fill full information" = "Please fill full information"
 
