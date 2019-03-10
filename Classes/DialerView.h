@@ -31,7 +31,6 @@
 
 
 @property(nonatomic, strong) IBOutlet UICallButton *callButton;
-@property(nonatomic, strong) IBOutlet UIButton *backButton;
 @property(weak, nonatomic) IBOutlet UIIconButton *backspaceButton;
 
 @property(nonatomic, strong) IBOutlet UIDigitButton *oneButton;
@@ -47,9 +46,12 @@
 @property(nonatomic, strong) IBOutlet UIDigitButton *zeroButton;
 @property(nonatomic, strong) IBOutlet UIDigitButton *hashButton;
 @property(weak, nonatomic) IBOutlet UIView *padView;
+@property (weak, nonatomic) IBOutlet UILabel *lbSepa123;
+@property (weak, nonatomic) IBOutlet UILabel *lbSepa456;
+@property (weak, nonatomic) IBOutlet UILabel *lbSepa789;
+@property (weak, nonatomic) IBOutlet UICallButton *btnVideoCall;
 
-- (IBAction)onAddContactClick:(id)event;
-- (IBAction)onBackClick:(id)event;
+- (IBAction)btnVideoCallPress:(UIButton *)sender;
 - (IBAction)onAddressChange:(id)sender;
 - (IBAction)onBackspaceClick:(id)sender;
 
@@ -57,21 +59,11 @@
 
 @property (weak, nonatomic) IBOutlet UIView *_viewNumber;
 @property(nonatomic, strong) IBOutlet UITextField *addressField;
-@property(nonatomic, strong) IBOutlet UIButton *addContactButton;
-
-@property (weak, nonatomic) IBOutlet UIButton *_btnAddCall;
-@property (weak, nonatomic) IBOutlet UIButton *_btnTransferCall;
-
-@property (weak, nonatomic) IBOutlet UIButton *_btnHotline;
 
 @property (weak, nonatomic) IBOutlet UIView *_viewStatus;
 @property (weak, nonatomic) IBOutlet UIImageView *_imgLogoSmall;
 @property (weak, nonatomic) IBOutlet UILabel *_lbAccount;
 @property (weak, nonatomic) IBOutlet UILabel *_lbStatus;
-
-- (IBAction)_btnAddCallPressed:(UIButton *)sender;
-- (IBAction)_btnTransferPressed:(UIButton *)sender;
-- (IBAction)_btnHotlinePressed:(UIButton *)sender;
 
 - (IBAction)_btnNumberPressed:(id)sender;
 - (IBAction)_btnCallPressed:(UIButton *)sender;

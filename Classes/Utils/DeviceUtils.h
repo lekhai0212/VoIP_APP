@@ -21,5 +21,6 @@
 + (float)getSizeOfIconEndCall;
 + (void)testChangeCamera;
 + (float)getHeightLogoWelcomeForDevice;
++ (UIEdgeInsets)getEdgeOfVideoCallDialerForDevice;
 
 @end

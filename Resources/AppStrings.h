@@ -174,18 +174,6 @@
 #define key_port                @"key_port"
 
 
-#define img_menu_history_def    @"img_menu_history_def"
-#define img_menu_history_act    @"img_menu_history_act"
-
-#define img_menu_contacts_def   @"img_menu_contacts_def"
-#define img_menu_contacts_act   @"img_menu_contacts_act"
-
-#define img_menu_keypad_def     @"img_menu_keypad_def"
-#define img_menu_keypad_act     @"img_menu_keypad_act"
-
-#define img_menu_more_def       @"img_menu_more_def"
-#define img_menu_more_act       @"img_menu_more_act"
-
 #define type_phone_home         @"home"
 #define type_phone_work         @"work"
 #define type_phone_fax          @"fax"

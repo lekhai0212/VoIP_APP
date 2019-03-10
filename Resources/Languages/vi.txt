@@ -3,19 +3,9 @@
 "Sign In" = "Đăng nhập"
 "Or sign in with QRCode" = "Hoặc đăng nhập với mã QR"
 "Or" = ""
+"Account ID" = "Tài khoản"
+"Password" = "Mật khẩu"
 
-
-"img_menu_history_def"  =   "menu_history_def.png"
-"img_menu_history_act"  =   "menu_history_act.png"
-
-"img_menu_contacts_def" =   "menu_contacts_def.png"
-"img_menu_contacts_act" =   "menu_contacts_act.png"
-
-"img_menu_keypad_def"   =   "menu_keypad_def.png"
-"img_menu_keypad_act"   =   "menu_keypad_act.png"
-
-"img_menu_more_def"     =   "menu_more_def.png"
-"img_menu_more_act"     =   "menu_more_act.png"
 
 "Online" = "Sẵn sàng"
 "Offline" = "Chưa kết nối"

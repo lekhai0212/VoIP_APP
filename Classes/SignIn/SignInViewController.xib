@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SignInViewController">
             <connections>
-                <outlet property="bgWelcome" destination="JF3-er-St2" id="wpa-xc-2DG"/>
                 <outlet property="btnAccountID" destination="ZiQ-N0-QeX" id="fda-3K-IPa"/>
                 <outlet property="btnPassword" destination="9bh-So-IHR" id="Z0W-HT-8pr"/>
                 <outlet property="btnQRCode" destination="kjl-DI-ZKS" id="bde-rw-3da"/>
@@ -22,7 +21,6 @@
                 <outlet property="imgLogoWelcome" destination="hEY-9X-cq0" id="r77-7v-seB"/>
                 <outlet property="imgWelcome" destination="wJL-nL-20J" id="RRx-zw-SFy"/>
                 <outlet property="lbHeader" destination="Ahq-2g-eu1" id="Prt-uW-qnr"/>
-                <outlet property="lbSepa" destination="Xdt-rd-VX2" id="BES-23-9u1"/>
                 <outlet property="lbSlogan" destination="dMu-YD-kNt" id="ahn-Gg-HHB"/>
                 <outlet property="tfAccountID" destination="jU2-1U-aOU" id="yvR-35-5JF"/>
                 <outlet property="tfPassword" destination="TgN-F1-e7g" id="nun-2u-2tP"/>
@@ -87,13 +85,6 @@
                                 <action selector="btnSignInPress:" destination="-1" eventType="touchUpInside" id="kNa-lR-XFP"/>
                             </connections>
                         </button>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xdt-rd-VX2">
-                            <rect key="frame" x="153" y="270" width="14" height="21"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <nil key="highlightedColor"/>
-                        </label>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kjl-DI-ZKS">
                             <rect key="frame" x="38" y="292" width="245" height="34"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -116,10 +107,6 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JF3-er-St2">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        </imageView>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="login_graphic.png" translatesAutoresizingMaskIntoConstraints="NO" id="wJL-nL-20J">
                             <rect key="frame" x="95" y="84" width="130" height="130"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

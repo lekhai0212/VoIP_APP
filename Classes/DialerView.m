@@ -50,7 +50,7 @@
 @implementation DialerView
 @synthesize _viewStatus, _imgLogoSmall, _lbAccount, _lbStatus;
 @synthesize _viewNumber;
-@synthesize _btnHotline, _btnAddCall, _btnTransferCall;
+@synthesize lbSepa123, lbSepa456, lbSepa789, btnVideoCall;
 
 #pragma mark - UICompositeViewDelegate Functions
 
@@ -102,7 +102,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     [device setProximityMonitoringEnabled: false];
     
     // invisible icon add contact & icon delete address
-    _addContactButton.hidden = YES;
     _addressField.text = @"";
     
     //  update token of device if not yet
@@ -129,9 +128,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(registrationUpdateEvent:)
                                                name:kLinphoneRegistrationUpdate object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(afterEndCallForTransfer)
-                                                 name:reloadHistoryCall object:nil];
     
 	// Update on show
 	LinphoneCall *call = linphone_core_get_current_call(LC);
@@ -188,6 +184,10 @@ static UICompositeViewDescription *compositeDescription = nil;
     _lbStatus.text = @"";
 }
 
+-(void)viewDidLayoutSubviews {
+    //  _imgLogoSmall.hidden = YES;
+}
+
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 										 duration:(NSTimeInterval)duration {
 	[super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
@@ -205,13 +205,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 			break;
 	}
 	_padView.hidden = !IPAD && UIInterfaceOrientationIsLandscape(toInterfaceOrientation);
-	if (linphone_core_get_calls_nb(LC)) {
-		_backButton.hidden = NO;
-		_addContactButton.hidden = YES;
-	} else {
-		_backButton.hidden = YES;
-		_addContactButton.hidden = NO;
-	}
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -236,24 +229,10 @@ static UICompositeViewDescription *compositeDescription = nil;
     LinphoneCore *lc = [LinphoneManager getLc];
     // ở keypad mà số cuộc gọi lớn hơn 0 nghĩa là đang add call cho conference hoặc transfer
     if(linphone_core_get_calls_nb(lc) > 0) {
-        if (LinphoneManager.instance.nextCallIsTransfer) {
-            _btnAddCall.hidden = YES;
-            _btnTransferCall.hidden = NO;
-        }else {
-            _btnAddCall.hidden = NO;
-            _btnTransferCall.hidden = YES;
-        }
         _callButton.hidden = YES;
-        _backButton.hidden = NO;
-        _btnHotline.hidden = YES;
     } else {
-        _btnAddCall.hidden = YES;
-        _btnTransferCall.hidden = YES;
-        _btnHotline.hidden = NO;
         _callButton.hidden = NO;
-        _backButton.hidden = YES;
     }
-    
     /*  Leo Kelvin
 	BOOL callInProgress = (linphone_core_get_calls_nb(LC) > 0);
 	_addContactButton.hidden = callInProgress;
@@ -266,11 +245,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)setAddress:(NSString *)address {
     _addressField.text = address;
-}
-
-- (void)afterEndCallForTransfer {
-    _addContactButton.hidden = YES;
-    _addressField.text = @"";
 }
 
 #pragma mark - UITextFieldDelegate Functions
@@ -307,29 +281,10 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 #pragma mark - Action Functions
 
-- (IBAction)onAddContactClick:(id)event {
-    if ([_addressField.text isEqualToString:USERNAME]) {
-        NSString *content = [[LanguageUtil sharedInstance] getContent:@"You can not add yourself to contact list"];
-        [self.view makeToast:content duration:2.0 position:CSToastPositionCenter];
-        return;
-    }
-    
-    NSString *cancelText = [[LanguageUtil sharedInstance] getContent:@"Cancel"];
-    UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:_addressField.text delegate:self cancelButtonTitle:cancelText destructiveButtonTitle:nil otherButtonTitles: [[LanguageUtil sharedInstance] getContent:@"Create new contact"], [[LanguageUtil sharedInstance] getContent:@"Add to existing contact"], nil];
-    popupAddContact.tag = 100;
-    [popupAddContact showInView:self.view];
-}
-
-- (IBAction)onBackClick:(id)event
-{
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"%s", __FUNCTION__]
-                         toFilePath:appDelegate.logFilePath];
-    
-	[PhoneMainView.instance popToView:CallView.compositeViewDescription];
+- (IBAction)btnVideoCallPress:(UIButton *)sender {
 }
 
 - (IBAction)onAddressChange:(id)sender {
-	_addContactButton.enabled = _backspaceButton.enabled = ([[_addressField text] length] > 0);
     if ([_addressField.text length] == 0) {
         [self.view endEditing:YES];
     }
@@ -340,7 +295,6 @@ static UICompositeViewDescription *compositeDescription = nil;
         _addressField.text = [_addressField.text substringToIndex:[_addressField.text length] - 1];
     }
 	
-    //kiem tra do dai so nhap vao
     if (_addressField.text.length > 0) {
         [pressTimer invalidate];
         pressTimer = nil;
@@ -348,7 +302,6 @@ static UICompositeViewDescription *compositeDescription = nil;
                                                     selector:@selector(searchPhoneBookWithThread)
                                                     userInfo:nil repeats:false];
     }else{
-        _addContactButton.hidden = YES;
         tvSearchResult.hidden = YES;
     }
 }
@@ -450,12 +403,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (IBAction)_btnNumberPressed:(id)sender {
     [self.view endEditing: true];
-    //  Show or hide "add contact" button when textfield address changed
-    if (_addressField.text.length > 0){
-        _addContactButton.hidden = NO;
-    }else{
-        _addContactButton.hidden = YES;
-    }
     
     [pressTimer invalidate];
     pressTimer = nil;
@@ -524,11 +471,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 // Search duoc danh sach
 - (void)searchContactDone
 {
-    if (_addressField.text.length == 0) {
-        _addContactButton.hidden = YES;
-    }else{
-        _addContactButton.hidden = NO;
-        
+    if (_addressField.text.length > 0) {
         //  [khai le - 02/11/2018]
         if (listPhoneSearched.count > 0) {
             tvSearchResult.hidden = NO;
@@ -560,19 +503,25 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.height.mas_equalTo(appDelegate._hRegistrationState);
     }];
     
+    UIImage *logoImg = [UIImage imageNamed:@"logo_white"];
+    float wLogo = 23.0 * logoImg.size.width / logoImg.size.height;
+    _imgLogoSmall.image = logoImg;
     [_imgLogoSmall mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_viewStatus).offset(appDelegate._hRegistrationState/4);
-        make.centerY.equalTo(_viewStatus.mas_centerY).offset(appDelegate._hStatus/2);
-        make.width.height.mas_equalTo(30.0);
+        make.centerY.equalTo(_viewStatus.mas_centerY).offset(appDelegate._hStatus/2-5.0);
+        make.height.mas_equalTo(22.0);
+        make.width.mas_equalTo(wLogo);
     }];
     
     //  account label
     _lbAccount.font = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
     _lbAccount.textAlignment = NSTextAlignmentCenter;
     [_lbAccount mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.bottom.equalTo(_imgLogoSmall);
+        //  make.top.bottom.equalTo(_imgLogoSmall);
+        make.centerY.equalTo(_viewStatus.mas_centerY).offset(appDelegate._hStatus/2);
         make.centerX.equalTo(_viewStatus.mas_centerX);
         make.width.mas_equalTo(150);
+        make.height.mas_equalTo(30.0);
     }];
     
     //  status label
@@ -631,14 +580,6 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.top.equalTo(_addressField.mas_bottom);
         make.height.mas_equalTo(30.0);
     }];
-    //  tvSearchResult.linkTextAttributes = @{NSUnderlineStyleAttributeName: NSUnderlineStyleNone};
-    
-    [_addContactButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_viewNumber).offset(10.0);
-        make.centerY.equalTo(_addressField.mas_centerY).offset(-3);
-        make.width.height.mas_equalTo(40.0);
-    }];
-    
     
     //  Number keypad
     float wIcon = [DeviceUtils getSizeOfKeypadButtonForDevice: modelName];
@@ -702,7 +643,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
     
     //  1, 2, 3
-    _twoButton.backgroundColor = UIColor.clearColor;
     _twoButton.layer.cornerRadius = wIcon/2;
     _twoButton.clipsToBounds = YES;
     [_twoButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -761,45 +701,45 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.width.height.mas_equalTo(wIcon);
     }];
     
-    
-    //  transfer button
-    _btnTransferCall.layer.cornerRadius = wIcon/2;
-    _btnTransferCall.clipsToBounds = YES;
-    _btnTransferCall.backgroundColor = [UIColor colorWithRed:(235/255.0) green:(235/255.0)
-                                                        blue:(235/255.0) alpha:1.0];
-    [_btnTransferCall mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.left.bottom.right.equalTo(_callButton);
-    }];
-    
-    //  Add call button
-    _btnAddCall.layer.cornerRadius = wIcon/2;
-    _btnAddCall.clipsToBounds = YES;
-    _btnAddCall.backgroundColor = [UIColor colorWithRed:(235/255.0) green:(235/255.0)
-                                                        blue:(235/255.0) alpha:1.0];
-    [_btnAddCall mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.left.bottom.right.equalTo(_callButton);
-    }];
-    
-    _btnHotline.layer.cornerRadius = wIcon/2;
-    _btnHotline.clipsToBounds = YES;
-    [_btnHotline mas_makeConstraints:^(MASConstraintMaker *make) {
+    btnVideoCall.imageEdgeInsets = [DeviceUtils getEdgeOfVideoCallDialerForDevice];
+    btnVideoCall.layer.cornerRadius = wIcon/2;
+    btnVideoCall.clipsToBounds = YES;
+    [btnVideoCall mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_callButton.mas_top);
         make.right.equalTo(_callButton.mas_left).offset(-spaceMarginX);
         make.width.height.mas_equalTo(wIcon);
     }];
     
-    _backButton.layer.cornerRadius = wIcon/2;
-    _backButton.clipsToBounds = YES;
-    [_backButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.left.bottom.right.equalTo(_btnHotline);
-    }];
-    
+    _backspaceButton.imageEdgeInsets = [DeviceUtils getEdgeOfVideoCallDialerForDevice];
     _backspaceButton.layer.cornerRadius = wIcon/2;
     _backspaceButton.clipsToBounds = YES;
     [_backspaceButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_callButton.mas_top);
         make.left.equalTo(_callButton.mas_right).offset(spaceMarginX);
         make.width.height.mas_equalTo(wIcon);
+    }];
+    
+    lbSepa123.backgroundColor = [UIColor colorWithRed:(240/255.0) green:(240/255.0)
+                                                 blue:(240/255.0) alpha:1.0];
+    lbSepa456.backgroundColor = lbSepa789.backgroundColor = lbSepa123.backgroundColor;
+    
+    [lbSepa123 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_oneButton);
+        make.right.equalTo(_threeButton.mas_right);
+        make.top.equalTo(_oneButton.mas_bottom).offset(spaceMarginY/2);
+        make.height.mas_equalTo(1.0);
+    }];
+    
+    [lbSepa456 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(lbSepa123);
+        make.top.equalTo(_fiveButton.mas_bottom).offset(spaceMarginY/2);
+        make.height.equalTo(lbSepa123.mas_height);
+    }];
+    
+    [lbSepa789 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(lbSepa123);
+        make.top.equalTo(_eightButton.mas_bottom).offset(spaceMarginY/2);
+        make.height.equalTo(lbSepa123.mas_height);
     }];
 }
 
@@ -1029,13 +969,9 @@ static UICompositeViewDescription *compositeDescription = nil;
         return;
     }
     if ([textfield.text isEqualToString:@""]) {
-        _addContactButton.hidden = YES;
         tvSearchResult.hidden = YES;
         
-        _addContactButton.hidden = YES;
     }else{
-        _addContactButton.hidden = NO;
-        
         [pressTimer invalidate];
         pressTimer = nil;
         pressTimer = [NSTimer scheduledTimerWithTimeInterval:0.2 target:self
@@ -1046,7 +982,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)hideSearchView {
     _addressField.text = @"";
-    _addContactButton.hidden = YES;
     tvSearchResult.hidden = YES;
 }
 

@@ -32,7 +32,7 @@
     }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
     {
         //  Screen width: 414.000000 - Screen height: 736.000000
-        return 75.0;
+        return 77.0;
     }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS]){
         //  Screen width: 375.000000 - Screen height: 812.000000
         return 80.0;
@@ -53,7 +53,7 @@
     {
         return 30.0;
     }else{
-        return 27.0;
+        return 28.0;
     }
 }
 + (float)getSpaceYBetweenKeypadButtonsForDevice: (NSString *)deviceMode {
@@ -181,6 +181,20 @@
         return 85.0;
     }else{
         return 62.0;
+    }
+}
+
++ (UIEdgeInsets)getEdgeOfVideoCallDialerForDevice
+{
+    NSString *deviceMode = [self getModelsOfCurrentDevice];
+    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE])
+    {
+        return UIEdgeInsetsMake(10, 10, 10, 10);
+    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2])
+    {
+        return UIEdgeInsetsMake(10, 10, 10, 10);
+    }else{
+        return UIEdgeInsetsMake(10, 10, 10, 10);
     }
 }
 

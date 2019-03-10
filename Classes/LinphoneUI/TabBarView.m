@@ -170,22 +170,21 @@
 
 - (void)setBackgroundForTabBarButton
 {
+    [_dialerButton setBackgroundImage:[UIImage imageNamed:@"menu_dialer_def"] forState:UIControlStateNormal];
+    [_dialerButton setBackgroundImage:[UIImage imageNamed:@"menu_dialer_act"] forState:UIControlStateHighlighted];
+    [_dialerButton setBackgroundImage:[UIImage imageNamed:@"menu_dialer_act"] forState:UIControlStateSelected];
     
-    [_historyButton setBackgroundImage:[UIImage imageNamed: [[LanguageUtil sharedInstance] getContent: img_menu_history_def]] forState:UIControlStateNormal];
-    [_historyButton setBackgroundImage:[UIImage imageNamed: [[LanguageUtil sharedInstance] getContent: img_menu_history_act]] forState:UIControlStateHighlighted];
-    [_historyButton setBackgroundImage:[UIImage imageNamed: [[LanguageUtil sharedInstance] getContent: img_menu_history_act]] forState:UIControlStateSelected];
+    [_historyButton setBackgroundImage:[UIImage imageNamed:@"menu_history_def"] forState:UIControlStateNormal];
+    [_historyButton setBackgroundImage:[UIImage imageNamed:@"menu_history_act"] forState:UIControlStateHighlighted];
+    [_historyButton setBackgroundImage:[UIImage imageNamed:@"menu_history_act"] forState:UIControlStateSelected];
     
-    [_contactsButton setBackgroundImage:[UIImage imageNamed: [[LanguageUtil sharedInstance] getContent: img_menu_contacts_def]] forState:UIControlStateNormal];
-    [_contactsButton setBackgroundImage:[UIImage imageNamed: [[LanguageUtil sharedInstance] getContent: img_menu_contacts_act]] forState:UIControlStateHighlighted];
-    [_contactsButton setBackgroundImage:[UIImage imageNamed: [[LanguageUtil sharedInstance] getContent: img_menu_contacts_act]] forState:UIControlStateSelected];
+    [_contactsButton setBackgroundImage:[UIImage imageNamed:@"menu_contact_def"] forState:UIControlStateNormal];
+    [_contactsButton setBackgroundImage:[UIImage imageNamed:@"menu_contact_act"] forState:UIControlStateHighlighted];
+    [_contactsButton setBackgroundImage:[UIImage imageNamed:@"menu_contact_act"] forState:UIControlStateSelected];
     
-    [_dialerButton setBackgroundImage:[UIImage imageNamed:[[LanguageUtil sharedInstance] getContent: img_menu_keypad_def]] forState:UIControlStateNormal];
-    [_dialerButton setBackgroundImage:[UIImage imageNamed:[[LanguageUtil sharedInstance] getContent: img_menu_keypad_act]] forState:UIControlStateHighlighted];
-    [_dialerButton setBackgroundImage:[UIImage imageNamed:[[LanguageUtil sharedInstance] getContent: img_menu_keypad_act]] forState:UIControlStateSelected];
-    
-    [_moreButton setBackgroundImage:[UIImage imageNamed: [[LanguageUtil sharedInstance] getContent: img_menu_more_def]] forState:UIControlStateNormal];
-    [_moreButton setBackgroundImage:[UIImage imageNamed: [[LanguageUtil sharedInstance] getContent: img_menu_more_act]] forState:UIControlStateHighlighted];
-    [_moreButton setBackgroundImage:[UIImage imageNamed: [[LanguageUtil sharedInstance] getContent: img_menu_more_act]] forState:UIControlStateSelected];
+    [_moreButton setBackgroundImage:[UIImage imageNamed:@"menu_more_def"] forState:UIControlStateNormal];
+    [_moreButton setBackgroundImage:[UIImage imageNamed:@"menu_more_act"] forState:UIControlStateHighlighted];
+    [_moreButton setBackgroundImage:[UIImage imageNamed:@"menu_more_act"] forState:UIControlStateSelected];
 }
 
 

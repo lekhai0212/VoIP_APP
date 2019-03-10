@@ -13,7 +13,6 @@
 
 //  Welcome view
 @property (weak, nonatomic) IBOutlet UIView *viewWelcome;
-@property (weak, nonatomic) IBOutlet UIImageView *bgWelcome;
 @property (weak, nonatomic) IBOutlet UIImageView *imgWelcome;
 @property (weak, nonatomic) IBOutlet UIImageView *imgLogoWelcome;
 @property (weak, nonatomic) IBOutlet UILabel *lbSlogan;
@@ -31,7 +30,6 @@
 
 @property (weak, nonatomic) IBOutlet UITextField *tfPassword;
 @property (weak, nonatomic) IBOutlet UIButton *btnPassword;
-@property (weak, nonatomic) IBOutlet UILabel *lbSepa;
 @property (weak, nonatomic) IBOutlet UIButton *btnSignIn;
 @property (weak, nonatomic) IBOutlet UIButton *btnQRCode;
 

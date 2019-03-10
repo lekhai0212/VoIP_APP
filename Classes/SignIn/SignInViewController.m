@@ -20,8 +20,8 @@
 @end
 
 @implementation SignInViewController
-@synthesize viewWelcome, bgWelcome, imgWelcome, imgLogoWelcome, lbSlogan, btnStart;
-@synthesize viewSignIn, iconBack, imgLogo, lbHeader, btnAccountID, tfAccountID, btnPassword, tfPassword, btnSignIn, lbSepa, btnQRCode;
+@synthesize viewWelcome, imgWelcome, imgLogoWelcome, lbSlogan, btnStart;
+@synthesize viewSignIn, iconBack, imgLogo, lbHeader, btnAccountID, tfAccountID, btnPassword, tfPassword, btnSignIn, btnQRCode;
 
 #pragma mark - UICompositeViewDelegate Functions
 static UICompositeViewDescription *compositeDescription = nil;
@@ -50,8 +50,8 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     //  tfAccountID.text = @"nhcla150";
     //  tfPassword.text = @"f7NnFKI1Kv";
-    tfAccountID.text = @"nhcla151";
-    tfPassword.text = @"5obr8jHH2q";
+    //  tfAccountID.text = @"nhcla151";
+    //  tfPassword.text = @"5obr8jHH2q";
     
     icWaiting = [[UIActivityIndicatorView alloc] init];
     icWaiting.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
@@ -73,7 +73,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
-
+    
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(registrationUpdateEvent:)
                                                name:kLinphoneRegistrationUpdate object:nil];
 }
@@ -93,8 +93,18 @@ static UICompositeViewDescription *compositeDescription = nil;
         [self.view makeToast:content duration:2.0 position:CSToastPositionCenter];
         return;
     }
+    [sender setTitleColor:[UIColor colorWithRed:(50/255.0) green:(196/255.0) blue:(124/255.0) alpha:1.0]
+                 forState:UIControlStateNormal];
+    sender.backgroundColor = UIColor.whiteColor;
+
+    [self performSelector:@selector(startLogin:) withObject:sender afterDelay:0.15];
+}
+- (void)startLogin: (UIButton *)sender {
+    [sender setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+    sender.backgroundColor = [UIColor colorWithRed:(50/255.0) green:(196/255.0) blue:(124/255.0) alpha:1.0];
     
     //  start register pbx
+    [self.view endEditing: YES];
     icWaiting.hidden = NO;
     [icWaiting startAnimating];
     
@@ -117,6 +127,27 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
 }
 
+- (BOOL)checkAccountLoginInformationReady {
+    if (![tfAccountID.text isEqualToString:@""] && ![tfPassword.text isEqualToString:@""]) {
+        return YES;
+    }else{
+        return NO;
+    }
+}
+
+- (void)whenTextfieldDidChange:(UITextField *)textfield {
+    BOOL ready = [self checkAccountLoginInformationReady];
+    if (ready) {
+        btnSignIn.enabled = YES;
+        btnSignIn.backgroundColor = [UIColor colorWithRed:(50/255.0) green:(196/255.0) blue:(124/255.0) alpha:1.0];
+        btnSignIn.layer.borderColor = btnSignIn.backgroundColor.CGColor;
+    }else{
+        btnSignIn.enabled = NO;
+        btnSignIn.backgroundColor = [UIColor colorWithRed:(234/255.0) green:(238/255.0) blue:(243/255.0) alpha:1.0];
+        btnSignIn.layer.borderColor = btnSignIn.backgroundColor.CGColor;
+    }
+}
+
 - (void)setupUIForView {
     //  Welcome view
     [viewWelcome mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -126,10 +157,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     gradient.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     gradient.colors = @[(id)[UIColor colorWithRed:(154/255.0) green:(215/255.0) blue:(9/255.0) alpha:1.0].CGColor, (id)[UIColor colorWithRed:(60/255.0) green:(198/255.0) blue:(116/255.0) alpha:1.0].CGColor];
     [viewWelcome.layer insertSublayer:gradient atIndex:0];
-    
-    [bgWelcome mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.left.bottom.right.equalTo(viewWelcome);
-    }];
     
     float wImgWelcome = SCREEN_WIDTH*4/6;
     imgWelcome.clipsToBounds = YES;
@@ -141,7 +168,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
     
     float topPadding = 30.0;
-    float marginCenterTop = 0;
     float hLogo;
     float hLogoColor = 60.0;
     float marginTop = 35.0;
@@ -150,53 +176,99 @@ static UICompositeViewDescription *compositeDescription = nil;
     float hButtonStart = 55.0;
     UIFont *sloganFont = [UIFont systemFontOfSize:18.0 weight:UIFontWeightRegular];
     UIFont *headerFont = [UIFont systemFontOfSize:28.0 weight:UIFontWeightBold];
+    UIFont *textfieldFont = [UIFont systemFontOfSize:17.0 weight:UIFontWeightRegular];
+    UIFont *buttonFont = [UIFont systemFontOfSize:18.0 weight:UIFontWeightRegular];
+    
     float accMargin = 30.0;
     float topHeader = 20.0;
     float hBTN = 45.0;
     float hSepa = 45.0;
     float hTextfield = 42.0;
+    float edge = 8.0;
+    float sizeIconQR = 24.0;
+    float edgeBack = 12.0;
+    float padding = 30.0;
+    float btnMarginTop = 20.0;
     
     NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
-    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE] || [deviceMode isEqualToString: simulator])
+    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE])
     {
         //  Screen width: 320.000000 - Screen height: 667.000000
         hLogo = 40.0;
-        hLogoColor = 30.0;
         marginTop = 10.0;
         marginSlogan = 20.0;
-        sloganFont = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
         wButtonStart = 160.0;
         hButtonStart = 40.0;
-        marginCenterTop = 10.0;
-        headerFont = [UIFont systemFontOfSize:18.0 weight:UIFontWeightBold];
-        accMargin = 0.0;
+        sloganFont = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
+        
+        padding = 20.0;
+        hLogoColor = 30.0;
         topPadding = 10.0;
-        topHeader = 10.0;
-        hBTN = 35.0;
-        hSepa = 25.0;
-        hTextfield = 38.0;
+        headerFont = [UIFont systemFontOfSize:18.0 weight:UIFontWeightBold];
+        accMargin = 5.0;
+        
+        topHeader = 15.0;
+        hBTN = 38.0;
+        hSepa = 30.0;
+        hTextfield = 40.0;
+        edge = 10.0;
+        sizeIconQR = 20.0;
+        btnMarginTop = 20.0;
+        
+        textfieldFont = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
+        buttonFont = [UIFont systemFontOfSize:16.0 weight:UIFontWeightRegular];
+        
+        edgeBack = 15.0;
         
     }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
     {
         //  Screen width: 375.000000 - Screen height: 667.000000
-        hLogo = 50.0;
+        hLogo = 48.0;
         marginTop = 20.0;
-        sloganFont = [UIFont systemFontOfSize:17.0 weight:UIFontWeightRegular];
-        wButtonStart = 160.0;
-        hButtonStart = 45.0;
-        marginCenterTop = 10.0;
+        marginSlogan = 30.0;
+        wButtonStart = 170.0;
+        hButtonStart = 50.0;
+        sloganFont = [UIFont systemFontOfSize:18.0 weight:UIFontWeightRegular];
         
+        padding = 25.0;
+        topPadding = 15.0;
+        hLogoColor = 40.0;
+        accMargin = 10.0;
+        edgeBack = 14.0;
+        edge = 9.0;
+        headerFont = [UIFont systemFontOfSize:20.0 weight:UIFontWeightBold];
+        
+        btnMarginTop = 20.0;
     }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
     {
         //  Screen width: 414.000000 - Screen height: 736.000000
-        hLogo = 60.0;
-    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2]){
-        //  Screen width: 375.000000 - Screen height: 812.000000;
-        hLogo = 60.0;
-        sloganFont = [UIFont systemFontOfSize:20.0 weight:UIFontWeightRegular];
-        marginTop = 50.0;
-        marginSlogan = 50.0;
+        hLogo = 55.0;
         
+        padding = 30.0;
+        hLogoColor = 50.0;
+        topPadding = 10.0;
+        edgeBack = 14.0;
+        edge = 12.0;
+        
+        accMargin = 20.0;
+        headerFont = [UIFont systemFontOfSize:26.0 weight:UIFontWeightBold];
+        hTextfield = 46.0;
+        hBTN = 50.0;
+        buttonFont = [UIFont systemFontOfSize:20.0 weight:UIFontWeightRegular];
+        btnMarginTop = 30.0;
+        
+    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2]  || [deviceMode isEqualToString: simulator]){
+        //  Screen width: 375.000000 - Screen height: 812.000000;
+        hLogo = 55.0;
+        sloganFont = [UIFont systemFontOfSize:20.0 weight:UIFontWeightRegular];
+        marginTop = 30.0;
+        marginSlogan = 30.0;
+        
+        topPadding = [UIApplication sharedApplication].statusBarFrame.size.height + 5;
+        padding = 30.0;
+        hLogoColor = 50.0;
+        headerFont = [UIFont systemFontOfSize:25.0 weight:UIFontWeightBold];
+        accMargin = 20.0;
     }else{
         hLogo = 60.0;
     }
@@ -204,7 +276,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     UIImage *logoImg = [UIImage imageNamed:@"logo_white.png"];
     float wLogo = logoImg.size.width * hLogo / logoImg.size.height;
     [imgLogoWelcome mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(viewWelcome.mas_centerX).offset(-marginCenterTop);
+        make.centerX.equalTo(viewWelcome.mas_centerX);
         make.top.equalTo(imgWelcome.mas_bottom).offset(marginTop);
         make.width.mas_equalTo(wLogo);
         make.height.mas_equalTo(hLogo);
@@ -239,7 +311,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
     
     //  view sign in
-    float padding = 20.0;
     viewSignIn.backgroundColor = UIColor.whiteColor;
     [viewSignIn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view).offset(SCREEN_WIDTH);
@@ -256,7 +327,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.height.mas_equalTo(hLogoColor);
     }];
     
-    iconBack.imageEdgeInsets = UIEdgeInsetsMake(12, 12, 12, 12);
+    iconBack.imageEdgeInsets = UIEdgeInsetsMake(edgeBack, edgeBack, edgeBack, edgeBack);
     [iconBack mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(imgLogo.mas_centerY);
         make.left.equalTo(viewSignIn);
@@ -276,10 +347,13 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.height.mas_equalTo(textSize.height + 20);
     }];
     
-    
-    
     //  account textfield
-    tfAccountID.font = [UIFont systemFontOfSize:17.0 weight:UIFontWeightRegular];
+    tfAccountID.placeholder = [[LanguageUtil sharedInstance] getContent:@"Account ID"];
+    [tfAccountID addTarget:self
+                    action:@selector(whenTextfieldDidChange:)
+          forControlEvents:UIControlEventEditingChanged];
+    
+    tfAccountID.font = textfieldFont;
     tfAccountID.textColor = UIColor.blackColor;
     [tfAccountID mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(lbHeader.mas_bottom).offset(accMargin);
@@ -287,29 +361,36 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.height.mas_equalTo(hTextfield);
     }];
     tfAccountID.borderStyle = UITextBorderStyleNone;
-    tfAccountID.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, hTextfield, hTextfield)];
+    tfAccountID.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, hTextfield-edge, hTextfield)];
     tfAccountID.leftViewMode = UITextFieldViewModeAlways;
     
     UILabel *lbAccount = [[UILabel alloc] init];
     lbAccount.backgroundColor = [UIColor colorWithRed:(220/255.0) green:(220/255.0)
                                                  blue:(220/255.0) alpha:1.0];
-    [tfAccountID addSubview: lbAccount];
+    [viewSignIn addSubview: lbAccount];
     [lbAccount mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(tfAccountID).offset(8.0);
-        make.bottom.right.equalTo(tfAccountID);
+        make.left.equalTo(btnAccountID).offset(edge);
+        make.bottom.equalTo(tfAccountID.mas_bottom);
+        make.right.equalTo(tfAccountID);
         make.height.mas_equalTo(1.0);
     }];
     
     btnAccountID.enabled = NO;
     [btnAccountID setImage:[UIImage imageNamed:@"icon_acc"] forState:UIControlStateDisabled];
-    btnAccountID.imageEdgeInsets = UIEdgeInsetsMake(8, 8, 8, 8);
+    btnAccountID.imageEdgeInsets = UIEdgeInsetsMake(edge,edge, edge, edge);
     [btnAccountID mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.left.bottom.equalTo(tfAccountID);
+        make.left.equalTo(tfAccountID).offset(-edge);
+        make.top.bottom.equalTo(tfAccountID);
         make.width.mas_equalTo(hTextfield);
     }];
     
     //  password textfield
-    tfPassword.font = [UIFont systemFontOfSize:17.0 weight:UIFontWeightRegular];
+    tfPassword.placeholder = [[LanguageUtil sharedInstance] getContent:@"Password"];
+    [tfPassword addTarget:self
+                   action:@selector(whenTextfieldDidChange:)
+         forControlEvents:UIControlEventEditingChanged];
+    
+    tfPassword.font = textfieldFont;
     tfPassword.secureTextEntry = YES;
     tfPassword.textColor = tfAccountID.textColor;
     [tfPassword mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -318,57 +399,85 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.height.mas_equalTo(hTextfield);
     }];
     tfPassword.borderStyle = UITextBorderStyleNone;
-    tfPassword.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, hTextfield, hTextfield)];
+    tfPassword.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, hTextfield-edge, hTextfield)];
     tfPassword.leftViewMode = UITextFieldViewModeAlways;
     
     UILabel *lbPassword = [[UILabel alloc] init];
     lbPassword.backgroundColor = lbAccount.backgroundColor;
-    [tfPassword addSubview: lbPassword];
+    [viewSignIn addSubview: lbPassword];
     [lbPassword mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(tfPassword).offset(8.0);
-        make.right.bottom.equalTo(tfPassword);
+        make.left.equalTo(btnPassword).offset(edge);
+        make.right.equalTo(tfPassword);
+        make.bottom.equalTo(tfPassword.mas_bottom);
         make.height.mas_equalTo(1.0);
     }];
     
     btnPassword.enabled = NO;
     [btnPassword setImage:[UIImage imageNamed:@"icon_pass"] forState:UIControlStateDisabled];
-    btnPassword.imageEdgeInsets = UIEdgeInsetsMake(8, 8, 8, 8);
+    btnPassword.imageEdgeInsets = UIEdgeInsetsMake(edge,edge, edge, edge);
     [btnPassword mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(tfPassword).offset(-edge);
         make.top.left.bottom.equalTo(tfPassword);
         make.width.mas_equalTo(hTextfield);
     }];
     
     //  signin button
+    btnSignIn.enabled = NO;
     [btnSignIn setTitle:[[LanguageUtil sharedInstance] getContent:@"Sign In"] forState:UIControlStateNormal];
-    btnSignIn.titleLabel.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightRegular];
-    btnSignIn.backgroundColor = [UIColor colorWithRed:(50/255.0) green:(196/255.0) blue:(124/255.0) alpha:1.0];
+    btnSignIn.titleLabel.font = buttonFont;
+    btnSignIn.backgroundColor = [UIColor colorWithRed:(234/255.0) green:(238/255.0) blue:(243/255.0) alpha:1.0];
+    btnSignIn.layer.borderColor = [UIColor colorWithRed:(234/255.0) green:(238/255.0) blue:(243/255.0) alpha:1.0].CGColor;
+    btnSignIn.layer.borderWidth = 1.0;
     [btnSignIn setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+    [btnSignIn setTitleColor:UIColor.lightGrayColor forState:UIControlStateDisabled];
     btnSignIn.layer.cornerRadius = 5.0;
     [btnSignIn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(tfPassword.mas_bottom).offset(20.0);
+        make.top.equalTo(tfPassword.mas_bottom).offset(btnMarginTop);
         make.left.right.equalTo(tfPassword);
         make.height.mas_equalTo(hBTN);
     }];
     
-    lbSepa.text = [[LanguageUtil sharedInstance] getContent:@"Or"];
-    lbSepa.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0)
-                                        blue:(102/255.0) alpha:1.0];
-    lbSepa.backgroundColor = UIColor.redColor;
-    [lbSepa mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(btnSignIn.mas_bottom);
-        make.left.right.equalTo(btnSignIn);
-        make.height.mas_equalTo(hSepa);
+    float hDot = 3.0;
+    UILabel *lbDot1 = [[UILabel alloc] init];
+    lbDot1.clipsToBounds = YES;
+    lbDot1.layer.cornerRadius = hDot/2;
+    lbDot1.backgroundColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0)
+                                              blue:(102/255.0) alpha:1.0];
+    [viewSignIn addSubview: lbDot1];
+    [lbDot1 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(btnSignIn.mas_bottom).offset((hSepa-hDot)/2);
+        make.centerX.equalTo(viewSignIn.mas_centerX);
+        make.width.height.mas_equalTo(hDot);
     }];
     
-    [btnQRCode setAttributedTitle:[self getQRCodeTitleContent] forState:UIControlStateNormal];
-    btnQRCode.titleLabel.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightRegular];
+    UILabel *lbDot2 = [[UILabel alloc] init];
+    lbDot2.clipsToBounds = YES;
+    lbDot2.layer.cornerRadius = hDot/2;
+    lbDot2.backgroundColor = lbDot1.backgroundColor;
+    [viewSignIn addSubview: lbDot2];
+    [lbDot2 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.bottom.equalTo(lbDot1);
+        make.right.equalTo(lbDot1.mas_left).offset(-4.0);
+        make.width.mas_equalTo(hDot);
+    }];
+    
+    UILabel *lbDot3 = [[UILabel alloc] init];
+    lbDot3.clipsToBounds = YES;
+    lbDot3.layer.cornerRadius = hDot/2;
+    lbDot3.backgroundColor = lbDot1.backgroundColor;
+    [viewSignIn addSubview: lbDot3];
+    [lbDot3 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.bottom.equalTo(lbDot1);
+        make.left.equalTo(lbDot1.mas_right).offset(4.0);
+        make.width.mas_equalTo(hDot);
+    }];
+    
+    [btnQRCode setAttributedTitle:[self getQRCodeTitleContentWithFont: buttonFont andSizeIcon:sizeIconQR] forState:UIControlStateNormal];
+    //  btnQRCode.titleLabel.font = buttonFont;
     btnQRCode.backgroundColor = [UIColor colorWithRed:(234/255.0) green:(238/255.0) blue:(243/255.0) alpha:1.0];
-    [btnQRCode setTitleColor:[UIColor colorWithRed:(60/255.0) green:(75/255.0)
-                                              blue:(102/255.0) alpha:1.0]
-                    forState:UIControlStateNormal];
     btnQRCode.layer.cornerRadius = 5.0;
     [btnQRCode mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(lbSepa.mas_bottom);
+        make.top.equalTo(lbDot1.mas_bottom).offset((hSepa-hDot)/2);
         make.left.right.equalTo(btnSignIn);
         make.height.equalTo(btnSignIn.mas_height);
     }];
@@ -599,7 +708,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     sender.enabled = NO;
     [sender setTitleColor:[UIColor colorWithRed:(60/255.0) green:(198/255.0) blue:(116/255.0) alpha:1.0]
                  forState:UIControlStateNormal];
-    [self performSelector:@selector(goToLoginScreen:) withObject:sender afterDelay:0.2];
+    [self performSelector:@selector(goToLoginScreen:) withObject:sender afterDelay:0.15];
 }
 
 - (void)goToLoginScreen: (UIButton *)sender {
@@ -608,6 +717,17 @@ static UICompositeViewDescription *compositeDescription = nil;
     sender.enabled = YES;
     [sender setTitleColor:[UIColor colorWithRed:(60/255.0) green:(75/255.0)
                                            blue:(102/255.0) alpha:1.0] forState:UIControlStateNormal];
+    
+    BOOL ready = [self checkAccountLoginInformationReady];
+    if (ready) {
+        btnSignIn.enabled = YES;
+        btnSignIn.backgroundColor = [UIColor colorWithRed:(50/255.0) green:(196/255.0) blue:(124/255.0) alpha:1.0];
+        btnSignIn.layer.borderColor = btnSignIn.backgroundColor.CGColor;
+    }else{
+        btnSignIn.enabled = NO;
+        btnSignIn.backgroundColor = [UIColor colorWithRed:(234/255.0) green:(238/255.0) blue:(243/255.0) alpha:1.0];
+        btnSignIn.layer.borderColor = btnSignIn.backgroundColor.CGColor;
+    }
     
     [viewWelcome mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.view.mas_left);
@@ -624,15 +744,18 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
 }
 
-- (NSAttributedString *)getQRCodeTitleContent {
+- (NSAttributedString *)getQRCodeTitleContentWithFont: (UIFont *)textFont andSizeIcon: (float)size
+{
     CustomTextAttachment *attachment = [[CustomTextAttachment alloc] init];
     attachment.image = [UIImage imageNamed:@"qrcode.png"];
-    [attachment setImageHeight: 24.0];
+    [attachment setImageHeight: size];
     
     NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:attachment];
     
     NSString *content = [NSString stringWithFormat:@" %@", [[LanguageUtil sharedInstance] getContent:@"Or sign in with QRCode"]];
     NSMutableAttributedString *contentString = [[NSMutableAttributedString alloc] initWithString:content];
+    [contentString addAttribute:NSFontAttributeName value:textFont range:NSMakeRange(0, contentString.length)];
+    [contentString addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0] range:NSMakeRange(0, contentString.length)];
     
     NSMutableAttributedString *verString = [[NSMutableAttributedString alloc] initWithAttributedString: attachmentString];
     //

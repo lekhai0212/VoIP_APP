@@ -575,9 +575,6 @@
     
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(registrationUpdateEvent:)
                                                name:kLinphoneRegistrationUpdate object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(afterEndCallForTransfer)
-                                                 name:reloadHistoryCall object:nil];
 }
 
 - (void)setAddress:(NSString *)address {
@@ -714,11 +711,6 @@
         default:
             break;
     }
-}
-
-- (void)afterEndCallForTransfer {
-    icAddContact.hidden = YES;
-    addressField.text = @"";
 }
 
 #pragma mark - Actionsheet Delegate
