@@ -8,7 +8,7 @@
 #import "PBXContactTableCell.h"
 
 @implementation PBXContactTableCell
-@synthesize _imgAvatar, _lbName, _lbPhone, _lbSepa, icCall;
+@synthesize _imgAvatar, _lbName, _lbPhone, _lbSepa, icCall, icVideoCall;
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -18,7 +18,7 @@
     float marginRight;
     if (IS_IPHONE || IS_IPOD) {
         marginLeft = 20.0;
-        marginRight = 25.0;
+        marginRight = 15.0;
     }else{
         marginLeft = 0.0;
         marginRight = 5.0;
@@ -33,16 +33,26 @@
     }];
     
     [icCall setTitleColor:UIColor.clearColor forState:UIControlStateNormal];
+    icCall.imageEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     [icCall mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.mas_centerY);
         make.right.equalTo(self).offset(-marginRight);
         make.width.height.mas_equalTo(40.0);
     }];
     
+    [icVideoCall setTitleColor:UIColor.clearColor forState:UIControlStateNormal];
+    icVideoCall.imageEdgeInsets = UIEdgeInsetsMake(7, 7, 7, 7);
+    [icVideoCall mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.mas_centerY);
+        make.right.equalTo(icCall.mas_left).offset(-5.0);
+        make.width.equalTo(icCall.mas_width);
+        make.height.equalTo(icCall.mas_height);
+    }];
+    
     [_lbName mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_imgAvatar);
         make.left.equalTo(_imgAvatar.mas_right).offset(10);
-        make.right.equalTo(icCall.mas_left).offset(-10);
+        make.right.equalTo(icVideoCall.mas_left).offset(-10);
         make.bottom.equalTo(_imgAvatar.mas_centerY);
     }];
     

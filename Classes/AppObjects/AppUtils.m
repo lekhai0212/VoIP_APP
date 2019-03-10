@@ -1061,4 +1061,16 @@
     return newImage;
 }
 
++ (void)addBoxShadowForView: (UIView *)view withColor: (UIColor *)color{
+    view.layer.shadowRadius  = view.layer.cornerRadius;
+    view.layer.shadowColor   = color.CGColor;
+    view.layer.shadowOffset  = CGSizeMake(0.0f, 0.0f);
+    view.layer.shadowOpacity = 0.9f;
+    view.layer.masksToBounds = NO;
+    
+    UIEdgeInsets shadowInsets     = UIEdgeInsetsMake(0, 0, 5.0f, 0);
+    UIBezierPath *shadowPath      = [UIBezierPath bezierPathWithRect:UIEdgeInsetsInsetRect(view.bounds, shadowInsets)];
+    view.layer.shadowPath    = shadowPath.CGPath;
+}
+
 @end

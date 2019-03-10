@@ -20,6 +20,7 @@
     PBXContactsViewController *pbxContactsVC;
     int currentView;
     float hIcon;
+    float paddingContent;
     
     NSTimer *searchTimer;
     WebServices *webService;
@@ -30,7 +31,7 @@
 @end
 
 @implementation ContactsViewController
-@synthesize _pageViewController, _viewHeader, _iconAll, _iconPBX, _iconSyncPBXContact, _tfSearch, imgBackground, _icClearSearch;
+@synthesize _pageViewController, _viewHeader, _iconAll, _iconPBX, _tfSearch, imgBackground, _icClearSearch, lbSepa;
 @synthesize _listSyncContact, _phoneForSync;
 
 #pragma mark - UICompositeViewDelegate Functions
@@ -59,9 +60,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)viewDidLoad {
     [super viewDidLoad];
     //  MY CODE HERE
-    _pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll
-                                                          navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
-                                                                        options:nil];
+    _pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
     
     self.view.backgroundColor = UIColor.clearColor;
     
@@ -110,24 +109,13 @@ static UICompositeViewDescription *compositeDescription = nil;
         _icClearSearch.hidden = YES;
     }
     
-    //  check to show icon sync
-    if ([SipUtils getStateOfDefaultProxyConfig] == eAccountNone) {
-        _iconSyncPBXContact.hidden = YES;
-    }else{
-        _iconSyncPBXContact.hidden = NO;
-    }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closeKeyboard)
                                                  name:@"closeKeyboard" object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear: animated];
-    
-    [AppUtils addCornerRadiusTopLeftAndBottomLeftForButton:_iconPBX radius:(hIcon-10)/2
-                                                 withColor:SELECT_TAB_BG_COLOR border:2.0];
-    
-    [AppUtils addCornerRadiusTopRightAndBottomRightForButton:_iconAll radius:(hIcon-10)/2
-                                                   withColor:SELECT_TAB_BG_COLOR border:2.0];
+    [AppUtils addBoxShadowForView:_tfSearch withColor:[UIColor colorWithRed:(100/255.0) green:(100/255.0) blue:(100/255.0) alpha:1.0]];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -210,74 +198,84 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 //  setup trạng thái cho các button
 - (void)autoLayoutForMainView {
+    float hTextfield = 40.0;
+    float hButton = 40.0;
+    paddingContent = 30.0;
+    
     hIcon = [LinphoneAppDelegate sharedInstance]._hRegistrationState - [LinphoneAppDelegate sharedInstance]._hStatus;
     _viewHeader.backgroundColor = UIColor.clearColor;
+    float hHeader = [LinphoneAppDelegate sharedInstance]._hRegistrationState + 60.0;
     [_viewHeader mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self.view);
-        make.height.mas_equalTo([LinphoneAppDelegate sharedInstance]._hRegistrationState + 50);
+        make.height.mas_equalTo(hHeader);
     }];
     
     [imgBackground mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.left.bottom.right.equalTo(_viewHeader);
+        make.top.left.right.equalTo(_viewHeader);
+        make.bottom.equalTo(_viewHeader).offset(-(hTextfield+10.0)/2);
     }];
     
-    _iconSyncPBXContact.backgroundColor = UIColor.clearColor;
-    [_iconSyncPBXContact mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_viewHeader).offset(10);
-        make.top.equalTo(_viewHeader).offset([LinphoneAppDelegate sharedInstance]._hStatus+5);
-        make.width.height.mas_equalTo(hIcon-10);
+    float marginTop = [LinphoneAppDelegate sharedInstance]._hStatus + (hHeader - [LinphoneAppDelegate sharedInstance]._hStatus - hTextfield - 10 - hButton)/ 2;
+    
+    
+    lbSepa.backgroundColor = [UIColor colorWithRed:(220/255.0) green:(220/255.0)
+                                              blue:(220/255.0) alpha:1.0];
+    [lbSepa mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_viewHeader).offset(marginTop + 10);
+        make.centerX.equalTo(_viewHeader.mas_centerX);
+        make.width.mas_equalTo(1.0);
+        make.height.mas_equalTo(hButton - 20);
     }];
     
-    _iconPBX.backgroundColor = SELECT_TAB_BG_COLOR;
-    [_iconPBX setTitle:[[LanguageUtil sharedInstance] getContent:@"PBX"] forState:UIControlStateNormal];
-    [_iconPBX setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
-    [_iconPBX mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(_viewHeader.mas_centerX);
-        make.centerY.equalTo(_iconSyncPBXContact.mas_centerY);
-        make.height.equalTo(_iconSyncPBXContact.mas_height);
-        make.width.mas_equalTo(SCREEN_WIDTH/4);
-    }];
-    
+    float padding = 30.0;
     _iconAll.backgroundColor = UIColor.clearColor;
-    [_iconAll setTitle:[[LanguageUtil sharedInstance] getContent:@"Contacts"] forState:UIControlStateNormal];
+    [_iconAll setTitle:[[LanguageUtil sharedInstance] getContent:@"All contacts"] forState:UIControlStateNormal];
     [_iconAll setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+    _iconAll.titleLabel.font = [UIFont systemFontOfSize:16.0 weight:UIFontWeightBold];
     [_iconAll mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_viewHeader.mas_centerX);
-        make.top.bottom.equalTo(_iconPBX);
-        make.width.equalTo(_iconPBX.mas_width);
-        make.height.equalTo(_iconPBX.mas_height);
+        make.right.equalTo(lbSepa.mas_left).offset(-padding);
+        make.top.equalTo(_viewHeader).offset(marginTop);
+        make.width.mas_equalTo(120);
+        make.height.mas_equalTo(hButton);
     }];
     
-    float hTextfield = 32.0;
-    _tfSearch.backgroundColor = [UIColor colorWithRed:(16/255.0) green:(59/255.0)
-                                                 blue:(123/255.0) alpha:0.8];
+    _iconPBX.backgroundColor = UIColor.clearColor;
+    [_iconPBX setTitle:[[LanguageUtil sharedInstance] getContent:@"PBX contacts"] forState:UIControlStateNormal];
+    [_iconPBX setTitleColor:[UIColor colorWithRed:(220/255.0) green:(220/255.0)
+                                             blue:(220/255.0) alpha:1.0]
+                   forState:UIControlStateNormal];
+    _iconPBX.titleLabel.font = _iconAll.titleLabel.font;
+    [_iconPBX mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.bottom.equalTo(_iconAll);
+        make.left.equalTo(lbSepa.mas_right).offset(padding);
+        make.width.equalTo(_iconAll.mas_width);
+    }];
+    
+    _tfSearch.backgroundColor = UIColor.whiteColor;
     _tfSearch.font = [UIFont systemFontOfSize: 16.0];
-    _tfSearch.borderStyle = UITextBorderStyleNone;
-    _tfSearch.layer.cornerRadius = hTextfield/2;
-    _tfSearch.clipsToBounds = YES;
-    _tfSearch.textColor = UIColor.whiteColor;
-    if ([self._tfSearch respondsToSelector:@selector(setAttributedPlaceholder:)]) {
-        _tfSearch.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[[LanguageUtil sharedInstance] getContent:@"Search..."] attributes:@{NSForegroundColorAttributeName: [UIColor colorWithRed:(230/255.0) green:(230/255.0) blue:(230/255.0) alpha:1.0]}];
-    } else {
-        _tfSearch.placeholder = [[LanguageUtil sharedInstance] getContent:@"Search..."];
-    }
+    _tfSearch.placeholder = [[LanguageUtil sharedInstance] getContent:@"Search name or phone number"];
+    _tfSearch.textColor = UIColor.darkGrayColor;
+
     [_tfSearch addTarget:self
                   action:@selector(onSearchContactChange:)
         forControlEvents:UIControlEventEditingChanged];
     
-    UIView *pLeft = [[UIView alloc] initWithFrame:CGRectMake(0, 0, hTextfield, hTextfield)];
+    UIView *pLeft = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 22.0, hTextfield)];
     _tfSearch.leftView = pLeft;
     _tfSearch.leftViewMode = UITextFieldViewModeAlways;
     
     [_tfSearch mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_iconAll.mas_bottom).offset(5+(50-hTextfield)/2);
-        make.left.equalTo(_viewHeader).offset(30.0);
-        make.right.equalTo(_viewHeader).offset(-30.0);
+        make.bottom.equalTo(_viewHeader).offset(-5.0);
+        make.left.equalTo(self.view).offset(paddingContent);
+        make.right.equalTo(self.view).offset(-paddingContent);
         make.height.mas_equalTo(hTextfield);
     }];
     
+    _tfSearch.clipsToBounds = YES;
+    _tfSearch.layer.cornerRadius = 7.0;
+    
     UIImageView *imgSearch = [[UIImageView alloc] init];
-    imgSearch.image = [UIImage imageNamed:@"ic_search"];
+    imgSearch.image = [UIImage imageNamed:@"ic_search_gray"];
     [_tfSearch addSubview: imgSearch];
     [imgSearch mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(_tfSearch.mas_centerY);
@@ -305,13 +303,15 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)updateStateIconWithView: (int)view
 {
     if (view == eContactAll){
-        _iconSyncPBXContact.hidden = YES;
-        [AppUtils setSelected: YES forButton: _iconAll];
-        [AppUtils setSelected: NO forButton: _iconPBX];
+        [_iconAll setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+        [_iconPBX setTitleColor:[UIColor colorWithRed:(220/255.0) green:(220/255.0)
+                                                 blue:(220/255.0) alpha:1.0]
+                       forState:UIControlStateNormal];
     }else{
-        _iconSyncPBXContact.hidden = NO;
-        [AppUtils setSelected: NO forButton: _iconAll];
-        [AppUtils setSelected: YES forButton: _iconPBX];
+        [_iconAll setTitleColor:[UIColor colorWithRed:(220/255.0) green:(220/255.0)
+                                                 blue:(220/255.0) alpha:1.0]
+                       forState:UIControlStateNormal];
+        [_iconPBX setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     }
 }
 
@@ -368,7 +368,6 @@ static UICompositeViewDescription *compositeDescription = nil;
         [icWaiting startAnimating];
         
         [LinphoneAppDelegate sharedInstance]._isSyncing = YES;
-        [self startAnimationForSyncButton: _iconSyncPBXContact];
         
         [self getPBXContactsWithServerName: service];
     }
@@ -648,7 +647,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     icWaiting.hidden = YES;
     
     [[LinphoneAppDelegate sharedInstance] set_isSyncing: false];
-    [_iconSyncPBXContact.layer removeAllAnimations];
+    //  [_iconSyncPBXContact.layer removeAllAnimations];
     
     [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Successful"] duration:2.0 position:CSToastPositionCenter];
     

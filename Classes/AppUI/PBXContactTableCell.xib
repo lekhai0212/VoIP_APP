@@ -23,14 +23,14 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lxp-WL-PQA">
-                        <rect key="frame" x="60" y="8" width="208" height="21"/>
+                        <rect key="frame" x="60" y="8" width="152" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="18"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jZ2-25-hAq">
-                        <rect key="frame" x="60" y="31" width="208" height="21"/>
+                        <rect key="frame" x="60" y="31" width="152" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                         <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="calibratedWhite"/>
@@ -47,7 +47,12 @@
                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NeT-uc-lyx">
                         <rect key="frame" x="276" y="13" width="35" height="35"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <state key="normal" image="ic_call_blue.png"/>
+                        <state key="normal" image="contact_audio_call.png"/>
+                    </button>
+                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aOz-kB-rJL">
+                        <rect key="frame" x="226" y="13" width="35" height="35"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <state key="normal" image="contact_video_call.png"/>
                     </button>
                 </subviews>
             </tableViewCellContentView>
@@ -57,12 +62,14 @@
                 <outlet property="_lbPhone" destination="jZ2-25-hAq" id="4Bx-ho-7jp"/>
                 <outlet property="_lbSepa" destination="KPm-aB-HNY" id="72r-Lg-SGH"/>
                 <outlet property="icCall" destination="NeT-uc-lyx" id="wiL-mr-jp5"/>
+                <outlet property="icVideoCall" destination="aOz-kB-rJL" id="Wc3-V6-yFX"/>
             </connections>
-            <point key="canvasLocation" x="-264" y="-79.160419790104953"/>
+            <point key="canvasLocation" x="296" y="-82"/>
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_call_blue.png" width="150" height="150"/>
-        <image name="no_avatar.png" width="198" height="198"/>
+        <image name="contact_audio_call.png" width="201" height="201"/>
+        <image name="contact_video_call.png" width="201" height="201"/>
+        <image name="no_avatar.png" width="256" height="256"/>
     </resources>
 </document>

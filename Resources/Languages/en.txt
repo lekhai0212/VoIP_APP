@@ -4,15 +4,18 @@
 "Or sign in with QRCode" = "Or sign in with QRCode"
 "Account ID" = "Account ID"
 "Password" = "Password"
-
+"PBX contacts" = "PBX contacts"
+"All Contacts" = "All Contacts"
+"Search name or phone number" = "Search name or phone number"
+"Count all contacts" = "All contacts"
+"Sync contacts" = "Sync contacts"
 
 
 "Online" = "Online"
 "Offline" = "Offline"
 "Connecting" = "Connecting"
 
-"PBX" = "PBX"
-"Contacts" = "Contacts"
+
 "Type name or phone number" = "Type name or phone number"
 
 "All" = "All"

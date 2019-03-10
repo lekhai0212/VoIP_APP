@@ -12,6 +12,7 @@
 #import "PBXContact.h"
 #import "PBXContactTableCell.h"
 #import "UIImage+GKContact.h"
+#import "CustomTextAttachment.h"
 
 @interface PBXContactsViewController (){
     BOOL isSearching;
@@ -27,6 +28,9 @@
     
     float hSection;
     NSMutableArray *pbxList;
+    
+    UILabel *lbAllContacts;
+    UIButton *btnSyncContacts;
 }
 
 @end
@@ -41,6 +45,7 @@
     hSection = 35.0;
     
     [self autoLayoutForView];
+    [self addHeaderForTableContactsView];
     
     contactSections = [[NSMutableDictionary alloc] init];
     listCharacter = [[NSArray alloc] initWithObjects: @"A", @"B", @"C", @"D", @"E", @"F",
@@ -100,6 +105,7 @@
         
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"List pbx contact count: %lu", (unsigned long)pbxList.count]
                              toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+        lbAllContacts.text = [NSString stringWithFormat:@"%@ (%ld)", [[LanguageUtil sharedInstance] getContent:@"Count all contacts"], pbxList.count];
         
         if (pbxList.count > 0) {
             _tbContacts.hidden = NO;
@@ -148,6 +154,35 @@
 }
 
 #pragma mark - my functions
+
+- (void)addHeaderForTableContactsView {
+    UIView *headerView = [[UIView alloc] init];
+    headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 50.0);
+    headerView.backgroundColor = [UIColor colorWithRed:(240/255.0) green:(240/255.0)
+                                                  blue:(240/255.0) alpha:1.0];
+    
+    float marginLeft;
+    if (IS_IPHONE || IS_IPOD) {
+        marginLeft = 20.0;
+    }else{
+        marginLeft = 0.0;
+    }
+    
+    //  getSyncTitleContentWithFont
+    btnSyncContacts = [[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-marginLeft-150, 0, 100, headerView.frame.size.height)];
+    btnSyncContacts.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+    
+    [btnSyncContacts setAttributedTitle:[self getSyncTitleContentWithFont:[UIFont systemFontOfSize:17.0 weight:UIFontWeightBold] andSizeIcon:20.0] forState:UIControlStateNormal];
+    [headerView addSubview: btnSyncContacts];
+    
+    
+    lbAllContacts = [[UILabel alloc] initWithFrame:CGRectMake(marginLeft, 0, SCREEN_WIDTH-2*marginLeft-btnSyncContacts.frame.size.width-10.0, headerView.frame.size.height)];
+    lbAllContacts.font = [UIFont systemFontOfSize:17.0 weight:UIFontWeightBold];
+    lbAllContacts.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
+    [headerView addSubview: lbAllContacts];
+    
+    _tbContacts.tableHeaderView = headerView;
+}
 
 - (void)showContentWithCurrentLanguage {
     _lbContacts.text = [[LanguageUtil sharedInstance] getContent:@"No contacts"];
@@ -225,34 +260,26 @@
         [cell.icCall addTarget:self
                         action:@selector(onIconCallClicked:)
               forControlEvents:UIControlEventTouchUpInside];
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            NSString *pbxServer = [[NSUserDefaults standardUserDefaults] objectForKey:PBX_SERVER];
-            NSString *avatarName = [NSString stringWithFormat:@"%@_%@.png", pbxServer, contact._number];
-            NSString *localFile = [NSString stringWithFormat:@"/avatars/%@", avatarName];
-            NSData *avatarData = [AppUtils getFileDataFromDirectoryWithFileName:localFile];
-            
-            dispatch_async(dispatch_get_main_queue(), ^(void){
-                if (avatarData != nil) {
-                    cell._imgAvatar.image = [UIImage imageWithData: avatarData];
-                }else{
-                    NSString *firstChar = [contact._name substringToIndex:1];
-                    UIImage *avatar = [UIImage imageForName:[firstChar uppercaseString] size:CGSizeMake(60.0, 60.0)
-                                            backgroundColor:[UIColor colorWithRed:0.169 green:0.53 blue:0.949 alpha:1.0]
-                                                  textColor:UIColor.whiteColor
-                                                       font:[UIFont fontWithName:HelveticaNeue size:30.0]];
-                    cell._imgAvatar.image = avatar;
-                }
-            });
-        });
     }else{
         cell._lbPhone.text = @"";
         cell.icCall.hidden = YES;
     }
     
+    if (![AppUtils isNullOrEmpty: contact._avatar]) {
+        NSData *imageData = [NSData dataFromBase64String:contact._avatar];
+        cell._imgAvatar.image = [UIImage imageWithData: imageData];
+    }else{
+        NSString *firstChar = [contact._name substringToIndex:1];
+        UIImage *avatar = [UIImage imageForName:[firstChar uppercaseString] size:CGSizeMake(60.0, 60.0)
+                                backgroundColor:[UIColor colorWithRed:(154/255.0) green:(215/255.0) blue:(9/255.0) alpha:1.0]
+                                      textColor:UIColor.whiteColor
+                                           font:[UIFont fontWithName:HelveticaNeue size:30.0]];
+        cell._imgAvatar.image = avatar;
+    }
+    
     if ([contact._name isEqualToString:@""]) {
         UIImage *avatar = [UIImage imageForName:@"#" size:CGSizeMake(60.0, 60.0)
-                                backgroundColor:[UIColor colorWithRed:0.169 green:0.53 blue:0.949 alpha:1.0]
+                                backgroundColor:[UIColor colorWithRed:(154/255.0) green:(215/255.0) blue:(9/255.0) alpha:1.0]
                                       textColor:UIColor.whiteColor
                                            font:[UIFont fontWithName:HelveticaNeue size:30.0]];
         cell._imgAvatar.image = avatar;
@@ -290,20 +317,20 @@
     return headerView;
 }
 
-- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-    NSMutableArray *tmpArr = [[NSMutableArray alloc] initWithArray: [[contactSections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)]];
-    
-    int iCount = 0;
-    while (iCount < tmpArr.count) {
-        NSString *title = [tmpArr objectAtIndex: iCount];
-        if ([title isEqualToString:@"z#"]) {
-            [tmpArr replaceObjectAtIndex:iCount withObject:@"#"];
-            break;
-        }
-        iCount++;
-    }
-    return tmpArr;
-}
+//- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
+//    NSMutableArray *tmpArr = [[NSMutableArray alloc] initWithArray: [[contactSections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)]];
+//
+//    int iCount = 0;
+//    while (iCount < tmpArr.count) {
+//        NSString *title = [tmpArr objectAtIndex: iCount];
+//        if ([title isEqualToString:@"z#"]) {
+//            [tmpArr replaceObjectAtIndex:iCount withObject:@"#"];
+//            break;
+//        }
+//        iCount++;
+//    }
+//    return tmpArr;
+//}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return hCell;
@@ -470,6 +497,25 @@
     if ([LinphoneAppDelegate sharedInstance].pbxContacts != nil) {
         [pbxList addObjectsFromArray:[[LinphoneAppDelegate sharedInstance].pbxContacts copy]];
     }
+}
+
+- (NSAttributedString *)getSyncTitleContentWithFont: (UIFont *)textFont andSizeIcon: (float)size
+{
+    CustomTextAttachment *attachment = [[CustomTextAttachment alloc] init];
+    attachment.image = [UIImage imageNamed:@"syne.png"];
+    [attachment setImageHeight: size];
+    
+    NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:attachment];
+    
+    NSString *content = [NSString stringWithFormat:@" %@", [[LanguageUtil sharedInstance] getContent:@"Sync contacts"]];
+    NSMutableAttributedString *contentString = [[NSMutableAttributedString alloc] initWithString:content];
+    [contentString addAttribute:NSFontAttributeName value:textFont range:NSMakeRange(0, contentString.length)];
+    [contentString addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0] range:NSMakeRange(0, contentString.length)];
+    
+    NSMutableAttributedString *verString = [[NSMutableAttributedString alloc] initWithAttributedString: attachmentString];
+    //
+    [verString appendAttributedString: contentString];
+    return verString;
 }
 
 @end

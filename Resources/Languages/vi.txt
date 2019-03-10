@@ -5,6 +5,11 @@
 "Or" = ""
 "Account ID" = "Tài khoản"
 "Password" = "Mật khẩu"
+"PBX contacts" = "Danh bạ nội bộ"
+"All Contacts" = "Danh bạ máy"
+"Search name or phone number" = "Tìm tên hoặc số điện thoại"
+"Count all contacts" = "Tất cả liên hệ"
+"Sync contacts" = "Đồng bộ"
 
 
 "Online" = "Sẵn sàng"

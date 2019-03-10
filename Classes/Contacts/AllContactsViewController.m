@@ -30,6 +30,7 @@
     NSTimer *refreshTimer;
     
     NSMutableArray *tbDatas;
+    UILabel *lbAllContacts;
 }
 
 @end
@@ -49,6 +50,8 @@
     _contactSections = [[NSMutableDictionary alloc] init];
     
     [self autoLayoutForView];
+    
+    [self addHeaderForTableContactsView];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -73,6 +76,8 @@
         refreshTimer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(showAndReloadContactList) userInfo:nil repeats:YES];
     }else{
         [self showAndReloadContactList];
+        
+        lbAllContacts.text = [NSString stringWithFormat:@"%@ (%ld)", [[LanguageUtil sharedInstance] getContent:@"Count all contacts"], tbDatas.count];
     }
     
     if ([LinphoneAppDelegate sharedInstance].needToReloadContactList) {
@@ -110,6 +115,27 @@
 
 #pragma mark - My Functions
 
+- (void)addHeaderForTableContactsView {
+    UIView *headerView = [[UIView alloc] init];
+    headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 50.0);
+    headerView.backgroundColor = [UIColor colorWithRed:(240/255.0) green:(240/255.0)
+                                                  blue:(240/255.0) alpha:1.0];
+    
+    float marginLeft;
+    if (IS_IPHONE || IS_IPOD) {
+        marginLeft = 20.0;
+    }else{
+        marginLeft = 0.0;
+    }
+    
+    lbAllContacts = [[UILabel alloc] initWithFrame:CGRectMake(marginLeft, 0, SCREEN_WIDTH-2*marginLeft, hSection)];
+    lbAllContacts.font = [UIFont systemFontOfSize:17.0 weight:UIFontWeightBold];
+    lbAllContacts.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
+    [headerView addSubview: lbAllContacts];
+    
+    _tbContacts.tableHeaderView = headerView;
+}
+
 - (void)whenLoadContactFinish
 {
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
@@ -143,12 +169,7 @@
     _tbContacts.delegate = self;
     _tbContacts.dataSource = self;
     _tbContacts.separatorStyle = UITableViewCellSeparatorStyleNone;
-    if ([_tbContacts respondsToSelector:@selector(setSectionIndexColor:)]) {
-        _tbContacts.sectionIndexColor = UIColor.grayColor;
-        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
-            _tbContacts.sectionIndexBackgroundColor = UIColor.whiteColor;
-        }
-    }
+
     //  khong co lien he
     _lbNoContacts.font = textFont;
     _lbNoContacts.textColor = UIColor.grayColor;
@@ -269,7 +290,7 @@
         }
         
         UIImage *avatar = [UIImage imageForName:[keyAvatar uppercaseString] size:CGSizeMake(60.0, 60.0)
-                                backgroundColor:[UIColor colorWithRed:0.169 green:0.53 blue:0.949 alpha:1.0]
+                                backgroundColor:[UIColor colorWithRed:(154/255.0) green:(215/255.0) blue:(9/255.0) alpha:1.0]
                                       textColor:UIColor.whiteColor
                                            font:nil];
         cell.image.image = avatar;
@@ -319,23 +340,23 @@
     return headerView;
 }
 
-- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-    NSMutableArray *tmpArr = [[NSMutableArray alloc] initWithArray: [[_contactSections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)]];
-    
-    int iCount = 0;
-    while (iCount < tmpArr.count) {
-        NSString *title = [tmpArr objectAtIndex: iCount];
-        if ([title isEqualToString:@"z#"]) {
-            [tmpArr replaceObjectAtIndex:iCount withObject:@"#"];
-            break;
-        }
-        iCount++;
-    }
-    return tmpArr;
-}
+//- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
+//    NSMutableArray *tmpArr = [[NSMutableArray alloc] initWithArray: [[_contactSections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)]];
+//
+//    int iCount = 0;
+//    while (iCount < tmpArr.count) {
+//        NSString *title = [tmpArr objectAtIndex: iCount];
+//        if ([title isEqualToString:@"z#"]) {
+//            [tmpArr replaceObjectAtIndex:iCount withObject:@"#"];
+//            break;
+//        }
+//        iCount++;
+//    }
+//    return tmpArr;
+//}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 60.0;
+    return 65.0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{

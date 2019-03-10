@@ -19,14 +19,13 @@
 @property (weak, nonatomic) IBOutlet UIView *_viewHeader;
 @property (weak, nonatomic) IBOutlet UIButton *_iconAll;
 @property (weak, nonatomic) IBOutlet UIButton *_iconPBX;
-@property (weak, nonatomic) IBOutlet UIButton *_iconSyncPBXContact;
 @property (weak, nonatomic) IBOutlet UITextField *_tfSearch;
 @property (weak, nonatomic) IBOutlet UIImageView *imgBackground;
 @property (weak, nonatomic) IBOutlet UIButton *_icClearSearch;
+@property (weak, nonatomic) IBOutlet UILabel *lbSepa;
 
 - (IBAction)_iconAllClicked:(id)sender;
 - (IBAction)_iconPBXClicked:(UIButton *)sender;
-- (IBAction)_iconSyncPBXContactClicked:(UIButton *)sender;
 - (IBAction)_icClearSearchClicked:(UIButton *)sender;
 
 @property (nonatomic, strong) NSMutableArray *_listSyncContact;

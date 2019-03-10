@@ -14,6 +14,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *_lbPhone;
 @property (weak, nonatomic) IBOutlet UILabel *_lbSepa;
 @property (weak, nonatomic) IBOutlet UIButton *icCall;
+@property (weak, nonatomic) IBOutlet UIButton *icVideoCall;
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated;
 

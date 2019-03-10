@@ -17,6 +17,7 @@
                 <outlet property="_tfSearch" destination="2Oy-gg-r4M" id="94m-TV-LMu"/>
                 <outlet property="_viewHeader" destination="aRW-A3-MKf" id="wYp-sX-hZd"/>
                 <outlet property="imgBackground" destination="mxP-38-pug" id="ccg-Ih-td2"/>
+                <outlet property="lbSepa" destination="9ue-Qh-FJE" id="NU3-lw-W3F"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -33,7 +34,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="320" height="77"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         </imageView>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="mTT-24-mhG">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="mTT-24-mhG">
                             <rect key="frame" x="26" y="2" width="136" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -50,7 +51,7 @@
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="I3y-t2-myS">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="I3y-t2-myS">
                             <rect key="frame" x="159" y="2" width="135" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -59,28 +60,28 @@
                                 <action selector="_iconPBXClicked:" destination="-1" eventType="touchUpInside" id="V70-xO-2dB"/>
                             </connections>
                         </button>
+                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="2Oy-gg-r4M">
+                            <rect key="frame" x="47" y="23" width="225" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <nil key="textColor"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits"/>
+                        </textField>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="hcr-xp-vhU">
+                            <rect key="frame" x="130" y="8" width="60" height="60"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" backgroundImage="tf_close_bg.png"/>
+                            <connections>
+                                <action selector="_icClearSearchClicked:" destination="-1" eventType="touchUpInside" id="NF2-Cq-NtM"/>
+                            </connections>
+                        </button>
                     </subviews>
                 </view>
-                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" id="2Oy-gg-r4M">
-                    <rect key="frame" x="47" y="62" width="225" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <nil key="textColor"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <textInputTraits key="textInputTraits"/>
-                </textField>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="hcr-xp-vhU">
-                    <rect key="frame" x="230" y="47" width="60" height="60"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" backgroundImage="tf_close_bg.png"/>
-                    <connections>
-                        <action selector="_icClearSearchClicked:" destination="-1" eventType="touchUpInside" id="NF2-Cq-NtM"/>
-                    </connections>
-                </button>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="-136" y="-295.05247376311848"/>
+            <point key="canvasLocation" x="-786" y="-295"/>
         </view>
     </objects>
     <resources>

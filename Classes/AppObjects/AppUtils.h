@@ -121,5 +121,6 @@
 + (void)setSelected: (BOOL)selected forButton: (UIButton *)button;
 + (NSString *)getTypeOfPhone: (NSString *)typePhone;
 + (UIImage *)imageWithImage:(UIImage *)sourceImage scaledToSize:(CGSize)targetSize;
++ (void)addBoxShadowForView: (UIView *)view withColor: (UIColor *)color;
 
 @end
