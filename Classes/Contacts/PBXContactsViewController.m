@@ -169,14 +169,14 @@
     }
     
     //  getSyncTitleContentWithFont
-    btnSyncContacts = [[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-marginLeft-150, 0, 100, headerView.frame.size.height)];
+    btnSyncContacts = [[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-10-100, 0, 100, headerView.frame.size.height)];
     btnSyncContacts.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     
     [btnSyncContacts setAttributedTitle:[self getSyncTitleContentWithFont:[UIFont systemFontOfSize:17.0 weight:UIFontWeightBold] andSizeIcon:20.0] forState:UIControlStateNormal];
     [headerView addSubview: btnSyncContacts];
     
     
-    lbAllContacts = [[UILabel alloc] initWithFrame:CGRectMake(marginLeft, 0, SCREEN_WIDTH-2*marginLeft-btnSyncContacts.frame.size.width-10.0, headerView.frame.size.height)];
+    lbAllContacts = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-2*marginLeft-btnSyncContacts.frame.size.width-10.0, headerView.frame.size.height)];
     lbAllContacts.font = [UIFont systemFontOfSize:17.0 weight:UIFontWeightBold];
     lbAllContacts.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     [headerView addSubview: lbAllContacts];
@@ -502,7 +502,7 @@
 - (NSAttributedString *)getSyncTitleContentWithFont: (UIFont *)textFont andSizeIcon: (float)size
 {
     CustomTextAttachment *attachment = [[CustomTextAttachment alloc] init];
-    attachment.image = [UIImage imageNamed:@"syne.png"];
+    attachment.image = [UIImage imageNamed:@"sync.png"];
     [attachment setImageHeight: size];
     
     NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:attachment];

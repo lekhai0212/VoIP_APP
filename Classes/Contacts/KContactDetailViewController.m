@@ -81,6 +81,38 @@ static UICompositeViewDescription *compositeDescription = nil;
     waitingHud = [[YBHud alloc] initWithHudType:DGActivityIndicatorAnimationTypeLineScale andText:@""];
     waitingHud.tintColor = [UIColor whiteColor];
     waitingHud.dimAmount = 0.5;
+    
+//    UIBezierPath *path = [UIBezierPath new];
+//    [path moveToPoint: CGPointMake(0, 100)];
+//    [path addCurveToPoint:CGPointMake(SCREEN_WIDTH, 100) controlPoint1:CGPointMake(0, 100) controlPoint2:CGPointMake(SCREEN_WIDTH/2, 200)];
+//    [path closePath];
+    
+    
+    UIBezierPath *path = [UIBezierPath new];
+    [path moveToPoint: CGPointMake(0, 100)];
+    [path addLineToPoint: CGPointMake(0, 200)];
+    //  [path moveToPoint: CGPointMake(0, 200)];
+    [path addQuadCurveToPoint:CGPointMake(SCREEN_WIDTH, 200) controlPoint:CGPointMake(SCREEN_WIDTH/2, 300)];
+    [path addLineToPoint: CGPointMake(SCREEN_WIDTH, 100)];
+    [path closePath];
+    
+    //  [path addLineToPoint: CGPointMake(SCREEN_WIDTH, 100)];
+    CAShapeLayer *shapeLayer = [CAShapeLayer new];
+    shapeLayer.path = path.CGPath;
+    shapeLayer.fillColor = UIColor.orangeColor.CGColor;
+    //  [self.view.layer addSublayer:shapeLayer];
+    
+    
+    
+    CAGradientLayer *_gradientLayer = [CAGradientLayer layer];
+    _gradientLayer.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    _gradientLayer.startPoint = CGPointMake(0.0, 1);
+    _gradientLayer.endPoint = CGPointMake(1, 0);
+    _gradientLayer.colors = @[(id)[UIColor colorWithRed:(154/255.0) green:(215/255.0) blue:(9/255.0) alpha:1.0].CGColor, (id)[UIColor colorWithRed:(60/255.0) green:(198/255.0) blue:(116/255.0) alpha:1.0].CGColor];
+    
+    //Add gradient layer to view
+    [self.view.layer addSublayer:_gradientLayer];
+    _gradientLayer.mask = shapeLayer;
 }
 
 - (void)viewWillAppear:(BOOL)animated {

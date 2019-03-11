@@ -128,7 +128,7 @@
         marginLeft = 0.0;
     }
     
-    lbAllContacts = [[UILabel alloc] initWithFrame:CGRectMake(marginLeft, 0, SCREEN_WIDTH-2*marginLeft, hSection)];
+    lbAllContacts = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, hSection)];
     lbAllContacts.font = [UIFont systemFontOfSize:17.0 weight:UIFontWeightBold];
     lbAllContacts.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     [headerView addSubview: lbAllContacts];

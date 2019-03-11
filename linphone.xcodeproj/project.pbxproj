@@ -369,6 +369,7 @@
 		63FD3F121CA17FA400E9AECC /* libmbedx509.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63FD3F081CA17F9100E9AECC /* libmbedx509.a */; };
 		70E542F313E147E3002BA2C0 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70E542F213E147E3002BA2C0 /* OpenGLES.framework */; };
 		70E542F513E147EB002BA2C0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70E542F413E147EB002BA2C0 /* QuartzCore.framework */; };
+		840488EA2235629D002369F1 /* sync.png in Resources */ = {isa = PBXBuildFile; fileRef = 840488E92235629C002369F1 /* sync.png */; };
 		8404CD5121EDD13000C28E48 /* iPadContactDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8404CD4C21EDD12E00C28E48 /* iPadContactDetailViewController.xib */; };
 		8404CD5221EDD13000C28E48 /* iPadContactDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8404CD4D21EDD12E00C28E48 /* iPadContactDetailViewController.m */; };
 		8404CD5321EDD13000C28E48 /* iPadContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8404CD4F21EDD12F00C28E48 /* iPadContactsViewController.m */; };
@@ -645,7 +646,6 @@
 		84D23222223530C50015335B /* ic_search_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 84D23221223530C30015335B /* ic_search_gray.png */; };
 		84D23225223539FB0015335B /* contact_audio_call.png in Resources */ = {isa = PBXBuildFile; fileRef = 84D23223223539FB0015335B /* contact_audio_call.png */; };
 		84D23226223539FB0015335B /* contact_video_call.png in Resources */ = {isa = PBXBuildFile; fileRef = 84D23224223539FB0015335B /* contact_video_call.png */; };
-		84D232282235410E0015335B /* syne.png in Resources */ = {isa = PBXBuildFile; fileRef = 84D232272235410E0015335B /* syne.png */; };
 		84E067141FBE63E300C49F66 /* PBXContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E067131FBE63E300C49F66 /* PBXContact.m */; };
 		84E07EF72025DD8A0000CD12 /* callnex_ring.wav in Resources */ = {isa = PBXBuildFile; fileRef = 84E07EF02025DD890000CD12 /* callnex_ring.wav */; };
 		84E07EF92025E3160000CD12 /* silence.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 84E07EF82025E3150000CD12 /* silence.mp3 */; };
@@ -1435,6 +1435,7 @@
 		70E542F413E147EB002BA2C0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		7E599B9756B814FDA3BCCB7C /* Pods-linphoneTests.distributionadhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-linphoneTests.distributionadhoc.xcconfig"; path = "Pods/Target Support Files/Pods-linphoneTests/Pods-linphoneTests.distributionadhoc.xcconfig"; sourceTree = "<group>"; };
 		81B3173DDA19A03CB8EB76EC /* Pods-linphone.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-linphone.release.xcconfig"; path = "Pods/Target Support Files/Pods-linphone/Pods-linphone.release.xcconfig"; sourceTree = "<group>"; };
+		840488E92235629C002369F1 /* sync.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sync.png; sourceTree = "<group>"; };
 		8404CD4B21EDD12E00C28E48 /* iPadContactDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iPadContactDetailViewController.h; path = iPad/Contacts/iPadContactDetailViewController.h; sourceTree = "<group>"; };
 		8404CD4C21EDD12E00C28E48 /* iPadContactDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = iPadContactDetailViewController.xib; path = iPad/Contacts/iPadContactDetailViewController.xib; sourceTree = "<group>"; };
 		8404CD4D21EDD12E00C28E48 /* iPadContactDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = iPadContactDetailViewController.m; path = iPad/Contacts/iPadContactDetailViewController.m; sourceTree = "<group>"; };
@@ -1839,7 +1840,6 @@
 		84D23221223530C30015335B /* ic_search_gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_search_gray.png; sourceTree = "<group>"; };
 		84D23223223539FB0015335B /* contact_audio_call.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = contact_audio_call.png; sourceTree = "<group>"; };
 		84D23224223539FB0015335B /* contact_video_call.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = contact_video_call.png; sourceTree = "<group>"; };
-		84D232272235410E0015335B /* syne.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = syne.png; sourceTree = "<group>"; };
 		84E067121FBE63E300C49F66 /* PBXContact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PBXContact.h; path = AppObjects/PBXContact.h; sourceTree = "<group>"; };
 		84E067131FBE63E300C49F66 /* PBXContact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PBXContact.m; path = AppObjects/PBXContact.m; sourceTree = "<group>"; };
 		84E07EF02025DD890000CD12 /* callnex_ring.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = callnex_ring.wav; sourceTree = "<group>"; };
@@ -3104,7 +3104,7 @@
 		633FEBE11D3CD5570014B822 /* images */ = {
 			isa = PBXGroup;
 			children = (
-				84D232272235410E0015335B /* syne.png */,
+				840488E92235629C002369F1 /* sync.png */,
 				84D23223223539FB0015335B /* contact_audio_call.png */,
 				84D23224223539FB0015335B /* contact_video_call.png */,
 				84D23221223530C30015335B /* ic_search_gray.png */,
@@ -4553,7 +4553,6 @@
 				84C1E22A1FAEB94500EED0B9 /* vi.txt in Resources */,
 				D38187D115FE346B00C3EDCA /* HistoryListView.xib in Resources */,
 				8414C3CE21EB235500F54DD1 /* call_hotline.png in Resources */,
-				84D232282235410E0015335B /* syne.png in Resources */,
 				8414C3D421EB23FD00F54DD1 /* facebook.png in Resources */,
 				8404CD5421EDD13000C28E48 /* iPadContactsViewController.xib in Resources */,
 				84969C30222BAF51008C7E1B /* ic_muted_red.png in Resources */,
@@ -4605,6 +4604,7 @@
 				84D2320022350A720015335B /* numpad_one_hover.png in Resources */,
 				8454877B221864400065E3A4 /* iPadEditProfileViewController.xib in Resources */,
 				84515E67200EEE1A007246E9 /* msg.wav in Resources */,
+				840488EA2235629D002369F1 /* sync.png in Resources */,
 				639E9CAC1C0DB80300019A75 /* UIContactDetailsCell.xib in Resources */,
 				841EB1662169818E00B59B8E /* add_call.png in Resources */,
 				84D2321522350A720015335B /* numpad_eight_hover.png in Resources */,
