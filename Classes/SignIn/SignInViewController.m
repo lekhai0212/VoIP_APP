@@ -10,13 +10,31 @@
 #import "QRCodeReaderViewController.h"
 #import "QRCodeReader.h"
 #import "CustomTextAttachment.h"
+#import <CommonCrypto/CommonDigest.h>
 
 @interface SignInViewController (){
     QRCodeReaderViewController *scanQRCodeVC;
     UIButton *btnScanFromPhoto;
     UIActivityIndicatorView *icWaiting;
+    
+    WebServices *webService;
 }
+@end
 
+@implementation NSString (MD5)
+- (NSString *)MD5String {
+    const char *cstr = [self UTF8String];
+    unsigned char result[16];
+    CC_MD5(cstr, (int)strlen(cstr), result);
+    
+    return [NSString stringWithFormat:
+            @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
+            result[0], result[1], result[2], result[3],
+            result[4], result[5], result[6], result[7],
+            result[8], result[9], result[10], result[11],
+            result[12], result[13], result[14], result[15]
+            ];
+}
 @end
 
 @implementation SignInViewController
@@ -69,6 +87,10 @@ static UICompositeViewDescription *compositeDescription = nil;
     nhcla151/5obr8jHH2q
     nhcla152/FNn1bHF12z
     nhcla153/qkprudKnm9 */
+    
+    //  Init for webservice
+    webService = [[WebServices alloc] init];
+    webService.delegate = self;
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -705,6 +727,46 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (IBAction)btnStartPress:(UIButton *)sender {
+    
+//    NSMutableDictionary *jsonDict = [[NSMutableDictionary alloc] init];
+//    [jsonDict setObject:@"nhcla150" forKey:@"userName"];
+//    [jsonDict setObject:@"f7NnFKI1Kv" forKey:@"password"];
+//    [jsonDict setObject:@"2" forKey:@"clientid"];
+//    [jsonDict setObject:@"iOS10" forKey:@"versionos"];
+//    [jsonDict setObject:@"1.0(1)" forKey:@"versionapp"];
+//    [jsonDict setObject:@"iphone6" forKey:@"devicename"];
+//
+//
+//    NSString *total = [NSString stringWithFormat:@"%@%@", @"nhcla150", @"f7NnFKI1Kv"];
+//    NSString *md5Str = [[total MD5String] lowercaseString];
+//    NSString *hashcode = [NSString stringWithFormat:@"%@%@", @"nhcla", md5Str];
+//
+//    [jsonDict setObject:hashcode forKey:@"hashcode"];
+//    [webService callWebServiceWithLink:@"Login" withParams:jsonDict];
+    
+    //  [webService callGETWebServiceWithParams:[NSString stringWithFormat:@"userName=%@&password=%@", @"nhcla150",@"f7NnFKI1Kv"]];
+    [webService callGETWebServiceWithParams:[NSString stringWithFormat:@"userName=%@", @"nhcla150"]];
+    /*
+     
+     - clientid: 1:web    2:app …..     hoac 1: android    2:ios ….
+     - versionos: phiên bản hệ điều hành (vd: iOS12, Android 9)
+     - versionapp: phiên bản ứng dụng ( vd: 1.0.0(1) )
+     - devicename: tên máy (vd: samsung s10+ SM-G975F)
+     - hashcode: mã hash bảo mật do mình qui định, mã này phải khớp giữa client và server thì mới cho call api
+     
+     efbfc415b5ae0a5e057537549f22054c
+     
+     clientid = 2;
+     devicename = iphone6;
+     hashcode = nhclaefbfc415b5ae0a5e057537549f22054c;
+     password = f7NnFKI1Kv;
+     userName = nhcla150;
+     versionapp = "1.0(1)";
+     versionos = iOS10;
+    */
+    
+    return;
+    
     sender.enabled = NO;
     [sender setTitleColor:[UIColor colorWithRed:(60/255.0) green:(198/255.0) blue:(116/255.0) alpha:1.0]
                  forState:UIControlStateNormal];
@@ -761,6 +823,22 @@ static UICompositeViewDescription *compositeDescription = nil;
     //
     [verString appendAttributedString: contentString];
     return verString;
+}
+
+#pragma mark - Webservice Delegate
+
+- (void)failedToCallWebService:(NSString *)link andError:(NSString *)error
+{
+    NSLog(@"%@", error);
+}
+
+- (void)successfulToCallWebService:(NSString *)link withData:(NSDictionary *)data
+{
+    NSLog(@"%@", data);
+}
+
+- (void)receivedResponeCode:(NSString *)link withCode:(int)responeCode {
+    NSLog(@"%d", responeCode);
 }
 
 @end

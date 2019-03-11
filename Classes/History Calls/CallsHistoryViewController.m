@@ -22,7 +22,7 @@
 @end
 
 @implementation CallsHistoryViewController
-@synthesize _viewHeader, _btnEdit, _iconAll, _iconMissed, bgHeader;
+@synthesize _viewHeader, _btnEdit, _iconAll, _iconMissed, bgHeader, lbSepa;
 @synthesize _pageViewController, _vcIndex;
 
 #pragma mark - UICompositeViewDelegate Functions
@@ -56,8 +56,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetUIForView)
                                                  name:k11ReloadAfterDeleteAllCall object:nil];
     
-    //  Cập nhật nhãn delete khi xoá lịch sử cuộc gọi
-    self.view.backgroundColor = UIColor.clearColor;
+    self.view.backgroundColor = UIColor.whiteColor;
     
     [self autoLayoutForView];
     currentView = eAllCalls;
@@ -116,12 +115,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear: animated];
-    
-    [AppUtils addCornerRadiusTopLeftAndBottomLeftForButton:_iconAll radius:(hIcon-10)/2
-                                                 withColor:SELECT_TAB_BG_COLOR border:2.0];
-    
-    [AppUtils addCornerRadiusTopRightAndBottomRightForButton:_iconMissed radius:(hIcon-10)/2
-                                                   withColor:SELECT_TAB_BG_COLOR border:2.0];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -211,11 +204,15 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)updateStateIconWithView: (int)view
 {
     if (view == eAllCalls){
-        [AppUtils setSelected: YES forButton: _iconAll];
-        [AppUtils setSelected: NO forButton: _iconMissed];
+        [_iconAll setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+        [_iconMissed setTitleColor:[UIColor colorWithRed:(220/255.0) green:(220/255.0)
+                                                    blue:(220/255.0) alpha:1.0]
+                          forState:UIControlStateNormal];
     }else{
-        [AppUtils setSelected: NO forButton: _iconAll];
-        [AppUtils setSelected: YES forButton: _iconMissed];
+        [_iconAll setTitleColor:[UIColor colorWithRed:(220/255.0) green:(220/255.0)
+                                                 blue:(220/255.0) alpha:1.0]
+                       forState:UIControlStateNormal];
+        [_iconMissed setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     }
 }
 
@@ -228,35 +225,55 @@ static UICompositeViewDescription *compositeDescription = nil;
         textFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
     }
     
+    float hHeader = [LinphoneAppDelegate sharedInstance]._hRegistrationState;
+    float hButton = 40.0;
+    float padding = 30.0;
+    
     hIcon = [LinphoneAppDelegate sharedInstance]._hRegistrationState - [LinphoneAppDelegate sharedInstance]._hStatus;
     
     [_viewHeader mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self.view);
-        make.height.mas_equalTo([LinphoneAppDelegate sharedInstance]._hRegistrationState);
+        make.height.mas_equalTo(hHeader);
     }];
     
     [bgHeader mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.bottom.right.equalTo(_viewHeader);
     }];
     
-    _iconAll.backgroundColor = [UIColor colorWithRed:0.169 green:0.53 blue:0.949 alpha:1.0];
+    float marginTop = [LinphoneAppDelegate sharedInstance]._hStatus + (hHeader - [LinphoneAppDelegate sharedInstance]._hStatus - hButton)/ 2;
+    
+    lbSepa.backgroundColor = [UIColor colorWithRed:(220/255.0) green:(220/255.0)
+                                              blue:(220/255.0) alpha:1.0];
+    [lbSepa mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_viewHeader).offset(marginTop + 10);
+        make.centerX.equalTo(_viewHeader.mas_centerX);
+        make.width.mas_equalTo(1.0);
+        make.height.mas_equalTo(hButton - 20);
+    }];
+    
+    _iconAll.backgroundColor = UIColor.clearColor;
+    _iconAll.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     [_iconAll setTitle:[[LanguageUtil sharedInstance] getContent:@"All"] forState:UIControlStateNormal];
     [_iconAll setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+    _iconAll.titleLabel.font = [UIFont systemFontOfSize:16.0 weight:UIFontWeightBold];
     [_iconAll mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_viewHeader).offset([LinphoneAppDelegate sharedInstance]._hStatus+5);
-        make.right.equalTo(_viewHeader.mas_centerX);
-        make.height.mas_equalTo(hIcon-10);
-        make.width.mas_equalTo(SCREEN_WIDTH/4);
+        make.right.equalTo(lbSepa.mas_left).offset(-padding);
+        make.top.equalTo(_viewHeader).offset(marginTop);
+        make.width.mas_equalTo(100);
+        make.height.mas_equalTo(hButton);
     }];
     
     _iconMissed.backgroundColor = UIColor.clearColor;
+    _iconMissed.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [_iconMissed setTitle:[[LanguageUtil sharedInstance] getContent:@"Missed"] forState:UIControlStateNormal];
-    [_iconMissed setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+    [_iconMissed setTitleColor:[UIColor colorWithRed:(220/255.0) green:(220/255.0)
+                                                blue:(220/255.0) alpha:1.0]
+                      forState:UIControlStateNormal];
+    _iconMissed.titleLabel.font = _iconAll.titleLabel.font;
     [_iconMissed mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_viewHeader.mas_centerX);
         make.top.bottom.equalTo(_iconAll);
+        make.left.equalTo(lbSepa.mas_right).offset(padding);
         make.width.equalTo(_iconAll.mas_width);
-        make.height.equalTo(_iconAll.mas_height);
     }];
     
     [_btnEdit mas_makeConstraints:^(MASConstraintMaker *make) {

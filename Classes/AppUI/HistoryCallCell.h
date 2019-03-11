@@ -20,10 +20,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *_btnCall;
 @property (weak, nonatomic) IBOutlet UILabel *_lbSepa;
 @property (weak, nonatomic) IBOutlet UILabel *_lbPhone;
+@property (weak, nonatomic) IBOutlet UILabel *lbDate;
 
 @property (nonatomic, strong) NSString *_phoneNumber;
 @property (weak, nonatomic) IBOutlet UILabel *lbTime;
-@property (weak, nonatomic) IBOutlet UILabel *lbDuration;
 
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated;
 //  [Khai le - 03/11/2018]

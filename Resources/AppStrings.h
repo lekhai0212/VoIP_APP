@@ -147,7 +147,7 @@
 
 #pragma mark - API
 
-#define link_api                @"https://wssf.cloudfone.vn/api/SoftPhone"
+#define link_api                @"https://api.cloudcall.vn"
 
 #define getServerInfoFunc       @"GetServerInfo"
 #define getServerContacts       @"GetServerContacts"

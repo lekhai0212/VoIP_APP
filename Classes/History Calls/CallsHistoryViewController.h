@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UIView *_viewHeader;
 @property (weak, nonatomic) IBOutlet UIImageView *bgHeader;
 @property (weak, nonatomic) IBOutlet UIButton *_btnEdit;
+@property (weak, nonatomic) IBOutlet UILabel *lbSepa;
 
 @property (weak, nonatomic) IBOutlet UIButton *_iconAll;
 @property (weak, nonatomic) IBOutlet UIButton *_iconMissed;

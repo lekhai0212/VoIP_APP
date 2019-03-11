@@ -9,7 +9,7 @@
 #import "UICompositeView.h"
 #import "QRCodeReaderDelegate.h"
 
-@interface SignInViewController : UIViewController<UICompositeViewDelegate, QRCodeReaderDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface SignInViewController : UIViewController<UICompositeViewDelegate, QRCodeReaderDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, WebServicesDelegate>
 
 //  Welcome view
 @property (weak, nonatomic) IBOutlet UIView *viewWelcome;

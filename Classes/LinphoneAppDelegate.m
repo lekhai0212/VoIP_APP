@@ -190,7 +190,7 @@
                     [[NSUserDefaults standardUserDefaults] removeObjectForKey:UserActivity];
                     [[NSUserDefaults standardUserDefaults] synchronize];
                     
-                    [self.window makeToast:[localization localizedStringForKey:@"You have not signed your account yet"] duration:3.0 position:CSToastPositionCenter];
+                    [self.window makeToast:[[LanguageUtil sharedInstance] getContent:@"You have not signed your account yet"] duration:3.0 position:CSToastPositionCenter];
                     [self performSelector:@selector(hideSplashScreen) withObject:nil afterDelay:3.0];
                     
                     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"Call with UserActivity phone number = %@, but have not signed with any account", phoneNumber] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
@@ -201,7 +201,7 @@
                 {
                     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"Call with UserActivity phone number = %@, but current account was off", phoneNumber] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
                     
-                    UIAlertView *alertAcc = [[UIAlertView alloc] initWithTitle:nil message:[localization localizedStringForKey:@"Your account was turned off. Do you want to enable and call?"] delegate:self cancelButtonTitle:[localization localizedStringForKey:@"No"] otherButtonTitles: [localization localizedStringForKey:@"Yes"], nil];
+                    UIAlertView *alertAcc = [[UIAlertView alloc] initWithTitle:nil message:[[LanguageUtil sharedInstance] getContent:@"Your account was turned off. Do you want to enable and call?"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"No"] otherButtonTitles: [[LanguageUtil sharedInstance] getContent:@"Yes"], nil];
                     alertAcc.delegate = self;
                     alertAcc.tag = 100;
                     [alertAcc show];
@@ -744,7 +744,7 @@ void onUncaughtException(NSException* exception)
             caller = contact.name;
         }
         
-        NSString *content = [NSString stringWithFormat:[localization localizedStringForKey:@"You have a call from %@"], caller];
+        NSString *content = [NSString stringWithFormat:@"Bạn có cuộc gọi từ %@", caller];
         
         UILocalNotification *messageNotif = [[UILocalNotification alloc] init];
         messageNotif.fireDate = [NSDate dateWithTimeIntervalSinceNow: 0.1];
@@ -1879,7 +1879,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             if (locLabel == nil) {
                 ContactDetailObj *anItem = [[ContactDetailObj alloc] init];
                 anItem._iconStr = @"btn_contacts_home.png";
-                anItem._titleStr = [localization localizedStringForKey:@"Home"];
+                anItem._titleStr = [[LanguageUtil sharedInstance] getContent:@"Home"];
                 anItem._valueStr = [AppUtils removeAllSpecialInString: phoneNumber];
                 anItem._buttonStr = @"contact_detail_icon_call.png";
                 anItem._typePhone = type_phone_home;
@@ -1888,7 +1888,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 if (CFStringCompare(locLabel, kABHomeLabel, 0) == kCFCompareEqualTo) {
                     ContactDetailObj *anItem = [[ContactDetailObj alloc] init];
                     anItem._iconStr = @"btn_contacts_home.png";
-                    anItem._titleStr = [localization localizedStringForKey:@"Home"];
+                    anItem._titleStr = [[LanguageUtil sharedInstance] getContent:@"Home"];
                     anItem._valueStr = [AppUtils removeAllSpecialInString: phoneNumber];
                     anItem._buttonStr = @"contact_detail_icon_call.png";
                     anItem._typePhone = type_phone_home;
@@ -1897,7 +1897,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 {
                     ContactDetailObj *anItem = [[ContactDetailObj alloc] init];
                     anItem._iconStr = @"btn_contacts_work.png";
-                    anItem._titleStr = [localization localizedStringForKey:@"Work"];
+                    anItem._titleStr = [[LanguageUtil sharedInstance] getContent:@"Work"];
                     anItem._valueStr = [AppUtils removeAllSpecialInString: phoneNumber];
                     anItem._buttonStr = @"contact_detail_icon_call.png";
                     anItem._typePhone = type_phone_work;
@@ -1906,7 +1906,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 {
                     ContactDetailObj *anItem = [[ContactDetailObj alloc] init];
                     anItem._iconStr = @"btn_contacts_mobile.png";
-                    anItem._titleStr = [localization localizedStringForKey:@"Mobile"];
+                    anItem._titleStr = [[LanguageUtil sharedInstance] getContent:@"Mobile"];
                     anItem._valueStr = [AppUtils removeAllSpecialInString: phoneNumber];
                     anItem._buttonStr = @"contact_detail_icon_call.png";
                     anItem._typePhone = type_phone_mobile;
@@ -1915,7 +1915,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 {
                     ContactDetailObj *anItem = [[ContactDetailObj alloc] init];
                     anItem._iconStr = @"btn_contacts_fax.png";
-                    anItem._titleStr = [localization localizedStringForKey:@"Fax"];
+                    anItem._titleStr = [[LanguageUtil sharedInstance] getContent:@"Fax"];
                     anItem._valueStr = [AppUtils removeAllSpecialInString: phoneNumber];
                     anItem._buttonStr = @"contact_detail_icon_call.png";
                     anItem._typePhone = type_phone_fax;
@@ -1924,7 +1924,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 {
                     ContactDetailObj *anItem = [[ContactDetailObj alloc] init];
                     anItem._iconStr = @"btn_contacts_fax.png";
-                    anItem._titleStr = [localization localizedStringForKey:@"Other"];
+                    anItem._titleStr = [[LanguageUtil sharedInstance] getContent:@"Other"];
                     anItem._valueStr = [AppUtils removeAllSpecialInString: phoneNumber];
                     anItem._buttonStr = @"contact_detail_icon_call.png";
                     anItem._typePhone = type_phone_other;
@@ -1932,7 +1932,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 }else{
                     ContactDetailObj *anItem = [[ContactDetailObj alloc] init];
                     anItem._iconStr = @"btn_contacts_mobile.png";
-                    anItem._titleStr = [localization localizedStringForKey:@"Mobile"];
+                    anItem._titleStr = [[LanguageUtil sharedInstance] getContent:@"Mobile"];
                     anItem._valueStr = [AppUtils removeAllSpecialInString: phoneNumber];
                     anItem._buttonStr = @"contact_detail_icon_call.png";
                     anItem._typePhone = type_phone_mobile;
@@ -1990,45 +1990,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
 }
 
-//- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
-//{
-//    INInteraction *interaction = userActivity.interaction;
-//    if (interaction != nil) {
-//        INStartAudioCallIntent *startAudioCallIntent = (INStartAudioCallIntent *)interaction.intent;
-//        if (startAudioCallIntent != nil && startAudioCallIntent.contacts.count > 0) {
-//            INPerson *contact = startAudioCallIntent.contacts[0];
-//            if (contact != nil) {
-//                INPersonHandle *personHandle = contact.personHandle;
-//                NSString *phoneNumber = personHandle.value;
-//                if (![AppUtils isNullOrEmpty: phoneNumber])
-//                {
-//                    phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
-//                    if ([AppUtils isNullOrEmpty: phoneNumber]) {
-//                        [self showSplashScreenOnView: NO];
-//                    }else{
-//                        [self showSplashScreenOnView: YES];
-//
-//                        [[NSUserDefaults standardUserDefaults] setObject:phoneNumber forKey:UserActivity];
-//                        [[NSUserDefaults standardUserDefaults] synchronize];
-//                    }
-//                }
-//            }
-//        }
-//    }
-//    return YES;
-//}
-
-- (void)showSplashScreenOnView: (BOOL)show {
-    if (splashScreen == nil) {
-        UINib *nib = [UINib nibWithNibName:@"LaunchScreen" bundle:nil];
-        splashScreen = [[nib instantiateWithOwner:self options:nil] objectAtIndex:0];
-        [self.window addSubview:splashScreen];
-    }
-    splashScreen.frame = [UIScreen mainScreen].bounds;
-    splashScreen.hidden = !show;
-}
-
--(BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
 {
     INInteraction *interaction = userActivity.interaction;
     if (interaction != nil) {
@@ -2055,6 +2017,44 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
     return YES;
 }
+
+- (void)showSplashScreenOnView: (BOOL)show {
+    if (splashScreen == nil) {
+        UINib *nib = [UINib nibWithNibName:@"LaunchScreen" bundle:nil];
+        splashScreen = [[nib instantiateWithOwner:self options:nil] objectAtIndex:0];
+        [self.window addSubview:splashScreen];
+    }
+    splashScreen.frame = [UIScreen mainScreen].bounds;
+    splashScreen.hidden = !show;
+}
+
+//-(BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+//{
+//    INInteraction *interaction = userActivity.interaction;
+//    if (interaction != nil) {
+//        INStartAudioCallIntent *startAudioCallIntent = (INStartAudioCallIntent *)interaction.intent;
+//        if (startAudioCallIntent != nil && startAudioCallIntent.contacts.count > 0) {
+//            INPerson *contact = startAudioCallIntent.contacts[0];
+//            if (contact != nil) {
+//                INPersonHandle *personHandle = contact.personHandle;
+//                NSString *phoneNumber = personHandle.value;
+//                if (![AppUtils isNullOrEmpty: phoneNumber])
+//                {
+//                    phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
+//                    if ([AppUtils isNullOrEmpty: phoneNumber]) {
+//                        [self showSplashScreenOnView: NO];
+//                    }else{
+//                        [self showSplashScreenOnView: YES];
+//
+//                        [[NSUserDefaults standardUserDefaults] setObject:phoneNumber forKey:UserActivity];
+//                        [[NSUserDefaults standardUserDefaults] synchronize];
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    return YES;
+//}
 
 #pragma mark - sync contact xmpp
 

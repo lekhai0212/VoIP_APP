@@ -219,7 +219,7 @@
     cell.lbTime.text = strTime;
     cell.lbTime.text = aCall._callTime;
     
-    cell.lbDuration.text = [AppUtils convertDurtationToString: aCall.duration];
+    cell.lbDate.text = aCall._callDate;
     
     if (isDeleted) {
         cell._cbDelete.hidden = NO;

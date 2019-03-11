@@ -228,9 +228,9 @@
     
     cell.lbTime.text = aCall._callTime;
     if (aCall.duration < 60) {
-        cell.lbDuration.text = [NSString stringWithFormat:@"%ld %@", aCall.duration, [[LanguageUtil sharedInstance] getContent:@"sec"]];
+        //  cell.lbDuration.text = [NSString stringWithFormat:@"%ld %@", aCall.duration, [[LanguageUtil sharedInstance] getContent:@"sec"]];
     }else{
-        cell.lbDuration.text = [NSString stringWithFormat:@"%ld s", aCall.duration];
+        //  cell.lbDuration.text = [NSString stringWithFormat:@"%ld s", aCall.duration];
     }
     
     if (isDeleted) {

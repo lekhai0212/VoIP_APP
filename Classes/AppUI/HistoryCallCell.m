@@ -9,21 +9,24 @@
 #import "HistoryCallCell.h"
 
 @implementation HistoryCallCell
-@synthesize _cbDelete, _imgAvatar, _imgStatus, _lbName, _btnCall, _lbSepa, _lbPhone, lbDuration, lbMissed;
+@synthesize _cbDelete, _imgAvatar, _imgStatus, _lbName, _btnCall, _lbSepa, _lbPhone, lbDate, lbMissed;
 @synthesize _phoneNumber;
 
 - (void)awakeFromNib {
     [super awakeFromNib];
+    
+    UIColor *textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
+    
     if (self.frame.size.width > 320) {
-        _lbName.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:19.0];
-        _lbPhone.font = [UIFont fontWithName:HelveticaNeueItalic size:16.0];
-        _lbTime.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
-        lbDuration.font = [UIFont fontWithName:HelveticaNeueItalic size:16.0];
+        _lbName.font = [UIFont systemFontOfSize:17.0 weight:UIFontWeightBold];
+        _lbPhone.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
+        _lbTime.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
+        lbDate.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
     }else{
-        _lbName.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
-        _lbPhone.font = [UIFont fontWithName:HelveticaNeueItalic size:14.0];
-        _lbTime.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:14.0];
-        lbDuration.font = [UIFont fontWithName:HelveticaNeueItalic size:14.0];
+        _lbName.font = [UIFont systemFontOfSize:17.0 weight:UIFontWeightBold];
+        _lbPhone.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
+        _lbTime.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
+        lbDate.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
     }
     
     _imgAvatar.clipsToBounds = YES;
@@ -48,51 +51,54 @@
     lbMissed.textColor = UIColor.whiteColor;
     lbMissed.textAlignment = NSTextAlignmentCenter;
     
+    _btnCall.imageEdgeInsets = UIEdgeInsetsMake(3, 3, 3, 3);
+    [_btnCall mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self).offset(-10);
+        make.centerY.equalTo(self.mas_centerY);
+        make.width.height.mas_equalTo(42.0);
+    }];
+    
+    lbDate.textColor = textColor;
+    [lbDate mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_imgAvatar.mas_top);
+        make.right.equalTo(_btnCall.mas_left).offset(-10.0);
+        make.bottom.equalTo(_imgAvatar.mas_centerY);
+        make.width.mas_equalTo(100.0);
+    }];
+    
+    _lbTime.textColor = textColor;
+    [_lbTime mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(lbDate.mas_bottom);
+        make.left.right.equalTo(lbDate);
+        make.bottom.equalTo(_imgAvatar.mas_bottom);
+    }];
+    
+    _lbName.textColor = textColor;
+    [_lbName mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_imgAvatar);
+        make.left.equalTo(_imgAvatar.mas_right).offset(5.0);
+        make.bottom.equalTo(_imgAvatar.mas_centerY);
+        make.right.equalTo(lbDate.mas_left).offset(-5.0);
+    }];
+    
     _imgStatus.clipsToBounds = YES;
     _imgStatus.layer.cornerRadius = 17.0/2;
     _imgStatus.layer.borderColor = UIColor.whiteColor.CGColor;
     _imgStatus.layer.borderWidth = 1.0;
     
     [_imgStatus mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_imgAvatar.mas_right).offset(-16);
-        make.top.equalTo(_imgAvatar.mas_bottom).offset(-15);
+        make.centerY.equalTo(_lbTime.mas_centerY);
+        make.left.equalTo(_lbName);
         make.width.height.mas_equalTo(17.0);
     }];
+
     
-    [_btnCall setBackgroundImage:[UIImage imageNamed:@"ic_call_history_over.png"]
-                        forState:UIControlStateHighlighted];
-    [_btnCall mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self).offset(-10);
-        make.centerY.equalTo(self.mas_centerY);
-        make.width.height.mas_equalTo(35.0);
-    }];
-    
-    [_lbTime mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_imgAvatar);
-        make.bottom.equalTo(_imgAvatar.mas_centerY);
-        make.right.equalTo(_btnCall.mas_left).offset(-5);
-        make.width.mas_equalTo(80.0);
-    }];
-    
-    lbDuration.textColor = _lbPhone.textColor;
-    [lbDuration mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_lbTime.mas_bottom);
-        make.right.equalTo(_lbTime);
-        make.bottom.equalTo(_imgAvatar.mas_bottom);
-        make.width.mas_equalTo(150.0);
-    }];
-    
-    [_lbName mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_imgAvatar).offset(4);
-        make.left.equalTo(_imgAvatar.mas_right).offset(5);
-        make.bottom.equalTo(_imgAvatar.mas_centerY);
-        make.right.equalTo(_lbTime.mas_left).offset(-5);
-    }];
-    
+    _lbPhone.textColor = textColor;
     [_lbPhone mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_lbName.mas_bottom);
-        make.left.right.equalTo(_lbName);
-        make.bottom.equalTo(lbDuration.mas_bottom);
+        make.left.equalTo(_imgStatus).offset(3.0);
+        make.right.equalTo(_lbName);
+        make.bottom.equalTo(_imgAvatar.mas_bottom);
     }];
     
     _lbSepa.backgroundColor = [UIColor colorWithRed:(235/255.0) green:(235/255.0)

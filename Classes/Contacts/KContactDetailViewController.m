@@ -11,10 +11,8 @@
 #import "UIContactPhoneCell.h"
 #import "JSONKit.h"
 #import "NSData+Base64.h"
-#import <CommonCrypto/CommonDigest.h>
 #import "TypePhoneContact.h"
 #import "ContactDetailObj.h"
-#import "EditContactViewController.h"
 
 @interface KContactDetailViewController (){
     LinphoneAppDelegate *appDelegate;
@@ -27,27 +25,8 @@
 }
 @end
 
-@implementation NSString (MD5)
-
-- (NSString *)MD5String {
-    const char *cstr = [self UTF8String];
-    unsigned char result[16];
-    CC_MD5(cstr, (int)strlen(cstr), result);
-    
-    return [NSString stringWithFormat:
-            @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
-            result[0], result[1], result[2], result[3],
-            result[4], result[5], result[6], result[7],
-            result[8], result[9], result[10], result[11],
-            result[12], result[13], result[14], result[15]
-            ];
-}
-
-@end
-
 @implementation KContactDetailViewController
-@synthesize _viewHeader, _iconBack, _lbTitle, _iconEdit, _imgAvatar, _lbContactName;
-@synthesize _tbContactInfo, buttonCallPBX;
+@synthesize _viewHeader, _iconBack, _imgAvatar, _lbContactName, _tbContactInfo;
 @synthesize detailsContact;
 
 #pragma mark - UICompositeViewDelegate Functions
@@ -81,46 +60,12 @@ static UICompositeViewDescription *compositeDescription = nil;
     waitingHud = [[YBHud alloc] initWithHudType:DGActivityIndicatorAnimationTypeLineScale andText:@""];
     waitingHud.tintColor = [UIColor whiteColor];
     waitingHud.dimAmount = 0.5;
-    
-//    UIBezierPath *path = [UIBezierPath new];
-//    [path moveToPoint: CGPointMake(0, 100)];
-//    [path addCurveToPoint:CGPointMake(SCREEN_WIDTH, 100) controlPoint1:CGPointMake(0, 100) controlPoint2:CGPointMake(SCREEN_WIDTH/2, 200)];
-//    [path closePath];
-    
-    
-    UIBezierPath *path = [UIBezierPath new];
-    [path moveToPoint: CGPointMake(0, 100)];
-    [path addLineToPoint: CGPointMake(0, 200)];
-    //  [path moveToPoint: CGPointMake(0, 200)];
-    [path addQuadCurveToPoint:CGPointMake(SCREEN_WIDTH, 200) controlPoint:CGPointMake(SCREEN_WIDTH/2, 300)];
-    [path addLineToPoint: CGPointMake(SCREEN_WIDTH, 100)];
-    [path closePath];
-    
-    //  [path addLineToPoint: CGPointMake(SCREEN_WIDTH, 100)];
-    CAShapeLayer *shapeLayer = [CAShapeLayer new];
-    shapeLayer.path = path.CGPath;
-    shapeLayer.fillColor = UIColor.orangeColor.CGColor;
-    //  [self.view.layer addSublayer:shapeLayer];
-    
-    
-    
-    CAGradientLayer *_gradientLayer = [CAGradientLayer layer];
-    _gradientLayer.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-    _gradientLayer.startPoint = CGPointMake(0.0, 1);
-    _gradientLayer.endPoint = CGPointMake(1, 0);
-    _gradientLayer.colors = @[(id)[UIColor colorWithRed:(154/255.0) green:(215/255.0) blue:(9/255.0) alpha:1.0].CGColor, (id)[UIColor colorWithRed:(60/255.0) green:(198/255.0) blue:(116/255.0) alpha:1.0].CGColor];
-    
-    //Add gradient layer to view
-    [self.view.layer addSublayer:_gradientLayer];
-    _gradientLayer.mask = shapeLayer;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     [WriteLogsUtils writeForGoToScreen: @"KContactDetailViewController"];
-    
-    _lbTitle.text = [[LanguageUtil sharedInstance] getContent:@"Contact info"];
     
     // Tắt màn hình cảm biến
     UIDevice *device = [UIDevice currentDevice];
@@ -166,8 +111,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)viewDidUnload {
     [self set_iconBack:nil];
-    [self set_lbTitle:nil];
-    [self set_iconEdit:nil];
     [self set_imgAvatar:nil];
     [self set_lbContactName:nil];
     [self set_tbContactInfo:nil];
@@ -178,82 +121,46 @@ static UICompositeViewDescription *compositeDescription = nil;
     [[PhoneMainView instance] popCurrentView];
 }
 
-- (IBAction)_iconEditClicked:(id)sender
-{
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
-                         toFilePath:appDelegate.logFilePath];
-    
-    EditContactViewController *controller = VIEW(EditContactViewController);
-    if (controller != nil) {
-        controller.idContact = detailsContact._id_contact;
-        controller.curPhoneNumber = @"";
-    }
-    [[PhoneMainView instance] changeCurrentView:[EditContactViewController compositeViewDescription] push:true];
-}
-
-- (IBAction)buttonCallPBXPressed:(UIButton *)sender {
-}
-
 #pragma mark - my functions
 
 - (void)autoLayoutForView
 {
-    self.view.backgroundColor = [UIColor colorWithRed:(230/255.0) green:(230/255.0)
-                                                 blue:(230/255.0) alpha:1.0];
+    self.view.backgroundColor = UIColor.whiteColor;
     if (SCREEN_WIDTH > 320) {
-        hCell = 55.0;
-        _lbTitle.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:20.0];
+        hCell = 70.0;
     }else{
-        hCell = 45.0;
-        _lbTitle.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
+        hCell = 60.0;
     }
     
     //  header
+    float hHeader = 180+[LinphoneAppDelegate sharedInstance]._hStatus;
+    _viewHeader.backgroundColor = UIColor.clearColor;
     [_viewHeader mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self.view);
-        make.height.mas_equalTo(230+[LinphoneAppDelegate sharedInstance]._hStatus);
-    }];
-    
-    [_bgHeader mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.left.bottom.right.equalTo(_viewHeader);
-    }];
-    
-    [_lbTitle mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_viewHeader).offset(appDelegate._hStatus);
-        make.centerX.equalTo(_viewHeader.mas_centerX);
-        make.width.mas_equalTo(200.0);
-        make.height.mas_equalTo(44.0);
+        make.height.mas_equalTo(hHeader);
     }];
     
     [_iconBack mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_viewHeader).offset(appDelegate._hStatus);
         make.left.equalTo(_viewHeader);
-        make.centerY.equalTo(_lbTitle.mas_centerY);
         make.width.height.mas_equalTo(HEADER_ICON_WIDTH);
     }];
     
-    _iconEdit.hidden = YES;
-    _iconEdit.imageEdgeInsets = UIEdgeInsetsMake(7, 7, 7, 7);
-    [_iconEdit mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_iconBack);
-        make.right.equalTo(_viewHeader);
-        make.width.equalTo(_iconBack.mas_width);
-        make.height.equalTo(_iconBack.mas_height);
-    }];
-    
-    _imgAvatar.layer.cornerRadius = 120.0/2;
+    float wAvatar = 100.0;
+    _imgAvatar.layer.cornerRadius = wAvatar/2;
     _imgAvatar.layer.borderWidth = 2.0;
     _imgAvatar.layer.borderColor = UIColor.whiteColor.CGColor;
     _imgAvatar.clipsToBounds = YES;
     [_imgAvatar mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_lbTitle.mas_bottom).offset(10);
+        make.top.equalTo(_iconBack.mas_centerY);
         make.centerX.equalTo(_viewHeader.mas_centerX);
-        make.width.height.mas_equalTo(120.0);
+        make.width.height.mas_equalTo(wAvatar);
     }];
     
     [_lbContactName mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_imgAvatar.mas_bottom);
+        make.top.equalTo(_imgAvatar.mas_bottom).offset(5.0);
         make.left.right.equalTo(_viewHeader);
-        make.height.mas_equalTo(40.0);
+        make.height.mas_equalTo(45.0);
     }];
     _lbContactName.marqueeType = MLContinuous;
     _lbContactName.scrollDuration = 15.0;
@@ -263,20 +170,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     _lbContactName.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightSemibold];
     _lbContactName.textColor = UIColor.whiteColor;
     
-    //  button call
-    [buttonCallPBX setBackgroundImage:[UIImage imageNamed:@"call_disable.png"]
-                             forState:UIControlStateDisabled];
-    buttonCallPBX.hidden = YES;
-    buttonCallPBX.enabled = NO;
-    buttonCallPBX.layer.cornerRadius = 70.0/2;
-    buttonCallPBX.clipsToBounds = YES;
-    buttonCallPBX.layer.borderWidth = 2.0;
-    buttonCallPBX.layer.borderColor = UIColor.whiteColor.CGColor;
-    [buttonCallPBX mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.view.mas_centerX);
-        make.centerY.equalTo(_viewHeader.mas_bottom);
-        make.width.height.mas_equalTo(70.0);
-    }];
     
     //  content
     [_tbContactInfo mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -289,10 +182,26 @@ static UICompositeViewDescription *compositeDescription = nil;
     _tbContactInfo.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tbContactInfo.backgroundColor = UIColor.clearColor;
     
-    UIView *headerView = [[UIView alloc] init];
-    headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 70.0/2);
-    headerView.backgroundColor = UIColor.whiteColor;
-    //  _tbContactInfo.tableHeaderView = headerView;
+    UIBezierPath *path = [UIBezierPath new];
+    [path moveToPoint: CGPointMake(0, 0)];
+    [path addLineToPoint: CGPointMake(0, hHeader-50)];
+    [path addQuadCurveToPoint:CGPointMake(SCREEN_WIDTH, hHeader-50) controlPoint:CGPointMake(SCREEN_WIDTH/2, hHeader+50)];
+    [path addLineToPoint: CGPointMake(SCREEN_WIDTH, 0)];
+    [path closePath];
+    
+    CAShapeLayer *shapeLayer = [CAShapeLayer new];
+    shapeLayer.path = path.CGPath;
+    //  shapeLayer.fillColor = UIColor.clearColor.CGColor;
+    
+    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
+    gradientLayer.frame = CGRectMake(0, 0, SCREEN_WIDTH, hHeader+100);
+    gradientLayer.startPoint = CGPointMake(0, 1);
+    gradientLayer.endPoint = CGPointMake(1, 0);
+    gradientLayer.colors = @[(id)[UIColor colorWithRed:(154/255.0) green:(215/255.0) blue:(9/255.0) alpha:1.0].CGColor, (id)[UIColor colorWithRed:(60/255.0) green:(198/255.0) blue:(116/255.0) alpha:1.0].CGColor];
+    
+    //Add gradient layer to view
+    [self.view.layer insertSublayer:gradientLayer atIndex:0];
+    gradientLayer.mask = shapeLayer;
 }
 
 //  Hiển thị thông tin của contact

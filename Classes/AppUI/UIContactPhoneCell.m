@@ -8,46 +8,52 @@
 #import "UIContactPhoneCell.h"
 
 @implementation UIContactPhoneCell
-@synthesize lbTitle, lbPhone, icCall, lbSepa;
+@synthesize lbTitle, lbPhone, icCall, icVideoCall, lbSepa;
 
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
     self.contentView.backgroundColor = UIColor.whiteColor;
     if (SCREEN_WIDTH > 320) {
-        lbTitle.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
-        lbPhone.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
+        lbTitle.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:17.0];
+        lbPhone.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:19.0];
     }else{
-        lbTitle.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
-        lbPhone.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
+        lbTitle.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:15.0];
+        lbPhone.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:17.0];
     }
     
-    [lbTitle mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self).offset(20);
-        make.top.bottom.equalTo(self);
-        make.width.mas_equalTo(100);
-    }];
-    lbTitle.textColor = [UIColor colorWithRed:(50/255.0) green:(50/255.0)
-                                         blue:(50/255.0) alpha:1.0];
-    
     [icCall setTitleColor:UIColor.clearColor forState:UIControlStateNormal];
-    icCall.clipsToBounds = YES;
-    icCall.layer.borderColor = [UIColor colorWithRed:(230/255.0) green:(230/255.0)
-                                                blue:(230/255.0) alpha:1.0].CGColor;
-    icCall.layer.borderWidth = 3.0;
-    icCall.layer.cornerRadius = 32.0/2;
+    icCall.imageEdgeInsets = UIEdgeInsetsMake(2, 2, 2, 2);
     [icCall mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self).offset(-10);
+        make.right.equalTo(self).offset(-10.0);
         make.centerY.equalTo(self.mas_centerY);
-        make.width.height.mas_equalTo(32.0);
+        make.width.height.mas_equalTo(42.0);
     }];
+    
+    [icVideoCall setTitleColor:UIColor.clearColor forState:UIControlStateNormal];
+    icVideoCall.imageEdgeInsets = UIEdgeInsetsMake(2, 2, 2, 2);
+    [icVideoCall mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(icCall.mas_left).offset(-10.0);
+        make.centerY.equalTo(self.mas_centerY);
+        make.width.equalTo(icCall.mas_width);
+        make.height.equalTo(icCall.mas_height);
+    }];
+    
+    [lbTitle mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self).offset(5.0);
+        make.bottom.equalTo(self.mas_centerY);
+        make.left.equalTo(self).offset(20);
+        make.right.equalTo(icVideoCall.mas_left).offset(-10.0);
+    }];
+    lbTitle.textColor = [UIColor colorWithRed:(120/255.0) green:(120/255.0)
+                                         blue:(120/255.0) alpha:1.0];
     
     [lbPhone mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(lbTitle.mas_right).offset(5);
-        make.right.equalTo(icCall.mas_left).offset(-10);
-        make.top.bottom.equalTo(self);
+        make.top.equalTo(self.mas_centerY);
+        make.left.right.equalTo(lbTitle);
+        make.bottom.equalTo(self).offset(-5.0);
     }];
-    lbPhone.textColor = lbTitle.textColor;
+    lbPhone.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     
     if (IS_IPOD || IS_IPHONE) {
         [lbSepa mas_makeConstraints:^(MASConstraintMaker *make) {

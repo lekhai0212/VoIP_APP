@@ -40,6 +40,30 @@
     }
 }
 
+- (void)callGETWebServiceWithParams: (NSString *)params
+{
+    receivedData = [[NSMutableData alloc] init];
+    
+    NSString *strURL = [NSString stringWithFormat:@"%@?%@", link_api, params];
+    NSURL *URL = [NSURL URLWithString:strURL];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: URL];
+    [request setHTTPMethod:@"GET"];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-type"];
+    [request setTimeoutInterval: 60];
+    
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    
+//    [request setValue:[NSString stringWithFormat:@"%d", (int)[requestData length]] forHTTPHeaderField:@"Content-Length"];
+//    [request setHTTPBody: requestData];
+    
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    if(connection) {
+        NSLog(@"Connection Successful");
+    }else {
+        [delegate failedToCallWebService:strURL andError:@""];
+    }
+}
+
 - (void)callWebServiceWithLink: (NSString *)linkService withParams: (NSDictionary *)paramsDict inBackgroundMode: (BOOL)isBackgroundMode
 {
     receivedData = [[NSMutableData alloc] init];
