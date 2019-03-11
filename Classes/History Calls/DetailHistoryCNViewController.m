@@ -18,14 +18,12 @@
     LinphoneAppDelegate *appDelegate;
     NSMutableArray *listHistoryCalls;
     UIFont *textFont;
-    BOOL newLayout;
 }
 @end
 
 @implementation DetailHistoryCNViewController
 
-@synthesize _viewHeader, bgHeader, _iconBack, _lbHeader, _iconAddNew, _imgAvatar, _lbName, icDelete;
-@synthesize btnCall, _tbHistory;
+@synthesize _viewHeader, _iconBack, _lbHeader, _imgAvatar, _lbName, icDelete, _tbHistory, lbPhone, viewInfo, iconAudio, iconVideo;
 @synthesize phoneNumber, onDate, onlyMissedCall;
 
 #pragma mark - UICompositeViewDelegate Functions
@@ -83,7 +81,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    newLayout = YES;
     
     // MY CODE HERE
     appDelegate = (LinphoneAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -111,16 +108,12 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (void)showContentWithCurrentLanguage {
-    if (!newLayout) {
-        _lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"Calls detail"];
-    }else{
-        if (![AppUtils isNullOrEmpty: phoneNumber]) {
-            PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: phoneNumber];
-            if (![AppUtils isNullOrEmpty:contact.name]) {
-                _lbHeader.text = contact.name;
-            }else{
-                _lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"Calls detail"];
-            }
+    if (![AppUtils isNullOrEmpty: phoneNumber]) {
+        PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: phoneNumber];
+        if (![AppUtils isNullOrEmpty:contact.name]) {
+            _lbHeader.text = contact.name;
+        }else{
+            _lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"Calls detail"];
         }
     }
 }
@@ -128,66 +121,23 @@ static UICompositeViewDescription *compositeDescription = nil;
 //  Cập nhật view sau khi get xong phone number
 - (void)updateView
 {
-    //  check if is call with hotline
-    if (!newLayout) {
-        if ([phoneNumber isEqualToString: hotline]) {
-            NSMutableAttributedString *contentAttr = [[NSMutableAttributedString alloc] initWithString:[[LanguageUtil sharedInstance] getContent:@"Hotline"]];
-            [contentAttr addAttribute:NSFontAttributeName value:[UIFont fontWithName:MYRIADPRO_BOLD size:18.0] range:NSMakeRange(0, contentAttr.length)];
-            [contentAttr addAttribute:NSForegroundColorAttributeName value:UIColor.orangeColor range:NSMakeRange(0, contentAttr.length)];
-            _lbName.attributedText = contentAttr;
-            
-            _imgAvatar.image = [UIImage imageNamed:@"hotline_avatar.png"];
-        }else{
-            PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: phoneNumber];
-            if (contact != nil)
-            {
-                _iconAddNew.hidden = YES;
-                
-                NSString *content = [NSString stringWithFormat:@"%@ - %@", contact.name, phoneNumber];
-                
-                NSRange phoneRange = NSMakeRange(content.length-phoneNumber.length, phoneNumber.length);
-                
-                NSMutableAttributedString *contentAttr = [[NSMutableAttributedString alloc] initWithString:content];
-                [contentAttr addAttribute:NSFontAttributeName value:[UIFont fontWithName:MYRIADPRO_BOLD size:18.0] range:phoneRange];
-                [contentAttr addAttribute:NSForegroundColorAttributeName value:UIColor.orangeColor range:phoneRange];
-                _lbName.attributedText = contentAttr;
-            }else{
-                _iconAddNew.hidden = NO;
-                
-                _lbName.text = phoneNumber;
-                
-                NSRange phoneRange = NSMakeRange(0, phoneNumber.length);
-                NSMutableAttributedString *contentAttr = [[NSMutableAttributedString alloc] initWithString:phoneNumber];
-                [contentAttr addAttribute:NSFontAttributeName value:[UIFont fontWithName:MYRIADPRO_BOLD size:18.0] range:phoneRange];
-                [contentAttr addAttribute:NSForegroundColorAttributeName value:UIColor.orangeColor range:phoneRange];
-                _lbName.attributedText = contentAttr;
-            }
-            
-            if (![AppUtils isNullOrEmpty: contact.avatar]) {
-                _imgAvatar.image = [UIImage imageWithData: [NSData dataFromBase64String: contact.avatar]];
-            }else{
-                _imgAvatar.image = [UIImage imageNamed:@"no_avatar.png"];
-            }
-        }
+    if ([phoneNumber isEqualToString: hotline]) {
+        _lbName.text = [[LanguageUtil sharedInstance] getContent:@"Hotline"];
+        _imgAvatar.image = [UIImage imageNamed:@"hotline_avatar.png"];
     }else{
-        if ([phoneNumber isEqualToString: hotline]) {
-            _lbName.text = [[LanguageUtil sharedInstance] getContent:@"Hotline"];
-            _imgAvatar.image = [UIImage imageNamed:@"hotline_avatar.png"];
+        PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: phoneNumber];
+        if (![AppUtils isNullOrEmpty:contact.name]) {
+            _lbName.text = contact.name;
         }else{
-            PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: phoneNumber];
-            if (![AppUtils isNullOrEmpty:contact.name]) {
-                _lbHeader.text = contact.name;
-            }else{
-                _lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"Calls detail"];
-            }
-            
-            if (![AppUtils isNullOrEmpty: contact.avatar]) {
-                _imgAvatar.image = [UIImage imageWithData: [NSData dataFromBase64String: contact.avatar]];
-            }else{
-                _imgAvatar.image = [UIImage imageNamed:@"no_avatar.png"];
-            }
-            _lbName.text = contact.number;
+            _lbName.text = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
         }
+        
+        if (![AppUtils isNullOrEmpty: contact.avatar]) {
+            _imgAvatar.image = [UIImage imageWithData: [NSData dataFromBase64String: contact.avatar]];
+        }else{
+            _imgAvatar.image = [UIImage imageNamed:@"no_avatar.png"];
+        }
+        lbPhone.text = phoneNumber;
     }
     
     // Check section
@@ -219,29 +169,20 @@ static UICompositeViewDescription *compositeDescription = nil;
         _lbHeader.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
     }
     //  header
+    float hHeader = 220+[LinphoneAppDelegate sharedInstance]._hStatus;
     [_viewHeader mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self.view);
-        make.height.mas_equalTo(230+[LinphoneAppDelegate sharedInstance]._hStatus);
+        make.height.mas_equalTo(hHeader);
     }];
     
-    [bgHeader mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.left.bottom.right.equalTo(_viewHeader);
-    }];
-    
+    _iconBack.imageEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     [_iconBack mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_viewHeader).offset([LinphoneAppDelegate sharedInstance]._hStatus+5.0);
         make.left.equalTo(_viewHeader);
         make.width.height.mas_equalTo(HEADER_ICON_WIDTH);
     }];
     
-    _iconAddNew.hidden = YES;
-    [_iconAddNew mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_iconBack);
-        make.right.equalTo(_viewHeader).offset(-5);
-        make.width.equalTo(_iconBack.mas_width);
-        make.height.equalTo(_iconBack.mas_height);
-    }];
-    
+    icDelete.imageEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     [icDelete mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_iconBack);
         make.right.equalTo(_viewHeader).offset(-5);
@@ -252,7 +193,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     [_lbHeader mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(_iconBack);
         make.left.equalTo(_iconBack.mas_right).offset(5);
-        make.right.equalTo(_iconAddNew.mas_left).offset(-5);
+        make.right.equalTo(icDelete.mas_left).offset(-5);
     }];
     
     _imgAvatar.layer.cornerRadius = 100.0/2;
@@ -265,28 +206,46 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.width.height.mas_equalTo(100.0);
     }];
     
-    _lbName.font = textFont;
+    _lbName.font = [UIFont systemFontOfSize:16.0 weight:UIFontWeightBold];
     _lbName.textColor = UIColor.whiteColor;
     [_lbName mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_imgAvatar.mas_bottom);
         make.left.right.equalTo(_viewHeader);
-        make.height.mas_equalTo(40.0);
+        make.height.mas_equalTo(30.0);
     }];
     
-    //  button call
-    btnCall.layer.cornerRadius = 70.0/2;
-    btnCall.clipsToBounds = YES;
-    btnCall.layer.borderWidth = 2.0;
-    btnCall.layer.borderColor = UIColor.whiteColor.CGColor;
-    [btnCall mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.view.mas_centerX);
-        make.centerY.equalTo(_viewHeader.mas_bottom);
-        make.width.height.mas_equalTo(70.0);
+    lbPhone.font = [UIFont systemFontOfSize:17.0 weight:UIFontWeightBold];
+    lbPhone.textColor = UIColor.whiteColor;
+    [lbPhone mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_lbName.mas_bottom);
+        make.left.right.equalTo(_viewHeader);
+        make.height.mas_equalTo(30.0);
+    }];
+    
+    //  view info
+    [viewInfo mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_viewHeader.mas_bottom);
+        make.left.right.equalTo(self.view);
+        make.height.mas_equalTo(80.0);
+    }];
+    
+    iconVideo.imageEdgeInsets = UIEdgeInsetsMake(2, 2, 2, 2);
+    [iconVideo mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(viewInfo);
+        make.right.equalTo(viewInfo.mas_centerX).offset(-8.0);
+        make.width.height.mas_equalTo(60.0);
+    }];
+    
+    iconAudio.imageEdgeInsets = UIEdgeInsetsMake(2, 2, 2, 2);
+    [iconAudio mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.bottom.equalTo(iconVideo);
+        make.left.equalTo(viewInfo.mas_centerX).offset(8.0);
+        make.width.mas_equalTo(60.0);
     }];
     
     //  content
     [_tbHistory mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_viewHeader.mas_bottom);
+        make.top.equalTo(viewInfo.mas_bottom);
         make.left.right.bottom.equalTo(self.view);
     }];
     _tbHistory.delegate = self;
@@ -299,6 +258,26 @@ static UICompositeViewDescription *compositeDescription = nil;
     _tbHistory.tableHeaderView = headerView;
     
     listHistoryCalls = [[NSMutableArray alloc] init];
+    
+    UIBezierPath *path = [UIBezierPath new];
+    [path moveToPoint: CGPointMake(0, 0)];
+    [path addLineToPoint: CGPointMake(0, hHeader-50)];
+    [path addQuadCurveToPoint:CGPointMake(SCREEN_WIDTH, hHeader-50) controlPoint:CGPointMake(SCREEN_WIDTH/2, hHeader+50)];
+    [path addLineToPoint: CGPointMake(SCREEN_WIDTH, 0)];
+    [path closePath];
+    
+    CAShapeLayer *shapeLayer = [CAShapeLayer new];
+    shapeLayer.path = path.CGPath;
+    
+    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
+    gradientLayer.frame = CGRectMake(0, 0, SCREEN_WIDTH, hHeader+100);
+    gradientLayer.startPoint = CGPointMake(0, 1);
+    gradientLayer.endPoint = CGPointMake(1, 0);
+    gradientLayer.colors = @[(id)[UIColor colorWithRed:(154/255.0) green:(215/255.0) blue:(9/255.0) alpha:1.0].CGColor, (id)[UIColor colorWithRed:(60/255.0) green:(198/255.0) blue:(116/255.0) alpha:1.0].CGColor];
+    
+    //Add gradient layer to view
+    [self.view.layer insertSublayer:gradientLayer atIndex:0];
+    gradientLayer.mask = shapeLayer;
 }
 
 #pragma mark - tableview delegate
@@ -354,201 +333,101 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (!newLayout) {
-        return 35.0;
-    }
     return 60.0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (!newLayout) {
-        static NSString *simpleTableIdentifier = @"UIHistoryDetailCell";
-        
-        UIHistoryDetailCell *cell = (UIHistoryDetailCell *)[tableView dequeueReusableCellWithIdentifier: simpleTableIdentifier];
-        if (cell == nil) {
-            NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"UIHistoryDetailCell" owner:self options:nil];
-            cell = topLevelObjects[0];
-        }
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-        CallHistoryObject *aCall = [listHistoryCalls objectAtIndex: indexPath.row];
-        
-        if (![aCall._date isEqualToString:@"date"]) {
-            NSString *dateStr = [AppUtils checkTodayForHistoryCall: aCall._date];
-            
-            if (![dateStr isEqualToString:@"Today"]) {
-                dateStr = [AppUtils checkYesterdayForHistoryCall: aCall._date];
-                if ([dateStr isEqualToString:@"Yesterday"]) {
-                    dateStr = [[LanguageUtil sharedInstance] getContent:@"Yesterday"];
-                }
-            }else{
-                dateStr = [[LanguageUtil sharedInstance] getContent:@"Today"];
-            }
-            cell.viewContent.hidden = YES;
-            cell.lbTitle.hidden = NO;
-            cell.lbTitle.text = dateStr;
-        }else{
-            cell.viewContent.hidden = NO;
-            cell.lbTitle.hidden = YES;
-            //  cell.lbTime.text = [AppUtils getTimeStringFromTimeInterval: aCall._timeInt];
-            cell.lbTime.text = aCall._time;
-            
-            if ([aCall._status isEqualToString: success_call])
-            {
-                if (aCall._duration < 60) {
-                    cell.lbDuration.text = [NSString stringWithFormat:@"%d %@", aCall._duration, [[LanguageUtil sharedInstance] getContent:@"sec"]];
-                }else{
-                    int hour = aCall._duration/3600;
-                    int minutes = (aCall._duration - hour*3600)/60;
-                    int seconds = aCall._duration - hour*3600 - minutes*60;
-                    
-                    NSString *str = @"";
-                    if (hour > 0) {
-                        if (hour == 1) {
-                            str = [NSString stringWithFormat:@"%ld %@", (long)hour, [[LanguageUtil sharedInstance] getContent:@"hour"]];
-                        }else{
-                            str = [NSString stringWithFormat:@"%ld %@", (long)hour, [[LanguageUtil sharedInstance] getContent:@"hours"]];
-                        }
-                    }
-                    
-                    if (minutes > 0) {
-                        if (![str isEqualToString:@""]) {
-                            if (minutes == 1) {
-                                str = [NSString stringWithFormat:@"%@ %d %@", str, minutes, [[LanguageUtil sharedInstance] getContent:@"minute"]];
-                            }else{
-                                str = [NSString stringWithFormat:@"%@ %d %@", str, minutes, [[LanguageUtil sharedInstance] getContent:@"minutes"]];
-                            }
-                        }else{
-                            if (minutes == 1) {
-                                str = [NSString stringWithFormat:@"%d %@", minutes, [[LanguageUtil sharedInstance] getContent:@"minute"]];
-                            }else{
-                                str = [NSString stringWithFormat:@"%d %@", minutes, [[LanguageUtil sharedInstance] getContent:@"minutes"]];
-                            }
-                        }
-                    }
-                    
-                    if (seconds > 0) {
-                        if (![str isEqualToString:@""]) {
-                            str = [NSString stringWithFormat:@"%@ %d %@", str, seconds, [[LanguageUtil sharedInstance] getContent:@"sec"]];
-                        }else{
-                            str = [NSString stringWithFormat:@"%d %@", seconds, [[LanguageUtil sharedInstance] getContent:@"sec"]];
-                        }
-                    }
-                    cell.lbDuration.text = str;
-                }
-                
-                if ([aCall._callDirection isEqualToString:@"Incomming"]) {
-                    cell.imgStatus.image = [UIImage imageNamed:@"ic_call_incoming.png"];
-                    cell.lbStateCall.text = [[LanguageUtil sharedInstance] getContent:@"Incoming call"];
-                }else{
-                    cell.imgStatus.image = [UIImage imageNamed:@"ic_call_outgoing.png"];
-                    cell.lbStateCall.text = [[LanguageUtil sharedInstance] getContent:@"Outgoing call"];
-                }
-            }else{
-                if ([aCall._status isEqualToString: aborted_call] || [aCall._status isEqualToString: declined_call]) {
-                    cell.lbStateCall.text = [[LanguageUtil sharedInstance] getContent:@"Aborted call"];
-                    cell.lbDuration.text = @"";
-                }else{
-                    cell.lbStateCall.text = [[LanguageUtil sharedInstance] getContent:@"Missed call"];
-                }
-                cell.imgStatus.image = [UIImage imageNamed:@"ic_call_missed.png"];
-                cell.lbDuration.text = [NSString stringWithFormat:@"%d %@", aCall._duration, [[LanguageUtil sharedInstance] getContent:@"sec"]];
-            }
-        }
-        return cell;
-    }else{
-        static NSString *identifier = @"NewHistoryDetailCell";
-        NewHistoryDetailCell *cell = (NewHistoryDetailCell *)[tableView dequeueReusableCellWithIdentifier: identifier];
-        if (cell == nil) {
-            NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"NewHistoryDetailCell" owner:self options:nil];
-            cell = topLevelObjects[0];
-        }
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-        CallHistoryObject *aCall = [listHistoryCalls objectAtIndex: indexPath.row];
-        
-        //  cell.lbTime.text = [AppUtils getTimeStringFromTimeInterval: aCall._timeInt];
-        cell.lbTime.text = aCall._time;
-        
-        if (aCall._duration == 0) {
-            cell.lbDuration.text = @"";
-        }else{
-            if (aCall._duration < 60) {
-                cell.lbDuration.text = [NSString stringWithFormat:@"%d %@", aCall._duration, [[LanguageUtil sharedInstance] getContent:@"sec"]];
-            }else{
-                int hour = aCall._duration/3600;
-                int minutes = (aCall._duration - hour*3600)/60;
-                int seconds = aCall._duration - hour*3600 - minutes*60;
-                
-                NSString *str = @"";
-                if (hour > 0) {
-                    if (hour == 1) {
-                        str = [NSString stringWithFormat:@"%ld %@", (long)hour, [[LanguageUtil sharedInstance] getContent:@"hour"]];
-                    }else{
-                        str = [NSString stringWithFormat:@"%ld %@", (long)hour, [[LanguageUtil sharedInstance] getContent:@"hours"]];
-                    }
-                }
-                
-                if (minutes > 0) {
-                    if (![str isEqualToString:@""]) {
-                        if (minutes == 1) {
-                            str = [NSString stringWithFormat:@"%@ %d %@", str, minutes, [[LanguageUtil sharedInstance] getContent:@"minute"]];
-                        }else{
-                            str = [NSString stringWithFormat:@"%@ %d %@", str, minutes, [[LanguageUtil sharedInstance] getContent:@"minutes"]];
-                        }
-                    }else{
-                        if (minutes == 1) {
-                            str = [NSString stringWithFormat:@"%d %@", minutes, [[LanguageUtil sharedInstance] getContent:@"minute"]];
-                        }else{
-                            str = [NSString stringWithFormat:@"%d %@", minutes, [[LanguageUtil sharedInstance] getContent:@"minutes"]];
-                        }
-                    }
-                }
-                
-                if (seconds > 0) {
-                    if (![str isEqualToString:@""]) {
-                        str = [NSString stringWithFormat:@"%@ %d %@", str, seconds, [[LanguageUtil sharedInstance] getContent:@"sec"]];
-                    }else{
-                        str = [NSString stringWithFormat:@"%d %@", seconds, [[LanguageUtil sharedInstance] getContent:@"sec"]];
-                    }
-                }
-                cell.lbDuration.text = str;
-            }
-        }
-        
-        if ([aCall._status isEqualToString: aborted_call] || [aCall._status isEqualToString: declined_call]) {
-            cell.lbState.text = [[LanguageUtil sharedInstance] getContent:@"Aborted call"];
-        }else if ([aCall._status isEqualToString: missed_call]){
-            cell.lbState.text = [[LanguageUtil sharedInstance] getContent:@"Missed call"];
-        }else{
-            cell.lbState.text = @"";
-        }
-        
-        if ([aCall._callDirection isEqualToString: incomming_call]) {
-            if ([aCall._status isEqualToString: missed_call]) {
-                cell.imgStatus.image = [UIImage imageNamed:@"ic_call_missed.png"];
-            }else{
-                cell.imgStatus.image = [UIImage imageNamed:@"ic_call_incoming.png"];
-            }
-        }else{
-            cell.imgStatus.image = [UIImage imageNamed:@"ic_call_outgoing.png"];
-        }
-        
-        NSString *dateStr = [AppUtils checkTodayForHistoryCall: onDate];
-        
-        if (![dateStr isEqualToString:@"Today"]) {
-            dateStr = [AppUtils checkYesterdayForHistoryCall: aCall._date];
-            if ([dateStr isEqualToString:@"Yesterday"]) {
-                dateStr = [[LanguageUtil sharedInstance] getContent:@"Yesterday"];
-            }
-        }else{
-            dateStr = [[LanguageUtil sharedInstance] getContent:@"Today"];
-        }
-        cell.lbDate.text = dateStr;
-        
-        return cell;
+    static NSString *identifier = @"NewHistoryDetailCell";
+    NewHistoryDetailCell *cell = (NewHistoryDetailCell *)[tableView dequeueReusableCellWithIdentifier: identifier];
+    if (cell == nil) {
+        NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"NewHistoryDetailCell" owner:self options:nil];
+        cell = topLevelObjects[0];
     }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    CallHistoryObject *aCall = [listHistoryCalls objectAtIndex: indexPath.row];
+    
+    //  cell.lbTime.text = [AppUtils getTimeStringFromTimeInterval: aCall._timeInt];
+    cell.lbTime.text = aCall._time;
+    
+    if (aCall._duration == 0) {
+        cell.lbDuration.text = [NSString stringWithFormat:@"%d %@", aCall._duration, [[LanguageUtil sharedInstance] getContent:@"sec"]];
+    }else{
+        if (aCall._duration < 60) {
+            cell.lbDuration.text = [NSString stringWithFormat:@"%d %@", aCall._duration, [[LanguageUtil sharedInstance] getContent:@"sec"]];
+        }else{
+            int hour = aCall._duration/3600;
+            int minutes = (aCall._duration - hour*3600)/60;
+            int seconds = aCall._duration - hour*3600 - minutes*60;
+            
+            NSString *str = @"";
+            if (hour > 0) {
+                if (hour == 1) {
+                    str = [NSString stringWithFormat:@"%ld %@", (long)hour, [[LanguageUtil sharedInstance] getContent:@"hour"]];
+                }else{
+                    str = [NSString stringWithFormat:@"%ld %@", (long)hour, [[LanguageUtil sharedInstance] getContent:@"hours"]];
+                }
+            }
+            
+            if (minutes > 0) {
+                if (![str isEqualToString:@""]) {
+                    if (minutes == 1) {
+                        str = [NSString stringWithFormat:@"%@ %d %@", str, minutes, [[LanguageUtil sharedInstance] getContent:@"minute"]];
+                    }else{
+                        str = [NSString stringWithFormat:@"%@ %d %@", str, minutes, [[LanguageUtil sharedInstance] getContent:@"minutes"]];
+                    }
+                }else{
+                    if (minutes == 1) {
+                        str = [NSString stringWithFormat:@"%d %@", minutes, [[LanguageUtil sharedInstance] getContent:@"minute"]];
+                    }else{
+                        str = [NSString stringWithFormat:@"%d %@", minutes, [[LanguageUtil sharedInstance] getContent:@"minutes"]];
+                    }
+                }
+            }
+            
+            if (seconds > 0) {
+                if (![str isEqualToString:@""]) {
+                    str = [NSString stringWithFormat:@"%@ %d %@", str, seconds, [[LanguageUtil sharedInstance] getContent:@"sec"]];
+                }else{
+                    str = [NSString stringWithFormat:@"%d %@", seconds, [[LanguageUtil sharedInstance] getContent:@"sec"]];
+                }
+            }
+            cell.lbDuration.text = str;
+        }
+    }
+    
+    if ([aCall._status isEqualToString: aborted_call] || [aCall._status isEqualToString: declined_call]) {
+        cell.lbState.text = [[LanguageUtil sharedInstance] getContent:@"Aborted call"];
+    }else if ([aCall._status isEqualToString: missed_call]){
+        cell.lbState.text = [[LanguageUtil sharedInstance] getContent:@"Missed call"];
+    }else{
+        cell.lbState.text = @"";
+    }
+    
+    if ([aCall._callDirection isEqualToString: incomming_call]) {
+        if ([aCall._status isEqualToString: missed_call]) {
+            cell.imgStatus.image = [UIImage imageNamed:@"ic_call_missed.png"];
+        }else{
+            cell.imgStatus.image = [UIImage imageNamed:@"ic_call_incoming.png"];
+        }
+    }else{
+        cell.imgStatus.image = [UIImage imageNamed:@"ic_call_outgoing.png"];
+    }
+    
+    NSString *dateStr = [AppUtils checkTodayForHistoryCall: onDate];
+    
+    if (![dateStr isEqualToString:@"Today"]) {
+        dateStr = [AppUtils checkYesterdayForHistoryCall: aCall._date];
+        if ([dateStr isEqualToString:@"Yesterday"]) {
+            dateStr = [[LanguageUtil sharedInstance] getContent:@"Yesterday"];
+        }
+    }else{
+        dateStr = [[LanguageUtil sharedInstance] getContent:@"Today"];
+    }
+    cell.lbDate.text = dateStr;
+    
+    return cell;
 }
 
 - (IBAction)_iconBackClicked:(UIButton *)sender {
@@ -623,5 +502,10 @@ static UICompositeViewDescription *compositeDescription = nil;
     return [cFormatter stringFromTimeInterval:duration];
 }
 
+- (IBAction)iconAudioClick:(UIButton *)sender {
+}
+
+- (IBAction)iconVideoClick:(UIButton *)sender {
+}
 @end
 

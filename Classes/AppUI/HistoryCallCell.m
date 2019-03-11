@@ -51,7 +51,7 @@
     lbMissed.textColor = UIColor.whiteColor;
     lbMissed.textAlignment = NSTextAlignmentCenter;
     
-    _btnCall.imageEdgeInsets = UIEdgeInsetsMake(3, 3, 3, 3);
+    _btnCall.imageEdgeInsets = UIEdgeInsetsMake(7, 7, 7, 7);
     [_btnCall mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self).offset(-10);
         make.centerY.equalTo(self.mas_centerY);
@@ -96,7 +96,7 @@
     _lbPhone.textColor = textColor;
     [_lbPhone mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_lbName.mas_bottom);
-        make.left.equalTo(_imgStatus).offset(3.0);
+        make.left.equalTo(_imgStatus.mas_right).offset(3.0);
         make.right.equalTo(_lbName);
         make.bottom.equalTo(_imgAvatar.mas_bottom);
     }];

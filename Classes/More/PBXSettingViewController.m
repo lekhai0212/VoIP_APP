@@ -528,18 +528,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)updateCustomerTokenIOSForPBX: (NSString *)pbxService andUsername: (NSString *)pbxUsername withTokenValue: (NSString *)tokenValue
 {
-    NSMutableDictionary *jsonDict = [[NSMutableDictionary alloc] init];
-    [jsonDict setObject:AuthUser forKey:@"AuthUser"];
-    [jsonDict setObject:AuthKey forKey:@"AuthKey"];
-    [jsonDict setObject:@"" forKey:@"UserName"];
-    [jsonDict setObject:tokenValue forKey:@"IOSToken"];
-    [jsonDict setObject:pbxService forKey:@"PBXID"];
-    [jsonDict setObject:pbxUsername forKey:@"PBXExt"];
     
-    [webService callWebServiceWithLink:ChangeCustomerIOSToken withParams:jsonDict];
-    
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] jsonDict = %@", __FUNCTION__, @[jsonDict]]
-                         toFilePath:appDelegate.logFilePath];
 }
 
 
@@ -553,11 +542,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     _icWaiting.hidden = YES;
     if ([link isEqualToString:getServerInfoFunc]) {
         [self.view makeToast:error duration:2.0 position:CSToastPositionCenter];
-    }else if ([link isEqualToString: ChangeCustomerIOSToken]){
-        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Can not update push token"]
-                    duration:2.0 position:CSToastPositionCenter];
-        
-        [self whenRegisterPBXSuccessfully];
     }
 }
 
@@ -567,19 +551,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     if ([link isEqualToString:getServerInfoFunc]) {
         [self startLoginPBXWithInfo: data];
-    }else if ([link isEqualToString: ChangeCustomerIOSToken]){
-        if (turnOnAcc) {
-            [self whenTurnOnPBXSuccessfully];
-            
-        } else if (turnOffAcc) {
-            [self whenTurnOffPBXSuccessfully];
-            
-        }else if (clearingAccount) {
-            [self whenClearPBXSuccessfully];
-            
-        }else{
-            [self whenRegisterPBXSuccessfully];
-        }
     }else if ([link isEqualToString: DecryptRSA]) {
         [self receiveDataFromQRCode: data];
     }

@@ -32,5 +32,6 @@
 @property (nonatomic, assign) long duration;
 @property (nonatomic, assign) long timeInt;
 @property (nonatomic, assign) int newMissedCall;
+@property (nonatomic, assign) int callType;
 
 @end

@@ -14,25 +14,27 @@
 @property (weak, nonatomic) IBOutlet UIView *_viewHeader;
 @property (weak, nonatomic) IBOutlet UIButton *_iconBack;
 @property (retain, nonatomic) IBOutlet UILabel *_lbHeader;
-@property (weak, nonatomic) IBOutlet UIButton *_iconAddNew;
 @property (weak, nonatomic) IBOutlet UIButton *icDelete;
 
 @property (weak, nonatomic) IBOutlet UIImageView *_imgAvatar;
 @property (weak, nonatomic) IBOutlet UILabel *_lbName;
+@property (weak, nonatomic) IBOutlet UILabel *lbPhone;
+
+@property (weak, nonatomic) IBOutlet UIView *viewInfo;
+@property (weak, nonatomic) IBOutlet UIButton *iconVideo;
+@property (weak, nonatomic) IBOutlet UIButton *iconAudio;
 
 @property (weak, nonatomic) IBOutlet UITableView *_tbHistory;
-@property (weak, nonatomic) IBOutlet UIButton *btnCall;
-@property (weak, nonatomic) IBOutlet UIImageView *bgHeader;
 
 - (IBAction)_iconBackClicked:(UIButton *)sender;
-- (IBAction)_iconAddNewClicked:(UIButton *)sender;
 - (IBAction)icDeleteClick:(UIButton *)sender;
+- (IBAction)iconAudioClick:(UIButton *)sender;
+- (IBAction)iconVideoClick:(UIButton *)sender;
 
 @property (nonatomic, retain) NSString *phoneNumber;
 @property (nonatomic, strong) NSString *onDate;
 @property (nonatomic, assign) BOOL onlyMissedCall;
 
 - (void)setPhoneNumberForView:(NSString *)phone andDate: (NSString *)date onlyMissed: (BOOL)onlyMissed;
-- (IBAction)btnCallPressed:(UIButton *)sender;
 
 @end

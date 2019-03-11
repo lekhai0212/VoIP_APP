@@ -9,7 +9,7 @@
 #import "MenuCell.h"
 
 @implementation MenuCell
-@synthesize _iconImage, _lbTitle, _lbSepa;
+@synthesize _iconImage, _lbTitle, _lbSepa, imgNext;
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -18,7 +18,7 @@
     self.contentView.backgroundColor = UIColor.whiteColor;
     
     if (IS_IPHONE || IS_IPOD) {
-        _lbTitle.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
+        _lbTitle.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightBold];
     }else{
         _lbTitle.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightRegular];
     }
@@ -29,29 +29,26 @@
         make.width.height.mas_equalTo(22.0);
     }];
     
-    _lbTitle.textColor = UIColor.darkGrayColor;
+    [imgNext mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self).offset(-20);
+        make.centerY.equalTo(self.mas_centerY);
+        make.width.height.mas_equalTo(17.0);
+    }];
+    
+    _lbTitle.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     _lbTitle.numberOfLines = 10;
     [_lbTitle mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_iconImage.mas_right).offset(10);
-        make.right.equalTo(self).offset(-20);
+        make.right.equalTo(imgNext.mas_left).offset(-20);
         make.top.bottom.equalTo(self);
     }];
     
     _lbSepa.backgroundColor = [UIColor colorWithRed:(240/255.0) green:(240/255.0)
                                                blue:(240/255.0) alpha:1.0];
-    if (IS_IPHONE || IS_IPOD) {
-        [_lbSepa mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(_iconImage);
-            make.bottom.right.equalTo(self);
-            make.height.mas_equalTo(1.0);
-        }];
-    }else{
-        [_lbSepa mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self);
-            make.bottom.right.equalTo(self);
-            make.height.mas_equalTo(1.0);
-        }];
-    }
+    [_lbSepa mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.bottom.right.equalTo(self);
+        make.height.mas_equalTo(5.0);
+    }];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

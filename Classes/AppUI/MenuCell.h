@@ -13,6 +13,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *_iconImage;
 @property (weak, nonatomic) IBOutlet UILabel *_lbTitle;
 @property (weak, nonatomic) IBOutlet UILabel *_lbSepa;
+@property (weak, nonatomic) IBOutlet UIImageView *imgNext;
 
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated;
 

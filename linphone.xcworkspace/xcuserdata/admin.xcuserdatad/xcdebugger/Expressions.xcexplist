@@ -10,5 +10,13 @@
             </PersistentString>
          </PersistentStrings>
       </ContextState>
+      <ContextState
+         contextName = "-[LinphoneManager onCall:StateChanged:withMessage:]:LinphoneManager.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "linphone_call_params_video_enabled(linphone_call_get_remote_params(call))">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
    </ContextStates>
 </VariablesViewState>

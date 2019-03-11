@@ -261,6 +261,14 @@
         cell.lbMissed.hidden = YES;
     }
     
+    if (aCall.callType == 1) {
+        [cell._btnCall setImage:[UIImage imageNamed:@"contact_audio_call.png"]
+                       forState:UIControlStateNormal];
+    }else{
+        [cell._btnCall setImage:[UIImage imageNamed:@"contact_video_call.png"]
+                       forState:UIControlStateNormal];
+    }
+    
     return cell;
 }
 

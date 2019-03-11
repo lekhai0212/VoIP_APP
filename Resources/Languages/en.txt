@@ -9,6 +9,15 @@
 "Search name or phone number" = "Search name or phone number"
 "Count all contacts" = "All contacts"
 "Sync contacts" = "Sync contacts"
+"Choose ringtone" = "Choose ringtone"
+"Call settings" = "Call settings"
+"App information" = "App information"
+"Send reports" = "Send reports"
+"Sign out" = "Sign out"
+"Privacy & Policy" = "Privacy & Policy"
+"Answer & Support" = "Answer & Support"
+
+
 
 
 "Online" = "Online"
@@ -24,7 +33,7 @@
 "Account settings" = "Account settings"
 "Settings" = "Settings"
 "Feedback" = "Feedback"
-"Privacy Policy" = "Privacy Policy"
+
 "Introduction" = "Introduction"
 "Send logs" = "Send logs"
 "About" = "About"
@@ -53,7 +62,7 @@
 "Current password not correct" = "Current password not correct"
 
 "Change language" = "Change language"
-"Call settings" = "Call settings"
+
 "Vietnamese" = "Vietnamese"
 "English" = "English"
 
@@ -221,7 +230,7 @@
 "Please fill full information" = "Please fill full information"
 
 "Please check sign in information" = "Please check sign in information"
-"Choose ringtone" = "Choose ringtone"
+
 "Audio call" = "Audio call"
 "Video call" = "Video call"
 "Can not detect QRCode. Please check again!" = "Can not detect QRCode. Please check again!"

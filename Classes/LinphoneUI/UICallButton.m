@@ -107,11 +107,12 @@
 //            linphone_address_destroy(addr);
 //    }
     
-    CallView *controller = VIEW(CallView);
-    if (controller != nil) {
-        controller.phoneNumber = address;
-    }
-    [[PhoneMainView instance] changeCurrentView:[CallView compositeViewDescription] push:TRUE];
+    //  12/03/2019
+//    CallView *controller = VIEW(CallView);
+//    if (controller != nil) {
+//        controller.phoneNumber = address;
+//    }
+//    [[PhoneMainView instance] changeCurrentView:[CallView compositeViewDescription] push:TRUE];
 }
 
 - (void)updateIcon {

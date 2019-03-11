@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14269.12" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14252.5"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -15,7 +15,7 @@
                 <outlet property="_btnMute" destination="tbn-aC-euS" id="6zR-Oq-fXw"/>
                 <outlet property="_btnSpeaker" destination="RQa-DE-BtC" id="T0h-Tt-yuS"/>
                 <outlet property="_imgAvatar" destination="Q5j-rV-2y8" id="WdI-Fo-lvM"/>
-                <outlet property="_imgBackground" destination="ZtW-ec-OyG" id="Ar5-gG-cud"/>
+                <outlet property="_imgBackground" destination="peD-Vh-Rwh" id="lMd-Dg-U2D"/>
                 <outlet property="_imgCallState" destination="GLP-dS-RhK" id="2Ms-yB-INA"/>
                 <outlet property="_lbCallState" destination="KTH-83-FHL" id="4p9-nb-Zy5"/>
                 <outlet property="_lbName" destination="dFb-hh-7EN" id="IVP-JK-OB8"/>
@@ -27,62 +27,61 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="bg-call" translatesAutoresizingMaskIntoConstraints="NO" id="ZtW-ec-OyG">
-                    <rect key="frame" x="0.0" y="-16" width="320" height="496"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="peD-Vh-Rwh">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="default-avatar" translatesAutoresizingMaskIntoConstraints="NO" id="Q5j-rV-2y8">
-                    <rect key="frame" x="105" y="37" width="110" height="110"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="no_avatar.png" translatesAutoresizingMaskIntoConstraints="NO" id="Q5j-rV-2y8">
+                    <rect key="frame" x="105" y="185" width="110" height="110"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Khải Lê iOs" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dFb-hh-7EN">
-                    <rect key="frame" x="45" y="166" width="229" height="30"/>
+                    <rect key="frame" x="46" y="20" width="229" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Đang đổ chuông..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KTH-83-FHL">
-                    <rect key="frame" x="46" y="209" width="229" height="30"/>
+                    <rect key="frame" x="46" y="139" width="229" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GMN-rx-6Q2">
-                    <rect key="frame" x="133" y="333" width="55" height="55"/>
+                    <rect key="frame" x="130" y="330" width="65" height="65"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" backgroundImage="decline_call_def"/>
+                    <state key="normal" image="end_call_def.png"/>
                     <connections>
                         <action selector="_btnEndCallPressed:" destination="-1" eventType="touchUpInside" id="vHG-Z7-Ass"/>
                     </connections>
                 </button>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="icon_ringing" translatesAutoresizingMaskIntoConstraints="NO" id="GLP-dS-RhK">
-                    <rect key="frame" x="75" y="216" width="18" height="18"/>
+                    <rect key="frame" x="151" y="120" width="18" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RQa-DE-BtC" customClass="UISpeakerButton">
-                    <rect key="frame" x="67" y="343" width="35" height="35"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" backgroundImage="call_speaker_on"/>
-                </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tbn-aC-euS" customClass="UIMutedMicroButton">
-                    <rect key="frame" x="219" y="343" width="35" height="35"/>
+                    <rect key="frame" x="216" y="340" width="40" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" backgroundImage="call_microphone_off"/>
+                    <state key="normal" image="mute_normal.png"/>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RQa-DE-BtC" customClass="UISpeakerButton">
+                    <rect key="frame" x="69" y="343" width="39" height="39"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" image="speaker_normal.png"/>
                 </button>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" red="0.86274509799999999" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="calibratedRGB"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="-1340" y="-228"/>
+            <point key="canvasLocation" x="-1340.8" y="-228.48575712143929"/>
         </view>
     </objects>
     <resources>
-        <image name="bg-call" width="720" height="1280"/>
-        <image name="call_microphone_off" width="112" height="112"/>
-        <image name="call_speaker_on" width="112" height="112"/>
-        <image name="decline_call_def" width="300" height="300"/>
-        <image name="default-avatar" width="256" height="256"/>
+        <image name="end_call_def.png" width="201" height="201"/>
         <image name="icon_ringing" width="256" height="256"/>
+        <image name="mute_normal.png" width="204" height="204"/>
+        <image name="no_avatar.png" width="256" height="256"/>
+        <image name="speaker_normal.png" width="204" height="204"/>
     </resources>
 </document>

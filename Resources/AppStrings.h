@@ -15,11 +15,40 @@
 #define IS_VIDEO_CALL_KEY   @"IS_VIDEO_CALL_KEY"
 
 
-#define link_appstore   @"https://itunes.apple.com/vn/app/cloudfone-vn/id1445535617?mt=8"
-#define link_introduce  @"https://cloudfone.vn/gioi-thieu-dich-vu-cloudfone/"
-#define link_policy     @"http://dieukhoan.cloudfone.vn/"
-#define youtube_channel @"UCBoBK-efPAsF1NbvCJFCzJw"
-#define facebook_link   @"https://www.facebook.com/CloudFone.VN/"
+
+
+
+
+#pragma mark - API
+
+#define link_api            @"https://api.cloudcall.vn"
+#define login_func          @"Login"
+#define update_token_func   @"UpdatePushToken"
+
+
+
+
+
+
+#define errorLoginCode  @"002"
+
+
+
+
+
+
+
+//#define link_appstore   @"https://itunes.apple.com/vn/app/cloudfone-vn/id1445535617?mt=8"
+//#define link_introduce  @"https://cloudfone.vn/gioi-thieu-dich-vu-cloudfone/"
+//#define link_policy     @"http://dieukhoan.cloudfone.vn/"
+//#define youtube_channel @"UCBoBK-efPAsF1NbvCJFCzJw"
+//#define facebook_link   @"https://www.facebook.com/CloudFone.VN/"
+
+#define link_appstore   @""
+#define link_introduce  @""
+#define link_policy     @""
+#define youtube_channel @""
+#define facebook_link   @""
 
 #define SHOW_LOGS @"[Show logs]"
 #define HEADER_ICON_WIDTH 35.0
@@ -145,13 +174,11 @@
 #define prefix_CHAT_BURN    @"prefix_CHAT_BURN"
 #define prefix_CHAT_BLOCK   @"prefix_CHAT_BLOCK"
 
-#pragma mark - API
 
-#define link_api                @"https://api.cloudcall.vn"
+
 
 #define getServerInfoFunc       @"GetServerInfo"
 #define getServerContacts       @"GetServerContacts"
-#define ChangeCustomerIOSToken  @"ChangeCustomerIOSToken"
 #define DecryptRSA              @"DecryptRSA"
 #define PushSharp               @"PushSharp"
 #define GetInfoMissCall         @"GetInfoMissCall"

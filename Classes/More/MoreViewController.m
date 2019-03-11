@@ -23,20 +23,14 @@
 
 @interface MoreViewController () {
     float hInfo;
-    
     NSMutableArray *listTitle;
     NSMutableArray *listIcon;
-    
-    UIFont *textFont;
-    
-    int logoutState;
-    UIButton *btnLogOut;
 }
 
 @end
 
 @implementation MoreViewController
-@synthesize _viewHeader, bgHeader, _imgAvatar, _lbName, lbPBXAccount, icEdit, _tbContent, lbNoAccount;
+@synthesize _viewHeader, bgHeader, _imgAvatar, _lbName, lbPBXAccount, _tbContent;
 
 #pragma mark - UICompositeViewDelegate Functions
 static UICompositeViewDescription *compositeDescription = nil;
@@ -64,16 +58,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     [super viewDidLoad];
     
     [self createDataForMenuView];
-    
-    btnLogOut = [[UIButton alloc] init];
-    btnLogOut.backgroundColor = [UIColor colorWithRed:(235/255.0) green:(235/255.0)
-                                                 blue:(235/255.0) alpha:1.0];
-    [btnLogOut setTitleColor:UIColor.redColor forState:UIControlStateNormal];
-    [btnLogOut setTitle:@"Đăng xuất" forState:UIControlStateNormal];
-    [btnLogOut addTarget:self
-                  action:@selector(btnSignOutPress)
-        forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview: btnLogOut];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -91,6 +75,9 @@ static UICompositeViewDescription *compositeDescription = nil;
     [self showContentWithCurrentLanguage];
     
     [self updateInformationOfUser];
+    
+    
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -102,8 +89,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)showContentWithCurrentLanguage {
     [self createDataForMenuView];
-    
-    lbNoAccount.text = [[LanguageUtil sharedInstance] getContent:@"No account"];
     [_tbContent reloadData];
 }
 
@@ -111,7 +96,13 @@ static UICompositeViewDescription *compositeDescription = nil;
 {
     if ([SipUtils getStateOfDefaultProxyConfig] != eAccountNone) {
         NSString *accountID = [SipUtils getAccountIdOfDefaultProxyConfig];
-        lbPBXAccount.text = accountID;
+        if (![AppUtils isNullOrEmpty: accountID] && accountID.length > 5) {
+            NSString *ext = [accountID substringFromIndex: 5];
+            lbPBXAccount.text = ext;
+            lbPBXAccount.text = [NSString stringWithFormat:@"Số nội bộ: %@", ext];
+        }else{
+            lbPBXAccount.text = [NSString stringWithFormat:@"Số nội bộ: %@", @"N/A"];
+        }
         
         NSString *pbxKeyName = [NSString stringWithFormat:@"%@_%@", @"pbxName", accountID];
         NSString *name = [[NSUserDefaults standardUserDefaults] objectForKey: pbxKeyName];
@@ -139,21 +130,12 @@ static UICompositeViewDescription *compositeDescription = nil;
     _imgAvatar.hidden = !show;
     lbPBXAccount.hidden = !show;
     _lbName.hidden = !show;
-    lbNoAccount.hidden = show;
-    
-    icEdit.hidden = YES;
 }
 
 //  Cập nhật vị trí cho view
 - (void)autoLayoutForMainView {
-    if (SCREEN_WIDTH > 320) {
-        textFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
-    }else{
-        textFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
-    }
-    
-    self.view.backgroundColor = [UIColor colorWithRed:(230/255.0) green:(230/255.0)
-                                                 blue:(230/255.0) alpha:1.0];
+    self.view.backgroundColor = [UIColor colorWithRed:(243/255.0) green:(244/255.0)
+                                                 blue:(248/255.0) alpha:1.0];
     if ([SipUtils getStateOfDefaultProxyConfig] == eAccountNone) {
         hInfo = [LinphoneAppDelegate sharedInstance]._hRegistrationState + 100;
     }else{
@@ -166,12 +148,6 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.height.mas_equalTo(hInfo);
     }];
     
-    [lbNoAccount mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.left.bottom.right.equalTo(_viewHeader);
-    }];
-    lbNoAccount.textColor = UIColor.whiteColor;
-    lbNoAccount.font = textFont;
-    
     [bgHeader mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.bottom.right.equalTo(_viewHeader);
     }];
@@ -183,19 +159,16 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
     _imgAvatar.clipsToBounds = YES;
     _imgAvatar.layer.cornerRadius = 55.0/2;
+    _imgAvatar.layer.borderColor = [UIColor colorWithRed:(96/255.0) green:(195/255.0)
+                                                    blue:(66/255.0) alpha:1.0].CGColor;
+    _imgAvatar.layer.borderWidth = 2.0;
     
-    //  Edit icon
-    [icEdit mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_imgAvatar);
-        make.right.equalTo(_viewHeader).offset(-10);
-        make.width.height.mas_equalTo(35.0);
-    }];
-    
+    _lbName.font = [UIFont systemFontOfSize:16.0 weight:UIFontWeightBold];
     _lbName.textColor = UIColor.whiteColor;
     [_lbName mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_imgAvatar);
-        make.left.equalTo(_imgAvatar.mas_right).offset(5);
-        make.right.equalTo(icEdit.mas_left).offset(-5);
+        make.left.equalTo(_imgAvatar.mas_right).offset(5.0);
+        make.right.equalTo(_viewHeader).offset(-5.0);
         make.bottom.equalTo(_imgAvatar.mas_centerY);
     }];
     
@@ -204,14 +177,6 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.top.equalTo(_lbName.mas_bottom);
         make.left.right.equalTo(_lbName);
         make.bottom.equalTo(_imgAvatar.mas_bottom);
-    }];
-    
-    //  signout button
-    btnLogOut.titleLabel.font = textFont;
-    [btnLogOut mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self.view);
-        make.bottom.equalTo(self.view);
-        make.height.mas_equalTo(60.0);
     }];
     
     _tbContent.backgroundColor = UIColor.clearColor;
@@ -233,9 +198,9 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 //  Khoi tao du lieu cho view
 - (void)createDataForMenuView {
-    listTitle = [[NSMutableArray alloc] initWithObjects: [[LanguageUtil sharedInstance] getContent:@"Choose ringtone"], [[LanguageUtil sharedInstance] getContent:@"Call settings"], [[LanguageUtil sharedInstance] getContent:@"Send logs"], [[LanguageUtil sharedInstance] getContent:@"About"], nil];
+    listTitle = [[NSMutableArray alloc] initWithObjects: [[LanguageUtil sharedInstance] getContent:@"Choose ringtone"], [[LanguageUtil sharedInstance] getContent:@"Call settings"], [[LanguageUtil sharedInstance] getContent:@"App information"], [[LanguageUtil sharedInstance] getContent:@"Send reports"], [[LanguageUtil sharedInstance] getContent:@"Sign out"], [[LanguageUtil sharedInstance] getContent:@"Privacy & Policy"], [[LanguageUtil sharedInstance] getContent:@"Answer & Support"], nil];
     
-    listIcon = [[NSMutableArray alloc] initWithObjects: @"ic_setup.png", @"ic_setting.png", @"ic_send_logs.png", @"ic_info.png", nil];
+    listIcon = [[NSMutableArray alloc] initWithObjects: @"more_ringtone", @"more_call_settings", @"more_app_info", @"more_send_reports", @"more_signout", @"more_policy", @"more_support", nil];
 }
 
 #pragma mark - uitableview delegate
@@ -255,6 +220,20 @@ static UICompositeViewDescription *compositeDescription = nil;
         cell = topLevelObjects[0];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    if (indexPath.row <= eSignOut) {
+        cell.contentView.backgroundColor = UIColor.whiteColor;
+        if (indexPath.row == eSendLogs) {
+            cell._lbSepa.hidden = NO;
+            cell._lbSepa.backgroundColor = self.view.backgroundColor;
+        }else{
+            cell._lbSepa.hidden = YES;
+        }
+        cell._lbTitle.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightBold];
+    }else{
+        cell._lbSepa.hidden = YES;
+        cell.contentView.backgroundColor = UIColor.clearColor;
+        cell._lbTitle.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightRegular];
+    }
     
     cell._iconImage.image = [UIImage imageNamed:[listIcon objectAtIndex: indexPath.row]];
     cell._lbTitle.text = [listTitle objectAtIndex:indexPath.row];
@@ -266,20 +245,31 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     switch (indexPath.row) {
-        case eSettingsAccount:{
-            [[PhoneMainView instance] changeCurrentView:[AccountSettingsViewController compositeViewDescription] push:true];
+        case eRingtone:{
+            //  [[PhoneMainView instance] changeCurrentView:[AccountSettingsViewController compositeViewDescription] push:true];
             break;
         }
-        case eSettings:{
-            [[PhoneMainView instance] changeCurrentView:[SettingsView compositeViewDescription] push:true];
+        case eCallSettings:{
+            //  [[PhoneMainView instance] changeCurrentView:[SettingsView compositeViewDescription] push:true];
+            break;
+        }
+        case eAppInfo:{
+            //  [[PhoneMainView instance] changeCurrentView:[SendLogsViewController compositeViewDescription] push:true];
             break;
         }
         case eSendLogs:{
-            [[PhoneMainView instance] changeCurrentView:[SendLogsViewController compositeViewDescription]
-                                                   push:true];
+            //  [[PhoneMainView instance] changeCurrentView:[AboutViewController compositeViewDescription] push:true];
             break;
         }
-        case eAbout:{
+        case eSignOut:{
+            //  [[PhoneMainView instance] changeCurrentView:[AboutViewController compositeViewDescription] push:true];
+            break;
+        }
+        case ePrivayPolicy:{
+            //  [[PhoneMainView instance] changeCurrentView:[AboutViewController compositeViewDescription] push:true];
+            break;
+        }
+        case eAnswerSupport:{
             //  [[PhoneMainView instance] changeCurrentView:[AboutViewController compositeViewDescription] push:true];
             break;
         }

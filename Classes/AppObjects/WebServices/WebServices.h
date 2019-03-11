@@ -8,7 +8,7 @@
 #import <Foundation/Foundation.h>
 
 @protocol WebServicesDelegate
-- (void)failedToCallWebService: (NSString *)link andError: (NSString *)error;
+- (void)failedToCallWebService:(NSString *)link andError:(id)error;
 - (void)successfulToCallWebService: (NSString *)link withData: (NSDictionary *)data;
 - (void)receivedResponeCode: (NSString *)link withCode: (int)responeCode;
 @end
@@ -19,7 +19,7 @@
 
 - (void)callWebServiceWithLink: (NSString *)linkService withParams: (NSDictionary *)paramsDict;
 - (void)callWebServiceWithLink: (NSString *)linkService withParams: (NSDictionary *)paramsDict inBackgroundMode: (BOOL)isBackgroundMode;
-- (void)callGETWebServiceWithParams: (NSString *)params;
+- (void)callGETWebServiceWithFunction: (NSString *)function andParams: (NSString *)params;
 
 @end
 

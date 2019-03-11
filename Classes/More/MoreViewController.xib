@@ -16,8 +16,6 @@
                 <outlet property="_tbContent" destination="YUO-pX-n0L" id="w9i-Of-ci7"/>
                 <outlet property="_viewHeader" destination="y5I-aF-LNa" id="JAk-TN-iyT"/>
                 <outlet property="bgHeader" destination="FSI-6e-MoN" id="0eI-WL-loi"/>
-                <outlet property="icEdit" destination="TRM-vo-ZOX" id="aAt-aJ-nHM"/>
-                <outlet property="lbNoAccount" destination="YvK-2X-Yo9" id="ZL7-m4-qjp"/>
                 <outlet property="lbPBXAccount" destination="2Sd-2v-HZr" id="fEH-pt-4EE"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -31,7 +29,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="70"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background_more.png" id="FSI-6e-MoN">
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background_header.jpg" id="FSI-6e-MoN">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="70"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
@@ -53,38 +51,22 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="TRM-vo-ZOX">
-                            <rect key="frame" x="277" y="8" width="35" height="35"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" backgroundImage="ic_edit.png"/>
-                            <connections>
-                                <action selector="icEditClicked:" destination="-1" eventType="touchUpInside" id="hYw-F5-ycj"/>
-                            </connections>
-                        </button>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No account" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="YvK-2X-Yo9">
-                            <rect key="frame" x="139" y="25" width="89" height="21"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <nil key="highlightedColor"/>
-                        </label>
                     </subviews>
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="YUO-pX-n0L">
-                    <rect key="frame" x="0.0" y="120" width="320" height="292"/>
+                    <rect key="frame" x="0.0" y="70" width="320" height="389"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" red="0.1627805567" green="0.67584343309999995" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </tableView>
             </subviews>
             <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="-460.80000000000001" y="-333.7331334332834"/>
+            <point key="canvasLocation" x="-460.80000000000001" y="-334.18290854572717"/>
         </view>
     </objects>
     <resources>
-        <image name="background_more.png" width="750" height="360"/>
-        <image name="ic_edit.png" width="128" height="128"/>
-        <image name="no_avatar.png" width="198" height="198"/>
+        <image name="background_header.jpg" width="1028" height="180"/>
+        <image name="no_avatar.png" width="256" height="256"/>
     </resources>
 </document>

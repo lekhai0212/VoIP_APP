@@ -10,6 +10,17 @@
 "Search name or phone number" = "Tìm tên hoặc số điện thoại"
 "Count all contacts" = "Tất cả liên hệ"
 "Sync contacts" = "Đồng bộ"
+"Choose ringtone" = "Chọn nhạc chuông"
+"Call settings" = "Cài đặt cuộc gọi"
+"App information" = "Thông tin ứng dụng"
+"Send reports" = "Gửi reports"
+"Sign out" = "Đăng xuất"
+"Privacy & Policy" = "Chính sách bảo mật"
+"Answer & Support" = "Hỏi đáp & hỗ trợ"
+
+
+
+
 
 
 "Online" = "Sẵn sàng"
@@ -26,9 +37,9 @@
 "Account settings" = "Cài đặt tài khoản"
 "Settings" = "Thiết lập chung"
 "Feedback" = "Phản hồi"
-"Privacy Policy" = "Chính sách bảo mật"
+
 "Introduction" = "Giới thiệu"
-"Send logs" = "Gửi nhật ký"
+
 "About" = "Thông tin"
 
 "PBX account" = "Tài khoản PBX"
@@ -55,7 +66,7 @@
 "Current password not correct" = "Mật khẩu hiện tại không chính xác"
 
 "Change language" = "Đổi ngôn ngữ"
-"Call settings" = "Cài đặt cuộc gọi"
+
 "Vietnamese" = "Tiếng việt"
 "English" = "Tiếng anh"
 
@@ -223,7 +234,7 @@
 "Please fill full information" = "Vui lòng nhập đầy đủ thông tin"
 
 "Please check sign in information" = "Vui lòng kiểm tra thông tin đăng nhập"
-"Choose ringtone" = "Chọn nhạc chuông"
+
 "Audio call" = "Gọi audio"
 "Video call" = "Gọi hình"
 "Can not detect QRCode. Please check again!" = "Không thể kiểm tra QRCode. Vui lòng kiểm tra lại!"

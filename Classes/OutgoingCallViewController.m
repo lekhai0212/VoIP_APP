@@ -173,6 +173,10 @@ static UICompositeViewDescription *compositeDescription = nil;
         textFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
     }
     
+    [_imgBackground mas_makeConstraints:^(MASConstraintMaker *make) {
+        
+    }];
+    
     _imgBackground.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     
     _imgAvatar.frame = CGRectMake((SCREEN_WIDTH-wAvatar)/2, (SCREEN_WIDTH-wAvatar)/2, wAvatar, wAvatar);

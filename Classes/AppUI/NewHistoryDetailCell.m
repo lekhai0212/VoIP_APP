@@ -8,53 +8,63 @@
 #import "NewHistoryDetailCell.h"
 
 @implementation NewHistoryDetailCell
-@synthesize imgStatus, lbDate, lbTime, lbDuration, lbState, lbSepa;
+@synthesize imgStatus, lbDate, lbTime, lbDuration, lbState, lbSepa, imgDuration;
 
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
     
     [imgStatus mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self).offset(20.0);
-        make.centerY.equalTo(self.mas_centerY);
-        make.width.height.mas_equalTo(25.0);
-    }];
-    
-    lbDate.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
-    lbDate.textColor = UIColor.blackColor;
-    [lbDate mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(imgStatus.mas_right).offset(15.0);
+        make.left.equalTo(self).offset(10.0);
         make.top.equalTo(self).offset(10.0);
-        make.right.equalTo(self.mas_centerX).offset(20.0);
-        make.bottom.equalTo(self.mas_centerY);
+        make.width.height.mas_equalTo(18.0);
     }];
     
-    lbTime.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
-    lbTime.textColor = [UIColor colorWithRed:(50/255.0) green:(50/255.0)
-                                        blue:(50/255.0) alpha:1.0];
-    [lbTime mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.mas_centerY);
-        make.left.right.equalTo(lbDate);
-        make.bottom.equalTo(self).offset(-5.0);
-    }];
-    
-    lbState.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
-    lbState.textColor = lbTime.textColor;
+    lbState.font = [UIFont systemFontOfSize:16.0 weight:UIFontWeightBold];
+    lbState.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     [lbState mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.bottom.equalTo(lbDate);
-        make.left.equalTo(lbDate.mas_right).offset(10.0);
-        make.right.equalTo(self).offset(-10.0);
+        make.bottom.equalTo(self.mas_centerY);
+        make.left.equalTo(imgStatus.mas_right).offset(8.0);
+        make.right.equalTo(self).offset(-8.0);
+        make.height.mas_equalTo(25.0);
     }];
     
-    lbDuration.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
+    lbDate.font = [UIFont systemFontOfSize:16.0 weight:UIFontWeightRegular];
+    lbDate.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
+    lbDate.backgroundColor = UIColor.greenColor;
+    [lbDate mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(lbState.mas_bottom);
+        make.left.equalTo(lbState);
+        make.width.mas_equalTo(100);
+        make.height.mas_equalTo(25.0);
+    }];
+    
+    lbTime.font = lbDate.font;
+    lbTime.textAlignment = NSTextAlignmentCenter;
+    lbTime.backgroundColor = UIColor.orangeColor;
+    lbTime.textColor = lbDate.textColor;
+    [lbTime mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.bottom.equalTo(lbDate);
+        make.left.equalTo(lbDate.mas_right).offset(5.0);
+        make.width.mas_equalTo(80);
+    }];
+    
+    [imgDuration mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(lbTime.mas_centerY);
+        make.left.equalTo(lbTime.mas_right).offset(30.0);
+        make.width.height.mas_equalTo(22.0);
+    }];
+    
+    lbDuration.font = lbTime.font;
     lbDuration.textColor = lbTime.textColor;
     [lbDuration mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(lbTime);
-        make.left.right.equalTo(lbState);
+        make.right.equalTo(self).offset(-8.0);
+        make.left.equalTo(imgDuration.mas_right).offset(3.0);
     }];
     
-    lbSepa.backgroundColor = [UIColor colorWithRed:(220/255.0) green:(220/255.0)
-                                              blue:(220/255.0) alpha:1.0];
+    lbSepa.backgroundColor = [UIColor colorWithRed:(240/255.0) green:(240/255.0)
+                                              blue:(240/255.0) alpha:1.0];
     [lbSepa mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.equalTo(self);
         make.height.mas_equalTo(1.0);

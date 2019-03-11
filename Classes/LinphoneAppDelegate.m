@@ -1990,45 +1990,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
 }
 
-- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
-{
-    INInteraction *interaction = userActivity.interaction;
-    if (interaction != nil) {
-        INStartAudioCallIntent *startAudioCallIntent = (INStartAudioCallIntent *)interaction.intent;
-        if (startAudioCallIntent != nil && startAudioCallIntent.contacts.count > 0) {
-            INPerson *contact = startAudioCallIntent.contacts[0];
-            if (contact != nil) {
-                INPersonHandle *personHandle = contact.personHandle;
-                NSString *phoneNumber = personHandle.value;
-                if (![AppUtils isNullOrEmpty: phoneNumber])
-                {
-                    phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
-                    if ([AppUtils isNullOrEmpty: phoneNumber]) {
-                        [self showSplashScreenOnView: NO];
-                    }else{
-                        [self showSplashScreenOnView: YES];
-
-                        [[NSUserDefaults standardUserDefaults] setObject:phoneNumber forKey:UserActivity];
-                        [[NSUserDefaults standardUserDefaults] synchronize];
-                    }
-                }
-            }
-        }
-    }
-    return YES;
-}
-
-- (void)showSplashScreenOnView: (BOOL)show {
-    if (splashScreen == nil) {
-        UINib *nib = [UINib nibWithNibName:@"LaunchScreen" bundle:nil];
-        splashScreen = [[nib instantiateWithOwner:self options:nil] objectAtIndex:0];
-        [self.window addSubview:splashScreen];
-    }
-    splashScreen.frame = [UIScreen mainScreen].bounds;
-    splashScreen.hidden = !show;
-}
-
-//-(BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+//- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
 //{
 //    INInteraction *interaction = userActivity.interaction;
 //    if (interaction != nil) {
@@ -2056,6 +2018,44 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 //    return YES;
 //}
 
+- (void)showSplashScreenOnView: (BOOL)show {
+    if (splashScreen == nil) {
+        UINib *nib = [UINib nibWithNibName:@"LaunchScreen" bundle:nil];
+        splashScreen = [[nib instantiateWithOwner:self options:nil] objectAtIndex:0];
+        [self.window addSubview:splashScreen];
+    }
+    splashScreen.frame = [UIScreen mainScreen].bounds;
+    splashScreen.hidden = !show;
+}
+
+-(BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+{
+    INInteraction *interaction = userActivity.interaction;
+    if (interaction != nil) {
+        INStartAudioCallIntent *startAudioCallIntent = (INStartAudioCallIntent *)interaction.intent;
+        if (startAudioCallIntent != nil && startAudioCallIntent.contacts.count > 0) {
+            INPerson *contact = startAudioCallIntent.contacts[0];
+            if (contact != nil) {
+                INPersonHandle *personHandle = contact.personHandle;
+                NSString *phoneNumber = personHandle.value;
+                if (![AppUtils isNullOrEmpty: phoneNumber])
+                {
+                    phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
+                    if ([AppUtils isNullOrEmpty: phoneNumber]) {
+                        [self showSplashScreenOnView: NO];
+                    }else{
+                        [self showSplashScreenOnView: YES];
+
+                        [[NSUserDefaults standardUserDefaults] setObject:phoneNumber forKey:UserActivity];
+                        [[NSUserDefaults standardUserDefaults] synchronize];
+                    }
+                }
+            }
+        }
+    }
+    return YES;
+}
+
 #pragma mark - sync contact xmpp
 
 +(LinphoneAppDelegate*) sharedInstance{
@@ -2065,19 +2065,11 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 #pragma mark - Web services delegate
 
 - (void)updateCustomerTokenIOS {
-    NSString *server = [[NSUserDefaults standardUserDefaults] objectForKey:PBX_SERVER];
-    if (USERNAME != nil && ![AppUtils isNullOrEmpty: server]) {
-        NSMutableDictionary *jsonDict = [[NSMutableDictionary alloc] init];
-        [jsonDict setObject:AuthUser forKey:@"AuthUser"];
-        [jsonDict setObject:AuthKey forKey:@"AuthKey"];
-        [jsonDict setObject:@"" forKey:@"UserName"];
-        [jsonDict setObject:_deviceToken forKey:@"IOSToken"];
-        [jsonDict setObject:server forKey:@"PBXID"];
-        [jsonDict setObject:USERNAME forKey:@"PBXExt"];
+    if (USERNAME != nil) {
+        NSString *params = [NSString stringWithFormat:@"pushToken=%@&userName=%@", _deviceToken, USERNAME];
+        [webService callGETWebServiceWithFunction:update_token_func andParams:params];
         
-        [webService callWebServiceWithLink:ChangeCustomerIOSToken withParams:jsonDict];
-        
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] jsonDict = %@", __FUNCTION__, @[jsonDict]] toFilePath:logFilePath];
+        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, params] toFilePath:logFilePath];
     }
 }
 
@@ -2148,7 +2140,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 
                 BOOL exists = [NSDatabase checkMissedCallExistsFromUser: phoneNumberCall withAccount: USERNAME atTime: (int)[createDate intValue]];
                 if (!exists) {
-                    [NSDatabase InsertHistory:callId status:missed_call phoneNumber:phoneNumberCall callDirection:incomming_call recordFiles:@"" duration:0 date:date time:time time_int:[createDate doubleValue] rate:0 sipURI:phoneNumberCall MySip:USERNAME kCallId:@"" andFlag:1 andUnread:1];
+                    [NSDatabase InsertHistory:callId status:missed_call phoneNumber:phoneNumberCall callDirection:incomming_call recordFiles:@"" duration:0 date:date time:time time_int:[createDate doubleValue] callType:1 sipURI:phoneNumberCall MySip:USERNAME kCallId:@"" andFlag:1 andUnread:1];
                 }
             }
         }
@@ -2161,7 +2153,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 {
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Result for %@:\nResponse data: %@\n", __FUNCTION__, link, error] toFilePath:logFilePath];
     
-    if ([link isEqualToString:ChangeCustomerIOSToken]) {
+    if ([link isEqualToString: update_token_func]) {
         _updateTokenSuccess = false;
     }
 }
@@ -2169,7 +2161,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 - (void)successfulToCallWebService:(NSString *)link withData:(NSDictionary *)data {
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Result for %@:\nResponse data: %@\n", __FUNCTION__, link, @[data]] toFilePath:logFilePath];
     
-    if ([link isEqualToString:ChangeCustomerIOSToken]) {
+    if ([link isEqualToString: update_token_func]) {
         _updateTokenSuccess = true;
     }else if ([link isEqualToString: GetInfoMissCall]){
         [self insertMissedCallToDatabase: data];
@@ -2563,5 +2555,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [ipadWaiting stopAnimating];
     }
 }
+
+/*
+*/
 
 @end

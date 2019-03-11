@@ -891,6 +891,8 @@ static void linphone_iphone_display_status(struct _LinphoneCore *lc, const char 
             callID = [AppUtils randomStringWithLength:10];
         }
         
+        BOOL videoEnabled = linphone_call_params_video_enabled(linphone_call_get_remote_params(call));
+        NSLog(@"%d", videoEnabled);
         NSString *phoneNumber = [NSString stringWithUTF8String:linphone_address_get_username(addr)];
         if ([callStatus isEqualToString:missed_call] || [callStatus isEqualToString: aborted_call]) {
             int unread = 1;
@@ -902,7 +904,7 @@ static void linphone_iphone_display_status(struct _LinphoneCore *lc, const char 
             }
             
             // Outgoing
-            [NSDatabase InsertHistory:callID status:callStatus phoneNumber:phoneNumber callDirection:callDicrection recordFiles:@"" duration:0 date:date time:time time_int:[[NSNumber numberWithInt:(int)linphone_call_log_get_start_date(callLog)] intValue] rate:0 sipURI:strAddress MySip:USERNAME kCallId:@"" andFlag:1 andUnread: unread];
+            [NSDatabase InsertHistory:callID status:callStatus phoneNumber:phoneNumber callDirection:callDicrection recordFiles:@"" duration:0 date:date time:time time_int:[[NSNumber numberWithInt:(int)linphone_call_log_get_start_date(callLog)] intValue] callType:1 sipURI:strAddress MySip:USERNAME kCallId:@"" andFlag:1 andUnread: unread];
             
             // Huỷ bỏ biến cancel cuộc gọi
             [[LinphoneAppDelegate sharedInstance] set_meEnded: FALSE];
@@ -913,7 +915,7 @@ static void linphone_iphone_display_status(struct _LinphoneCore *lc, const char 
                 unread = 0;
             }
             // Outgoing
-            [NSDatabase InsertHistory:callID status:callStatus phoneNumber:phoneNumber callDirection:callDicrection recordFiles:@"" duration:0 date:date time:time time_int:[[NSNumber numberWithInt:(int)linphone_call_log_get_start_date(callLog)] intValue] rate:0 sipURI:strAddress MySip:USERNAME kCallId:@"" andFlag:1 andUnread: unread];
+            [NSDatabase InsertHistory:callID status:callStatus phoneNumber:phoneNumber callDirection:callDicrection recordFiles:@"" duration:0 date:date time:time time_int:[[NSNumber numberWithInt:(int)linphone_call_log_get_start_date(callLog)] intValue] callType:1 sipURI:strAddress MySip:USERNAME kCallId:@"" andFlag:1 andUnread: unread];
             
             // Huỷ bỏ biến cancel cuộc gọi
             [[LinphoneAppDelegate sharedInstance] set_meEnded: FALSE];
@@ -1077,12 +1079,12 @@ static void linphone_iphone_display_status(struct _LinphoneCore *lc, const char 
             if ([LinphoneAppDelegate sharedInstance]._busyForCall) {
                 int timeInt = (int)linphone_call_log_get_start_date(callLog);
                 
-                [NSDatabase InsertHistory:callID status:missed_call phoneNumber:phoneNumber callDirection:callDicrection recordFiles:@"" duration:duration date:date time:time time_int:timeInt rate:0 sipURI:strAddress MySip:USERNAME kCallId:@"" andFlag:1 andUnread:1];
+                [NSDatabase InsertHistory:callID status:missed_call phoneNumber:phoneNumber callDirection:callDicrection recordFiles:@"" duration:duration date:date time:time time_int:timeInt callType:1 sipURI:strAddress MySip:USERNAME kCallId:@"" andFlag:1 andUnread:1];
                 
                 [[LinphoneAppDelegate sharedInstance] set_busyForCall: NO];
             }else{
                 int timeInt = (int)linphone_call_log_get_start_date(callLog);
-                [NSDatabase InsertHistory:callID status:callStatus phoneNumber:phoneNumber callDirection:callDicrection recordFiles:@"" duration:duration date:date time:time time_int:timeInt rate:0 sipURI:strAddress MySip:USERNAME kCallId:@"" andFlag:1 andUnread:0];
+                [NSDatabase InsertHistory:callID status:callStatus phoneNumber:phoneNumber callDirection:callDicrection recordFiles:@"" duration:duration date:date time:time time_int:timeInt callType:1 sipURI:strAddress MySip:USERNAME kCallId:@"" andFlag:1 andUnread:0];
             }
         }
         

@@ -234,10 +234,12 @@ HMLocalization *localization;
              NSString *callTime      = [rsDict objectForKey:@"time"];
              NSString *callDate      = [rsDict objectForKey:@"date"];
              NSString *phoneNumber   = [rsDict objectForKey:@"phone_number"];
+             int callType            = [[rsDict objectForKey:@"call_type"] intValue];
              long timeInt   = [[rsDict objectForKey:@"time_int"] longValue];
              
              aCall._prefixPhone = @"";
              aCall._phoneNumber = phoneNumber;
+             aCall.callType = callType;
              
              //  [Khai le - 03/11/2018]
              PhoneObject *aPhone = [ContactUtils getContactPhoneObjectWithNumber: phoneNumber];
@@ -316,9 +318,9 @@ HMLocalization *localization;
     return result;
 }
 
-+ (void)InsertHistory : (NSString *)call_id status : (NSString *)status phoneNumber : (NSString *)phone_number callDirection : (NSString *)callDirection recordFiles : (NSString*) record_files duration : (int)duration date : (NSString *)date time : (NSString *)time time_int : (int)time_int rate : (float)rate sipURI : (NSString*)sipUri MySip : (NSString *)mysip kCallId: (NSString *)kCallId andFlag: (int)flag andUnread: (int)unread{
++ (void)InsertHistory : (NSString *)call_id status : (NSString *)status phoneNumber : (NSString *)phone_number callDirection : (NSString *)callDirection recordFiles : (NSString*) record_files duration : (int)duration date : (NSString *)date time : (NSString *)time time_int : (int)time_int callType : (int)callType sipURI : (NSString*)sipUri MySip : (NSString *)mysip kCallId: (NSString *)kCallId andFlag: (int)flag andUnread: (int)unread{
     [self openDB];
-    NSString *sql = [NSString stringWithFormat:@"INSERT INTO history(call_id,status,phone_number,call_direction,record_files,duration,date,rate,sipURI,time,time_int,my_sip, k_call_id, flag, unread) VALUES ('%@','%@','%@','%@','%@',%d,'%@',%f,'%@','%@',%d,'%@','%@',%d,%d)",call_id,status,phone_number,callDirection,record_files,duration,date,rate,sipUri,time,time_int,mysip, kCallId, flag, unread];
+    NSString *sql = [NSString stringWithFormat:@"INSERT INTO history(call_id,status,phone_number,call_direction,record_files,duration,date,call_type,sipURI,time,time_int,my_sip, k_call_id, flag, unread) VALUES ('%@','%@','%@','%@','%@',%d,'%@',%d,'%@','%@',%d,'%@','%@',%d,%d)",call_id,status,phone_number,callDirection,record_files,duration,date,callType,sipUri,time,time_int,mysip, kCallId, flag, unread];
     NSLog(@"%@",sql);
     char *err;
     sqlite3_exec(db, [sql UTF8String], NULL, NULL, &err);

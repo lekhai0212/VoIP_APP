@@ -18,6 +18,8 @@
     UIActivityIndicatorView *icWaiting;
     
     WebServices *webService;
+    NSString *port;
+    NSString *domain;
 }
 @end
 
@@ -66,8 +68,8 @@ static UICompositeViewDescription *compositeDescription = nil;
     // Do any additional setup after loading the view from its nib.
     [self setupUIForView];
     
-    //  tfAccountID.text = @"nhcla150";
-    //  tfPassword.text = @"f7NnFKI1Kv";
+    tfAccountID.text = @"nhcla150";
+    tfPassword.text = @"f7NnFKI1Kv";
     //  tfAccountID.text = @"nhcla151";
     //  tfPassword.text = @"5obr8jHH2q";
     
@@ -95,6 +97,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
+    domain = @"";
+    port = @"";
     
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(registrationUpdateEvent:)
                                                name:kLinphoneRegistrationUpdate object:nil];
@@ -130,7 +134,8 @@ static UICompositeViewDescription *compositeDescription = nil;
     icWaiting.hidden = NO;
     [icWaiting startAnimating];
     
-    [SipUtils registerPBXAccount:tfAccountID.text password:tfPassword.text ipAddress:DOMAIN_DEFAULT port:PORT_DEFAULT];
+    NSString *params = [NSString stringWithFormat:@"userName=%@&password=%@", tfAccountID.text, tfPassword.text];
+    [webService callGETWebServiceWithFunction:login_func andParams:params];
 }
 
 - (IBAction)iconBackPress:(UIButton *)sender {
@@ -522,7 +527,16 @@ static UICompositeViewDescription *compositeDescription = nil;
             
             [[NSUserDefaults standardUserDefaults] setObject:tfAccountID.text forKey:key_login];
             [[NSUserDefaults standardUserDefaults] setObject:tfPassword.text forKey:key_password];
+            if (tfAccountID.text.length > 5) {
+                NSString *accountID = [tfAccountID.text substringFromIndex: 5];
+                if ([AppUtils isNullOrEmpty: accountID]) {
+                    [[NSUserDefaults standardUserDefaults] setObject:accountID forKey:PBX_ID];
+                }
+            }
+            [[NSUserDefaults standardUserDefaults] setObject:domain forKey:PBX_SERVER];
+            [[NSUserDefaults standardUserDefaults] setObject:port forKey:PBX_PORT];
             [[NSUserDefaults standardUserDefaults] synchronize];
+            
             
             [PhoneMainView.instance changeCurrentView:DialerView.compositeViewDescription];
             break;
@@ -727,46 +741,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (IBAction)btnStartPress:(UIButton *)sender {
-    
-//    NSMutableDictionary *jsonDict = [[NSMutableDictionary alloc] init];
-//    [jsonDict setObject:@"nhcla150" forKey:@"userName"];
-//    [jsonDict setObject:@"f7NnFKI1Kv" forKey:@"password"];
-//    [jsonDict setObject:@"2" forKey:@"clientid"];
-//    [jsonDict setObject:@"iOS10" forKey:@"versionos"];
-//    [jsonDict setObject:@"1.0(1)" forKey:@"versionapp"];
-//    [jsonDict setObject:@"iphone6" forKey:@"devicename"];
-//
-//
-//    NSString *total = [NSString stringWithFormat:@"%@%@", @"nhcla150", @"f7NnFKI1Kv"];
-//    NSString *md5Str = [[total MD5String] lowercaseString];
-//    NSString *hashcode = [NSString stringWithFormat:@"%@%@", @"nhcla", md5Str];
-//
-//    [jsonDict setObject:hashcode forKey:@"hashcode"];
-//    [webService callWebServiceWithLink:@"Login" withParams:jsonDict];
-    
-    //  [webService callGETWebServiceWithParams:[NSString stringWithFormat:@"userName=%@&password=%@", @"nhcla150",@"f7NnFKI1Kv"]];
-    [webService callGETWebServiceWithParams:[NSString stringWithFormat:@"userName=%@", @"nhcla150"]];
-    /*
-     
-     - clientid: 1:web    2:app …..     hoac 1: android    2:ios ….
-     - versionos: phiên bản hệ điều hành (vd: iOS12, Android 9)
-     - versionapp: phiên bản ứng dụng ( vd: 1.0.0(1) )
-     - devicename: tên máy (vd: samsung s10+ SM-G975F)
-     - hashcode: mã hash bảo mật do mình qui định, mã này phải khớp giữa client và server thì mới cho call api
-     
-     efbfc415b5ae0a5e057537549f22054c
-     
-     clientid = 2;
-     devicename = iphone6;
-     hashcode = nhclaefbfc415b5ae0a5e057537549f22054c;
-     password = f7NnFKI1Kv;
-     userName = nhcla150;
-     versionapp = "1.0(1)";
-     versionos = iOS10;
-    */
-    
-    return;
-    
     sender.enabled = NO;
     [sender setTitleColor:[UIColor colorWithRed:(60/255.0) green:(198/255.0) blue:(116/255.0) alpha:1.0]
                  forState:UIControlStateNormal];
@@ -825,16 +799,48 @@ static UICompositeViewDescription *compositeDescription = nil;
     return verString;
 }
 
+- (void)hideWaitingView: (BOOL)hide {
+    if (hide) {
+        [icWaiting stopAnimating];
+        icWaiting.hidden = YES;
+    }else{
+        [icWaiting startAnimating];
+        icWaiting.hidden = NO;
+    }
+}
+
 #pragma mark - Webservice Delegate
 
-- (void)failedToCallWebService:(NSString *)link andError:(NSString *)error
+- (void)failedToCallWebService:(NSString *)link andError:(id)error
 {
-    NSLog(@"%@", error);
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] link: %@.\nResponse data: %@", __FUNCTION__, link, @[error]] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
+    [self hideWaitingView: YES];
+    if ([error isKindOfClass:[NSDictionary class]]) {
+        NSString *errorCode = [error objectForKey:@"errorCode"];
+        if ([errorCode isKindOfClass:[NSString class]] && [errorCode isEqualToString: errorLoginCode]) {
+            [self.view makeToast:@"Sai tên đăng nhập hoặc mật khẩu"
+                        duration:2.0 position:CSToastPositionCenter];
+        }
+    }
 }
 
 - (void)successfulToCallWebService:(NSString *)link withData:(NSDictionary *)data
 {
-    NSLog(@"%@", data);
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] link: %@.\nResponse data: %@", __FUNCTION__, link, @[data]] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
+    if ([link isEqualToString: login_func]) {
+        if (data != nil && [data isKindOfClass:[NSDictionary class]]) {
+            domain = [data objectForKey:@"domain"];
+            port = [data objectForKey:@"port"];
+            if ([port isKindOfClass:[NSNumber class]]) {
+                port = [NSString stringWithFormat:@"%d", [port intValue]];
+            }
+            [SipUtils registerPBXAccount:tfAccountID.text password:tfPassword.text ipAddress:domain port:port];
+        }
+    }else{
+        [self hideWaitingView: YES];
+    }
 }
 
 - (void)receivedResponeCode:(NSString *)link withCode:(int)responeCode {

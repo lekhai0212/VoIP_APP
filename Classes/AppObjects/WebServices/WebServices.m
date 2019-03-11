@@ -40,11 +40,11 @@
     }
 }
 
-- (void)callGETWebServiceWithParams: (NSString *)params
+- (void)callGETWebServiceWithFunction: (NSString *)function andParams: (NSString *)params
 {
     receivedData = [[NSMutableData alloc] init];
     
-    NSString *strURL = [NSString stringWithFormat:@"%@?%@", link_api, params];
+    NSString *strURL = [NSString stringWithFormat:@"%@/%@?%@", link_api, function, params];
     NSURL *URL = [NSURL URLWithString:strURL];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: URL];
     [request setHTTPMethod:@"GET"];
@@ -147,43 +147,40 @@
     receivedData = nil;
     id object = [value objectFromJSONString];
     if ([object isKindOfClass:[NSDictionary class]]) {
-        NSString *result = [object objectForKey:@"result"];
+        id result = [object objectForKey:@"success"];
         if (![result isKindOfClass:[NSNull class]] && result != nil)
         {
-            NSString *strURL = [[[connection currentRequest] URL] absoluteString];
-            NSString *function = [self getFunctionFromURL: strURL];
+            NSURL *requestURL = [[connection currentRequest] URL];
+            NSString *urlPath = requestURL.path;
             
-            if ([result isEqualToString:@"failure"] || [result isEqualToString:@"failed"]) {
-                NSString *message = [object objectForKey:@"message"];
-                message = [NSString stringWithUTF8String: [message UTF8String]];
+            NSString *function;
+            if (![AppUtils isNullOrEmpty: urlPath]) {
+                function = [urlPath stringByReplacingOccurrencesOfString:@"/" withString:@""];
                 
-                [delegate failedToCallWebService:function andError:message];
-            }else if([result isEqualToString:@"success"])
-            {
-                id data = [object objectForKey:@"data"];
-                if ([data isKindOfClass:[NSDictionary class]]) {
-                    [delegate successfulToCallWebService:function withData:data];
-                }else{
-                    if (data == nil && [object isKindOfClass:[NSDictionary class]]) {
-                        [delegate successfulToCallWebService:function withData:object];
-                    }else{
+                if ([result boolValue] == NO || [result intValue] == 0) {
+                    id data = [object objectForKey:@"data"];
+                    [delegate failedToCallWebService:function andError:data];
+                }else {
+                    id data = [object objectForKey:@"data"];
+                    if ([data isKindOfClass:[NSDictionary class]]) {
                         [delegate successfulToCallWebService:function withData:data];
+                    }else{
+                        if (data == nil && [object isKindOfClass:[NSDictionary class]]) {
+                            [delegate successfulToCallWebService:function withData:object];
+                        }else{
+                            [delegate successfulToCallWebService:function withData:data];
+                        }
                     }
                 }
+            }else{
+                NSString *strURL = [requestURL absoluteString];
+                [delegate failedToCallWebService:strURL andError:result];
             }
         }else{
             NSString *strURL = [[[connection currentRequest] URL] absoluteString];
             [delegate failedToCallWebService:strURL andError:result];
         }
     }
-}
-
-- (NSString *)getFunctionFromURL: (NSString *)strURL {
-    NSArray *tmpArr = [strURL componentsSeparatedByString:@"/"];
-    if (tmpArr.count > 0) {
-        return [tmpArr lastObject];
-    }
-    return @"";
 }
 
 @end
