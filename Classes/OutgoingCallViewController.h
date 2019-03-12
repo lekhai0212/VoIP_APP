@@ -17,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *_lbCallState;
 @property (weak, nonatomic) IBOutlet UIImageView *_imgCallState;
 @property (weak, nonatomic) IBOutlet UIButton *_btnEndCall;
+@property (weak, nonatomic) IBOutlet UILabel *lbPhone;
 @property (weak, nonatomic) IBOutlet UISpeakerButton *_btnSpeaker;
 @property (weak, nonatomic) IBOutlet UIMutedMicroButton *_btnMute;
 

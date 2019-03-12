@@ -31,7 +31,7 @@
 @end
 
 @implementation OutgoingCallViewController
-@synthesize _imgBackground, _imgAvatar, _lbName, _lbCallState, _btnEndCall, _imgCallState, _btnSpeaker, _btnMute;
+@synthesize _imgBackground, _imgAvatar, _lbName, _lbCallState, _btnEndCall, _imgCallState, _btnSpeaker, _btnMute, lbPhone;
 @synthesize _phoneNumber;
 
 #pragma mark - UICompositeViewDelegate Functions
@@ -64,6 +64,8 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     [self setupUIForView];
     
+    [self addTransparentLayerForView];
+    
     [self turnOnCircle];
 }
 
@@ -75,14 +77,15 @@ static UICompositeViewDescription *compositeDescription = nil;
     userName = contact.name;
     
     if ([AppUtils isNullOrEmpty: userName]) {
-        userName = _phoneNumber;
-        _lbName.text = _phoneNumber;
+        userName = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
+        _lbName.text = userName;
     }else{
         _lbName.text = userName;
     }
+    lbPhone.text = _phoneNumber;
     
     if ([AppUtils isNullOrEmpty: contact.avatar]) {
-        _imgAvatar.image = [UIImage imageNamed:@"default-avatar"];
+        _imgAvatar.image = [UIImage imageNamed:@"no_avatar"];
     }else{
         _imgAvatar.image = [UIImage imageWithData:[NSData dataFromBase64String: contact.avatar]];
     }
@@ -139,6 +142,13 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 #pragma mark - My functions
 
+- (void)addTransparentLayerForView {
+    CAGradientLayer *gradient = [CAGradientLayer layer];
+    gradient.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    gradient.colors = @[(id)[UIColor colorWithRed:(154/255.0) green:(215/255.0) blue:(9/255.0) alpha:1.0].CGColor, (id)[UIColor colorWithRed:(60/255.0) green:(198/255.0) blue:(116/255.0) alpha:1.0].CGColor];
+    [self.view.layer insertSublayer:gradient atIndex:0];
+}
+
 - (void)setPhoneNumberForView: (NSString *)phoneNumber {
     _phoneNumber = phoneNumber;
 }
@@ -153,10 +163,38 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (void)setupUIForView {
+    float margin = 25.0;
+    
+    NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
+    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE] || [deviceMode isEqualToString: simulator])
+    {
+        //  Screen width: 320.000000 - Screen height: 667.000000
+        wAvatar = 90.0;
+        wSmallIcon = 45.0;
+    }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
+    {
+        //  Screen width: 375.000000 - Screen height: 667.000000
+        wAvatar = 110.0;
+        
+    }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
+    {
+        //  Screen width: 414.000000 - Screen height: 736.000000
+        wAvatar = 130.0;
+        wSmallIcon = 55.0;
+        margin = 30.0;
+        
+    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2]){
+        //  Screen width: 375.000000 - Screen height: 812.000000
+        wAvatar = 110.0;
+    }else{
+        wAvatar = 90.0;
+    }
+    
+    
+    
     if (SCREEN_WIDTH > 320) {
         wIconEndCall = 70.0;
         wSmallIcon = 50.0;
-        wAvatar = 110.0;
         wIconState = 15.0;
         hStateLabel = 25.0;
         
@@ -164,8 +202,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         textFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:20.0];
     }else{
         wIconEndCall = 60.0;
-        wSmallIcon = 45.0;
-        wAvatar = 90.0;
+        
         wIconState = 15.0;
         hStateLabel = 25.0;
         
@@ -174,51 +211,75 @@ static UICompositeViewDescription *compositeDescription = nil;
     }
     
     [_imgBackground mas_makeConstraints:^(MASConstraintMaker *make) {
-        
+        make.top.left.bottom.right.equalTo(self.view);
     }];
     
-    _imgBackground.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-    
-    _imgAvatar.frame = CGRectMake((SCREEN_WIDTH-wAvatar)/2, (SCREEN_WIDTH-wAvatar)/2, wAvatar, wAvatar);
+    [_imgAvatar mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.view.mas_centerX);
+        make.centerY.equalTo(self.view.mas_centerY);
+        make.width.height.mas_equalTo(wAvatar);
+    }];
     _imgAvatar.clipsToBounds = YES;
     _imgAvatar.layer.borderColor = [UIColor lightGrayColor].CGColor;
     _imgAvatar.layer.borderWidth = 1.0;
     _imgAvatar.layer.cornerRadius = wAvatar/2;
     
-    _lbName.frame = CGRectMake(0, _imgAvatar.frame.origin.y+_imgAvatar.frame.size.height+20, SCREEN_WIDTH, 40);
-    _lbName.font = textFontBold;
     
-    _lbCallState.frame = CGRectMake(_lbName.frame.origin.x, _lbName.frame.origin.y+_lbName.frame.size.height+10, _lbName.frame.size.width, hStateLabel);
     _lbCallState.font = textFont;
+    [_lbCallState mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.view.mas_centerX);
+        make.bottom.equalTo(_imgAvatar.mas_top).offset(-50.0);
+        make.width.mas_equalTo(300.0);
+        make.height.mas_equalTo(30.0);
+    }];
     
-    _btnEndCall.frame = CGRectMake((SCREEN_WIDTH-wIconEndCall)/2, SCREEN_HEIGHT-20-50-wIconEndCall, wIconEndCall, wIconEndCall);
+    [_imgCallState mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.view.mas_centerX);
+        make.bottom.equalTo(_lbCallState.mas_top);
+        make.width.height.mas_equalTo(25.0);
+    }];
+    
+    lbPhone.font = textFont;
+    [lbPhone mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.view.mas_centerX);
+        make.bottom.equalTo(_imgCallState.mas_top).offset(-30.0);
+        make.height.mas_equalTo(25.0);
+        make.width.mas_equalTo(300.0);
+    }];
+    
+    _lbName.font = textFontBold;
+    [_lbName mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.view.mas_centerX);
+        make.bottom.equalTo(lbPhone.mas_top);
+        make.height.mas_equalTo(35.0);
+        make.width.mas_equalTo(300.0);
+    }];
+    
+    [_btnEndCall mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.view.mas_centerX);
+        make.bottom.equalTo(self.view).offset(-40.0);
+        make.width.height.mas_equalTo(wIconEndCall);
+    }];
     _btnEndCall.layer.cornerRadius = wIconEndCall/2;
     
     //  video speaker
-    float margin = 25.0;
-    _btnSpeaker.frame = CGRectMake(_btnEndCall.frame.origin.x-(margin+wSmallIcon), _btnEndCall.frame.origin.y+wIconEndCall/2-wSmallIcon/2, wSmallIcon, wSmallIcon);
     
-    [(UIButton *)_btnSpeaker setBackgroundImage:[UIImage imageNamed:@"call_speaker_on"]
-                                         forState:UIControlStateNormal];
-    [(UIButton *)_btnSpeaker setBackgroundImage:[UIImage imageNamed:@"call_speaker_on_selected"]
-                                         forState:UIControlStateHighlighted];
-    [(UIButton *)_btnSpeaker setBackgroundImage:[UIImage imageNamed:@"call_speaker_on_selected"]
-                                         forState:UIControlStateSelected];
+    [_btnSpeaker mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_btnEndCall.mas_centerY);
+        make.left.equalTo(_btnEndCall.mas_right).offset(margin);
+        make.width.height.mas_equalTo(wSmallIcon);
+    }];
     _btnSpeaker.layer.cornerRadius = wSmallIcon/2;
-    _btnSpeaker.backgroundColor = [UIColor colorWithRed:(255/255.0) green:(255/255.0)
-                                                   blue:(255/255.0) alpha:0.15];
+    _btnSpeaker.backgroundColor = UIColor.clearColor;
     
     //  mute button
-    _btnMute.frame = CGRectMake(_btnEndCall.frame.origin.x+_btnEndCall.frame.size.width+margin, _btnSpeaker.frame.origin.y, wSmallIcon, wSmallIcon);
-    [(UIButton *)_btnMute setBackgroundImage:[UIImage imageNamed:@"call_microphone_off"]
-                                      forState:UIControlStateNormal];
-    [(UIButton *)_btnMute setBackgroundImage:[UIImage imageNamed:@"call_microphone_off_selected"]
-                                      forState:UIControlStateHighlighted];
-    [(UIButton *)_btnMute setBackgroundImage:[UIImage imageNamed:@"call_microphone_off_selected"]
-                                      forState:UIControlStateSelected];
+    [_btnMute mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_btnEndCall.mas_centerY);
+        make.right.equalTo(_btnEndCall.mas_left).offset(-margin);
+        make.width.height.mas_equalTo(wSmallIcon);
+    }];
     _btnMute.layer.cornerRadius = wSmallIcon/2;
-    _btnMute.backgroundColor = [UIColor colorWithRed:(255/255.0) green:(255/255.0)
-                                                blue:(255/255.0) alpha:0.15];
+    _btnMute.backgroundColor = UIColor.clearColor;
 }
 
 - (void) turnOnCircle {
@@ -304,12 +365,12 @@ static UICompositeViewDescription *compositeDescription = nil;
                         [[PhoneMainView instance] popToView:CallView.compositeViewDescription];
                     }{
                         NSString *reason = [NSString stringWithFormat:@"%@ %@", userName, [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Busy"]];
-                        _lbName.text = reason;
+                        _lbCallState.text = reason;
                     }
                     break;
                 }
                 default:
-                    _lbName.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey: @"Terminated"];
+                    _lbCallState.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey: @"Terminated"];
                     break;
             }
             break;

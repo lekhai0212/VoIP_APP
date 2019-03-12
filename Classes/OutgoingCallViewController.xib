@@ -19,6 +19,7 @@
                 <outlet property="_imgCallState" destination="GLP-dS-RhK" id="2Ms-yB-INA"/>
                 <outlet property="_lbCallState" destination="KTH-83-FHL" id="4p9-nb-Zy5"/>
                 <outlet property="_lbName" destination="dFb-hh-7EN" id="IVP-JK-OB8"/>
+                <outlet property="lbPhone" destination="b0K-rW-cdu" id="oW4-Fl-unx"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -66,6 +67,13 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" image="mute_normal.png"/>
                 </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b0K-rW-cdu">
+                    <rect key="frame" x="69" y="58" width="146" height="21"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RQa-DE-BtC" customClass="UISpeakerButton">
                     <rect key="frame" x="69" y="343" width="39" height="39"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -74,7 +82,7 @@
             </subviews>
             <color key="backgroundColor" red="0.86274509799999999" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="calibratedRGB"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="-1340.8" y="-228.48575712143929"/>
+            <point key="canvasLocation" x="-1858" y="-219"/>
         </view>
     </objects>
     <resources>
