@@ -77,7 +77,7 @@
     }else{
         [self showAndReloadContactList];
         
-        lbAllContacts.text = [NSString stringWithFormat:@"%@ (%ld)", [[LanguageUtil sharedInstance] getContent:@"Count all contacts"], tbDatas.count];
+        lbAllContacts.text = [NSString stringWithFormat:@"%@ (%d)", [[LanguageUtil sharedInstance] getContent:@"Count all contacts"], (int)tbDatas.count];
     }
     
     if ([LinphoneAppDelegate sharedInstance].needToReloadContactList) {

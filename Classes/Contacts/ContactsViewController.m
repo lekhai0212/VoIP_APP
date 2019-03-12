@@ -235,7 +235,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     [_iconAll mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(lbSepa.mas_left).offset(-padding);
         make.top.equalTo(_viewHeader).offset(marginTop);
-        make.width.mas_equalTo(100);
+        make.width.mas_equalTo(120);
         make.height.mas_equalTo(hButton);
     }];
     

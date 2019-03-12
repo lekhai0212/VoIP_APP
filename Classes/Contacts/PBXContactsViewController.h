@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "WebServices.h"
 
-@interface PBXContactsViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>
+@interface PBXContactsViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, WebServicesDelegate>
 
-@property (weak, nonatomic) IBOutlet UILabel *_lbContacts;
 @property (weak, nonatomic) IBOutlet UITableView *_tbContacts;
 
 @end

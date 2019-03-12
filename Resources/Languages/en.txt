@@ -17,7 +17,10 @@
 "Privacy & Policy" = "Privacy & Policy"
 "Answer & Support" = "Answer & Support"
 
-
+"Ringing" = "Ringing..."
+"Calling" = "Calling..."
+"The user is busy" = "The user is busy"
+"Terminated" = "Terminated"
 
 
 "Online" = "Online"
@@ -67,8 +70,7 @@
 "English" = "English"
 
 
-"Ringing" = "Ringing..."
-"Calling" = "Calling..."
+
 "Feedback" = "Feedback"
 "Privacy Policy" = "Privacy Policy"
 "Introduction" = "Introduction"
@@ -157,7 +159,7 @@
 "Unknown" = "Unknown"
 "Account name" = "Account name"
 "You have a call from %@" = "You have a call from %@"
-"The user is busy" = "The user is busy"
+
 
 "Do you want to enable this account?" = "Do you want to enable this account?"
 "Your account was turned off. Do you want to enable and call?" = "Your account was turned off. Do you want to enable and call?"

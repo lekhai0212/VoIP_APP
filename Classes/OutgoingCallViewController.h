@@ -9,7 +9,7 @@
 #import "UICompositeView.h"
 #import "PulsingHaloLayer.h"
 
-@interface OutgoingCallViewController : UIViewController<UICompositeViewDelegate, CAAnimationDelegate>
+@interface OutgoingCallViewController : UIViewController<UICompositeViewDelegate, CAAnimationDelegate, UISpeakerButtonDelegate, UIMutedMicroButtonDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *_imgBackground;
 @property (weak, nonatomic) IBOutlet UIImageView *_imgAvatar;

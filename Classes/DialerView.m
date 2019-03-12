@@ -282,6 +282,20 @@ static UICompositeViewDescription *compositeDescription = nil;
 #pragma mark - Action Functions
 
 - (IBAction)btnVideoCallPress:(UIButton *)sender {
+    if (_addressField.text.length > 0) {
+        tvSearchResult.hidden = YES;
+        
+        [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:IS_VIDEO_CALL_KEY];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        return;
+    }
+    
+    [pressTimer invalidate];
+    pressTimer = nil;
+    pressTimer = [NSTimer scheduledTimerWithTimeInterval:0.2 target:self
+                                                selector:@selector(searchPhoneBookWithThread)
+                                                userInfo:nil repeats:false];
 }
 
 - (IBAction)onAddressChange:(id)sender {
@@ -414,6 +428,10 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (IBAction)_btnCallPressed:(UIButton *)sender {
     if (_addressField.text.length > 0) {
         tvSearchResult.hidden = YES;
+        
+        [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:IS_VIDEO_CALL_KEY];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
         return;
     }
     

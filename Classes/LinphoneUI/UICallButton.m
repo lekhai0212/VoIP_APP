@@ -108,6 +108,12 @@
 //    }
     
     //  12/03/2019
+    OutgoingCallViewController *controller = VIEW(OutgoingCallViewController);
+    if (controller != nil) {
+        [controller setPhoneNumberForView: address];
+    }
+    [[PhoneMainView instance] changeCurrentView:[OutgoingCallViewController compositeViewDescription] push:TRUE];
+    
 //    CallView *controller = VIEW(CallView);
 //    if (controller != nil) {
 //        controller.phoneNumber = address;

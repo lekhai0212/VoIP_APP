@@ -24,6 +24,7 @@
 #define link_api            @"https://api.cloudcall.vn"
 #define login_func          @"Login"
 #define update_token_func   @"UpdatePushToken"
+#define get_contacts_func   @"GetServerContacts"
 
 
 
@@ -166,9 +167,9 @@
 #define idContactUnknown    -9999
 #define idSyncPBX           @"keySyncPBX"
 #define accSyncPBX          @"accSyncPBX"
-#define nameContactSyncPBX  @"CloudFone PBX"
-#define nameSyncCompany     @"Online Data Services"
-#define keySyncPBX          @"CloudFonePBX"
+#define nameContactSyncPBX  @"CloudCall PBX"
+#define nameSyncCompany     @"Nhan Hoa Software Company"
+#define keySyncPBX          @"CloudCallPBX"
 
 #define prefix_CHAT_NOTIF   @"prefix_CHAT_NOTIF"
 #define prefix_CHAT_BURN    @"prefix_CHAT_BURN"

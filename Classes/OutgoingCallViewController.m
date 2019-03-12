@@ -16,12 +16,8 @@
     float wIconEndCall;
     float wSmallIcon;
     float wAvatar;
-    float wIconState;
     float hStateLabel;
     
-    NSTimer *onTimerUp1 ;
-    NSTimer *onTimerUp2;
-    NSTimer *onTimerUp3;
     UIFont *textFontBold;
     UIFont *textFont;
     
@@ -65,12 +61,13 @@ static UICompositeViewDescription *compositeDescription = nil;
     [self setupUIForView];
     
     [self addTransparentLayerForView];
-    
-    [self turnOnCircle];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
+    
+    _btnSpeaker.delegate = self;
+    _btnMute.delegate = self;
     
     PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: _phoneNumber];
     
@@ -93,9 +90,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     _btnSpeaker.selected = NO;
     _btnMute.selected = NO;
     
-    _lbCallState.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey: @"Calling"];
-    _imgCallState.image = [UIImage imageNamed:@"icon_calling"];
-    [self updateStateCallForView];
+    _lbCallState.text = [[LanguageUtil sharedInstance] getContent:@"Calling"];
     
     // basic setup
     PulsingHaloLayer *layer = [PulsingHaloLayer layer];
@@ -104,10 +99,8 @@ static UICompositeViewDescription *compositeDescription = nil;
     [self setupInitialValuesWithNumLayer:5 radius:0.8 duration:0.45 color:[UIColor colorWithRed:(220/255.0) green:(220/255.0) blue:(220/255.0) alpha:0.7]];
     [self.halo start];
     
-    [NSNotificationCenter.defaultCenter addObserver:self
-                                           selector:@selector(callUpdateEvent:)
-                                               name:kLinphoneCallUpdate
-                                             object:nil];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(callUpdateEvent:)
+                                               name:kLinphoneCallUpdate object:nil];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -125,6 +118,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillAppear: animated];
+    [[NSNotificationCenter defaultCenter] removeObserver: self];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -153,15 +147,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     _phoneNumber = phoneNumber;
 }
 
-- (void)updateStateCallForView {
-    [_lbCallState sizeToFit];
-    NSLog(@"%f", _lbCallState.frame.size.width);
-    
-    float originX = (SCREEN_WIDTH - (wIconState + 10 + _lbCallState.frame.size.width))/2;
-    _imgCallState.frame = CGRectMake(originX, _lbCallState.frame.origin.y+4, wIconState, wIconState);
-    _lbCallState.frame = CGRectMake(_imgCallState.frame.origin.x+wIconState+10, _lbCallState.frame.origin.y, _lbCallState.frame.size.width, hStateLabel);
-}
-
 - (void)setupUIForView {
     float margin = 25.0;
     
@@ -170,11 +155,14 @@ static UICompositeViewDescription *compositeDescription = nil;
     {
         //  Screen width: 320.000000 - Screen height: 667.000000
         wAvatar = 90.0;
+        wIconEndCall = 60.0;
         wSmallIcon = 45.0;
     }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
     {
         //  Screen width: 375.000000 - Screen height: 667.000000
-        wAvatar = 110.0;
+        wAvatar = 120.0;
+        wIconEndCall = 80.0;
+        wSmallIcon = 65.0;
         
     }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
     {
@@ -193,17 +181,10 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     
     if (SCREEN_WIDTH > 320) {
-        wIconEndCall = 70.0;
-        wSmallIcon = 50.0;
-        wIconState = 15.0;
         hStateLabel = 25.0;
-        
         textFontBold = [UIFont fontWithName:MYRIADPRO_BOLD size:24.0];
         textFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:20.0];
     }else{
-        wIconEndCall = 60.0;
-        
-        wIconState = 15.0;
         hStateLabel = 25.0;
         
         textFontBold = [UIFont fontWithName:MYRIADPRO_BOLD size:20.0];
@@ -282,16 +263,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     _btnMute.backgroundColor = UIColor.clearColor;
 }
 
-- (void) turnOnCircle {
-    return;
-    [self addanimateCircle1];
-    [self addanimateCircle2];
-    [self addanimateCircle3];
-    onTimerUp1 = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(addanimateCircle1) userInfo:nil repeats:YES];
-    
-    onTimerUp2 = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(addanimateCircle2) userInfo:nil repeats:YES];
-    onTimerUp3 = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(addanimateCircle3) userInfo:nil repeats:YES];
-}
 #pragma mark - Call update event
 - (void)callUpdateEvent:(NSNotification *)notif {
     LinphoneCall *call = [[notif.userInfo objectForKey:@"call"] pointerValue];
@@ -311,22 +282,19 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case LinphoneCallOutgoingInit:{
-            _lbCallState.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey: @"Calling"];
-            _imgCallState.image = [UIImage imageNamed:@"icon_calling"];
+            _lbCallState.text = [[LanguageUtil sharedInstance] getContent:@"Calling"];
             break;
         }
         case LinphoneCallOutgoingRinging:{
-            _lbCallState.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey: @"Ringing"];
-            _imgCallState.image = [UIImage imageNamed:@"icon_ringing"];
+            _lbCallState.text = [[LanguageUtil sharedInstance] getContent:@"Ringing"];
             break;
         }
         case LinphoneCallOutgoingEarlyMedia:{
-            _lbCallState.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey: @"Calling"];
-            _imgCallState.image = [UIImage imageNamed:@"icon_calling"];
+            _lbCallState.text = [[LanguageUtil sharedInstance] getContent:@"Calling"];
             break;
         }
         case LinphoneCallConnected:{
-            _lbCallState.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Connected"];
+            _lbCallState.text = [[LanguageUtil sharedInstance] getContent:@"Connected"];
             
             break;
         }
@@ -348,13 +316,10 @@ static UICompositeViewDescription *compositeDescription = nil;
             
             break;
         case LinphoneCallEnd:{
-            _lbCallState.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey: @"Terminated"];
-            _imgCallState.image = [UIImage imageNamed:@"icon_state_endcall"];
+            _lbCallState.text = [[LanguageUtil sharedInstance] getContent:@"Terminated"];
             break;
         }
         case LinphoneCallError:{
-            _imgCallState.image = [UIImage imageNamed:@"icon_state_endcall"];
-            
             switch (linphone_call_get_reason(call)) {
                 case LinphoneReasonNotFound:
                     NSLog(@"123");
@@ -364,13 +329,13 @@ static UICompositeViewDescription *compositeDescription = nil;
                     if (count > 0) {
                         [[PhoneMainView instance] popToView:CallView.compositeViewDescription];
                     }{
-                        NSString *reason = [NSString stringWithFormat:@"%@ %@", userName, [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Busy"]];
+                        NSString *reason = [NSString stringWithFormat:@"%@ %@", userName, [[LanguageUtil sharedInstance] getContent:@"Busy"]];
                         _lbCallState.text = reason;
                     }
                     break;
                 }
                 default:
-                    _lbCallState.text = [[LinphoneAppDelegate sharedInstance].localization localizedStringForKey: @"Terminated"];
+                    _lbCallState.text = [[LanguageUtil sharedInstance] getContent:@"Terminated"];
                     break;
             }
             break;
@@ -378,7 +343,6 @@ static UICompositeViewDescription *compositeDescription = nil;
         default:
             break;
     }
-    [self updateStateCallForView];
 }
 
 #pragma mark - Animation
@@ -451,6 +415,23 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (CGPathRef)createCirclePathWithRadius:(CGRect)frame radius:(CGFloat)radius
 {
     return [UIBezierPath bezierPathWithRoundedRect:frame cornerRadius:radius].CGPath;
+}
+
+#pragma mark - Speaker button delegate
+- (void)onSpeakerStateChangedTo:(BOOL)speaker {
+    if (speaker) {
+        [_btnSpeaker setImage:[UIImage imageNamed:@"speaker_enable"] forState:UIControlStateNormal];
+    }else{
+        [_btnSpeaker setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
+    }
+}
+
+- (void)onMuteStateChangedTo:(BOOL)muted {
+    if (muted) {
+        [_btnMute setImage:[UIImage imageNamed:@"mute_enable"] forState:UIControlStateNormal];
+    }else{
+        [_btnMute setImage:[UIImage imageNamed:@"mute_normal"] forState:UIControlStateNormal];
+    }
 }
 
 @end

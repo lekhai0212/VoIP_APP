@@ -18,7 +18,10 @@
 "Privacy & Policy" = "Chính sách bảo mật"
 "Answer & Support" = "Hỏi đáp & hỗ trợ"
 
-
+"Ringing" = "Đang đổ chuông..."
+"Calling" = "Đang gọi..."
+"The user is busy" = "Người dùng đang bận"
+"Terminated" = "Cuộc gọi kết thúc"
 
 
 
@@ -73,8 +76,7 @@
 
 
 
-"Ringing" = "Đang đổ chuông...";"
-"Calling" = "Đang gọi..."
+
 "Feedback" = "Gửi phản hồi"
 "Privacy Policy" = "Chính sách"
 "Introduction" = "Giới thiệu"
@@ -163,7 +165,7 @@
 "Unknown" = "Chưa xác định"
 "Account name" = "Tên tài khoản"
 "You have a call from %@" = "Bạn có cuộc gọi từ %@"
-"The user is busy" = "Người dùng đang bận"
+
 
 "Do you want to enable this account?" = "Bạn có muốn kích hoạt lại tài khoản này?"
 "Your account was turned off. Do you want to enable and call?" = "Tài khoản của bạn đã bị tắt. Bạn có muốn mở lại và gọi?"

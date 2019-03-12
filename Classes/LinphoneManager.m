@@ -2918,6 +2918,8 @@ static int comp_call_state_paused(const LinphoneCall *call, const void *param) {
             NSString *isVideoCall = [[NSUserDefaults standardUserDefaults] objectForKey:IS_VIDEO_CALL_KEY];
             if (isVideoCall != nil && [isVideoCall isEqualToString:@"1"]) {
                 linphone_call_params_enable_video(lcallParams, TRUE);
+            }else{
+                linphone_call_params_enable_video(lcallParams, FALSE);
             }
             
             call = linphone_core_invite_address_with_params(theLinphoneCore, addr, lcallParams);

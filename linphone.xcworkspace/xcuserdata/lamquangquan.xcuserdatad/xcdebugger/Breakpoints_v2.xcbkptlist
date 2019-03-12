@@ -154,7 +154,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneManager.m"
-            timestampString = "573707701.806296"
+            timestampString = "574054952.189364"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1535"
@@ -278,11 +278,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/DialerView.m"
-            timestampString = "573991592.163667"
+            timestampString = "574054952.189766"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "320"
-            endingLineNumber = "320"
+            startingLineNumber = "334"
+            endingLineNumber = "334"
             landmarkName = "DialerView"
             landmarkType = "3">
          </BreakpointContent>
@@ -293,22 +293,8 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Classes/DialerView.m"
-            timestampString = "573991592.164582"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1059"
-            endingLineNumber = "1059">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneManager.m"
-            timestampString = "573707701.80715"
+            timestampString = "574054952.189854"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "2364"
@@ -372,28 +358,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneManager.m"
-            timestampString = "573707701.808551"
+            timestampString = "574054952.190051"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "2560"
             endingLineNumber = "2560"
             landmarkName = "-enterBackgroundMode"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Classes/LinphoneManager.m"
-            timestampString = "573707701.808692"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2607"
-            endingLineNumber = "2607"
-            landmarkName = "-becomeActive"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -579,13 +549,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Classes/PhoneMainView.m"
-            timestampString = "573793466.740522"
+            filePath = "Classes/LinphoneManager.m"
+            timestampString = "574054952.191153"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "726"
-            endingLineNumber = "726"
-            landmarkName = "-popCurrentView"
+            startingLineNumber = "2922"
+            endingLineNumber = "2922"
+            landmarkName = "-doCall:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -595,45 +565,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Classes/SignIn/SignInViewController.m"
-            timestampString = "573991592.166535"
+            filePath = "Classes/LinphoneManager.m"
+            timestampString = "574054952.191304"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "831"
-            endingLineNumber = "831"
-            landmarkName = "-failedToCallWebService:andError:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Classes/SignIn/SignInViewController.m"
-            timestampString = "573991592.16731"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "836"
-            endingLineNumber = "836"
-            landmarkName = "-successfulToCallWebService:withData:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Classes/AppObjects/WebServices/WebServices.m"
-            timestampString = "573991592.16791"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "141"
-            endingLineNumber = "141"
-            landmarkName = "-connection:didFailWithError:"
+            startingLineNumber = "2920"
+            endingLineNumber = "2920"
+            landmarkName = "-doCall:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
