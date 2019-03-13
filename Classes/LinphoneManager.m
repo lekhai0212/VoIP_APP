@@ -891,8 +891,6 @@ static void linphone_iphone_display_status(struct _LinphoneCore *lc, const char 
             callID = [AppUtils randomStringWithLength:10];
         }
         
-        BOOL videoEnabled = linphone_call_params_video_enabled(linphone_call_get_remote_params(call));
-        NSLog(@"%d", videoEnabled);
         NSString *phoneNumber = [NSString stringWithUTF8String:linphone_address_get_username(addr)];
         if ([callStatus isEqualToString:missed_call] || [callStatus isEqualToString: aborted_call]) {
             int unread = 1;
@@ -2927,8 +2925,6 @@ static int comp_call_state_paused(const LinphoneCall *call, const void *param) {
             NSString *isVideoCall = [[NSUserDefaults standardUserDefaults] objectForKey:IS_VIDEO_CALL_KEY];
             if (isVideoCall != nil && [isVideoCall isEqualToString:@"1"]) {
                 linphone_call_params_enable_video(lcallParams, TRUE);
-            }else{
-                linphone_call_params_enable_video(lcallParams, FALSE);
             }
             
             call = linphone_core_invite_address_with_params(theLinphoneCore, addr, lcallParams);

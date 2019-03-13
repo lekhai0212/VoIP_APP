@@ -55,17 +55,13 @@ void message_received(LinphoneCore *lc, LinphoneChatRoom *room, const LinphoneAd
 const NSInteger SECURE_BUTTON_TAG = 5;
 
 @interface CallView (){
+    BOOL isAudioCall;
+    
     LinphoneAppDelegate *appDelegate;
     UIFont *textFont;
     
-    float wButton;
-    float wCollection;
     float marginX;
     
-    UIButton *btnConference;
-    UIButton *buttonRecord;
-    UIButton *buttonMessage;
-    UIButton *buttonSendfile;
     UIButton *btnNumpad;
     
     int typeCurrentCall;
@@ -83,12 +79,10 @@ const NSInteger SECURE_BUTTON_TAG = 5;
     UIHangUpButton *btEndCall;
     UIButton *btHideKeypad;
     
-    float hIconEndCall;
     
     UIImageView *icVideoCall;
     UIImageView *icWaveVideo;
     UIImageView *icOffCameraForPreview;
-    UILabel *lbMsgCount;
 }
 
 @end
@@ -206,6 +200,14 @@ static UICompositeViewDescription *compositeDescription = nil;
 
     [self setupUIForView];
     
+    
+    NSString *isvideo = [[NSUserDefaults standardUserDefaults] objectForKey:IS_VIDEO_CALL_KEY];
+    if (![AppUtils isNullOrEmpty: isvideo] && [isvideo isEqualToString:@"1"]) {
+        isAudioCall = NO;
+    }else{
+        isAudioCall = YES;
+    }
+    
     //  Leo Kelvin
     _bottomBar.hidden = YES;
     _bottomBar.clipsToBounds = YES;
@@ -249,13 +251,14 @@ static UICompositeViewDescription *compositeDescription = nil;
     [self updateAddress];
     
     int count = linphone_core_get_calls_nb([LinphoneManager getLc]);
-    NSLog(@"So cuoc goi: %d", count);
     if (count > 0) {
-        [self testtest2];
+        if (!isAudioCall) {
+            [self enableVideoForCurrentCall];
+        }
     }
-    callView.hidden = YES;
-    _conferenceView.hidden = YES;
-    viewVideoCall.hidden = NO;
+    callView.hidden = !isAudioCall;
+    _conferenceView.hidden = isAudioCall;
+    viewVideoCall.hidden = isAudioCall;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -272,6 +275,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 	LinphoneCallState state = (call != NULL) ? linphone_call_get_state(call) : 0;
 	[self callUpdate:call state:state animated:FALSE];
     
+    /*
     UIButton *normal = [[UIButton alloc] initWithFrame:CGRectMake(180, 50, 100, 50)];
     normal.backgroundColor = UIColor.redColor;
     [normal setTitle:@"VIDEO" forState:UIControlStateNormal];
@@ -286,11 +290,11 @@ static UICompositeViewDescription *compositeDescription = nil;
     [normal2 addTarget:self
                action:@selector(testtest3)
      forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview: normal2];
+    [self.view addSubview: normal2];    */
 }
 
 - (void)CallConnectedSuccessful {
-    [self testtest2];
+    [self enableVideoForCurrentCall];
 }
 
 - (void)testtest3 {
@@ -298,24 +302,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (void)testtest2 {
-    if (!linphone_core_video_display_enabled(LC))
-        return;
-    
-    LinphoneCall *call = linphone_core_get_current_call(LC);
-    if (call) {
-        LinphoneCallAppData *callAppData = (__bridge LinphoneCallAppData *)linphone_call_get_user_pointer(call);
-        callAppData->videoRequested = TRUE; /* will be used later to notify user if video was not activated because of the linphone core*/
-        //  LinphoneCallParams *call_params = linphone_core_create_call_params(LC,call);
-        LinphoneCallParams* call_params = linphone_call_params_copy(linphone_call_get_current_params(call));
-        
-        linphone_call_params_enable_video(call_params, TRUE);
-        linphone_core_update_call(LC, call, call_params);
-        linphone_call_params_destroy(call_params);
-    } else {
-        NSLog(@"Cannot toggle video button, because no current call");
-    }
-    return;
-    
     //    UInt32 sessionCategory = kAudioSessionCategory_PlayAndRecord;
     //    AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(sessionCategory), &sessionCategory);
     //    UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_None;
@@ -349,8 +335,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)viewDidDisappear:(BOOL)animated {
 	[super viewDidDisappear:animated];
-
-    [lbMsgCount removeFromSuperview];
     
 	[[UIApplication sharedApplication] setIdleTimerDisabled:false];
 	UIDevice.currentDevice.proximityMonitoringEnabled = NO;
@@ -742,10 +726,6 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     /*--Khong co goi conference--*/
     [self btnHideKeypadPressed];
     
-    //  Neu dang goi video call thi thoi
-    callView.hidden = YES;
-    _conferenceView.hidden = YES;
-    viewVideoCall.hidden = NO;
 
 	static LinphoneCall *currentCall = NULL;
 	if (!currentCall || linphone_core_get_current_call(LC) != currentCall) {
@@ -778,13 +758,9 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
             
             // Nếu không phải Outgoing trong conference thì set disable các button
             if (!changeConference) {
-                btnConference.enabled = NO;
                 btnNumpad.enabled = NO;
                 callPauseButton.enabled = NO;
-                buttonRecord.enabled = NO;
                 microButton.enabled = NO;
-                buttonMessage.enabled = NO;
-                buttonSendfile.enabled = NO;
             }
             break;
         }
@@ -802,13 +778,10 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
             NSLog(@"File : %s",linphone_call_params_get_record_file(paramsCopy));
             linphone_call_start_recording(currentCall);
             
-            btnConference.enabled = YES;
             btnNumpad.enabled = YES;
             routesSpeakerButton.enabled = YES;
             callPauseButton.enabled = YES;
             microButton.enabled = YES;
-            buttonMessage.enabled = YES;
-            buttonRecord.enabled = YES;
             
             lbStateVideoCall.text = @"Đã kết nối";
             
@@ -829,13 +802,10 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 					linphone_call_params_low_bandwidth_enabled(param)) {
 				}
 			}
-            btnConference.enabled = YES;
             btnNumpad.enabled = YES;
             routesSpeakerButton.enabled = YES;
             callPauseButton.enabled = YES;
             microButton.enabled = YES;
-            buttonMessage.enabled = YES;
-            buttonRecord.enabled = YES;
             
             // Add tất cả các cuộc gọi vào nhóm
             if (linphone_core_get_calls_nb(LC) >= 2) {
@@ -874,7 +844,6 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 			}
 			break;
         case LinphoneCallEnd:{
-            buttonRecord.selected = NO;
             
             if (durationTimer != nil) {
                 [durationTimer invalidate];
@@ -1255,7 +1224,6 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 }
 
 - (void)callEnded {
-    buttonRecord.selected = NO;
 }
 
 //  Hide keypad mini
@@ -1368,15 +1336,10 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
             lbAddressVideoCall.text = fullName;
             lbAddressVideoCall.text = fullName;
             
-            if ([addressPhoneNumber hasPrefix:@"778899"]) {
-                buttonMessage.enabled = YES;
-            }else{
-                buttonMessage.enabled = NO;
-            }
-            if (![avatar isEqualToString:@""]) {
+            if (![AppUtils isNullOrEmpty: avatar]) {
                 avatarImage.image = [UIImage imageWithData: [NSData dataFromBase64String: avatar]];
             }else{
-                avatarImage.image = [UIImage imageNamed:@"default-avatar"];
+                avatarImage.image = [UIImage imageNamed:@"no_avatar.png"];
             }
         });
     });
@@ -1399,13 +1362,15 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
         make.top.left.bottom.right.equalTo(callView);
     }];
     
-    avatarImage.layer.borderColor = UIColor.whiteColor.CGColor;
-    avatarImage.layer.borderWidth = 2.0;
     [avatarImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(callView.mas_centerX);
         make.centerY.equalTo(callView.mas_centerY);
         make.width.height.mas_equalTo(120.0);
     }];
+    avatarImage.clipsToBounds = YES;
+    avatarImage.layer.borderColor = UIColor.whiteColor.CGColor;
+    avatarImage.layer.borderWidth = 2.0;
+    avatarImage.layer.cornerRadius = 120/2;
     
     _lbQuality.font = [UIFont systemFontOfSize:14.0 weight:UIFontWeightThin];
     [_lbQuality setTextColor: [UIColor whiteColor]];
@@ -1424,55 +1389,61 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
         make.height.mas_equalTo(50);
     }];
     
+    lbPhoneNumber.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightRegular];
+    [lbPhoneNumber mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(callView.mas_centerX);
+        make.bottom.equalTo(durationLabel.mas_top).offset(-30);
+        make.width.mas_equalTo(200.0);
+        make.height.mas_equalTo(30);
+    }];
     
+    nameLabel.font = [UIFont systemFontOfSize:22.0 weight:UIFontWeightBold];
+    [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(callView).offset(5.0);
+        make.right.equalTo(callView).offset(-5.0);
+        make.bottom.equalTo(lbPhoneNumber.mas_top);
+        make.height.mas_equalTo(30);
+    }];
 
+    float marginIcon = 10.0;
+    [hangupButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(callView.mas_centerX);
+        make.bottom.equalTo(callView).offset(-40.0);
+        make.width.height.mas_equalTo(70.0);
+    }];
+    [hangupButton addTarget:self
+                     action:@selector(btnHangupButtonPressed)
+           forControlEvents:UIControlEventTouchUpInside];
     
-    //  float hHeader = SCREEN_WIDTH*445/1280;
+    [speakerButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(callView.mas_centerX);
+        make.bottom.equalTo(hangupButton.mas_top).offset(-marginIcon);
+        make.width.height.mas_equalTo(55.0);
+    }];
     
-    float hInfo;
-    if (SCREEN_WIDTH > 320) {
-        hIconEndCall = 60.0;
-        hInfo = 120.0;
-        wButton = 100.0;
-        
-        [_hangupButton setFrame: CGRectMake((SCREEN_WIDTH-60)/2, _callView.frame.size.height-hIconEndCall-35, hIconEndCall, hIconEndCall)];
-    }else{
-        hIconEndCall = 60.0;
-        hInfo = 90.0;
-        wButton = 90.0;
-        
-        [_hangupButton setFrame: CGRectMake((SCREEN_WIDTH-60)/2, _callView.frame.size.height-hIconEndCall-25, hIconEndCall, hIconEndCall)];
-    }
+    [routesSpeakerButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(hangupButton.mas_centerY);
+        make.right.equalTo(hangupButton.mas_left).offset(-marginIcon);
+        make.width.height.mas_equalTo(55.0);
+    }];
     
-    [_hangupButton addTarget:self
-                      action:@selector(btnHangupButtonPressed)
-            forControlEvents:UIControlEventTouchUpInside];
+    [microButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.bottom.equalTo(routesSpeakerButton);
+        make.right.equalTo(routesSpeakerButton.mas_left).offset(-marginIcon);
+        make.width.mas_equalTo(55.0);
+    }];
     
-    [_viewInfo setFrame: CGRectMake(0, 0, SCREEN_WIDTH, hInfo)];
-    [_bgHeader setFrame: CGRectMake(0, 0, _viewInfo.frame.size.width, _viewInfo.frame.size.height)];
+    [callPauseButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.bottom.equalTo(routesSpeakerButton);
+        make.left.equalTo(hangupButton.mas_right).offset(marginIcon);
+        make.width.mas_equalTo(55.0);
+    }];
     
-    [_avatarImage setFrame: CGRectMake(10, 10, hInfo-20, hInfo-20)];
-    [_avatarImage.layer setCornerRadius: 0];
-    
-    [_nameLabel setFrame: CGRectMake(_avatarImage.frame.origin.x+_avatarImage.frame.size.width+10, _avatarImage.frame.origin.y, SCREEN_WIDTH-(_avatarImage.frame.origin.x+_avatarImage.frame.size.width+10+60), _avatarImage.frame.size.height/2)];
-    [_nameLabel setFont: textFont];
-    [_nameLabel setTextColor:[UIColor whiteColor]];
-    [_nameLabel setBackgroundColor:[UIColor clearColor]];
-    
-    [_lbState setFrame: CGRectMake(_nameLabel.frame.origin.x, _nameLabel.frame.origin.y+_nameLabel.frame.size.height, _viewInfo.frame.size.width-(2*_avatarImage.frame.origin.x+_avatarImage.frame.size.width+5), _nameLabel.frame.size.height)];
-    [_lbState setTextColor:[UIColor whiteColor]];
-    
-    
-    
-    [_hangupButton setBackgroundImage:[UIImage imageNamed:@"decline_call_over.png"]
-                             forState:UIControlStateHighlighted];
-    
-    [_viewCommand setFrame: CGRectMake(0, _durationLabel.frame.origin.y+_durationLabel.frame.size.height, SCREEN_WIDTH, _hangupButton.frame.origin.y-25-(_durationLabel.frame.origin.y+_durationLabel.frame.size.height+25))];
-    [_viewCommand setBackgroundColor:[UIColor clearColor]];
-    
-    
-    //  video call
-    [viewVideoCall setFrame: CGRectMake(0, 0, SCREEN_WIDTH, _callView.frame.size.height+_viewHeader.frame.size.height)];
+    [numpadButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.bottom.equalTo(routesSpeakerButton);
+        make.left.equalTo(callPauseButton.mas_right).offset(marginIcon);
+        make.width.mas_equalTo(55.0);
+    }];
     
     if (SCREEN_WIDTH > 320) {
         [_lbVideoTime setFont: [UIFont fontWithName:MYRIADPRO_REGULAR size:15.0]];
@@ -1590,25 +1561,6 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     return image;
 }
 
-/*----- Pasuse and resume call -----*/
-- (void)onClickPause:(UIButton *)sender {
-    NSIndexPath *curIndex = [NSIndexPath indexPathForItem:sender.tag inSection:0];
-    UIConferenceCell *curCell = (UIConferenceCell *)[collectionConference cellForItemAtIndexPath: curIndex];
-    LinphoneCallState state = linphone_call_get_state(curCell.call);
-    if (state == LinphoneCallStreamsRunning){
-        linphone_core_pause_call([LinphoneManager getLc], curCell.call);
-    }else if (state == LinphoneCallPaused){
-        linphone_core_resume_call([LinphoneManager getLc], curCell.call);
-    }
-}
-
-/*----- End call conference trong từng cell -----*/
-- (void)onClickEndCallConf:(UIControl *)sender {
-    NSIndexPath *curIndex = [NSIndexPath indexPathForItem:sender.tag inSection:0];
-    UIConferenceCell *curCell = (UIConferenceCell *)[collectionConference cellForItemAtIndexPath: curIndex];
-    linphone_core_terminate_call([LinphoneManager getLc], curCell.call);
-    changeConference = NO;
-}
 
 - (void)sendCaptureImageToUser: (UIImage *)captureImage
 {
@@ -1630,6 +1582,26 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 //
 //    //  Upload image lên server
 //    [self startUploadImage:captureImage toServerWithMessageId:idMsgImage andName:detailURL];
+}
+
+- (void)enableVideoForCurrentCall {
+    return;
+    if (!linphone_core_video_display_enabled(LC))
+        return;
+    
+    LinphoneCall *call = linphone_core_get_current_call(LC);
+    if (call) {
+        LinphoneCallAppData *callAppData = (__bridge LinphoneCallAppData *)linphone_call_get_user_pointer(call);
+        callAppData->videoRequested = TRUE; /* will be used later to notify user if video was not activated because of the linphone core*/
+        //  LinphoneCallParams *call_params = linphone_core_create_call_params(LC,call);
+        LinphoneCallParams* call_params = linphone_call_params_copy(linphone_call_get_current_params(call));
+        
+        linphone_call_params_enable_video(call_params, TRUE);
+        linphone_core_update_call(LC, call, call_params);
+        linphone_call_params_destroy(call_params);
+    } else {
+        NSLog(@"Cannot toggle video button, because no current call");
+    }
 }
 
 @end
