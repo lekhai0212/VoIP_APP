@@ -302,7 +302,7 @@
                                     <state key="normal" image="video_call_default.png">
                                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </state>
-                                    <state key="highlighted" image="call_hover.png"/>
+                                    <state key="highlighted" image="video_call_hover.png"/>
                                     <connections>
                                         <action selector="_btnCallPressed:" destination="-1" eventType="touchUpInside" id="eza-gO-muT"/>
                                         <action selector="btnVideoCallPress:" destination="-1" eventType="touchUpInside" id="zjT-Xn-YPl"/>
@@ -379,5 +379,6 @@
         <image name="numpad_zero_default.png" width="261" height="261"/>
         <image name="numpad_zero_hover" width="241" height="141"/>
         <image name="video_call_default.png" width="201" height="201"/>
+        <image name="video_call_hover.png" width="201" height="201"/>
     </resources>
 </document>

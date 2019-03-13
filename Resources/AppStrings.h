@@ -13,7 +13,8 @@
 #define PORT_DEFAULT    @"51000"
 
 #define IS_VIDEO_CALL_KEY   @"IS_VIDEO_CALL_KEY"
-
+#define TAG_AUDIO_CALL  1
+#define TAG_VIDEO_CALL  2
 
 
 

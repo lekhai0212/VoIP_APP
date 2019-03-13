@@ -90,7 +90,26 @@
     }
     address = [AppUtils removeAllSpecialInString: address];
     
-    [SipUtils makeVideoCallWithPhoneNumber: address];
+    if ([(UICallButton *)sender tag] == TAG_AUDIO_CALL) {
+        [SipUtils makeAudioCallWithPhoneNumber: address];
+        [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:IS_VIDEO_CALL_KEY];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+    }else if ([(UICallButton *)sender tag] == TAG_VIDEO_CALL) {
+        [SipUtils makeVideoCallWithPhoneNumber: address];
+        [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:IS_VIDEO_CALL_KEY];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+    }else{
+        NSString *typeCall = [[NSUserDefaults standardUserDefaults] objectForKey:IS_VIDEO_CALL_KEY];
+        if (typeCall == nil || [typeCall isEqualToString:@"0"]) {
+            [SipUtils makeAudioCallWithPhoneNumber: address];
+        }else{
+            [SipUtils makeVideoCallWithPhoneNumber: address];
+        }
+    }
+    
+    //  [SipUtils makeVideoCallWithPhoneNumber: address];
     /*
     BOOL success = [SipUtils makeCallWithPhoneNumber: address];
     if (!success) {

@@ -34,46 +34,86 @@
 #import "UIRoundedImageView.h"
 #import "UIBouncingView.h"
 
-typedef enum directionCall{
+typedef enum typeCall{
     callIncoming,
     callOutgoing,
-}directionCall;
-
-typedef enum typeCall{
-    eUnknownTypeCall,
-    eAudioCall,
-    eVideoCall,
 }typeCall;
 
 @class VideoView;
 
-@interface CallView : TPMultiLayoutViewController <UIGestureRecognizerDelegate, UICompositeViewDelegate, CAAnimationDelegate> {
+@interface CallView : TPMultiLayoutViewController <UIGestureRecognizerDelegate, UICompositeViewDelegate> {
   @private
 	UITapGestureRecognizer *singleFingerTap;
 	NSTimer *hideControlsTimer;
+	NSTimer *videoDismissTimer;
 	BOOL videoHidden;
 	VideoZoomHandler *videoZoomHandler;
 }
 
-@property (weak, nonatomic) IBOutlet UIImageView *bgCall;
+
+@property (weak, nonatomic) IBOutlet UIImageView *bgAudioCall;
+@property(weak, nonatomic) IBOutlet UILabel *nameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *lbPhoneNumber;
+@property(weak, nonatomic) IBOutlet UILabel *durationLabel;
+@property(weak, nonatomic) IBOutlet UIRoundedImageView *avatarImage;
+@property (weak, nonatomic) IBOutlet UILabel *_lbQuality;
+@property(nonatomic, strong) IBOutlet UISpeakerButton *speakerButton;
+@property(nonatomic, strong) IBOutlet UIHangUpButton *hangupButton;
+@property(nonatomic, strong) IBOutlet UIButton *routesSpeakerButton;
+@property(nonatomic, strong) IBOutlet UIMutedMicroButton *microButton;
+@property(nonatomic, strong) IBOutlet UIPauseButton *callPauseButton;
+@property(nonatomic, strong) IBOutlet UIToggleButton *numpadButton;
+
+
+
 
 @property(nonatomic, strong) IBOutlet CallPausedTableView *pausedCallsTable;
+
+@property(nonatomic, strong) IBOutlet UIView *videoView;
+@property(nonatomic, strong) IBOutlet UIView *videoPreview;
+@property(nonatomic, strong) IBOutlet UIActivityIndicatorView *videoWaitingForFirstImage;
+@property(weak, nonatomic) IBOutlet UIView *callView;
+
 
 @property(nonatomic, strong) IBOutlet UIButton *optionsConferenceButton;
 
 @property(nonatomic, strong) IBOutlet UIToggleButton *routesButton;
 @property(nonatomic, strong) IBOutlet UIToggleButton *optionsButton;
+
+@property(nonatomic, strong) IBOutlet UIView *numpadView;
 @property(nonatomic, strong) IBOutlet UIView *routesView;
 @property(nonatomic, strong) IBOutlet UIView *optionsView;
 @property(nonatomic, strong) IBOutlet UIButton *routesEarpieceButton;
+
 @property(nonatomic, strong) IBOutlet UIButton *routesBluetoothButton;
 @property(nonatomic, strong) IBOutlet UIButton *optionsAddButton;
+
+
+
 @property(weak, nonatomic) IBOutlet UIBouncingView *chatNotificationView;
 @property(weak, nonatomic) IBOutlet UILabel *chatNotificationLabel;
 
 @property(weak, nonatomic) IBOutlet UIView *bottomBar;
+@property(nonatomic, strong) IBOutlet UIDigitButton *oneButton;
+@property(nonatomic, strong) IBOutlet UIDigitButton *twoButton;
+@property(nonatomic, strong) IBOutlet UIDigitButton *threeButton;
+@property(nonatomic, strong) IBOutlet UIDigitButton *fourButton;
+@property(nonatomic, strong) IBOutlet UIDigitButton *fiveButton;
+@property(nonatomic, strong) IBOutlet UIDigitButton *sixButton;
+@property(nonatomic, strong) IBOutlet UIDigitButton *sevenButton;
+@property(nonatomic, strong) IBOutlet UIDigitButton *eightButton;
+@property(nonatomic, strong) IBOutlet UIDigitButton *nineButton;
+@property(nonatomic, strong) IBOutlet UIDigitButton *starButton;
+@property(nonatomic, strong) IBOutlet UIDigitButton *zeroButton;
+@property(nonatomic, strong) IBOutlet UIDigitButton *hashButton;
 
+
+
+
+
+@property(weak, nonatomic) IBOutlet UIView *conferenceView;
 @property(strong, nonatomic) IBOutlet CallPausedTableView *conferenceCallsTable;
+
 - (IBAction)onRoutesClick:(id)sender;
 - (IBAction)onRoutesBluetoothClick:(id)sender;
 - (IBAction)onRoutesEarpieceClick:(id)sender;
@@ -85,8 +125,16 @@ typedef enum typeCall{
 - (IBAction)onNumpadClick:(id)sender;
 - (IBAction)onChatClick:(id)sender;
 
+@property (weak, nonatomic) IBOutlet UIView *viewVideoCall;
+
+@property (weak, nonatomic) IBOutlet UILabel *_lbVideoTime;
+@property (weak, nonatomic) IBOutlet UILabel *lbAddressVideoCall;
+@property (weak, nonatomic) IBOutlet UILabel *lbStateVideoCall;
+@property (weak, nonatomic) IBOutlet UIButton *iconCaptureScreen;
+
+- (IBAction)iconCaptureScreenClicked:(UIButton *)sender;
+
 @property (nonatomic, strong) NSTimer *durationTimer;
-@property (nonatomic, strong) NSString *phoneNumber;
-@property (nonatomic, assign) typeCall typeOfCall;
+
 
 @end

@@ -367,6 +367,7 @@ static RootViewManager *rootViewManagerInstance = nil;
 		case LinphoneCallPausedByRemote:
 		case LinphoneCallConnected: {
             NSLog(@"-------> LinphoneCallConnected");
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"CallConnectedSuccessful" object:nil];
             
             if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max && call) {
                 NSString *callId =
@@ -419,6 +420,8 @@ static RootViewManager *rootViewManagerInstance = nil;
 		}
 		case LinphoneCallError: {
 			[self displayCallError:call message:message];
+            [self performSelector:@selector(hideCallView)
+                       withObject:nil afterDelay:1.0];
 			break;
 		}
 		case LinphoneCallEnd: {
@@ -481,7 +484,7 @@ static RootViewManager *rootViewManagerInstance = nil;
     if (calls == NULL) {
         while ((currentView == CallView.compositeViewDescription) ||
                (currentView == IncomingCallViewController.compositeViewDescription) ||
-               (currentView == CallOutgoingView.compositeViewDescription)) {
+               (currentView == CallOutgoingView.compositeViewDescription) || (currentView == OutgoingCallViewController.compositeViewDescription)) {
             [self popCurrentView];
         }
     } else {

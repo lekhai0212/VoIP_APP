@@ -276,6 +276,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.width.equalTo(_iconAll.mas_width);
     }];
     
+    _btnEdit.imageEdgeInsets = UIEdgeInsetsMake(8, 8, 8, 8);
     [_btnEdit mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(_viewHeader.mas_right).offset(-10);
         make.centerY.equalTo(_iconAll.mas_centerY);

@@ -711,6 +711,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
     
     //  fifth layer
+    _callButton.tag = TAG_AUDIO_CALL;
     _callButton.layer.cornerRadius = wIcon/2;
     _callButton.clipsToBounds = YES;
     [_callButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -719,6 +720,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.width.height.mas_equalTo(wIcon);
     }];
     
+    btnVideoCall.tag = TAG_VIDEO_CALL;
     btnVideoCall.imageEdgeInsets = [DeviceUtils getEdgeOfVideoCallDialerForDevice];
     btnVideoCall.layer.cornerRadius = wIcon/2;
     btnVideoCall.clipsToBounds = YES;

@@ -267,13 +267,12 @@
             }
             [[PhoneMainView instance] changeCurrentView:[OutgoingCallViewController compositeViewDescription] push:TRUE];
            
-            /*
-            CallView *controller = VIEW(CallView);
-            if (controller != nil) {
-                controller.phoneNumber = phoneNumber;
-            }
-            [[PhoneMainView instance] changeCurrentView:[CallView compositeViewDescription] push:TRUE];
-            */
+//            CallView *controller = VIEW(CallView);
+//            if (controller != nil) {
+//                controller.phoneNumber = phoneNumber;
+//            }
+//            [[PhoneMainView instance] changeCurrentView:[CallView compositeViewDescription] push:TRUE];
+
         }else{
             [[NSNotificationCenter defaultCenter] postNotificationName:showIpadPopupCall
                                                                 object:phoneNumber];

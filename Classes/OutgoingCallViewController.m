@@ -57,10 +57,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     [super viewDidLoad];
     
     //  My code here
-    
     [self setupUIForView];
-    
-    [self addTransparentLayerForView];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -96,8 +93,16 @@ static UICompositeViewDescription *compositeDescription = nil;
     PulsingHaloLayer *layer = [PulsingHaloLayer layer];
     self.halo = layer;
     [_imgAvatar.superview.layer insertSublayer:self.halo below:_imgAvatar.layer];
-    [self setupInitialValuesWithNumLayer:5 radius:0.8 duration:0.45 color:[UIColor colorWithRed:(220/255.0) green:(220/255.0) blue:(220/255.0) alpha:0.7]];
+    [self setupInitialValuesWithNumLayer:5 radius:0.8 duration:0.45 color:[UIColor colorWithRed:(240/255.0) green:(240/255.0) blue:(240/255.0) alpha:0.8]];
     [self.halo start];
+    
+    //  [Khai Le - 12/02/2019]
+    NSString *isVideo = [[NSUserDefaults standardUserDefaults] objectForKey:IS_VIDEO_CALL_KEY];
+    if (![AppUtils isNullOrEmpty: isVideo] && [isVideo isEqualToString:@"1"]) {
+        _imgCallState.image = [UIImage imageNamed:@"state_video_call"];
+    }else{
+        _imgCallState.image = [UIImage imageNamed:@"state_audio_call"];
+    }
     
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(callUpdateEvent:)
                                                name:kLinphoneCallUpdate object:nil];
@@ -136,13 +141,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 #pragma mark - My functions
 
-- (void)addTransparentLayerForView {
-    CAGradientLayer *gradient = [CAGradientLayer layer];
-    gradient.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-    gradient.colors = @[(id)[UIColor colorWithRed:(154/255.0) green:(215/255.0) blue:(9/255.0) alpha:1.0].CGColor, (id)[UIColor colorWithRed:(60/255.0) green:(198/255.0) blue:(116/255.0) alpha:1.0].CGColor];
-    [self.view.layer insertSublayer:gradient atIndex:0];
-}
-
 - (void)setPhoneNumberForView: (NSString *)phoneNumber {
     _phoneNumber = phoneNumber;
 }
@@ -162,7 +160,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         //  Screen width: 375.000000 - Screen height: 667.000000
         wAvatar = 120.0;
         wIconEndCall = 80.0;
-        wSmallIcon = 65.0;
+        wSmallIcon = 60.0;
         
     }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
     {
@@ -216,8 +214,8 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     [_imgCallState mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view.mas_centerX);
-        make.bottom.equalTo(_lbCallState.mas_top);
-        make.width.height.mas_equalTo(25.0);
+        make.bottom.equalTo(_lbCallState.mas_top).offset(-5.0);
+        make.width.height.mas_equalTo(28.0);
     }];
     
     lbPhone.font = textFont;
@@ -293,13 +291,61 @@ static UICompositeViewDescription *compositeDescription = nil;
             _lbCallState.text = [[LanguageUtil sharedInstance] getContent:@"Calling"];
             break;
         }
+        case LinphoneCallOutgoingProgress:{
+            _lbCallState.text = [[LanguageUtil sharedInstance] getContent:@"Calling"];
+            
+            //  [Khai Le -14/02/2019]
+            if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max && call &&
+                (linphone_core_get_calls_nb(LC) < 2)) {
+                // Link call ID to UUID
+                NSString *callId =
+                [NSString stringWithUTF8String:linphone_call_log_get_call_id(linphone_call_get_call_log(call))];
+                NSUUID *uuid = [LinphoneManager.instance.providerDelegate.uuids objectForKey:@""];
+                if (uuid) {
+                    [LinphoneManager.instance.providerDelegate.uuids removeObjectForKey:@""];
+                    [LinphoneManager.instance.providerDelegate.uuids setObject:uuid forKey:callId];
+                    [LinphoneManager.instance.providerDelegate.calls setObject:callId forKey:uuid];
+                }
+            }
+            
+            break;
+        }
         case LinphoneCallConnected:{
             _lbCallState.text = [[LanguageUtil sharedInstance] getContent:@"Connected"];
+            
+            //  [Khai Le - 14/02/2019]
+            if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max && call) {
+                NSString *callId =
+                [NSString stringWithUTF8String:linphone_call_log_get_call_id(linphone_call_get_call_log(call))];
+                NSUUID *uuid = [LinphoneManager.instance.providerDelegate.uuids objectForKey:callId];
+                if (uuid) {
+                    [LinphoneManager.instance.providerDelegate.provider reportOutgoingCallWithUUID:uuid
+                                                                           startedConnectingAtDate:nil];
+                }
+            }
             
             break;
         }
         case LinphoneCallStreamsRunning: {
-            _lbCallState.text = @"Streams Running";
+            //  [Khai Le - 14/02/2019]
+            if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max && call) {
+                NSString *callId =
+                [NSString stringWithUTF8String:linphone_call_log_get_call_id(linphone_call_get_call_log(call))];
+                NSUUID *uuid = [LinphoneManager.instance.providerDelegate.uuids objectForKey:callId];
+                if (uuid) {
+                    [LinphoneManager.instance.providerDelegate.provider reportOutgoingCallWithUUID:uuid
+                                                                                   connectedAtDate:nil];
+                    
+                    CXCallUpdate *update = [[CXCallUpdate alloc] init];
+                    NSString *phoneNumber = [SipUtils getPhoneNumberOfCall:call orLinphoneAddress:nil];
+                    update.remoteHandle = [[CXHandle alloc] initWithType:CXHandleTypePhoneNumber value:phoneNumber];
+                    update.supportsGrouping = TRUE;
+                    update.supportsDTMF = TRUE;
+                    update.supportsHolding = TRUE;
+                    update.supportsUngrouping = TRUE;
+                    [LinphoneManager.instance.providerDelegate.provider reportCallWithUUID:uuid updated:update];
+                }
+            }
             break;
         }
         case LinphoneCallUpdatedByRemote: {
@@ -320,7 +366,8 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case LinphoneCallError:{
-            switch (linphone_call_get_reason(call)) {
+            LinphoneReason reason = linphone_call_get_reason(call);
+            switch (reason) {
                 case LinphoneReasonNotFound:
                     NSLog(@"123");
                     break;
@@ -343,78 +390,6 @@ static UICompositeViewDescription *compositeDescription = nil;
         default:
             break;
     }
-}
-
-#pragma mark - Animation
-- (void)addanimateCircle1 {
-    
-    CGFloat scale = 5.5;
-    CGFloat width = _imgAvatar.bounds.size.width, height = _imgAvatar.bounds.size.height;
-    CAShapeLayer *circleShape = [self createCircleShapeWithPosition:CGPointMake(_imgAvatar.center.x, _imgAvatar.center.y)
-                                                           pathRect:CGRectMake(-CGRectGetMidX(_imgAvatar.bounds), -CGRectGetMidY(_imgAvatar.bounds), width, height)
-                                                             radius:_imgAvatar.layer.cornerRadius];
-    [self.view.layer addSublayer:circleShape];
-    [circleShape addAnimation:[self createFlashAnimationWithScale:scale duration:3.0f] forKey:nil];
-}
-
-- (void)addanimateCircle2 {
-    
-    CGFloat scale = 3.0;
-    CGFloat width = _imgAvatar.bounds.size.width, height = _imgAvatar.bounds.size.height;
-    CAShapeLayer *circleShape = [self createCircleShapeWithPosition:CGPointMake(_imgAvatar.center.x, _imgAvatar.center.y)
-                                                           pathRect:CGRectMake(-CGRectGetMidX(_imgAvatar.bounds), -CGRectGetMidY(_imgAvatar.bounds), width, height)
-                                                             radius:_imgAvatar.layer.cornerRadius];
-    [self.view.layer addSublayer:circleShape];
-    [circleShape addAnimation:[self createFlashAnimationWithScale:scale duration:2.0f] forKey:nil];
-}
-
-- (void)addanimateCircle3 {
-    
-    CGFloat scale = 1.7;
-    CGFloat width = _imgAvatar.bounds.size.width, height = _imgAvatar.bounds.size.height;
-    CAShapeLayer *circleShape = [self createCircleShapeWithPosition:CGPointMake(_imgAvatar.center.x, _imgAvatar.center.y)
-                                                           pathRect:CGRectMake(-CGRectGetMidX(_imgAvatar.bounds), -CGRectGetMidY(_imgAvatar.bounds), width, height)
-                                                             radius:_imgAvatar.layer.cornerRadius];
-    [self.view.layer addSublayer:circleShape];
-    [circleShape addAnimation:[self createFlashAnimationWithScale:scale duration:1.5f] forKey:nil];
-}
-
-- (CAAnimationGroup *)createFlashAnimationWithScale:(CGFloat)scale duration:(CGFloat)duration
-{
-    CABasicAnimation *scaleAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
-    scaleAnimation.fromValue = [NSValue valueWithCATransform3D:CATransform3DIdentity];
-    scaleAnimation.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeScale(scale, scale, 1)];
-    
-    CABasicAnimation *alphaAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
-    alphaAnimation.fromValue = @1;
-    alphaAnimation.toValue = @0;
-    
-    CAAnimationGroup *animation = [CAAnimationGroup animation];
-    animation.animations = @[scaleAnimation, alphaAnimation];
-    animation.delegate = self;
-    animation.duration = duration;
-    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
-    
-    return animation;
-}
-
-- (CAShapeLayer *)createCircleShapeWithPosition:(CGPoint)position pathRect:(CGRect)rect radius:(CGFloat)radius
-{
-    CAShapeLayer *circleShape = [CAShapeLayer layer];
-    circleShape.path = [self createCirclePathWithRadius:rect radius:radius];
-    circleShape.position = position;
-    circleShape.fillColor = [UIColor clearColor].CGColor;
-    circleShape.strokeColor = [UIColor lightGrayColor].CGColor;
-    
-    circleShape.opacity = 0;
-    circleShape.lineWidth = 0.3;
-    
-    return circleShape;
-}
-
-- (CGPathRef)createCirclePathWithRadius:(CGRect)frame radius:(CGFloat)radius
-{
-    return [UIBezierPath bezierPathWithRoundedRect:frame cornerRadius:radius].CGPath;
 }
 
 #pragma mark - Speaker button delegate

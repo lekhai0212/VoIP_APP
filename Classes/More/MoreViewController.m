@@ -250,7 +250,7 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case eCallSettings:{
-            //  [[PhoneMainView instance] changeCurrentView:[SettingsView compositeViewDescription] push:true];
+            [[PhoneMainView instance] changeCurrentView:[SettingsView compositeViewDescription] push:true];
             break;
         }
         case eAppInfo:{

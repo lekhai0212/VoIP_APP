@@ -853,7 +853,7 @@ static void linphone_iphone_display_status(struct _LinphoneCore *lc, const char 
 	// we keep the speaker auto-enabled state in this static so that we don't
 	// force-enable it on ICE re-invite if the user disabled it.
 	static BOOL speaker_already_enabled = FALSE;
-
+    
 	// Disable speaker when no more call
 	if ((state == LinphoneCallEnd || state == LinphoneCallError))
     {
@@ -2798,6 +2798,15 @@ static int comp_call_state_paused(const LinphoneCall *call, const void *param) {
     
 	//  linphone_call_params_enable_video(lcallParams, video);
     [[LinphoneAppDelegate sharedInstance] set_acceptCall: true];
+    
+    //  [Khai Le - 12/03/2019]
+    if (video) {
+        [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:IS_VIDEO_CALL_KEY];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }else{
+        [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:IS_VIDEO_CALL_KEY];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
     
 	linphone_core_accept_call_with_params(theLinphoneCore, call, lcallParams);
 }
