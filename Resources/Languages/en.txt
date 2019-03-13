@@ -21,6 +21,10 @@
 "Calling" = "Calling..."
 "The user is busy" = "The user is busy"
 "Terminated" = "Terminated"
+"Choose DID" = "Choose DID"
+
+
+
 
 
 "Online" = "Online"

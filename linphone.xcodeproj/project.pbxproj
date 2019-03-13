@@ -90,6 +90,7 @@
 		15A2B8AA22325F6F00DA6342 /* logo_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 15A2B8A322325F6800DA6342 /* logo_white.png */; };
 		15A2B8AB22325F6F00DA6342 /* icon_pass.png in Resources */ = {isa = PBXBuildFile; fileRef = 15A2B8A422325F6C00DA6342 /* icon_pass.png */; };
 		15A2B8AD2232600B00DA6342 /* bg_signin.png in Resources */ = {isa = PBXBuildFile; fileRef = 15A2B8AC2232600A00DA6342 /* bg_signin.png */; };
+		15A3B2EC22391397008F4932 /* ChooseDIDPopupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A3B2EB22391397008F4932 /* ChooseDIDPopupView.m */; };
 		15A4333721A7EE5000055E02 /* WriteLogsUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A4333521A7EE4A00055E02 /* WriteLogsUtils.m */; };
 		15A64D92216C5A3D00D194BD /* ic_call_contact.png in Resources */ = {isa = PBXBuildFile; fileRef = 15A64D91216C5A3C00D194BD /* ic_call_contact.png */; };
 		15A64DA0216C8BC700D194BD /* InfoForNewContactTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A64D9E216C8BC700D194BD /* InfoForNewContactTableCell.m */; };
@@ -1089,6 +1090,8 @@
 		15A2B8A322325F6800DA6342 /* logo_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo_white.png; sourceTree = "<group>"; };
 		15A2B8A422325F6C00DA6342 /* icon_pass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_pass.png; sourceTree = "<group>"; };
 		15A2B8AC2232600A00DA6342 /* bg_signin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_signin.png; sourceTree = "<group>"; };
+		15A3B2EA22391397008F4932 /* ChooseDIDPopupView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ChooseDIDPopupView.h; path = AppUI/ChooseDIDPopupView.h; sourceTree = "<group>"; };
+		15A3B2EB22391397008F4932 /* ChooseDIDPopupView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ChooseDIDPopupView.m; path = AppUI/ChooseDIDPopupView.m; sourceTree = "<group>"; };
 		15A4333521A7EE4A00055E02 /* WriteLogsUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WriteLogsUtils.m; path = Utils/WriteLogsUtils.m; sourceTree = "<group>"; };
 		15A4333621A7EE4D00055E02 /* WriteLogsUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WriteLogsUtils.h; path = Utils/WriteLogsUtils.h; sourceTree = "<group>"; };
 		15A64D91216C5A3C00D194BD /* ic_call_contact.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_call_contact.png; sourceTree = "<group>"; };
@@ -3723,6 +3726,8 @@
 				842DEC421FC478F300E7F74D /* UIMiniKeypad.xib */,
 				84C443941FBE10BE0015854C /* ChooseAvatarPopupView.h */,
 				84C443951FBE10BE0015854C /* ChooseAvatarPopupView.m */,
+				15A3B2EA22391397008F4932 /* ChooseDIDPopupView.h */,
+				15A3B2EB22391397008F4932 /* ChooseDIDPopupView.m */,
 				84C4438C1FBE105F0015854C /* NewPhoneCell.h */,
 				84C4438D1FBE105F0015854C /* NewPhoneCell.m */,
 				84C4438E1FBE105F0015854C /* NewPhoneCell.xib */,
@@ -5318,6 +5323,7 @@
 				8404CD5321EDD13000C28E48 /* iPadContactsViewController.m in Sources */,
 				D3F795D615A582810077328B /* ChatConversationView.m in Sources */,
 				D32B6E2915A5BC440033019F /* ChatConversationTableView.m in Sources */,
+				15A3B2EC22391397008F4932 /* ChooseDIDPopupView.m in Sources */,
 				158A2A332233654100C535E0 /* OutgoingCallViewController.m in Sources */,
 				D3A8BB7015A6C7D500F96BE5 /* UIChatBubbleTextCell.m in Sources */,
 				15857C08216E136500DB5237 /* TypePhonePopupView.m in Sources */,

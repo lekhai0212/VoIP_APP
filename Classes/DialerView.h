@@ -23,10 +23,11 @@
 #import "UICallButton.h"
 #import "UIDigitButton.h"
 #import "SearchContactPopupView.h"
+#import "WebServices.h"
 
 @class UICallButton;
 @interface DialerView
-	: TPMultiLayoutViewController <UITextFieldDelegate, UICompositeViewDelegate, UIGestureRecognizerDelegate, UIActionSheetDelegate, UICallButtonDelegate, UIAlertViewDelegate, UITextViewDelegate, SearchContactPopupViewDelegate> {
+	: TPMultiLayoutViewController <UITextFieldDelegate, UICompositeViewDelegate, UIGestureRecognizerDelegate, UIActionSheetDelegate, UICallButtonDelegate, UIAlertViewDelegate, UITextViewDelegate, SearchContactPopupViewDelegate, WebServicesDelegate> {
 }
 
 

@@ -44,6 +44,8 @@
     
     UITextView *tvSearchResult;
     SearchContactPopupView *popupSearchContacts;
+    
+    WebServices *webService;
 }
 @end
 
@@ -78,6 +80,11 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
+    
+    if (webService == nil) {
+        webService = [[WebServices alloc] init];
+        webService.delegate = self;
+    }
     
     [WriteLogsUtils writeForGoToScreen: @"DialerView"];
     
@@ -140,6 +147,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 	[NSNotificationCenter.defaultCenter removeObserver:self];
+    
+    webService = nil;
 }
 
 - (void)viewDidLoad {
@@ -508,6 +517,11 @@ static UICompositeViewDescription *compositeDescription = nil;
     linphone_nat_policy_enable_ice(LNP, FALSE);
 }
 
+- (void)whenTapOnAccount {
+    NSString *params = [NSString stringWithFormat:@"userName=%@&did=%d", USERNAME, 1];
+    [webService callGETWebServiceWithFunction:get_didlist_func andParams:params];
+}
+
 - (void)autoLayoutForView
 {
     NSString *modelName = [DeviceUtils getModelsOfCurrentDevice];
@@ -532,21 +546,25 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
     
     //  account label
+    UITapGestureRecognizer *tapOnAccount = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(whenTapOnAccount)];
+    _lbAccount.userInteractionEnabled = YES;
+    [_lbAccount addGestureRecognizer: tapOnAccount];
+    
     _lbAccount.font = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
     _lbAccount.textAlignment = NSTextAlignmentCenter;
     [_lbAccount mas_makeConstraints:^(MASConstraintMaker *make) {
         //  make.top.bottom.equalTo(_imgLogoSmall);
         make.centerY.equalTo(_viewStatus.mas_centerY).offset(appDelegate._hStatus/2);
         make.centerX.equalTo(_viewStatus.mas_centerX);
-        make.width.mas_equalTo(150);
-        make.height.mas_equalTo(30.0);
+        make.width.mas_equalTo(120);
+        make.height.mas_equalTo(40.0);
     }];
     
     //  status label
     _lbStatus.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
     _lbStatus.numberOfLines = 0;
     [_lbStatus mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_viewStatus.mas_centerX);
+        make.left.equalTo(_lbAccount.mas_right);
         make.top.bottom.equalTo(_lbAccount);
         make.right.equalTo(_viewStatus).offset(-appDelegate._hRegistrationState/4);
     }];
@@ -1075,4 +1093,24 @@ static UICompositeViewDescription *compositeDescription = nil;
         return NO;
     }
 }
+
+#pragma mark - Webservice delegate
+- (void)failedToCallWebService:(NSString *)link andError:(NSString *)error
+{
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Result for %@:\nResponse data: %@\n", __FUNCTION__, link, error] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+}
+
+- (void)successfulToCallWebService:(NSString *)link withData:(NSDictionary *)data {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Result for %@:\nResponse data: %@\n", __FUNCTION__, link, @[data]] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
+    if ([link isEqualToString: get_didlist_func]){
+        NSLog(@"%@", data);
+    }
+}
+
+-(void)receivedResponeCode:(NSString *)link withCode:(int)responeCode {
+}
+
+
+
 @end

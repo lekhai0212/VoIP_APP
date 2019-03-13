@@ -18,7 +18,7 @@
 
 
 
-
+#define getDIDListForCall   @"getDIDListForCall"
 
 #pragma mark - API
 
@@ -26,6 +26,7 @@
 #define login_func          @"Login"
 #define update_token_func   @"UpdatePushToken"
 #define get_contacts_func   @"GetServerContacts"
+#define get_didlist_func    @"GetDIDList"
 
 
 

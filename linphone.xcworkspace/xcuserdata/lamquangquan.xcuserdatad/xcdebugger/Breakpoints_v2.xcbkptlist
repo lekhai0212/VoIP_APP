@@ -278,11 +278,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/DialerView.m"
-            timestampString = "574140658.12308"
+            timestampString = "574163027.8742599"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "334"
-            endingLineNumber = "334"
+            startingLineNumber = "343"
+            endingLineNumber = "343"
             landmarkName = "DialerView"
             landmarkType = "3">
          </BreakpointContent>
@@ -524,6 +524,22 @@
             startingLineNumber = "362"
             endingLineNumber = "362"
             landmarkName = "-callUpdate:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Classes/DialerView.m"
+            timestampString = "574163027.876533"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1109"
+            endingLineNumber = "1109"
+            landmarkName = "-successfulToCallWebService:withData:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

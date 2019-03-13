@@ -22,6 +22,9 @@
 "Calling" = "Đang gọi..."
 "The user is busy" = "Người dùng đang bận"
 "Terminated" = "Cuộc gọi kết thúc"
+"Choose DID" = "Chọn đầu số"
+
+
 
 
 
