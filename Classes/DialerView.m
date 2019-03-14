@@ -441,7 +441,25 @@ static UICompositeViewDescription *compositeDescription = nil;
         [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:IS_VIDEO_CALL_KEY];
         [[NSUserDefaults standardUserDefaults] synchronize];
         
+        [LinphoneAppDelegate sharedInstance].phoneForCall = _addressField.text;
+        [[NSNotificationCenter defaultCenter] postNotificationName:getDIDListForCall object:nil];
+        
         return;
+    }
+    
+    NSString *phoneNumber = [NSDatabase getLastCallOfUser];
+    if (![AppUtils isNullOrEmpty: phoneNumber]) {
+        if ([phoneNumber hasPrefix:@"+84"]) {
+            phoneNumber = [phoneNumber stringByReplacingOccurrencesOfString:@"+84" withString:@"0"];
+        }
+        
+        if ([phoneNumber hasPrefix:@"84"]) {
+            phoneNumber = [phoneNumber substringFromIndex:2];
+            phoneNumber = [NSString stringWithFormat:@"0%@", phoneNumber];
+        }
+        phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
+        
+        _addressField.text = phoneNumber;
     }
     
     [pressTimer invalidate];
@@ -517,11 +535,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     linphone_nat_policy_enable_ice(LNP, FALSE);
 }
 
-- (void)whenTapOnAccount {
-    NSString *params = [NSString stringWithFormat:@"userName=%@&did=%d", USERNAME, 1];
-    [webService callGETWebServiceWithFunction:get_didlist_func andParams:params];
-}
-
 - (void)autoLayoutForView
 {
     NSString *modelName = [DeviceUtils getModelsOfCurrentDevice];
@@ -546,10 +559,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
     
     //  account label
-    UITapGestureRecognizer *tapOnAccount = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(whenTapOnAccount)];
-    _lbAccount.userInteractionEnabled = YES;
-    [_lbAccount addGestureRecognizer: tapOnAccount];
-    
     _lbAccount.font = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
     _lbAccount.textAlignment = NSTextAlignmentCenter;
     [_lbAccount mas_makeConstraints:^(MASConstraintMaker *make) {

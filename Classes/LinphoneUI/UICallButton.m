@@ -59,6 +59,8 @@
 #pragma mark -
 
 - (void)touchUp:(id)sender {
+    return;
+    
     BOOL networkReady = [DeviceUtils checkNetworkAvailable];
     if (!networkReady) {
         [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];

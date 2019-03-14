@@ -23,8 +23,8 @@
 "The user is busy" = "Người dùng đang bận"
 "Terminated" = "Cuộc gọi kết thúc"
 "Choose DID" = "Chọn đầu số"
-
-
+"Can not get DID list" = "Không thể lấy danh sách đầu số"
+"Default DID" = "Mặc định"
 
 
 

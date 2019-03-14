@@ -41,7 +41,7 @@ typedef enum typeCall{
 
 @class VideoView;
 
-@interface CallView : TPMultiLayoutViewController <UIGestureRecognizerDelegate, UICompositeViewDelegate> {
+@interface CallView : TPMultiLayoutViewController <UIGestureRecognizerDelegate, UICompositeViewDelegate, UISpeakerButtonDelegate, UIMutedMicroButtonDelegate> {
   @private
 	UITapGestureRecognizer *singleFingerTap;
 	NSTimer *hideControlsTimer;
@@ -59,7 +59,6 @@ typedef enum typeCall{
 @property (weak, nonatomic) IBOutlet UILabel *_lbQuality;
 @property(nonatomic, strong) IBOutlet UISpeakerButton *speakerButton;
 @property(nonatomic, strong) IBOutlet UIHangUpButton *hangupButton;
-@property(nonatomic, strong) IBOutlet UIButton *routesSpeakerButton;
 @property(nonatomic, strong) IBOutlet UIMutedMicroButton *microButton;
 @property(nonatomic, strong) IBOutlet UIPauseButton *callPauseButton;
 @property(nonatomic, strong) IBOutlet UIToggleButton *numpadButton;

@@ -8,12 +8,13 @@
 #import <UIKit/UIKit.h>
 
 @protocol ChooseDIDPopupViewDelegate
-- (void)selectContactFromSearchPopup: (NSString *)phoneNumber;
+- (void)selectDIDForCallWithPrefix: (NSString *)prefix;
 @end
 
 @interface ChooseDIDPopupView : UIView<UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic,strong) id <NSObject, ChooseDIDPopupViewDelegate> delegate;
+@property (nonatomic, strong) NSMutableArray *listDID;
 @property (nonatomic, strong) UILabel *lbHeader;
 @property (nonatomic, strong) UITableView *tbDIDList;
 @property (nonatomic, retain) UITapGestureRecognizer *tapGesture;

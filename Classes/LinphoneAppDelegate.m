@@ -92,7 +92,7 @@
 @synthesize webService, keepAwakeTimer, listNumber, listInfoPhoneNumber, supportLoginWithPhoneNumber, logFilePath, dbQueue, splashScreen;
 @synthesize supportVoice;
 @synthesize homeSplitVC, contactType, historyType, callTransfered, hNavigation, hasBluetoothEar, ipadWaiting;
-@synthesize audioCallView, videoCallView;
+@synthesize audioCallView, videoCallView, phoneForCall;
 
 #pragma mark - Lifecycle Functions
 
@@ -1994,45 +1994,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
 }
 
-- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
-{
-    INInteraction *interaction = userActivity.interaction;
-    if (interaction != nil) {
-        INStartAudioCallIntent *startAudioCallIntent = (INStartAudioCallIntent *)interaction.intent;
-        if (startAudioCallIntent != nil && startAudioCallIntent.contacts.count > 0) {
-            INPerson *contact = startAudioCallIntent.contacts[0];
-            if (contact != nil) {
-                INPersonHandle *personHandle = contact.personHandle;
-                NSString *phoneNumber = personHandle.value;
-                if (![AppUtils isNullOrEmpty: phoneNumber])
-                {
-                    phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
-                    if ([AppUtils isNullOrEmpty: phoneNumber]) {
-                        [self showSplashScreenOnView: NO];
-                    }else{
-                        [self showSplashScreenOnView: YES];
-
-                        [[NSUserDefaults standardUserDefaults] setObject:phoneNumber forKey:UserActivity];
-                        [[NSUserDefaults standardUserDefaults] synchronize];
-                    }
-                }
-            }
-        }
-    }
-    return YES;
-}
-
-- (void)showSplashScreenOnView: (BOOL)show {
-    if (splashScreen == nil) {
-        UINib *nib = [UINib nibWithNibName:@"LaunchScreen" bundle:nil];
-        splashScreen = [[nib instantiateWithOwner:self options:nil] objectAtIndex:0];
-        [self.window addSubview:splashScreen];
-    }
-    splashScreen.frame = [UIScreen mainScreen].bounds;
-    splashScreen.hidden = !show;
-}
-
-//-(BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+//- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
 //{
 //    INInteraction *interaction = userActivity.interaction;
 //    if (interaction != nil) {
@@ -2059,6 +2021,44 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 //    }
 //    return YES;
 //}
+
+- (void)showSplashScreenOnView: (BOOL)show {
+    if (splashScreen == nil) {
+        UINib *nib = [UINib nibWithNibName:@"LaunchScreen" bundle:nil];
+        splashScreen = [[nib instantiateWithOwner:self options:nil] objectAtIndex:0];
+        [self.window addSubview:splashScreen];
+    }
+    splashScreen.frame = [UIScreen mainScreen].bounds;
+    splashScreen.hidden = !show;
+}
+
+-(BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+{
+    INInteraction *interaction = userActivity.interaction;
+    if (interaction != nil) {
+        INStartAudioCallIntent *startAudioCallIntent = (INStartAudioCallIntent *)interaction.intent;
+        if (startAudioCallIntent != nil && startAudioCallIntent.contacts.count > 0) {
+            INPerson *contact = startAudioCallIntent.contacts[0];
+            if (contact != nil) {
+                INPersonHandle *personHandle = contact.personHandle;
+                NSString *phoneNumber = personHandle.value;
+                if (![AppUtils isNullOrEmpty: phoneNumber])
+                {
+                    phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
+                    if ([AppUtils isNullOrEmpty: phoneNumber]) {
+                        [self showSplashScreenOnView: NO];
+                    }else{
+                        [self showSplashScreenOnView: YES];
+
+                        [[NSUserDefaults standardUserDefaults] setObject:phoneNumber forKey:UserActivity];
+                        [[NSUserDefaults standardUserDefaults] synchronize];
+                    }
+                }
+            }
+        }
+    }
+    return YES;
+}
 
 #pragma mark - sync contact xmpp
 
@@ -2159,6 +2159,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     
     if ([link isEqualToString: update_token_func]) {
         _updateTokenSuccess = false;
+        
+    }else if ([link isEqualToString: get_didlist_func]) {
+        [self.window makeToast:[[LanguageUtil sharedInstance] getContent:@"Can not get DID list"]
+                      duration:2.0 position:CSToastPositionCenter];
     }
 }
 
@@ -2167,8 +2171,12 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     
     if ([link isEqualToString: update_token_func]) {
         _updateTokenSuccess = true;
+        
     }else if ([link isEqualToString: GetInfoMissCall]){
         [self insertMissedCallToDatabase: data];
+        
+    }else if ([link isEqualToString: get_didlist_func]) {
+        [self showPopupToChooseDID: data];
     }
 }
 
@@ -2561,10 +2569,36 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 }
 
 - (void)startGetDIDListForCall {
-    ssssss
+    NSString *params = [NSString stringWithFormat:@"userName=%@&did=%d", USERNAME, 1];
+    [webService callGETWebServiceWithFunction:get_didlist_func andParams:params];
 }
 
-/*
-*/
+- (void)showPopupToChooseDID: (id)data {
+    if ([data isKindOfClass:[NSArray class]] && data != nil) {
+        float popupHeight;
+        if ([(NSArray *)data count] > 6) {
+            popupHeight = 60.0 + 7*60.0;
+        }else{
+            popupHeight = 60.0 + ([(NSArray *)data count] + 1) * 60.0;
+        }
+        
+        ChooseDIDPopupView *popupDID = [[ChooseDIDPopupView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-300.0)/2, (SCREEN_HEIGHT-popupHeight)/2, 300.0, popupHeight)];
+        popupDID.delegate = self;
+        [popupDID.listDID addObjectsFromArray: data];
+        [popupDID.tbDIDList reloadData];
+        [popupDID showInView:self.window animated:YES];
+    }else{
+        NSLog(@"Make call right now");
+    }
+}
+
+-(void)selectDIDForCallWithPrefix:(NSString *)prefix {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] prefix = %@, phoneForCall = %@", __FUNCTION__, prefix, phoneForCall] toFilePath:logFilePath];
+    
+    if (![AppUtils isNullOrEmpty: phoneForCall]) {
+        NSString *strToCall = [NSString stringWithFormat:@"%@%@", prefix, phoneForCall];
+        [SipUtils makeCallWithPhoneNumber: strToCall];
+    }
+}
 
 @end

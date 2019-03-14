@@ -22,8 +22,8 @@
 "The user is busy" = "The user is busy"
 "Terminated" = "Terminated"
 "Choose DID" = "Choose DID"
-
-
+"Can not get DID list" = "Can not get DID list"
+"Default DID" = "Default DID"
 
 
 

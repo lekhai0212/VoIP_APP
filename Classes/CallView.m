@@ -91,7 +91,7 @@ const NSInteger SECURE_BUTTON_TAG = 5;
 	BOOL hiddenVolume;
 }
 
-@synthesize callView, bgAudioCall, nameLabel, lbPhoneNumber, durationLabel, _lbQuality, avatarImage, hangupButton, speakerButton, routesSpeakerButton, microButton, callPauseButton, numpadButton;
+@synthesize callView, bgAudioCall, nameLabel, lbPhoneNumber, durationLabel, _lbQuality, avatarImage, hangupButton, speakerButton, microButton, callPauseButton, numpadButton;
 @synthesize viewVideoCall, _lbVideoTime, lbAddressVideoCall, lbStateVideoCall, iconCaptureScreen;
 @synthesize durationTimer;
 
@@ -655,9 +655,7 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 	}
 
 	_routesBluetoothButton.selected = LinphoneManager.instance.bluetoothEnabled;
-    //  _routesSpeakerButton.selected = LinphoneManager.instance.speakerEnabled;
-	_routesEarpieceButton.selected = ! _routesBluetoothButton.selected && !routesSpeakerButton.selected;
-
+    
 	if (hidden != _routesView.hidden) {
 		if (animated) {
 			[self hideAnimation:hidden forView:_routesView completion:nil];
@@ -779,7 +777,7 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
             linphone_call_start_recording(currentCall);
             
             btnNumpad.enabled = YES;
-            routesSpeakerButton.enabled = YES;
+            speakerButton.enabled = YES;
             callPauseButton.enabled = YES;
             microButton.enabled = YES;
             
@@ -803,7 +801,6 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 				}
 			}
             btnNumpad.enabled = YES;
-            routesSpeakerButton.enabled = YES;
             callPauseButton.enabled = YES;
             microButton.enabled = YES;
             
@@ -1415,32 +1412,30 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
                      action:@selector(btnHangupButtonPressed)
            forControlEvents:UIControlEventTouchUpInside];
     
+    [speakerButton setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
+    [speakerButton setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateDisabled];
+    speakerButton.delegate = self;
     [speakerButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(callView.mas_centerX);
-        make.bottom.equalTo(hangupButton.mas_top).offset(-marginIcon);
-        make.width.height.mas_equalTo(55.0);
-    }];
-    
-    [routesSpeakerButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(hangupButton.mas_centerY);
         make.right.equalTo(hangupButton.mas_left).offset(-marginIcon);
         make.width.height.mas_equalTo(55.0);
     }];
     
+    microButton.delegate = self;
     [microButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.bottom.equalTo(routesSpeakerButton);
-        make.right.equalTo(routesSpeakerButton.mas_left).offset(-marginIcon);
+        make.top.bottom.equalTo(speakerButton);
+        make.right.equalTo(speakerButton.mas_left).offset(-marginIcon);
         make.width.mas_equalTo(55.0);
     }];
     
     [callPauseButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.bottom.equalTo(routesSpeakerButton);
+        make.top.bottom.equalTo(speakerButton);
         make.left.equalTo(hangupButton.mas_right).offset(marginIcon);
         make.width.mas_equalTo(55.0);
     }];
     
     [numpadButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.bottom.equalTo(routesSpeakerButton);
+        make.top.bottom.equalTo(speakerButton);
         make.left.equalTo(callPauseButton.mas_right).offset(marginIcon);
         make.width.mas_equalTo(55.0);
     }];
@@ -1601,6 +1596,30 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
         linphone_call_params_destroy(call_params);
     } else {
         NSLog(@"Cannot toggle video button, because no current call");
+    }
+}
+
+-(void)onSpeakerStateChangedTo:(BOOL)speaker {
+    if (isAudioCall) {
+        if (speaker) {
+            [speakerButton setImage:[UIImage imageNamed:@"speaker_enable"] forState:UIControlStateNormal];
+        }else{
+            [speakerButton setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
+        }
+    }else{
+        
+    }
+}
+
+- (void)onMuteStateChangedTo:(BOOL)muted {
+    if (isAudioCall) {
+        if (muted) {
+            [microButton setImage:[UIImage imageNamed:@"mute_enable"] forState:UIControlStateNormal];
+        }else{
+            [microButton setImage:[UIImage imageNamed:@"mute_normal"] forState:UIControlStateNormal];
+        }
+    }else{
+        
     }
 }
 

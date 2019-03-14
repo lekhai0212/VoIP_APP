@@ -40,6 +40,7 @@
 #import <CoreBluetooth/CoreBluetooth.h>
 #import "AudioCallView.h"
 #import "VideoCallView.h"
+#import "ChooseDIDPopupView.h"
 
 #define MINI_KEYPAD_TAG 101
 #define MINI_TRANSFER_CALL_VIEW_TAG 102
@@ -70,7 +71,7 @@ typedef enum{
     qrCodeLogin,
 }typeLoginPBX;
 
-@interface LinphoneAppDelegate : NSObject <UIApplicationDelegate, PKPushRegistryDelegate, UNUserNotificationCenterDelegate, WebServicesDelegate, UIAlertViewDelegate, UITabBarControllerDelegate, UITabBarDelegate, CBCentralManagerDelegate> {
+@interface LinphoneAppDelegate : NSObject <UIApplicationDelegate, PKPushRegistryDelegate, UNUserNotificationCenterDelegate, WebServicesDelegate, UIAlertViewDelegate, UITabBarControllerDelegate, UITabBarDelegate, CBCentralManagerDelegate, ChooseDIDPopupViewDelegate> {
     @private
 	UIBackgroundTaskIdentifier bgStartId;
     BOOL startedInBackground;
@@ -163,6 +164,8 @@ typedef enum{
 
 @property (nonatomic, strong) AudioCallView *audioCallView;
 @property (nonatomic, strong) VideoCallView *videoCallView;
+
+@property (nonatomic, strong) NSString *phoneForCall;
 
 @end
 

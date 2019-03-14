@@ -147,6 +147,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)setupUIForView {
     float margin = 25.0;
+    wIconEndCall = 80.0;
     
     NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
     if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE] || [deviceMode isEqualToString: simulator])
@@ -166,8 +167,9 @@ static UICompositeViewDescription *compositeDescription = nil;
     {
         //  Screen width: 414.000000 - Screen height: 736.000000
         wAvatar = 130.0;
-        wSmallIcon = 55.0;
-        margin = 30.0;
+        wIconEndCall = 80.0;
+        wSmallIcon = 60.0;
+        margin = 45.0;
         
     }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2]){
         //  Screen width: 375.000000 - Screen height: 812.000000

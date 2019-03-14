@@ -784,6 +784,8 @@
 		84F81BE921EF86C3009629C9 /* ic_keyboard_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F81BE721EF86C2009629C9 /* ic_keyboard_white.png */; };
 		84F81BEA21EF86C3009629C9 /* ic_keyboard_black.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F81BE821EF86C3009629C9 /* ic_keyboard_black.png */; };
 		84FE45C520E4D0740067405F /* keepawake.wav in Resources */ = {isa = PBXBuildFile; fileRef = 84FE45BE20E4D0740067405F /* keepawake.wav */; };
+		84FEC5C922394F0200E6A0F5 /* ChooseDIDCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FEC5C722394F0200E6A0F5 /* ChooseDIDCell.m */; };
+		84FEC5CA22394F0200E6A0F5 /* ChooseDIDCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84FEC5C822394F0200E6A0F5 /* ChooseDIDCell.xib */; };
 		8C1B67061E671826001EA2FE /* AudioHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C1B67051E671826001EA2FE /* AudioHelper.m */; };
 		8C2595DD1DEDC92D007A6424 /* ProviderDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2595DC1DEDC92D007A6424 /* ProviderDelegate.m */; };
 		8C2595DF1DEDCC8E007A6424 /* CallKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C2595DE1DEDCC8E007A6424 /* CallKit.framework */; };
@@ -2064,6 +2066,9 @@
 		84F81BE721EF86C2009629C9 /* ic_keyboard_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_keyboard_white.png; sourceTree = "<group>"; };
 		84F81BE821EF86C3009629C9 /* ic_keyboard_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_keyboard_black.png; sourceTree = "<group>"; };
 		84FE45BE20E4D0740067405F /* keepawake.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = keepawake.wav; sourceTree = "<group>"; };
+		84FEC5C622394F0200E6A0F5 /* ChooseDIDCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ChooseDIDCell.h; path = AppUI/ChooseDIDCell.h; sourceTree = "<group>"; };
+		84FEC5C722394F0200E6A0F5 /* ChooseDIDCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ChooseDIDCell.m; path = AppUI/ChooseDIDCell.m; sourceTree = "<group>"; };
+		84FEC5C822394F0200E6A0F5 /* ChooseDIDCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ChooseDIDCell.xib; path = AppUI/ChooseDIDCell.xib; sourceTree = "<group>"; };
 		888B75431B1859C14849ED48 /* libPods-linphoneTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-linphoneTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		89AD7C7EF2E7673980DA481B /* Pods-liblinphoneTesterTests.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-liblinphoneTesterTests.distribution.xcconfig"; path = "Pods/Target Support Files/Pods-liblinphoneTesterTests/Pods-liblinphoneTesterTests.distribution.xcconfig"; sourceTree = "<group>"; };
 		8C1B67051E671826001EA2FE /* AudioHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioHelper.m; sourceTree = "<group>"; };
@@ -3728,6 +3733,9 @@
 				84C443951FBE10BE0015854C /* ChooseAvatarPopupView.m */,
 				15A3B2EA22391397008F4932 /* ChooseDIDPopupView.h */,
 				15A3B2EB22391397008F4932 /* ChooseDIDPopupView.m */,
+				84FEC5C622394F0200E6A0F5 /* ChooseDIDCell.h */,
+				84FEC5C722394F0200E6A0F5 /* ChooseDIDCell.m */,
+				84FEC5C822394F0200E6A0F5 /* ChooseDIDCell.xib */,
 				84C4438C1FBE105F0015854C /* NewPhoneCell.h */,
 				84C4438D1FBE105F0015854C /* NewPhoneCell.m */,
 				84C4438E1FBE105F0015854C /* NewPhoneCell.xib */,
@@ -4822,6 +4830,7 @@
 				159E0879217984F00056E2BB /* RegisterPBXWithPhoneView.xib in Resources */,
 				842DEC441FC478F300E7F74D /* UIMiniKeypad.xib in Resources */,
 				84ECF9C6216679A70067B4B6 /* ic_addcall_dis.png in Resources */,
+				84FEC5CA22394F0200E6A0F5 /* ChooseDIDCell.xib in Resources */,
 				15F2E5FC216B575D0076CB1F /* background_more.png in Resources */,
 				8444C41A22262C4500D11166 /* bg_button_login.png in Resources */,
 				15B292C121FC0AF4005B6568 /* ic_speaker_ble_def.png in Resources */,
@@ -5341,6 +5350,7 @@
 				631348301B6F7B6600C6BDCB /* UIRoundBorderedButton.m in Sources */,
 				84C443881FBE101B0015854C /* PhoneObject.m in Sources */,
 				15E9B6D221F0863600F25EA1 /* TestViewController.m in Sources */,
+				84FEC5C922394F0200E6A0F5 /* ChooseDIDCell.m in Sources */,
 				C90FAA7915AF54E6002091CB /* HistoryDetailsView.m in Sources */,
 				63FB30351A680E73008CA393 /* UIRoundedImageView.m in Sources */,
 				84EFFE061FF3E6B60085A9F4 /* DGActivityIndicatorBallSpinFadeLoader.m in Sources */,

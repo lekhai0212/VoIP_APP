@@ -6,24 +6,29 @@
 //
 
 #import "ChooseDIDPopupView.h"
+#import "ChooseDIDCell.h"
 
 @implementation ChooseDIDPopupView
-@synthesize tbDIDList, lbHeader, tapGesture, delegate;
+@synthesize tbDIDList, lbHeader, tapGesture, delegate, listDID;
 
 - (id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame: frame];
     if (self) {
         // Initialization code
+        self.backgroundColor =  UIColor.whiteColor;
+        listDID = [[NSMutableArray alloc] init];
         self.clipsToBounds = YES;
         self.layer.cornerRadius = 12.0;
         
         lbHeader = [[UILabel alloc] init];
+        lbHeader.textAlignment = NSTextAlignmentCenter;
         lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"Choose DID"];
-        lbHeader.font = [UIFont systemFontOfSize:22.0 weight:UIFontWeightRegular];
-        lbHeader.textColor = [UIColor darkGrayColor];
+        lbHeader.font = [UIFont systemFontOfSize:22.0 weight:UIFontWeightSemibold];
+        lbHeader.textColor = [UIColor colorWithRed:(80/255.0) green:(208/255.0) blue:(135/255.0) alpha:1.0];
         [self addSubview: lbHeader];
         [lbHeader mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.left.right.equalTo(self);
+            make.height.mas_equalTo(60.0);
         }];
         
         tbDIDList = [[UITableView alloc] init];
@@ -88,6 +93,8 @@
 }
 
 - (void)closePopupViewWhenTagOut{
+    [LinphoneAppDelegate sharedInstance].phoneForCall = @"";
+    
     [self fadeOut];
     [self.superview removeGestureRecognizer:tapGesture];
 }
@@ -98,43 +105,39 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return contacts.count;
+    return listDID.count + 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *identifier = @"ContactCell";
-    ContactCell *cell = [tableView dequeueReusableCellWithIdentifier: identifier];
+    static NSString *identifier = @"ChooseDIDCell";
+    ChooseDIDCell *cell = [tableView dequeueReusableCellWithIdentifier: identifier];
     if (cell == nil) {
-        NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"ContactCell" owner:self options:nil];
+        NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"ChooseDIDCell" owner:self options:nil];
         cell = topLevelObjects[0];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    PhoneObject *phone = [contacts objectAtIndex: indexPath.row];
-    
-    cell.icCall.hidden = YES;
-    cell.name.text = phone.name;
-    cell.phone.text = phone.number;
-    if (![AppUtils isNullOrEmpty: phone.avatar]) {
-        cell.image.image = [UIImage imageWithData:[NSData dataFromBase64String: phone.avatar]];
+    if (indexPath.row == 0) {
+        cell.lbDIDNumber.text = [[LanguageUtil sharedInstance] getContent:@"Default DID"];
     }else{
-        cell.image.image = [UIImage imageNamed:@"no_avatar.png"];
+        NSDictionary *info = [listDID objectAtIndex: indexPath.row-1];
+        NSString *did = [info objectForKey:@"did"];
+        cell.lbDIDNumber.text = did;
     }
-    cell.icCall.hidden = YES;
-    
-    [cell._lbSepa mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.bottom.equalTo(cell);
-        make.height.mas_equalTo(1.0);
-    }];
     
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self fadeOut];
-    PhoneObject *phone = [contacts objectAtIndex: indexPath.row];
-    [self.delegate selectContactFromSearchPopup: phone.number];
+    if (indexPath.row == 0) {
+        [delegate selectDIDForCallWithPrefix:@""];
+    }else{
+        NSDictionary *info = [listDID objectAtIndex: indexPath.row-1];
+        NSString *prefix = [info objectForKey:@"st"];
+        [delegate selectDIDForCallWithPrefix: prefix];
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
