@@ -10,6 +10,6 @@
 
 @implementation CallHistoryObject
 
-@synthesize _time, _status, _duration, _date, _rate, _callDirection, _timeInt;
+@synthesize _time, _status, _duration, _date, _rate, _callDirection, _timeInt, typeCall;
 
 @end

@@ -30,11 +30,12 @@
     }
     
     _imgAvatar.clipsToBounds = YES;
-    _imgAvatar.layer.borderColor = [UIColor colorWithRed:0.169 green:0.53 blue:0.949 alpha:1.0].CGColor;
+    _imgAvatar.layer.borderColor = [UIColor colorWithRed:(101/255.0) green:(205/255.0)
+                                                    blue:(70/255.0) alpha:1.0].CGColor;
     _imgAvatar.layer.borderWidth = 1.0;
     _imgAvatar.layer.cornerRadius = 50.0/2;
     [_imgAvatar mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self).offset(20);
+        make.left.equalTo(self).offset(10.0);
         make.centerY.equalTo(self.mas_centerY);
         make.width.height.mas_equalTo(50.0);
     }];
@@ -61,9 +62,9 @@
     lbDate.textColor = textColor;
     [lbDate mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_imgAvatar.mas_top);
-        make.right.equalTo(_btnCall.mas_left).offset(-10.0);
+        make.right.equalTo(_btnCall.mas_left).offset(-5.0);
         make.bottom.equalTo(_imgAvatar.mas_centerY);
-        make.width.mas_equalTo(100.0);
+        make.width.mas_equalTo(90.0);
     }];
     
     _lbTime.textColor = textColor;

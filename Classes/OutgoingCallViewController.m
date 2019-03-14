@@ -63,6 +63,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
     
+    NSLog(@"State = count ---> %d", linphone_core_get_calls_nb([LinphoneManager getLc]));
+    
     _btnSpeaker.delegate = self;
     _btnMute.delegate = self;
     
@@ -132,6 +134,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (IBAction)_btnEndCallPressed:(UIButton *)sender {
+    [LinphoneAppDelegate sharedInstance]._meEnded = YES;
+    
     int numCall = linphone_core_get_calls_nb([LinphoneManager getLc]);
     if (numCall == 0) {
         [LinphoneAppDelegate sharedInstance].phoneNumberEnd = _phoneNumber;
@@ -282,18 +286,25 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case LinphoneCallOutgoingInit:{
+            NSLog(@"State = %@", @"LinphoneCallOutgoingInit");
+            
             _lbCallState.text = [[LanguageUtil sharedInstance] getContent:@"Calling"];
             break;
         }
         case LinphoneCallOutgoingRinging:{
+            NSLog(@"State = %@", @"LinphoneCallOutgoingRinging");
+            
             _lbCallState.text = [[LanguageUtil sharedInstance] getContent:@"Ringing"];
             break;
         }
         case LinphoneCallOutgoingEarlyMedia:{
+            NSLog(@"State = %@", @"LinphoneCallOutgoingEarlyMedia");
             _lbCallState.text = [[LanguageUtil sharedInstance] getContent:@"Calling"];
             break;
         }
         case LinphoneCallOutgoingProgress:{
+            NSLog(@"State = %@", @"LinphoneCallOutgoingProgress");
+            
             _lbCallState.text = [[LanguageUtil sharedInstance] getContent:@"Calling"];
             
             //  [Khai Le -14/02/2019]
@@ -329,6 +340,8 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case LinphoneCallStreamsRunning: {
+            NSLog(@"State = %@", @"LinphoneCallStreamsRunning");
+            
             //  [Khai Le - 14/02/2019]
             if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max && call) {
                 NSString *callId =
@@ -368,6 +381,8 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case LinphoneCallError:{
+            NSLog(@"State = %@", @"LinphoneCallError");
+            
             LinphoneReason reason = linphone_call_get_reason(call);
             switch (reason) {
                 case LinphoneReasonNotFound:

@@ -750,6 +750,16 @@ static void linphone_iphone_display_status(struct _LinphoneCore *lc, const char 
             
             video = (([UIApplication sharedApplication].applicationState != UIApplicationStateBackground) && videoEnabled);
             
+            //  [Khai Le - 14/03/2019] save to know is video call or audio call
+            if (video) {
+                [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:IS_VIDEO_CALL_KEY];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }else{
+                [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:IS_VIDEO_CALL_KEY];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+            //  -------
+            
 			[LinphoneManager.instance.providerDelegate reportIncomingCallwithUUID:uuid handle:address video:video];
 #else
 			[PhoneMainView.instance displayIncomingCall:call];
@@ -902,7 +912,8 @@ static void linphone_iphone_display_status(struct _LinphoneCore *lc, const char 
             }
             
             // Outgoing
-            [NSDatabase InsertHistory:callID status:callStatus phoneNumber:phoneNumber callDirection:callDicrection recordFiles:@"" duration:0 date:date time:time time_int:[[NSNumber numberWithInt:(int)linphone_call_log_get_start_date(callLog)] intValue] callType:1 sipURI:strAddress MySip:USERNAME kCallId:@"" andFlag:1 andUnread: unread];
+            int callType = [SipUtils getCurrentTypeForCall];
+            [NSDatabase InsertHistory:callID status:callStatus phoneNumber:phoneNumber callDirection:callDicrection recordFiles:@"" duration:0 date:date time:time time_int:[[NSNumber numberWithInt:(int)linphone_call_log_get_start_date(callLog)] intValue] callType:callType sipURI:strAddress MySip:USERNAME kCallId:@"" andFlag:1 andUnread: unread];
             
             // Huỷ bỏ biến cancel cuộc gọi
             [[LinphoneAppDelegate sharedInstance] set_meEnded: FALSE];
@@ -913,7 +924,8 @@ static void linphone_iphone_display_status(struct _LinphoneCore *lc, const char 
                 unread = 0;
             }
             // Outgoing
-            [NSDatabase InsertHistory:callID status:callStatus phoneNumber:phoneNumber callDirection:callDicrection recordFiles:@"" duration:0 date:date time:time time_int:[[NSNumber numberWithInt:(int)linphone_call_log_get_start_date(callLog)] intValue] callType:1 sipURI:strAddress MySip:USERNAME kCallId:@"" andFlag:1 andUnread: unread];
+            int callType = [SipUtils getCurrentTypeForCall];
+            [NSDatabase InsertHistory:callID status:callStatus phoneNumber:phoneNumber callDirection:callDicrection recordFiles:@"" duration:0 date:date time:time time_int:[[NSNumber numberWithInt:(int)linphone_call_log_get_start_date(callLog)] intValue] callType:callType sipURI:strAddress MySip:USERNAME kCallId:@"" andFlag:1 andUnread: unread];
             
             // Huỷ bỏ biến cancel cuộc gọi
             [[LinphoneAppDelegate sharedInstance] set_meEnded: FALSE];
@@ -1077,12 +1089,15 @@ static void linphone_iphone_display_status(struct _LinphoneCore *lc, const char 
             if ([LinphoneAppDelegate sharedInstance]._busyForCall) {
                 int timeInt = (int)linphone_call_log_get_start_date(callLog);
                 
-                [NSDatabase InsertHistory:callID status:missed_call phoneNumber:phoneNumber callDirection:callDicrection recordFiles:@"" duration:duration date:date time:time time_int:timeInt callType:1 sipURI:strAddress MySip:USERNAME kCallId:@"" andFlag:1 andUnread:1];
+                int callType = [SipUtils getCurrentTypeForCall];
+                [NSDatabase InsertHistory:callID status:missed_call phoneNumber:phoneNumber callDirection:callDicrection recordFiles:@"" duration:duration date:date time:time time_int:timeInt callType:callType sipURI:strAddress MySip:USERNAME kCallId:@"" andFlag:1 andUnread:1];
                 
                 [[LinphoneAppDelegate sharedInstance] set_busyForCall: NO];
             }else{
                 int timeInt = (int)linphone_call_log_get_start_date(callLog);
-                [NSDatabase InsertHistory:callID status:callStatus phoneNumber:phoneNumber callDirection:callDicrection recordFiles:@"" duration:duration date:date time:time time_int:timeInt callType:1 sipURI:strAddress MySip:USERNAME kCallId:@"" andFlag:1 andUnread:0];
+                
+                int callType = [SipUtils getCurrentTypeForCall];
+                [NSDatabase InsertHistory:callID status:callStatus phoneNumber:phoneNumber callDirection:callDicrection recordFiles:@"" duration:duration date:date time:time time_int:timeInt callType:callType sipURI:strAddress MySip:USERNAME kCallId:@"" andFlag:1 andUnread:0];
             }
         }
         

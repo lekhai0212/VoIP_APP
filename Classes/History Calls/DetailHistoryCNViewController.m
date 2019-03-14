@@ -7,17 +7,15 @@
 //
 
 #import "DetailHistoryCNViewController.h"
-#import "NewContactViewController.h"
-#import "AllContactListViewController.h"
-#import "UIHistoryDetailCell.h"
 #import "NewHistoryDetailCell.h"
+#import "HistoryCallDetailTableViewCell.h"
 #import "CallHistoryObject.h"
 #import "NSData+Base64.h"
 
-@interface DetailHistoryCNViewController () {
-    LinphoneAppDelegate *appDelegate;
+@interface DetailHistoryCNViewController ()<UIAlertViewDelegate> {
     NSMutableArray *listHistoryCalls;
     UIFont *textFont;
+    BOOL newLayout;
 }
 @end
 
@@ -82,13 +80,12 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // MY CODE HERE
-    appDelegate = (LinphoneAppDelegate *)[[UIApplication sharedApplication] delegate];
     [self setupUIForView];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    newLayout = YES;
     
     [WriteLogsUtils writeForGoToScreen:@"DetailHistoryCNViewController"];
     
@@ -143,11 +140,11 @@ static UICompositeViewDescription *compositeDescription = nil;
     // Check section
     [listHistoryCalls removeAllObjects];
     if ([AppUtils isNullOrEmpty: onDate]) {
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Get all list call with phone number %@", __FUNCTION__, phoneNumber] toFilePath:appDelegate.logFilePath];
+        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Get all list call with phone number %@", __FUNCTION__, phoneNumber] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
         
         [listHistoryCalls addObjectsFromArray: [NSDatabase getAllListCallOfMe:USERNAME withPhoneNumber:phoneNumber]];
     }else{
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Get all list call with phone number %@, on date %@", __FUNCTION__, phoneNumber, onDate] toFilePath:appDelegate.logFilePath];
+        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Get all list call with phone number %@, on date %@", __FUNCTION__, phoneNumber, onDate] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
         
         [listHistoryCalls addObjectsFromArray: [NSDatabase getAllCallOfMe:USERNAME withPhone:phoneNumber onDate:onDate onlyMissedCall: onlyMissedCall]];
     }
@@ -333,161 +330,156 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 60.0;
+    return 70.0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *identifier = @"NewHistoryDetailCell";
-    NewHistoryDetailCell *cell = (NewHistoryDetailCell *)[tableView dequeueReusableCellWithIdentifier: identifier];
-    if (cell == nil) {
-        NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"NewHistoryDetailCell" owner:self options:nil];
-        cell = topLevelObjects[0];
-    }
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
-    CallHistoryObject *aCall = [listHistoryCalls objectAtIndex: indexPath.row];
-    
-    //  cell.lbTime.text = [AppUtils getTimeStringFromTimeInterval: aCall._timeInt];
-    cell.lbTime.text = aCall._time;
-    
-    if (aCall._duration == 0) {
-        cell.lbDuration.text = [NSString stringWithFormat:@"%d %@", aCall._duration, [[LanguageUtil sharedInstance] getContent:@"sec"]];
-    }else{
-        if (aCall._duration < 60) {
-            cell.lbDuration.text = [NSString stringWithFormat:@"%d %@", aCall._duration, [[LanguageUtil sharedInstance] getContent:@"sec"]];
+    if (newLayout) {
+        static NSString *identifier = @"HistoryCallDetailTableViewCell";
+        HistoryCallDetailTableViewCell *cell = (HistoryCallDetailTableViewCell *)[tableView dequeueReusableCellWithIdentifier: identifier];
+        if (cell == nil) {
+            NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"HistoryCallDetailTableViewCell" owner:self options:nil];
+            cell = topLevelObjects[0];
+        }
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        CallHistoryObject *aCall = [listHistoryCalls objectAtIndex: indexPath.row];
+        
+        cell.lbTime.text = aCall._time;
+        cell.lbDuration.text = [AppUtils convertDurtationToString: aCall._duration];
+        
+        //  Show direction and type call
+        if (aCall.typeCall == AUDIO_CALL_TYPE) {
+            cell.imgCallType.image = [UIImage imageNamed:@"contact_audio_call.png"];
         }else{
-            int hour = aCall._duration/3600;
-            int minutes = (aCall._duration - hour*3600)/60;
-            int seconds = aCall._duration - hour*3600 - minutes*60;
-            
-            NSString *str = @"";
-            if (hour > 0) {
-                if (hour == 1) {
-                    str = [NSString stringWithFormat:@"%ld %@", (long)hour, [[LanguageUtil sharedInstance] getContent:@"hour"]];
-                }else{
-                    str = [NSString stringWithFormat:@"%ld %@", (long)hour, [[LanguageUtil sharedInstance] getContent:@"hours"]];
-                }
-            }
-            
-            if (minutes > 0) {
-                if (![str isEqualToString:@""]) {
-                    if (minutes == 1) {
-                        str = [NSString stringWithFormat:@"%@ %d %@", str, minutes, [[LanguageUtil sharedInstance] getContent:@"minute"]];
-                    }else{
-                        str = [NSString stringWithFormat:@"%@ %d %@", str, minutes, [[LanguageUtil sharedInstance] getContent:@"minutes"]];
-                    }
-                }else{
-                    if (minutes == 1) {
-                        str = [NSString stringWithFormat:@"%d %@", minutes, [[LanguageUtil sharedInstance] getContent:@"minute"]];
-                    }else{
-                        str = [NSString stringWithFormat:@"%d %@", minutes, [[LanguageUtil sharedInstance] getContent:@"minutes"]];
-                    }
-                }
-            }
-            
-            if (seconds > 0) {
-                if (![str isEqualToString:@""]) {
-                    str = [NSString stringWithFormat:@"%@ %d %@", str, seconds, [[LanguageUtil sharedInstance] getContent:@"sec"]];
-                }else{
-                    str = [NSString stringWithFormat:@"%d %@", seconds, [[LanguageUtil sharedInstance] getContent:@"sec"]];
-                }
-            }
-            cell.lbDuration.text = str;
+            cell.imgCallType.image = [UIImage imageNamed:@"contact_video_call.png"];
         }
-    }
-    
-    if ([aCall._status isEqualToString: aborted_call] || [aCall._status isEqualToString: declined_call]) {
-        cell.lbState.text = [[LanguageUtil sharedInstance] getContent:@"Aborted call"];
-    }else if ([aCall._status isEqualToString: missed_call]){
-        cell.lbState.text = [[LanguageUtil sharedInstance] getContent:@"Missed call"];
-    }else{
-        cell.lbState.text = @"";
-    }
-    
-    if ([aCall._callDirection isEqualToString: incomming_call]) {
-        if ([aCall._status isEqualToString: missed_call]) {
-            cell.imgStatus.image = [UIImage imageNamed:@"ic_call_missed.png"];
+        
+        if ([aCall._status isEqualToString: aborted_call]){
+            cell.lbCallState.text = [NSString stringWithFormat:@"Bị hủy bỏ"];
+            
+        }else if ([aCall._status isEqualToString: declined_call]){
+            cell.lbCallState.text = [NSString stringWithFormat:@"Bị từ chối"];
+            
+        }else if ([aCall._status isEqualToString: missed_call]){
+            cell.lbCallState.text = [NSString stringWithFormat:@"Cuộc gọi nhỡ"];
+            
+        }else if ([aCall._status isEqualToString: success_call]){
+            cell.lbCallState.text = [NSString stringWithFormat:@"Đã kết nối"];
+            
         }else{
-            cell.imgStatus.image = [UIImage imageNamed:@"ic_call_incoming.png"];
+            cell.lbCallState.text = @"";
         }
-    }else{
-        cell.imgStatus.image = [UIImage imageNamed:@"ic_call_outgoing.png"];
-    }
-    
-    NSString *dateStr = [AppUtils checkTodayForHistoryCall: onDate];
-    
-    if (![dateStr isEqualToString:@"Today"]) {
-        dateStr = [AppUtils checkYesterdayForHistoryCall: aCall._date];
-        if ([dateStr isEqualToString:@"Yesterday"]) {
-            dateStr = [[LanguageUtil sharedInstance] getContent:@"Yesterday"];
+        
+        if ([aCall._callDirection isEqualToString: incomming_call]) {
+            if ([aCall._status isEqualToString: missed_call]) {
+                cell.imgDirection.image = [UIImage imageNamed:@"ic_call_missed.png"];
+            }else{
+                cell.imgDirection.image = [UIImage imageNamed:@"ic_call_incoming.png"];
+            }
+        }else{
+            cell.imgDirection.image = [UIImage imageNamed:@"ic_call_outgoing.png"];
         }
+        
+        NSString *dateStr = [AppUtils checkTodayForHistoryCall: onDate];
+        
+        if (![dateStr isEqualToString:@"Today"]) {
+            dateStr = [AppUtils checkYesterdayForHistoryCall: aCall._date];
+            if ([dateStr isEqualToString:@"Yesterday"]) {
+                dateStr = [[LanguageUtil sharedInstance] getContent:@"Yesterday"];
+            }
+        }else{
+            dateStr = [[LanguageUtil sharedInstance] getContent:@"Today"];
+        }
+        cell.lbDate.text = dateStr;
+        
+        return cell;
+        
     }else{
-        dateStr = [[LanguageUtil sharedInstance] getContent:@"Today"];
+        static NSString *identifier = @"NewHistoryDetailCell";
+        NewHistoryDetailCell *cell = (NewHistoryDetailCell *)[tableView dequeueReusableCellWithIdentifier: identifier];
+        if (cell == nil) {
+            NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"NewHistoryDetailCell" owner:self options:nil];
+            cell = topLevelObjects[0];
+        }
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        CallHistoryObject *aCall = [listHistoryCalls objectAtIndex: indexPath.row];
+        
+        //  cell.lbTime.text = [AppUtils getTimeStringFromTimeInterval: aCall._timeInt];
+        cell.lbTime.text = aCall._time;
+        cell.lbDuration.text = [AppUtils convertDurtationToString: aCall._duration];
+        
+        //  Show direction and type call
+        if ([aCall._status isEqualToString: aborted_call])
+        {
+            if (aCall.typeCall == AUDIO_CALL_TYPE) {
+                cell.lbState.text = [NSString stringWithFormat:@"Cuộc gọi thoại bị huỷ bỏ"];
+            }else{
+                cell.lbState.text = [NSString stringWithFormat:@"Cuộc gọi video bị huỷ bỏ"];
+            }
+            
+        }else if ([aCall._status isEqualToString: declined_call]){
+            if (aCall.typeCall == AUDIO_CALL_TYPE) {
+                cell.lbState.text = [NSString stringWithFormat:@"Cuộc gọi thoại bị từ chối"];
+            }else{
+                cell.lbState.text = [NSString stringWithFormat:@"Cuộc gọi video bị từ chối"];
+            }
+            
+        }else if ([aCall._status isEqualToString: missed_call]){
+            if (aCall.typeCall == AUDIO_CALL_TYPE) {
+                cell.lbState.text = [NSString stringWithFormat:@"Cuộc gọi thoại nhỡ"];
+            }else{
+                cell.lbState.text = [NSString stringWithFormat:@"Cuộc gọi video nhỡ"];
+            }
+            
+        }else if ([aCall._status isEqualToString: success_call]){
+            if (aCall.typeCall == AUDIO_CALL_TYPE) {
+                cell.lbState.text = [NSString stringWithFormat:@"Cuộc gọi thoại"];
+            }else{
+                cell.lbState.text = [NSString stringWithFormat:@"Cuộc gọi video"];
+            }
+            
+        }else{
+            cell.lbState.text = @"";
+        }
+        
+        if ([aCall._callDirection isEqualToString: incomming_call]) {
+            if ([aCall._status isEqualToString: missed_call]) {
+                cell.imgStatus.image = [UIImage imageNamed:@"ic_call_missed.png"];
+            }else{
+                cell.imgStatus.image = [UIImage imageNamed:@"ic_call_incoming.png"];
+            }
+        }else{
+            cell.imgStatus.image = [UIImage imageNamed:@"ic_call_outgoing.png"];
+        }
+        
+        NSString *dateStr = [AppUtils checkTodayForHistoryCall: onDate];
+        
+        if (![dateStr isEqualToString:@"Today"]) {
+            dateStr = [AppUtils checkYesterdayForHistoryCall: aCall._date];
+            if ([dateStr isEqualToString:@"Yesterday"]) {
+                dateStr = [[LanguageUtil sharedInstance] getContent:@"Yesterday"];
+            }
+        }else{
+            dateStr = [[LanguageUtil sharedInstance] getContent:@"Today"];
+        }
+        cell.lbDate.text = dateStr;
+        
+        return cell;
     }
-    cell.lbDate.text = dateStr;
-    
-    return cell;
 }
 
 - (IBAction)_iconBackClicked:(UIButton *)sender {
-    appDelegate._newContact = nil;
     [[PhoneMainView instance] popCurrentView];
-}
-
-- (IBAction)_iconAddNewClicked:(UIButton *)sender {
-    UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:phoneNumber delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles:
-                                      [[LanguageUtil sharedInstance] getContent:@"Create new contact"],
-                                      [[LanguageUtil sharedInstance] getContent:@"Add to existing contact"],
-                                      nil];
-    popupAddContact.tag = 100;
-    [popupAddContact showInView:self.view];
 }
 
 - (IBAction)icDeleteClick:(UIButton *)sender
 {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
-                         toFilePath:appDelegate.logFilePath];
-    
-    [NSDatabase deleteCallHistoryOfRemote:phoneNumber onDate:onDate ofAccount:USERNAME];
-    
-    appDelegate._newContact = nil;
-    [[PhoneMainView instance] popCurrentView];
-}
-
-#pragma mark - Actionsheet Delegate
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (actionSheet.tag == 100) {
-        switch (buttonIndex) {
-            case 0:{
-                NewContactViewController *controller = VIEW(NewContactViewController);
-                if (controller) {
-                    if ([phoneNumber hasPrefix:@"778899"]) {
-                        controller.currentPhoneNumber = @"";
-                        controller.currentName = @"";
-                    }else{
-                        controller.currentPhoneNumber = phoneNumber;
-                        controller.currentName = @"";
-                    }
-                }
-                [[PhoneMainView instance] changeCurrentView:[NewContactViewController compositeViewDescription]
-                                                       push:true];
-                break;
-            }
-            case 1:{
-                AllContactListViewController *controller = VIEW(AllContactListViewController);
-                if (controller != nil) {
-                    controller.phoneNumber = phoneNumber;
-                }
-                [[PhoneMainView instance] changeCurrentView:[AllContactListViewController compositeViewDescription]
-                                                       push:true];
-                break;
-            }
-            default:
-                break;
-        }
-    }
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"Bạn có muốn xoá lịch sử cuộc gọi?" delegate:self cancelButtonTitle:@"Không" otherButtonTitles:@"Xoá", nil];
+    alertView.delegate = self;
+    [alertView show];
 }
 
 - (NSString *)getEventTimeFromDuration:(NSTimeInterval)duration
@@ -503,9 +495,27 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (IBAction)iconAudioClick:(UIButton *)sender {
+    [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:IS_VIDEO_CALL_KEY];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [LinphoneAppDelegate sharedInstance].phoneForCall = phoneNumber;
+    [[NSNotificationCenter defaultCenter] postNotificationName:getDIDListForCall object:nil];
 }
 
 - (IBAction)iconVideoClick:(UIButton *)sender {
+    [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:IS_VIDEO_CALL_KEY];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [LinphoneAppDelegate sharedInstance].phoneForCall = phoneNumber;
+    [[NSNotificationCenter defaultCenter] postNotificationName:getDIDListForCall object:nil];
 }
+
+#pragma mark - Alertview delegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        
+    }
+}
+
 @end
 

@@ -470,4 +470,14 @@
     }
 }
 
+//  check call is video or audio call
++ (int)getCurrentTypeForCall {
+    NSString *isVideo = [[NSUserDefaults standardUserDefaults] objectForKey:IS_VIDEO_CALL_KEY];
+    if (![AppUtils isNullOrEmpty: isVideo] && [isVideo isEqualToString:@"1"]) {
+        return VIDEO_CALL_TYPE;
+    }else{
+        return AUDIO_CALL_TYPE;
+    }
+}
+
 @end

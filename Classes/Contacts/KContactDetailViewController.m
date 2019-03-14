@@ -140,6 +140,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.height.mas_equalTo(hHeader);
     }];
     
+    _iconBack.imageEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     [_iconBack mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_viewHeader).offset(appDelegate._hStatus);
         make.left.equalTo(_viewHeader);

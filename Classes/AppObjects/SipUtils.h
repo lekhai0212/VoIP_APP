@@ -29,5 +29,7 @@
 
 //  Call quality
 + (NSMutableAttributedString *)getQualityOfCall: (LinphoneCall *)call;
+//  check call is video or audio call
++ (int)getCurrentTypeForCall;
 
 @end

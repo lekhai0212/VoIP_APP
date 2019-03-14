@@ -25,6 +25,12 @@
 "Can not get DID list" = "Can not get DID list"
 "Default DID" = "Default DID"
 
+"Missed call" = "Missed"
+"Aborted call" = "Aborted"
+"Declined call" = "Declined"
+
+
+
 
 
 "Online" = "Online"
@@ -97,8 +103,7 @@
 "Yesterday" = "Yesterday"
 "Incoming call" = "Incoming call"
 "Outgoing call" = "Outgoing call"
-"Missed call" = "Missed call"
-"Aborted call" = "Aborted"
+
 
 "Delete contact" = "Delete contact"
 "Are you sure, you want to delete this contact?" =   "Are you sure, you want to delete this contact?"

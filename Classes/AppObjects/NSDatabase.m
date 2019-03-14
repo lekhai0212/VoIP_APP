@@ -419,6 +419,7 @@ HMLocalization *localization;
             float rate = [[rsDict objectForKey:@"rate"] floatValue];
             NSString *call_direction = [rsDict objectForKey:@"call_direction"];
             long timeInt = [[rsDict objectForKey:@"time_int"] longValue];
+            int call_type = [[rsDict objectForKey:@"call_type"] intValue];
             
             CallHistoryObject *aCall = [[CallHistoryObject alloc] init];
             aCall._time = time;
@@ -428,6 +429,7 @@ HMLocalization *localization;
             aCall._date = @"date";
             aCall._callDirection = call_direction;
             aCall._timeInt = timeInt;
+            aCall.typeCall = call_type;
             
             [resultArr addObject: aCall];
         }

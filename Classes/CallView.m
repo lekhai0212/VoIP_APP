@@ -1428,6 +1428,7 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
         make.width.mas_equalTo(55.0);
     }];
     
+    callPauseButton.delegate = self;
     [callPauseButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(speakerButton);
         make.left.equalTo(hangupButton.mas_right).offset(marginIcon);
@@ -1617,6 +1618,18 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
             [microButton setImage:[UIImage imageNamed:@"mute_enable"] forState:UIControlStateNormal];
         }else{
             [microButton setImage:[UIImage imageNamed:@"mute_normal"] forState:UIControlStateNormal];
+        }
+    }else{
+        
+    }
+}
+
+-(void)onPauseStateChangedTo:(BOOL)paused {
+    if (isAudioCall) {
+        if (paused) {
+            [callPauseButton setImage:[UIImage imageNamed:@"hold_enable"] forState:UIControlStateNormal];
+        }else{
+            [callPauseButton setImage:[UIImage imageNamed:@"hold_normal"] forState:UIControlStateNormal];
         }
     }else{
         

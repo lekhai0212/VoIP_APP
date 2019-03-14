@@ -16,6 +16,8 @@
 #define TAG_AUDIO_CALL  1
 #define TAG_VIDEO_CALL  2
 
+#define AUDIO_CALL_TYPE 1
+#define VIDEO_CALL_TYPE 2
 
 
 #define getDIDListForCall   @"getDIDListForCall"
@@ -27,6 +29,7 @@
 #define update_token_func   @"UpdatePushToken"
 #define get_contacts_func   @"GetServerContacts"
 #define get_didlist_func    @"GetDIDList"
+#define get_missedcall_func @"GetInfoMissCall"
 
 
 

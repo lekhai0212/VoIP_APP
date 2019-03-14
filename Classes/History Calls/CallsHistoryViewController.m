@@ -94,8 +94,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     [super viewWillAppear:animated];
     
     _btnEdit.tag = 0;
-    [_btnEdit setBackgroundImage:[UIImage imageNamed:@"ic_trash"]
-                        forState:UIControlStateNormal];
+    [_btnEdit setImage:[UIImage imageNamed:@"ic_trash"] forState:UIControlStateNormal];
     
     [self showContentWithCurrentLanguage];
     
@@ -149,12 +148,12 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (IBAction)_btnEditPressed:(id)sender {
     if (_btnEdit.tag == 0) {
         _btnEdit.tag = 1;
-        [_btnEdit setBackgroundImage:[UIImage imageNamed:@"ic_tick"]
-                            forState:UIControlStateNormal];
+        [_btnEdit setImage:[UIImage imageNamed:@"ic_tick"]
+                  forState:UIControlStateNormal];
     }else{
         _btnEdit.tag = 0;
-        [_btnEdit setBackgroundImage:[UIImage imageNamed:@"ic_trash"]
-                            forState:UIControlStateNormal];
+        [_btnEdit setImage:[UIImage imageNamed:@"ic_trash"]
+                  forState:UIControlStateNormal];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:deleteHistoryCallsChoosed
                                                         object:[NSNumber numberWithInt:(int)_btnEdit.tag]];

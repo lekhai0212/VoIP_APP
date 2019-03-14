@@ -923,6 +923,9 @@
 
 + (NSString *)convertDurtationToString: (long)duration
 {
+    if (duration == 0) {
+        return [NSString stringWithFormat:@"0 %@", [[LanguageUtil sharedInstance] getContent:@"sec"]];
+    }
     int hour = (int)(duration/3600);
     int minutes = (int)((duration - hour*3600)/60);
     int seconds = (int)(duration - hour*3600 - minutes*60);

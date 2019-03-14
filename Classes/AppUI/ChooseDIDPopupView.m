@@ -135,7 +135,7 @@
         [delegate selectDIDForCallWithPrefix:@""];
     }else{
         NSDictionary *info = [listDID objectAtIndex: indexPath.row-1];
-        NSString *prefix = [info objectForKey:@"st"];
+        NSString *prefix = [info objectForKey:@"prefix"];
         [delegate selectDIDForCallWithPrefix: prefix];
     }
 }

@@ -26,6 +26,15 @@
 "Can not get DID list" = "Không thể lấy danh sách đầu số"
 "Default DID" = "Mặc định"
 
+"Missed call" = "Cuộc gọi nhỡ"
+"Aborted call" = "Bị hủy bỏ"
+"Declined call" = "Bị từ chối"
+
+
+
+
+
+
 
 
 
@@ -102,8 +111,7 @@
 "Yesterday" = "Hôm qua"
 "Incoming call" = "Cuộc gọi đến"
 "Outgoing call" = "Cuộc gọi đi"
-"Missed call" = "Cuộc gọi nhỡ"
-"Aborted call" = "Bị hủy bỏ"
+
 
 "Delete contact" = "Xóa liên hệ"
 "Are you sure, you want to delete this contact?" =   "Are you sure, you want to delete this contact?"

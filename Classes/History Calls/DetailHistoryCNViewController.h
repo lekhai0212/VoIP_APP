@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "UICompositeView.h"
 
-@interface DetailHistoryCNViewController : UIViewController<UICompositeViewDelegate, NSXMLParserDelegate, UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate >
+@interface DetailHistoryCNViewController : UIViewController<UICompositeViewDelegate, NSXMLParserDelegate, UITableViewDataSource, UITableViewDelegate >
 
 @property (weak, nonatomic) IBOutlet UIView *_viewHeader;
 @property (weak, nonatomic) IBOutlet UIButton *_iconBack;

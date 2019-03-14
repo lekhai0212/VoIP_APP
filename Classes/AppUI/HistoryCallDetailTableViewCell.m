@@ -1,41 +1,48 @@
 //
-//  NewHistoryDetailCell.m
+//  HistoryCallDetailTableViewCell.m
 //  linphone
 //
-//  Created by lam quang quan on 11/13/18.
+//  Created by lam quang quan on 3/14/19.
 //
 
-#import "NewHistoryDetailCell.h"
+#import "HistoryCallDetailTableViewCell.h"
 
-@implementation NewHistoryDetailCell
-@synthesize imgStatus, lbDate, lbTime, lbDuration, lbState, lbSepa, imgDuration;
+@implementation HistoryCallDetailTableViewCell
+@synthesize imgCallType, lbCallState, imgDirection, lbDate, lbTime, imgDuration, lbDuration, lbSepa;
 
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    float padding = 8.0;
     
-    lbState.font = [UIFont systemFontOfSize:16.0 weight:UIFontWeightBold];
-    lbState.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
-    [lbState mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.mas_centerY);
-        make.left.equalTo(imgStatus.mas_right).offset(8.0);
-        make.right.equalTo(self).offset(-18.0 - 8.0);
+    lbCallState.font = [UIFont systemFontOfSize:16.0 weight:UIFontWeightBold];
+    lbCallState.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
+    [lbCallState mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.mas_centerY).offset(-2.5);
+        make.left.equalTo(self).offset(padding + 20.0 + padding);
+        make.right.equalTo(self).offset(-padding);
         make.height.mas_equalTo(25.0);
     }];
     
-    [imgStatus mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self).offset(10.0);
-        make.centerY.equalTo(lbState.mas_centerY);
-        make.width.height.mas_equalTo(18.0);
+    [imgCallType mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self).offset(padding);
+        make.centerY.equalTo(lbCallState.mas_centerY);
+        make.width.height.mas_equalTo(20.0);
     }];
     
     lbDate.font = [UIFont systemFontOfSize:14.0 weight:UIFontWeightRegular];
     lbDate.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     [lbDate mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(lbState.mas_bottom);
-        make.left.equalTo(lbState);
+        make.top.equalTo(self.mas_centerY).offset(2.5);
+        make.left.equalTo(lbCallState);
         make.width.mas_equalTo(90);
         make.height.mas_equalTo(25.0);
+    }];
+    
+    [imgDirection mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(imgCallType.mas_centerX);
+        make.centerY.equalTo(lbDate.mas_centerY);
+        make.width.height.mas_equalTo(16.0);
     }];
     
     lbTime.font = lbDate.font;

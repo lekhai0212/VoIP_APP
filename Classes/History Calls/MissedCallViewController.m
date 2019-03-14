@@ -177,61 +177,48 @@
     cell._lbPhone.text = aCall._phoneNumber;
     cell._phoneNumber = aCall._phoneNumber;
     
-    if ([aCall._phoneNumber isEqualToString: hotline]) {
-        cell._lbName.text = [[LanguageUtil sharedInstance] getContent:@"Hotline"];
-        cell._imgAvatar.image = [UIImage imageNamed:@"hotline_avatar.png"];
-        
-        [cell updateFrameForHotline: YES];
-        cell._lbPhone.hidden = YES;
-        cell.lbMissed.hidden = YES;
+    [cell updateFrameForHotline: NO];
+    cell._lbPhone.hidden = NO;
+    
+    if ([aCall._phoneName isEqualToString: @""]) {
+        cell._lbName.text = aCall._phoneNumber;
     }else{
-        [cell updateFrameForHotline: NO];
-        cell._lbPhone.hidden = NO;
-        
-        if ([aCall._phoneName isEqualToString: @""]) {
-            cell._lbName.text = aCall._phoneNumber;
-        }else{
-            cell._lbName.text = aCall._phoneName;
-        }
-        
-        if ([AppUtils isNullOrEmpty: aCall._phoneAvatar]) {
-            if (aCall._phoneNumber.length < 10) {
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-                    NSString *pbxServer = [[NSUserDefaults standardUserDefaults] objectForKey:PBX_SERVER];
-                    NSString *avatarName = [NSString stringWithFormat:@"%@_%@.png", pbxServer, aCall._phoneNumber];
-                    NSString *localFile = [NSString stringWithFormat:@"/avatars/%@", avatarName];
-                    NSData *avatarData = [AppUtils getFileDataFromDirectoryWithFileName:localFile];
-                    
-                    dispatch_async(dispatch_get_main_queue(), ^(void){
-                        if (avatarData != nil) {
-                            cell._imgAvatar.image = [UIImage imageWithData: avatarData];
-                        }else{
-                            cell._imgAvatar.image = [UIImage imageNamed:@"no_avatar_blue.png"];
-                        }
-                    });
+        cell._lbName.text = aCall._phoneName;
+    }
+    
+    if ([AppUtils isNullOrEmpty: aCall._phoneAvatar]) {
+        if (aCall._phoneNumber.length < 10) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                NSString *pbxServer = [[NSUserDefaults standardUserDefaults] objectForKey:PBX_SERVER];
+                NSString *avatarName = [NSString stringWithFormat:@"%@_%@.png", pbxServer, aCall._phoneNumber];
+                NSString *localFile = [NSString stringWithFormat:@"/avatars/%@", avatarName];
+                NSData *avatarData = [AppUtils getFileDataFromDirectoryWithFileName:localFile];
+                
+                dispatch_async(dispatch_get_main_queue(), ^(void){
+                    if (avatarData != nil) {
+                        cell._imgAvatar.image = [UIImage imageWithData: avatarData];
+                    }else{
+                        cell._imgAvatar.image = [UIImage imageNamed:@"no_avatar_blue.png"];
+                    }
                 });
-            }else{
-                cell._imgAvatar.image = [UIImage imageNamed:@"no_avatar_blue.png"];
-            }
+            });
         }else{
-            NSData *imgData = [[NSData alloc] initWithData:[NSData dataFromBase64String: aCall._phoneAvatar]];
-            cell._imgAvatar.image = [UIImage imageWithData: imgData];
+            cell._imgAvatar.image = [UIImage imageNamed:@"no_avatar_blue.png"];
         }
-        
-        //  Show missed notification
-        if (aCall.newMissedCall > 0) {
-            cell.lbMissed.hidden = NO;
-        }else{
-            cell.lbMissed.hidden = YES;
-        }
+    }else{
+        NSData *imgData = [[NSData alloc] initWithData:[NSData dataFromBase64String: aCall._phoneAvatar]];
+        cell._imgAvatar.image = [UIImage imageWithData: imgData];
+    }
+    
+    //  Show missed notification
+    if (aCall.newMissedCall > 0) {
+        cell.lbMissed.hidden = NO;
+    }else{
+        cell.lbMissed.hidden = YES;
     }
     
     cell.lbTime.text = aCall._callTime;
-    if (aCall.duration < 60) {
-        //  cell.lbDuration.text = [NSString stringWithFormat:@"%ld %@", aCall.duration, [[LanguageUtil sharedInstance] getContent:@"sec"]];
-    }else{
-        //  cell.lbDuration.text = [NSString stringWithFormat:@"%ld s", aCall.duration];
-    }
+    cell.lbDate.text = aCall._callDate;
     
     if (isDeleted) {
         cell._cbDelete.hidden = NO;

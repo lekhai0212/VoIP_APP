@@ -1994,45 +1994,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
 }
 
-//- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
-//{
-//    INInteraction *interaction = userActivity.interaction;
-//    if (interaction != nil) {
-//        INStartAudioCallIntent *startAudioCallIntent = (INStartAudioCallIntent *)interaction.intent;
-//        if (startAudioCallIntent != nil && startAudioCallIntent.contacts.count > 0) {
-//            INPerson *contact = startAudioCallIntent.contacts[0];
-//            if (contact != nil) {
-//                INPersonHandle *personHandle = contact.personHandle;
-//                NSString *phoneNumber = personHandle.value;
-//                if (![AppUtils isNullOrEmpty: phoneNumber])
-//                {
-//                    phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
-//                    if ([AppUtils isNullOrEmpty: phoneNumber]) {
-//                        [self showSplashScreenOnView: NO];
-//                    }else{
-//                        [self showSplashScreenOnView: YES];
-//
-//                        [[NSUserDefaults standardUserDefaults] setObject:phoneNumber forKey:UserActivity];
-//                        [[NSUserDefaults standardUserDefaults] synchronize];
-//                    }
-//                }
-//            }
-//        }
-//    }
-//    return YES;
-//}
-
-- (void)showSplashScreenOnView: (BOOL)show {
-    if (splashScreen == nil) {
-        UINib *nib = [UINib nibWithNibName:@"LaunchScreen" bundle:nil];
-        splashScreen = [[nib instantiateWithOwner:self options:nil] objectAtIndex:0];
-        [self.window addSubview:splashScreen];
-    }
-    splashScreen.frame = [UIScreen mainScreen].bounds;
-    splashScreen.hidden = !show;
-}
-
--(BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
 {
     INInteraction *interaction = userActivity.interaction;
     if (interaction != nil) {
@@ -2059,6 +2021,44 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
     return YES;
 }
+
+- (void)showSplashScreenOnView: (BOOL)show {
+    if (splashScreen == nil) {
+        UINib *nib = [UINib nibWithNibName:@"LaunchScreen" bundle:nil];
+        splashScreen = [[nib instantiateWithOwner:self options:nil] objectAtIndex:0];
+        [self.window addSubview:splashScreen];
+    }
+    splashScreen.frame = [UIScreen mainScreen].bounds;
+    splashScreen.hidden = !show;
+}
+
+//-(BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+//{
+//    INInteraction *interaction = userActivity.interaction;
+//    if (interaction != nil) {
+//        INStartAudioCallIntent *startAudioCallIntent = (INStartAudioCallIntent *)interaction.intent;
+//        if (startAudioCallIntent != nil && startAudioCallIntent.contacts.count > 0) {
+//            INPerson *contact = startAudioCallIntent.contacts[0];
+//            if (contact != nil) {
+//                INPersonHandle *personHandle = contact.personHandle;
+//                NSString *phoneNumber = personHandle.value;
+//                if (![AppUtils isNullOrEmpty: phoneNumber])
+//                {
+//                    phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
+//                    if ([AppUtils isNullOrEmpty: phoneNumber]) {
+//                        [self showSplashScreenOnView: NO];
+//                    }else{
+//                        [self showSplashScreenOnView: YES];
+//
+//                        [[NSUserDefaults standardUserDefaults] setObject:phoneNumber forKey:UserActivity];
+//                        [[NSUserDefaults standardUserDefaults] synchronize];
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    return YES;
+//}
 
 #pragma mark - sync contact xmpp
 
@@ -2093,38 +2093,18 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 - (void)getMissedCallFromServer
 {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:logFilePath];
-    
-    NSString *pbxIp = [[NSUserDefaults standardUserDefaults] objectForKey:PBX_ID];
-    NSString *ExtUser = [SipUtils getAccountIdOfDefaultProxyConfig];
-    
     NSString *dateFrom = [[NSUserDefaults standardUserDefaults] objectForKey:DATE_FROM];
     
-    NSDate *localDate = [self toLocalTime];
-    NSString *dateTo = [NSString stringWithFormat:@"%ld", (long)[localDate timeIntervalSince1970]];
-    //  NSString *dateTo = [NSString stringWithFormat:@"%ld", (long)[[NSDate date] timeIntervalSince1970]];
+    //  NSDate *localDate = [self toLocalTime];
+    //  NSString *dateTo = [NSString stringWithFormat:@"%ld", (long)[localDate timeIntervalSince1970]];
+    NSString *dateTo = [NSString stringWithFormat:@"%ld", (long)[[NSDate date] timeIntervalSince1970]];
     
-//    NSDate *globalDate = [self toGlobalTime];
-//    NSLog(@"%ld", (long)[localDate timeIntervalSince1970]);
-//    NSLog(@"%ld", (long)[globalDate timeIntervalSince1970]);
+    NSString *params = [NSString stringWithFormat:@"userName=%@&dateFrom=%@&dateTo=%@", USERNAME, dateFrom, dateTo];
+    [webService callGETWebServiceWithFunction:get_missedcall_func andParams:params];
     
-    if (![AppUtils isNullOrEmpty: dateFrom] && ![AppUtils isNullOrEmpty: pbxIp] && ![AppUtils isNullOrEmpty: ExtUser]) {
-        if (webService == nil) {
-            webService = [[WebServices alloc] init];
-            webService.delegate = self;
-        }
-        NSMutableDictionary *jsonDict = [[NSMutableDictionary alloc] init];
-        [jsonDict setObject:AuthUser forKey:@"AuthUser"];
-        [jsonDict setObject:AuthKey forKey:@"AuthKey"];
-        [jsonDict setObject:pbxIp forKey:@"IP"];
-        [jsonDict setObject:ExtUser forKey:@"PhoneNumberReceive"];
-        [jsonDict setObject:dateFrom forKey:@"DateFrom"];
-        [jsonDict setObject:dateTo forKey:@"DateTo"];
-        
-        [webService callWebServiceWithLink:GetInfoMissCall withParams:jsonDict inBackgroundMode:YES];
-    }else{
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Can not get dateFrom for first install", __FUNCTION__] toFilePath:logFilePath];
-    }
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, params] toFilePath:logFilePath];
+    
+    
     [[NSUserDefaults standardUserDefaults] setObject:dateTo forKey:DATE_FROM];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
@@ -2144,7 +2124,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 
                 BOOL exists = [NSDatabase checkMissedCallExistsFromUser: phoneNumberCall withAccount: USERNAME atTime: (int)[createDate intValue]];
                 if (!exists) {
-                    [NSDatabase InsertHistory:callId status:missed_call phoneNumber:phoneNumberCall callDirection:incomming_call recordFiles:@"" duration:0 date:date time:time time_int:[createDate doubleValue] callType:1 sipURI:phoneNumberCall MySip:USERNAME kCallId:@"" andFlag:1 andUnread:1];
+                    int callType = [SipUtils getCurrentTypeForCall];
+                    [NSDatabase InsertHistory:callId status:missed_call phoneNumber:phoneNumberCall callDirection:incomming_call recordFiles:@"" duration:0 date:date time:time time_int:[createDate doubleValue] callType:callType sipURI:phoneNumberCall MySip:USERNAME kCallId:@"" andFlag:1 andUnread:1];
                 }
             }
         }
@@ -2163,7 +2144,12 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }else if ([link isEqualToString: get_didlist_func]) {
         [self.window makeToast:[[LanguageUtil sharedInstance] getContent:@"Can not get DID list"]
                       duration:2.0 position:CSToastPositionCenter];
+    }else if ([link isEqualToString: get_missedcall_func]) {
+        NSLog(@"Can not get missed call");
     }
+    
+    
+    
 }
 
 - (void)successfulToCallWebService:(NSString *)link withData:(NSDictionary *)data {
@@ -2177,6 +2163,9 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         
     }else if ([link isEqualToString: get_didlist_func]) {
         [self showPopupToChooseDID: data];
+        
+    }else if ([link isEqualToString: get_missedcall_func]) {
+        NSLog(@"%@", data);
     }
 }
 
