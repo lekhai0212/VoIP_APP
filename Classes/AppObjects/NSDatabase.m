@@ -239,6 +239,7 @@ HMLocalization *localization;
              
              NSString *callDate = [AppUtils getDateStringFromTimeInterval: timeInt];
              NSString *callTime = [AppUtils getTimeStringFromTimeInterval: timeInt];
+             kiem tra lai cho nay, ko get history dc
              
              aCall._prefixPhone = @"";
              aCall._phoneNumber = phoneNumber;
