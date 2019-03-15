@@ -2027,10 +2027,13 @@ static LinphoneCoreVTable linphonec_vtable = {
 	NSString *zrtpSecretsFileName = [LinphoneManager documentFile:@"zrtp_secrets"];
 	NSString *chatDBFileName = [LinphoneManager documentFile:kLinphoneInternalChatDBFilename];
 
+    //  [Khai Le - 15/03/2019]
+    NSString *displayName = [NSBundle.mainBundle objectForInfoDictionaryKey:@"CFBundleDisplayName"];
+    displayName = @"Cloudcall";
+    
 	NSString *device = [[NSMutableString alloc]
 		initWithString:[NSString
-						   stringWithFormat:@"%@_%@_iOS%@",
-											[NSBundle.mainBundle objectForInfoDictionaryKey:@"CFBundleDisplayName"],
+						   stringWithFormat:@"%@_%@_iOS%@",displayName,
 											[LinphoneUtils deviceModelIdentifier],
 											UIDevice.currentDevice.systemVersion]];
 	device = [device stringByReplacingOccurrencesOfString:@"," withString:@"."];

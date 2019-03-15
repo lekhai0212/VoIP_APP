@@ -12,6 +12,7 @@
 #define DOMAIN_DEFAULT  @"nhanhoa.cloudcall.vn"
 #define PORT_DEFAULT    @"51000"
 
+#define DEFAULT_RINGTONE    @"DEFAULT_RINGTONE"
 #define IS_VIDEO_CALL_KEY   @"IS_VIDEO_CALL_KEY"
 #define TAG_AUDIO_CALL  1
 #define TAG_VIDEO_CALL  2
@@ -45,13 +46,12 @@
 
 
 //#define link_appstore   @"https://itunes.apple.com/vn/app/cloudfone-vn/id1445535617?mt=8"
-//#define link_introduce  @"https://cloudfone.vn/gioi-thieu-dich-vu-cloudfone/"
 //#define link_policy     @"http://dieukhoan.cloudfone.vn/"
 //#define youtube_channel @"UCBoBK-efPAsF1NbvCJFCzJw"
 //#define facebook_link   @"https://www.facebook.com/CloudFone.VN/"
 
 #define link_appstore   @""
-#define link_introduce  @""
+#define link_introduce  @"https://cloudcall.vn/about.html"
 #define link_policy     @""
 #define youtube_channel @""
 #define facebook_link   @""

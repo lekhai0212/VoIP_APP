@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>name</key>
+		<string>Angry Birds</string>
+		<key>file</key>
+		<string>angry_birds.mp3</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Bapoo Aau</string>
+		<key>file</key>
+		<string>bapoo_aau.mp3</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Chirtmas</string>
+		<key>file</key>
+		<string>chirtmas.mp3</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Cute Cat Song</string>
+		<key>file</key>
+		<string>cute_cat_song.mp3</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Din Don</string>
+		<key>file</key>
+		<string>din_don.mp3</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Donald Xmas</string>
+		<key>file</key>
+		<string>donald_xmas.mp3</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Htc Tone</string>
+		<key>file</key>
+		<string>htc_tone.mp3</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Jingle Bells</string>
+		<key>file</key>
+		<string>jingle_bells.mp3</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Landras Dream</string>
+		<key>file</key>
+		<string>landras_dream.mp3</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Lenovo Sound</string>
+		<key>file</key>
+		<string>lenovo_suond.mp3</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Smekh Rebenka Mix</string>
+		<key>file</key>
+		<string>smekh_rebenka_mix.mp3</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>A ha ha</string>
+		<key>file</key>
+		<string>a_ha_ha.mp3</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Fast Browser</string>
+		<key>file</key>
+		<string>fast_browser.mp3</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>New Nokia Remix</string>
+		<key>file</key>
+		<string>new_nokia_remix.mp3</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Wave</string>
+		<key>file</key>
+		<string>wave.mp3</string>
+	</dict>
+</array>
+</plist>

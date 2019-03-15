@@ -320,7 +320,7 @@
         if ([yesterday isEqualToString:@"Yesterday"]) {
             titleHeader =  [[LanguageUtil sharedInstance] getContent:@"YESTERDAY"];
         }else{
-            titleHeader = currentDate;
+            titleHeader = [currentDate stringByReplacingOccurrencesOfString:@"-" withString:@"/"];
         }
     }
     

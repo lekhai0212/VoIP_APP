@@ -231,11 +231,14 @@ HMLocalization *localization;
              int callId              = [[rsDict objectForKey:@"_id"] intValue];
              NSString *status        = [rsDict objectForKey:@"status"];
              NSString *callDirection = [rsDict objectForKey:@"call_direction"];
-             NSString *callTime      = [rsDict objectForKey:@"time"];
-             NSString *callDate      = [rsDict objectForKey:@"date"];
+             // NSString *callTime      = [rsDict objectForKey:@"time"];
+             // NSString *callDate      = [rsDict objectForKey:@"date"];
              NSString *phoneNumber   = [rsDict objectForKey:@"phone_number"];
              int callType            = [[rsDict objectForKey:@"call_type"] intValue];
              long timeInt   = [[rsDict objectForKey:@"time_int"] longValue];
+             
+             NSString *callDate = [AppUtils getDateStringFromTimeInterval: timeInt];
+             NSString *callTime = [AppUtils getTimeStringFromTimeInterval: timeInt];
              
              aCall._prefixPhone = @"";
              aCall._phoneNumber = phoneNumber;

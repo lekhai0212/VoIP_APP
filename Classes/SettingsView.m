@@ -1109,6 +1109,13 @@ void update_hash_cbs(LinphoneAccountCreator *creator, LinphoneAccountCreatorStat
         make.height.mas_equalTo([LinphoneAppDelegate sharedInstance]._hRegistrationState);
     }];
     
+    _iconBackView.imageEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
+    [_iconBackView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_viewTopBar).offset([LinphoneAppDelegate sharedInstance]._hStatus+5.0);
+        make.left.equalTo(_viewTopBar);
+        make.width.height.mas_equalTo(HEADER_ICON_WIDTH);
+    }];
+    
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_viewTopBar).offset([LinphoneAppDelegate sharedInstance]._hStatus);
         make.bottom.equalTo(_viewTopBar);
@@ -1116,6 +1123,7 @@ void update_hash_cbs(LinphoneAccountCreator *creator, LinphoneAccountCreatorStat
         make.width.mas_equalTo(200.0);
     }];
     
+    _backButton.imageEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     [_backButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_viewTopBar).offset([LinphoneAppDelegate sharedInstance]._hStatus+5.0);
         make.left.equalTo(_viewTopBar);

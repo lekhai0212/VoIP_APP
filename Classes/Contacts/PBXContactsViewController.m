@@ -120,6 +120,14 @@
                                                  name:finishGetPBXContacts object:nil];
 }
 
+
+- (void)scrollViewDidScroll:(UIScrollView*)scrollView {
+    CGPoint scrollViewOffset = scrollView.contentOffset;
+    if (scrollViewOffset.y < 0) {
+        [scrollView setContentOffset:CGPointMake(0, 0)];
+    }
+}
+
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear: animated];
     [[NSNotificationCenter defaultCenter] removeObserver: self];
@@ -144,12 +152,7 @@
     headerView.backgroundColor = [UIColor colorWithRed:(240/255.0) green:(240/255.0)
                                                   blue:(240/255.0) alpha:1.0];
     
-    float marginLeft;
-    if (IS_IPHONE || IS_IPOD) {
-        marginLeft = 20.0;
-    }else{
-        marginLeft = 0.0;
-    }
+    float marginLeft = 20.0;
     
     //  getSyncTitleContentWithFont
     btnSyncContacts = [[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-10-100, 0, 100, headerView.frame.size.height)];
@@ -184,6 +187,8 @@
     hCell = 65.0;
     
     //  table contacts
+    _tbContacts.alwaysBounceVertical = NO;
+    _tbContacts.alwaysBounceHorizontal = NO;
     _tbContacts.delegate = self;
     _tbContacts.dataSource = self;
     _tbContacts.separatorStyle = UITableViewCellSeparatorStyleNone;

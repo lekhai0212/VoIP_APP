@@ -8,8 +8,7 @@
 
 #import "MoreViewController.h"
 #import "MenuCell.h"
-#import "EditProfileViewController.h"
-#import "AccountSettingsViewController.h"
+#import "ChooseRingtoneViewController.h"
 #import "KSettingViewController.h"
 #import "PolicyViewController.h"
 #import "IntroduceViewController.h"
@@ -228,11 +227,9 @@ static UICompositeViewDescription *compositeDescription = nil;
         }else{
             cell._lbSepa.hidden = YES;
         }
-        cell._lbTitle.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightBold];
     }else{
         cell._lbSepa.hidden = YES;
         cell.contentView.backgroundColor = UIColor.clearColor;
-        cell._lbTitle.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightRegular];
     }
     
     cell._iconImage.image = [UIImage imageNamed:[listIcon objectAtIndex: indexPath.row]];
@@ -246,7 +243,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     switch (indexPath.row) {
         case eRingtone:{
-            //  [[PhoneMainView instance] changeCurrentView:[AccountSettingsViewController compositeViewDescription] push:true];
+            [[PhoneMainView instance] changeCurrentView:[ChooseRingtoneViewController compositeViewDescription] push:true];
             break;
         }
         case eCallSettings:{
@@ -280,11 +277,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 60.0;
-}
-
-- (IBAction)icEditClicked:(UIButton *)sender {
-    [[PhoneMainView instance] changeCurrentView:[EditProfileViewController compositeViewDescription]
-                                           push:YES];
 }
 
 - (void)downloadMyAvatar: (NSString *)myaccount

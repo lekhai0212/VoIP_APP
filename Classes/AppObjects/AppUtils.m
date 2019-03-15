@@ -779,7 +779,7 @@
 + (NSString *)getDateStringFromTimeInterval: (double)timeInterval
 {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    [dateFormatter setDateFormat:@"dd-MM-yyyy"];
     NSDate *date = [NSDate dateWithTimeIntervalSince1970: timeInterval];
     NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar];
     if ([calendar isDateInToday:date]) {

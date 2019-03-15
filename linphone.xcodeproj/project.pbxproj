@@ -47,6 +47,29 @@
 		1579B72421674989002BECE3 /* ic_add_contact.png in Resources */ = {isa = PBXBuildFile; fileRef = 1579B71D21674988002BECE3 /* ic_add_contact.png */; };
 		1579B72521674989002BECE3 /* ic_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 1579B71E21674988002BECE3 /* ic_back.png */; };
 		1579B72721674A6B002BECE3 /* call_disable.png in Resources */ = {isa = PBXBuildFile; fileRef = 1579B72621674A67002BECE3 /* call_disable.png */; };
+		157C7238223B4AD300EA607F /* RingTone.plist in Resources */ = {isa = PBXBuildFile; fileRef = 157C7237223B4AD300EA607F /* RingTone.plist */; };
+		157C724A223B4B1B00EA607F /* htc_tone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 157C723F223B4B1000EA607F /* htc_tone.mp3 */; };
+		157C724B223B4B1B00EA607F /* landras_dream.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 157C7240223B4B1200EA607F /* landras_dream.mp3 */; };
+		157C724C223B4B1B00EA607F /* jingle_bells.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 157C7241223B4B1400EA607F /* jingle_bells.mp3 */; };
+		157C724D223B4B1B00EA607F /* cute_cat_song.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 157C7242223B4B1500EA607F /* cute_cat_song.mp3 */; };
+		157C724E223B4B1B00EA607F /* angry_birds.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 157C7243223B4B1600EA607F /* angry_birds.mp3 */; };
+		157C724F223B4B1B00EA607F /* donald_xmas.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 157C7244223B4B1700EA607F /* donald_xmas.mp3 */; };
+		157C7250223B4B1B00EA607F /* chirtmas.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 157C7245223B4B1800EA607F /* chirtmas.mp3 */; };
+		157C7251223B4B1B00EA607F /* din_don.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 157C7246223B4B1800EA607F /* din_don.mp3 */; };
+		157C7252223B4B1B00EA607F /* bapoo_aau.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 157C7247223B4B1900EA607F /* bapoo_aau.mp3 */; };
+		157C7253223B4B1B00EA607F /* lenovo_suond.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 157C7248223B4B1A00EA607F /* lenovo_suond.mp3 */; };
+		157C7254223B4B1B00EA607F /* smekh_rebenka_mix.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 157C7249223B4B1B00EA607F /* smekh_rebenka_mix.mp3 */; };
+		157C7259223B4C3B00EA607F /* new_nokia_remix.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 157C7255223B4C3700EA607F /* new_nokia_remix.mp3 */; };
+		157C725A223B4C3B00EA607F /* a_ha_ha.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 157C7256223B4C3800EA607F /* a_ha_ha.mp3 */; };
+		157C725B223B4C3B00EA607F /* fast_browser.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 157C7257223B4C3900EA607F /* fast_browser.mp3 */; };
+		157C725C223B4C3B00EA607F /* wave.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 157C7258223B4C3A00EA607F /* wave.mp3 */; };
+		157C7260223B52C700EA607F /* ChooseRingToneCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 157C725E223B52C700EA607F /* ChooseRingToneCell.m */; };
+		157C7261223B52C700EA607F /* ChooseRingToneCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 157C725F223B52C700EA607F /* ChooseRingToneCell.xib */; };
+		157C7264223B687000EA607F /* PlayRingTonePopupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 157C7263223B687000EA607F /* PlayRingTonePopupView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		157C7266223B834C00EA607F /* ic_tick_ringtone.png in Resources */ = {isa = PBXBuildFile; fileRef = 157C7265223B834900EA607F /* ic_tick_ringtone.png */; };
+		157C7269223B872100EA607F /* ringtone_play.png in Resources */ = {isa = PBXBuildFile; fileRef = 157C7267223B871E00EA607F /* ringtone_play.png */; };
+		157C726A223B872100EA607F /* ringtone_pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 157C7268223B872000EA607F /* ringtone_pause.png */; };
+		157C726C223B8EFE00EA607F /* ringtone_stop.png in Resources */ = {isa = PBXBuildFile; fileRef = 157C726B223B8EFC00EA607F /* ringtone_stop.png */; };
 		157C85C22217BFB100F1F8F2 /* iPadNotChooseContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 157C85C02217BFB100F1F8F2 /* iPadNotChooseContactViewController.m */; };
 		157C85C32217BFB100F1F8F2 /* iPadNotChooseContactViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 157C85C12217BFB100F1F8F2 /* iPadNotChooseContactViewController.xib */; };
 		1584470A21F80B6C00BFC96E /* avatar.png in Resources */ = {isa = PBXBuildFile; fileRef = 1584470321F80B6A00BFC96E /* avatar.png */; };
@@ -1045,6 +1068,31 @@
 		1579B71D21674988002BECE3 /* ic_add_contact.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_add_contact.png; sourceTree = "<group>"; };
 		1579B71E21674988002BECE3 /* ic_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_back.png; sourceTree = "<group>"; };
 		1579B72621674A67002BECE3 /* call_disable.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = call_disable.png; path = Resources/images/keypad/call_disable.png; sourceTree = SOURCE_ROOT; };
+		157C7237223B4AD300EA607F /* RingTone.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = RingTone.plist; sourceTree = "<group>"; };
+		157C723F223B4B1000EA607F /* htc_tone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = htc_tone.mp3; sourceTree = "<group>"; };
+		157C7240223B4B1200EA607F /* landras_dream.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = landras_dream.mp3; sourceTree = "<group>"; };
+		157C7241223B4B1400EA607F /* jingle_bells.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = jingle_bells.mp3; sourceTree = "<group>"; };
+		157C7242223B4B1500EA607F /* cute_cat_song.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = cute_cat_song.mp3; sourceTree = "<group>"; };
+		157C7243223B4B1600EA607F /* angry_birds.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = angry_birds.mp3; sourceTree = "<group>"; };
+		157C7244223B4B1700EA607F /* donald_xmas.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = donald_xmas.mp3; sourceTree = "<group>"; };
+		157C7245223B4B1800EA607F /* chirtmas.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = chirtmas.mp3; sourceTree = "<group>"; };
+		157C7246223B4B1800EA607F /* din_don.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = din_don.mp3; sourceTree = "<group>"; };
+		157C7247223B4B1900EA607F /* bapoo_aau.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bapoo_aau.mp3; sourceTree = "<group>"; };
+		157C7248223B4B1A00EA607F /* lenovo_suond.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = lenovo_suond.mp3; sourceTree = "<group>"; };
+		157C7249223B4B1B00EA607F /* smekh_rebenka_mix.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = smekh_rebenka_mix.mp3; sourceTree = "<group>"; };
+		157C7255223B4C3700EA607F /* new_nokia_remix.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = new_nokia_remix.mp3; sourceTree = "<group>"; };
+		157C7256223B4C3800EA607F /* a_ha_ha.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = a_ha_ha.mp3; sourceTree = "<group>"; };
+		157C7257223B4C3900EA607F /* fast_browser.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = fast_browser.mp3; sourceTree = "<group>"; };
+		157C7258223B4C3A00EA607F /* wave.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = wave.mp3; sourceTree = "<group>"; };
+		157C725D223B52C700EA607F /* ChooseRingToneCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ChooseRingToneCell.h; path = AppUI/ChooseRingToneCell.h; sourceTree = "<group>"; };
+		157C725E223B52C700EA607F /* ChooseRingToneCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ChooseRingToneCell.m; path = AppUI/ChooseRingToneCell.m; sourceTree = "<group>"; };
+		157C725F223B52C700EA607F /* ChooseRingToneCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ChooseRingToneCell.xib; path = AppUI/ChooseRingToneCell.xib; sourceTree = "<group>"; };
+		157C7262223B687000EA607F /* PlayRingTonePopupView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlayRingTonePopupView.h; path = AppUI/PlayRingTonePopupView.h; sourceTree = "<group>"; };
+		157C7263223B687000EA607F /* PlayRingTonePopupView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PlayRingTonePopupView.m; path = AppUI/PlayRingTonePopupView.m; sourceTree = "<group>"; };
+		157C7265223B834900EA607F /* ic_tick_ringtone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_tick_ringtone.png; sourceTree = "<group>"; };
+		157C7267223B871E00EA607F /* ringtone_play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ringtone_play.png; sourceTree = "<group>"; };
+		157C7268223B872000EA607F /* ringtone_pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ringtone_pause.png; sourceTree = "<group>"; };
+		157C726B223B8EFC00EA607F /* ringtone_stop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ringtone_stop.png; sourceTree = "<group>"; };
 		157C85BF2217BFB100F1F8F2 /* iPadNotChooseContactViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iPadNotChooseContactViewController.h; path = iPad/Contacts/iPadNotChooseContactViewController.h; sourceTree = "<group>"; };
 		157C85C02217BFB100F1F8F2 /* iPadNotChooseContactViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = iPadNotChooseContactViewController.m; path = iPad/Contacts/iPadNotChooseContactViewController.m; sourceTree = "<group>"; };
 		157C85C12217BFB100F1F8F2 /* iPadNotChooseContactViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = iPadNotChooseContactViewController.xib; path = iPad/Contacts/iPadNotChooseContactViewController.xib; sourceTree = "<group>"; };
@@ -3174,6 +3222,10 @@
 		633FEBE11D3CD5570014B822 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				157C726B223B8EFC00EA607F /* ringtone_stop.png */,
+				157C7268223B872000EA607F /* ringtone_pause.png */,
+				157C7267223B871E00EA607F /* ringtone_play.png */,
+				157C7265223B834900EA607F /* ic_tick_ringtone.png */,
 				842814E1223ABEDD00E8EAC0 /* cam_dis.png */,
 				842814E2223ABEDE00E8EAC0 /* cam_enable.png */,
 				842814E3223ABEDE00E8EAC0 /* cam_normal.png */,
@@ -3374,6 +3426,7 @@
 				631348311B6FA53300C6BDCB /* rootca.pem */,
 				63CDC4511C3BDE370085F529 /* sounds */,
 				84C1E2181FAEB48500EED0B9 /* AppStrings.h */,
+				157C7237223B4AD300EA607F /* RingTone.plist */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -3416,6 +3469,21 @@
 				63DFE0451C40161700DA5E87 /* notes_of_the_optimistic.caf */,
 				84E07EF02025DD890000CD12 /* callnex_ring.wav */,
 				84E07EF82025E3150000CD12 /* silence.mp3 */,
+				157C7243223B4B1600EA607F /* angry_birds.mp3 */,
+				157C7247223B4B1900EA607F /* bapoo_aau.mp3 */,
+				157C7245223B4B1800EA607F /* chirtmas.mp3 */,
+				157C7242223B4B1500EA607F /* cute_cat_song.mp3 */,
+				157C7246223B4B1800EA607F /* din_don.mp3 */,
+				157C7244223B4B1700EA607F /* donald_xmas.mp3 */,
+				157C723F223B4B1000EA607F /* htc_tone.mp3 */,
+				157C7241223B4B1400EA607F /* jingle_bells.mp3 */,
+				157C7240223B4B1200EA607F /* landras_dream.mp3 */,
+				157C7248223B4B1A00EA607F /* lenovo_suond.mp3 */,
+				157C7249223B4B1B00EA607F /* smekh_rebenka_mix.mp3 */,
+				157C7256223B4C3800EA607F /* a_ha_ha.mp3 */,
+				157C7257223B4C3900EA607F /* fast_browser.mp3 */,
+				157C7255223B4C3700EA607F /* new_nokia_remix.mp3 */,
+				157C7258223B4C3A00EA607F /* wave.mp3 */,
 			);
 			path = ringtones;
 			sourceTree = "<group>";
@@ -3827,6 +3895,11 @@
 				15444088222D062E00A92B88 /* VideoCallView.h */,
 				15444089222D062E00A92B88 /* VideoCallView.m */,
 				15444091222D066D00A92B88 /* VideoCallView.xib */,
+				157C725D223B52C700EA607F /* ChooseRingToneCell.h */,
+				157C725E223B52C700EA607F /* ChooseRingToneCell.m */,
+				157C725F223B52C700EA607F /* ChooseRingToneCell.xib */,
+				157C7262223B687000EA607F /* PlayRingTonePopupView.h */,
+				157C7263223B687000EA607F /* PlayRingTonePopupView.m */,
 			);
 			name = AppUI;
 			sourceTree = "<group>";
@@ -4629,6 +4702,7 @@
 				845487762218631A0065E3A4 /* iPadAboutViewController.xib in Resources */,
 				84ECF9C2216679A70067B4B6 /* ic_keypad_act.png in Resources */,
 				15EB548021E0619200636C63 /* ColorCollectionCell.xib in Resources */,
+				157C725C223B4C3B00EA607F /* wave.mp3 in Resources */,
 				15C209A7221A627E00C281CE /* iPadAddContactViewController.xib in Resources */,
 				63AADBFF1B6A0FF200AA16FD /* assistant_external_sip.rc in Resources */,
 				634610121B6140A500548952 /* CallOutgoingView.xib in Resources */,
@@ -4636,6 +4710,7 @@
 				84F81BCB21EF73F9009629C9 /* ic_user_blue.png in Resources */,
 				84ECF9A921666C840067B4B6 /* decline_call_over.png in Resources */,
 				15444094222D081900A92B88 /* switch_cam.png in Resources */,
+				157C724A223B4B1B00EA607F /* htc_tone.mp3 in Resources */,
 				8442A37A1FB13D0D00F08F11 /* PBXContactsViewController.xib in Resources */,
 				84ECF9C7216679A70067B4B6 /* ic_keypad_dis.png in Resources */,
 				8440F188216BA82000BB559C /* mini_key_sharp_hover.png in Resources */,
@@ -4647,6 +4722,7 @@
 				843ED6761FB66A36005FE1C1 /* SettingCell.xib in Resources */,
 				15E4B96821895271008677AA /* TabBarView~ipad.xib in Resources */,
 				15B9C6F421DF67D8009CCD53 /* ic_controls_act.png in Resources */,
+				157C724D223B4B1B00EA607F /* cute_cat_song.mp3 in Resources */,
 				D38187F815FE355D00C3EDCA /* TabBarView.xib in Resources */,
 				841EB1672169818E00B59B8E /* transfer_call.png in Resources */,
 				1575279821661D1A007D789A /* ic_search.png in Resources */,
@@ -4666,13 +4742,17 @@
 				8414C3D421EB23FD00F54DD1 /* facebook.png in Resources */,
 				8404CD5421EDD13000C28E48 /* iPadContactsViewController.xib in Resources */,
 				84969C30222BAF51008C7E1B /* ic_muted_red.png in Resources */,
+				157C7253223B4B1B00EA607F /* lenovo_suond.mp3 in Resources */,
+				157C7261223B52C700EA607F /* ChooseRingToneCell.xib in Resources */,
 				15B292C321FC0AF4005B6568 /* ic_speaker_ble_dis.png in Resources */,
 				1523A3C521FB134D00C40F44 /* ic_save.png in Resources */,
+				157C7254223B4B1B00EA607F /* smekh_rebenka_mix.mp3 in Resources */,
 				84F81BC721EF6AE4009629C9 /* iPadHistoryCallCell.xib in Resources */,
 				154E400C217440FD0030A6B8 /* no_avatar_blue.png in Resources */,
 				842814E6223ABEDF00E8EAC0 /* cam_normal.png in Resources */,
 				842529CA201F0F9A00BF4385 /* AllContactListViewController.xib in Resources */,
 				D38187BD15FE342800C3EDCA /* ContactsListView.xib in Resources */,
+				157C725B223B4C3B00EA607F /* fast_browser.mp3 in Resources */,
 				84B4F0E321E8CCB600591C50 /* ic_history_bottom_bar_act@2x.png in Resources */,
 				8404CD5121EDD13000C28E48 /* iPadContactDetailViewController.xib in Resources */,
 				840E964922371CF90040CDCC /* more_support.png in Resources */,
@@ -4687,6 +4767,7 @@
 				639E9CB51C0DB88200019A75 /* PhoneMainView.xib in Resources */,
 				6352A5761BE0D4B800594C1C /* CallSideMenuView.xib in Resources */,
 				84D2321322350A720015335B /* numpad_eight_default.png in Resources */,
+				157C724C223B4B1B00EA607F /* jingle_bells.mp3 in Resources */,
 				84D2320522350A720015335B /* numpad_seven_default.png in Resources */,
 				84E286EB1FC9FC52009CBA27 /* PhoneCell.xib in Resources */,
 				63DFE04B1C40161700DA5E87 /* notes_of_the_optimistic.caf in Resources */,
@@ -4700,6 +4781,7 @@
 				84C47D0A1FB62CC10015695E /* HistoryCallCell.xib in Resources */,
 				1579B72021674989002BECE3 /* ic_add_contact@2x.png in Resources */,
 				840E964D22371CF90040CDCC /* more_done.png in Resources */,
+				157C724B223B4B1B00EA607F /* landras_dream.mp3 in Resources */,
 				15A2B8AD2232600B00DA6342 /* bg_signin.png in Resources */,
 				840E965C223726490040CDCC /* speaker_enable.png in Resources */,
 				15A2B8AA22325F6F00DA6342 /* logo_white.png in Resources */,
@@ -4708,8 +4790,10 @@
 				15CAA27821F02A6A00D3739A /* ic_end_call_white.png in Resources */,
 				840E964722371CF90040CDCC /* more_app_info.png in Resources */,
 				841F97E71FB4B2DC00A9A8CD /* UIConferenceCell.xib in Resources */,
+				157C7259223B4C3B00EA607F /* new_nokia_remix.mp3 in Resources */,
 				84D231DC2235034A0015335B /* menu_history_act.png in Resources */,
 				848C5DA321F4571E00094D7C /* iPadTransferCallView.xib in Resources */,
+				157C726A223B872100EA607F /* ringtone_pause.png in Resources */,
 				84548758221851370065E3A4 /* iPadMoreViewController.xib in Resources */,
 				84D23226223539FB0015335B /* contact_video_call.png in Resources */,
 				8440F18C216BA82000BB559C /* mini_key_1_hover.png in Resources */,
@@ -4745,6 +4829,7 @@
 				84D2320E22350A720015335B /* numpad_clear.png in Resources */,
 				846586951FCA9AC900C5142C /* KMessageViewController.xib in Resources */,
 				84D2320422350A720015335B /* numpad_five_default.png in Resources */,
+				157C7238223B4AD300EA607F /* RingTone.plist in Resources */,
 				1575279A21661D44007D789A /* tf_close_bg.png in Resources */,
 				84485C5522387DEE00DFB862 /* keypad_dis.png in Resources */,
 				84D2322022350B360015335B /* video_call_default.png in Resources */,
@@ -4803,9 +4888,11 @@
 				848C5D9221F4313200094D7C /* ic_muted_gray.png in Resources */,
 				15C5A5FE219AAF5600FDD6C5 /* NewHistoryDetailCell.xib in Resources */,
 				636316D41A1DEC650009B839 /* SettingsView.xib in Resources */,
+				157C7252223B4B1B00EA607F /* bapoo_aau.mp3 in Resources */,
 				84B889F01FAF6C73008D88C5 /* PhoneBookContactCell.xib in Resources */,
 				841B359D2191F26D0019BD45 /* ic-pause-default.png in Resources */,
 				848C5D9421F4369C00094D7C /* ic_speaker_gray.png in Resources */,
+				157C724E223B4B1B00EA607F /* angry_birds.mp3 in Resources */,
 				15E641B22179779900A9E15E /* ic_phone_login.png in Resources */,
 				848D7CB72237FDE30010CC5E /* state_audio_call.png in Resources */,
 				D34F6F9E1594D3FB0095705B /* InAppSettings.bundle in Resources */,
@@ -4825,6 +4912,7 @@
 				84D23225223539FB0015335B /* contact_audio_call.png in Resources */,
 				84D231DB2235034A0015335B /* menu_more_def.png in Resources */,
 				63CDC45F1C3BDE370085F529 /* ringback.wav in Resources */,
+				157C7269223B872100EA607F /* ringtone_play.png in Resources */,
 				84D231DD2235034A0015335B /* menu_history_def.png in Resources */,
 				15C5A600219ACC2000FDD6C5 /* ic_trash.png in Resources */,
 				84ECF9C5216679A70067B4B6 /* ic_pause_def.png in Resources */,
@@ -4849,6 +4937,7 @@
 				15906E35217AE959000877A9 /* transfer_call_hover.png in Resources */,
 				84D231E02235034A0015335B /* menu_contact_act.png in Resources */,
 				15A64DA4216CACD900D194BD /* ic_delete_phone.png in Resources */,
+				157C7266223B834C00EA607F /* ic_tick_ringtone.png in Resources */,
 				8440F189216BA82000BB559C /* mini_key_2_hover.png in Resources */,
 				84AEA9251FC4FD5500DAA68A /* EditContactViewController.xib in Resources */,
 				84B4F0E821E8CD4E00591C50 /* ic_more_bottom_bar_def@2x.png in Resources */,
@@ -4858,6 +4947,7 @@
 				84D2321822350A720015335B /* numpad_two_default.png in Resources */,
 				D38187DD15FE348A00C3EDCA /* AssistantView.xib in Resources */,
 				8489DED02160B16100A7A1DD /* NewSettingCell.xib in Resources */,
+				157C725A223B4C3B00EA607F /* a_ha_ha.mp3 in Resources */,
 				84B4F0E021E8CC2B00591C50 /* ic_call_bottom_bar_act@2x.png in Resources */,
 				15444098222D0B8400A92B88 /* off_camera_black.png in Resources */,
 				1521E0A921EED5140085EAB1 /* iPadNewContactViewController.xib in Resources */,
@@ -4878,6 +4968,7 @@
 				8429870C21B29D4000150EB0 /* ic_phonebook_bottom_bar_def.png in Resources */,
 				157C85C32217BFB100F1F8F2 /* iPadNotChooseContactViewController.xib in Resources */,
 				8489DED42160B5FA00A7A1DD /* right-arrow.png in Resources */,
+				157C724F223B4B1B00EA607F /* donald_xmas.mp3 in Resources */,
 				84B4F0F221E8D86E00591C50 /* ic_more_bottom_bar_def@3x.png in Resources */,
 				1556A8E22181C347002E8D26 /* launch_bg.png in Resources */,
 				84485C5422387DEE00DFB862 /* keypad_normal.png in Resources */,
@@ -4929,6 +5020,7 @@
 				84D2321B22350AD70015335B /* call_hover.png in Resources */,
 				84D231DE2235034A0015335B /* menu_dialer_def.png in Resources */,
 				63AADC021B6A0FF200AA16FD /* assistant_remote.rc in Resources */,
+				157C726C223B8EFE00EA607F /* ringtone_stop.png in Resources */,
 				840E964F22371CF90040CDCC /* more_send_reports.png in Resources */,
 				84C47D051FB62C660015695E /* callnex.sqlite in Resources */,
 				15A64DA5216CACD900D194BD /* ic_add_phone.png in Resources */,
@@ -4950,12 +5042,14 @@
 				84C47CE81FB6271D0015695E /* CallsHistoryViewController.xib in Resources */,
 				D38187C115FE345B00C3EDCA /* DialerView.xib in Resources */,
 				D37EE10D16035793003608A6 /* ImageView.xib in Resources */,
+				157C7250223B4B1B00EA607F /* chirtmas.mp3 in Resources */,
 				84D0320D1FB51C50002D2524 /* ContactCell.xib in Resources */,
 				8442A36B1FB13C0F00F08F11 /* ContactsViewController.xib in Resources */,
 				15D480E721EC8FBE00213F45 /* iPadAccountSettingsViewController.xib in Resources */,
 				84D2320D22350A720015335B /* numpad_nine_default.png in Resources */,
 				840E965A223726490040CDCC /* speaker_normal.png in Resources */,
 				8440F18D216BA82000BB559C /* mini_key_7_hover.png in Resources */,
+				157C7251223B4B1B00EA607F /* din_don.mp3 in Resources */,
 				8439F74D216EC06A00110D26 /* hotline_avatar.png in Resources */,
 				8429870B21B29D4000150EB0 /* ic_history_bottom_bar_act.png in Resources */,
 				84D23222223530C50015335B /* ic_search_gray.png in Resources */,
@@ -5255,6 +5349,7 @@
 				8C2595DD1DEDC92D007A6424 /* ProviderDelegate.m in Sources */,
 				63F1DF4B1BCE983200EDED90 /* CallConferenceTableView.m in Sources */,
 				84EFFE031FF3E6B60085A9F4 /* DGActivityIndicatorTripleRingsAnimation.m in Sources */,
+				157C7264223B687000EA607F /* PlayRingTonePopupView.m in Sources */,
 				84F742BD20163334000F7FFF /* FriendForAcceptCell.m in Sources */,
 				84548760221860F70065E3A4 /* iPadLanguageViewController.m in Sources */,
 				84EFFE101FF3E6B60085A9F4 /* DGActivityIndicatorBallGridPulseAnimation.m in Sources */,
@@ -5451,6 +5546,7 @@
 				845487752218631A0065E3A4 /* iPadAboutViewController.m in Sources */,
 				D3807FFA15C2894A005BE9BC /* IASKPSTextFieldSpecifierViewCell.m in Sources */,
 				84E286CA1FC9E1AC009CBA27 /* SDWebImageDownloaderOperation.m in Sources */,
+				157C7260223B52C700EA607F /* ChooseRingToneCell.m in Sources */,
 				84C4436E1FBE01680015854C /* PolicyViewController.m in Sources */,
 				84E286CE1FC9E1AC009CBA27 /* UIImage+GIF.m in Sources */,
 				84C1E2401FAEBB5300EED0B9 /* JSONKit.m in Sources */,

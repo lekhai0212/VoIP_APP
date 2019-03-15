@@ -42,7 +42,7 @@ echocancellation=0 #to not overload cpu in case of VG
 
 [net]
 dns_srv_enabled=0 #no srv needed in general
-stun_server=stun.cloudfone.vn
+stun_server=stun.cloudcall.vn
 
 [call_log_0]
 dir=0

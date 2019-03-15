@@ -513,7 +513,11 @@ static UICompositeViewDescription *compositeDescription = nil;
 #pragma mark - Alertview delegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 1) {
+        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
+                             toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
         
+        [NSDatabase deleteCallHistoryOfRemote:phoneNumber onDate:onDate ofAccount:USERNAME];
+        [[PhoneMainView instance] popCurrentView];
     }
 }
 

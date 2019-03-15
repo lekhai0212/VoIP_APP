@@ -17,12 +17,6 @@
     
     self.contentView.backgroundColor = UIColor.whiteColor;
     
-    if (IS_IPHONE || IS_IPOD) {
-        _lbTitle.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightBold];
-    }else{
-        _lbTitle.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightRegular];
-    }
-    
     [_iconImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self).offset(20);
         make.centerY.equalTo(self.mas_centerY);
@@ -35,6 +29,7 @@
         make.width.height.mas_equalTo(17.0);
     }];
     
+    _lbTitle.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightRegular];
     _lbTitle.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     _lbTitle.numberOfLines = 10;
     [_lbTitle mas_makeConstraints:^(MASConstraintMaker *make) {

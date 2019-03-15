@@ -121,14 +121,8 @@
     headerView.backgroundColor = [UIColor colorWithRed:(240/255.0) green:(240/255.0)
                                                   blue:(240/255.0) alpha:1.0];
     
-    float marginLeft;
-    if (IS_IPHONE || IS_IPOD) {
-        marginLeft = 20.0;
-    }else{
-        marginLeft = 0.0;
-    }
-    
-    lbAllContacts = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, hSection)];
+    float marginLeft = 20.0;
+    lbAllContacts = [[UILabel alloc] initWithFrame:CGRectMake(marginLeft, 0, SCREEN_WIDTH-2*marginLeft, headerView.frame.size.height)];
     lbAllContacts.font = [UIFont systemFontOfSize:17.0 weight:UIFontWeightBold];
     lbAllContacts.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     [headerView addSubview: lbAllContacts];
@@ -443,6 +437,13 @@
     }else{
         _tbContacts.hidden = YES;
         _lbNoContacts.hidden = NO;
+    }
+}
+
+- (void)scrollViewDidScroll:(UIScrollView*)scrollView {
+    CGPoint scrollViewOffset = scrollView.contentOffset;
+    if (scrollViewOffset.y < 0) {
+        [scrollView setContentOffset:CGPointMake(0, 0)];
     }
 }
 

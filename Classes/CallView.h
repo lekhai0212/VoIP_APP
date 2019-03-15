@@ -70,6 +70,28 @@ typedef enum typeCall{
 @property (weak, nonatomic) IBOutlet UILabel *lbVideoQuality;
 @property (weak, nonatomic) IBOutlet UILabel *_lbVideoTime;
 @property (weak, nonatomic) IBOutlet UILabel *lbAddressVideoCall;
+@property (weak, nonatomic) IBOutlet UIMutedMicroButton *btnMicroVideo;
+@property (weak, nonatomic) IBOutlet UISpeakerButton *btnSpeakerVideo;
+@property (weak, nonatomic) IBOutlet UIButton *btnOffCamera;
+@property (weak, nonatomic) IBOutlet UICamSwitch *btnSwitchCamera;
+@property (weak, nonatomic) IBOutlet UIToggleButton *btnKeypadVideo;
+@property (weak, nonatomic) IBOutlet UIHangUpButton *btnHangupVideo;
+
+- (IBAction)btnMicroVideoClick:(id)sender;
+- (IBAction)btnSpeakerVideoClick:(id)sender;
+- (IBAction)btnOffCameraClick:(id)sender;
+- (IBAction)btnSwitchCameraClick:(id)sender;
+- (IBAction)btnKeypadVideoClick:(id)sender;
+- (IBAction)btnHangupVideoClick:(id)sender;
+
+
+
+
+
+
+
+
+
 
 
 @property(nonatomic, strong) IBOutlet CallPausedTableView *pausedCallsTable;

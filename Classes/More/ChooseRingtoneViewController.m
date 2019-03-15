@@ -6,16 +6,49 @@
 //
 
 #import "ChooseRingtoneViewController.h"
+#import "ChooseRingToneCell.h"
+#import "PlayRingTonePopupView.h"
 
-@interface ChooseRingtoneViewController ()
+@interface ChooseRingtoneViewController ()<UITableViewDelegate, UITableViewDataSource, PlayRingTonePopupViewDelegate>{
+    NSMutableArray *ringtones;
+}
 
 @end
 
 @implementation ChooseRingtoneViewController
+@synthesize viewHeader, bgHeader, iconBack, lbTitle, tbList;
+
+#pragma mark - UICompositeViewDelegate Functions
+
+static UICompositeViewDescription *compositeDescription = nil;
+
++ (UICompositeViewDescription *)compositeViewDescription {
+    if (compositeDescription == nil) {
+        compositeDescription = [[UICompositeViewDescription alloc] init:self.class
+                                                              statusBar:StatusBarView.class
+                                                                 tabBar:nil
+                                                               sideMenu:nil
+                                                             fullscreen:false
+                                                         isLeftFragment:YES
+                                                           fragmentWith:nil];
+        compositeDescription.darkBackground = true;
+    }
+    return compositeDescription;
+}
+
+- (UICompositeViewDescription *)compositeViewDescription {
+    return self.class.compositeViewDescription;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    [self autoLayoutForView];
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear: animated];
+    [self getListRingTonesFromFile];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -23,14 +56,109 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (IBAction)iconBackClick:(UIButton *)sender {
+    [[PhoneMainView instance] popCurrentView];
 }
-*/
+
+- (void)autoLayoutForView {
+    float hHeader = [LinphoneAppDelegate sharedInstance]._hRegistrationState;
+    [viewHeader mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.right.equalTo(self.view);
+        make.height.mas_equalTo(hHeader);
+    }];
+    
+    [bgHeader mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.bottom.right.equalTo(viewHeader);
+    }];
+    
+    iconBack.imageEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
+    [iconBack mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(viewHeader).offset([LinphoneAppDelegate sharedInstance]._hStatus);
+        make.left.equalTo(viewHeader);
+        make.width.height.mas_equalTo(HEADER_ICON_WIDTH);
+    }];
+    
+    lbTitle.font = [UIFont systemFontOfSize:16.0 weight:UIFontWeightRegular];
+    [lbTitle mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(viewHeader).offset([LinphoneAppDelegate sharedInstance]._hStatus);
+        make.bottom.equalTo(viewHeader);
+        make.centerX.equalTo(viewHeader.mas_centerX);
+        make.width.mas_equalTo(250);
+    }];
+    
+    tbList.separatorStyle = UITableViewCellSelectionStyleNone;
+    tbList.delegate = self;
+    tbList.dataSource = self;
+    [tbList mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(viewHeader.mas_bottom);
+        make.left.right.bottom.equalTo(self.view);
+    }];
+}
+
+- (void)getListRingTonesFromFile {
+    NSString* filePath = [[NSBundle mainBundle] pathForResource:@"RingTone"
+                                                         ofType:@"plist"];
+    NSArray *plist = [NSArray arrayWithContentsOfFile: filePath];
+    if (ringtones == nil) {
+        ringtones = [[NSMutableArray alloc] init];
+    }
+    [ringtones removeAllObjects];
+    
+    if (plist != nil) {
+        [ringtones addObjectsFromArray: plist];
+    }
+}
+
+- (void)finishedSetRingTone:(NSString *)ringtone {
+    [tbList reloadData];
+}
+
+#pragma mark - UITableview
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return ringtones.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *identifier = @"ChooseRingToneCell";
+    ChooseRingToneCell *cell = [tableView dequeueReusableCellWithIdentifier: identifier];
+    if (cell == nil) {
+        NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"ChooseRingToneCell" owner:self options:nil];
+        cell = topLevelObjects[0];
+    }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    NSDictionary *ringtone = [ringtones objectAtIndex: indexPath.row];
+    NSString *name = [ringtone objectForKey:@"name"];
+    cell.lbName.text = name;
+    
+    NSString *file = [ringtone objectForKey:@"file"];
+    if ([file isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:DEFAULT_RINGTONE]]) {
+        cell.imgSelected.hidden = NO;
+    }else{
+        cell.imgSelected.hidden = YES;
+    }
+    
+    return cell;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    float hPopup = 15 + 40.0 + 15.0 + 50.0;
+    PlayRingTonePopupView *popupRingTone = [[PlayRingTonePopupView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-300.0)/2, (SCREEN_HEIGHT-hPopup)/2, 300.0, hPopup)];
+    popupRingTone.delegate = self;
+    [popupRingTone showInView:self.view animated:YES];
+    
+    NSDictionary *ringtone = [ringtones objectAtIndex: indexPath.row];
+    [popupRingTone setRingtoneInfoContent: ringtone];
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 50.0;
+}
+
 
 @end

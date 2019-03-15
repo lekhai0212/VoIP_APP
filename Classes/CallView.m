@@ -92,7 +92,7 @@ const NSInteger SECURE_BUTTON_TAG = 5;
 }
 
 @synthesize callView, bgAudioCall, nameLabel, lbPhoneNumber, durationLabel, _lbQuality, avatarImage, hangupButton, speakerButton, microButton, callPauseButton, numpadButton;
-@synthesize viewVideoCall, _lbVideoTime, lbAddressVideoCall, lbVideoQuality;
+@synthesize viewVideoCall, _lbVideoTime, lbAddressVideoCall, lbVideoQuality, btnHangupVideo, btnMicroVideo, btnSpeakerVideo, btnOffCamera, btnSwitchCamera, btnKeypadVideo;
 @synthesize durationTimer;
 
 #pragma mark - Lifecycle Functions
@@ -264,8 +264,13 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 
-	[[UIApplication sharedApplication] setIdleTimerDisabled:YES];
-	UIDevice.currentDevice.proximityMonitoringEnabled = YES;
+    if (isAudioCall) {
+        [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+        UIDevice.currentDevice.proximityMonitoringEnabled = YES;
+    }else{
+        [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
+        UIDevice.currentDevice.proximityMonitoringEnabled = YES;
+    }
 
 	[PhoneMainView.instance setVolumeHidden:TRUE];
 	hiddenVolume = TRUE;
@@ -1404,6 +1409,45 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
         make.right.equalTo(viewVideoCall.mas_centerX);
         make.height.mas_equalTo(25.0);
     }];
+    
+    
+    [btnOffCamera mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(viewVideoCall.mas_centerX);
+        make.bottom.equalTo(viewVideoCall).offset(-20.0);
+        make.width.height.mas_equalTo(55.0);
+    }];
+    
+    btnSpeakerVideo.delegate = self;
+    [btnSpeakerVideo mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(btnOffCamera.mas_centerY);
+        make.right.equalTo(btnOffCamera.mas_left).offset(-marginIcon);
+        make.width.height.mas_equalTo(55.0);
+    }];
+    
+    btnMicroVideo.delegate = self;
+    [btnMicroVideo mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(btnSpeakerVideo.mas_centerY);
+        make.right.equalTo(btnSpeakerVideo.mas_left).offset(-marginIcon);
+        make.width.height.mas_equalTo(55.0);
+    }];
+    
+    [btnSwitchCamera mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(btnOffCamera.mas_centerY);
+        make.left.equalTo(btnOffCamera.mas_right).offset(marginIcon);
+        make.width.height.mas_equalTo(55.0);
+    }];
+    
+    [btnKeypadVideo mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(btnSwitchCamera.mas_centerY);
+        make.left.equalTo(btnSwitchCamera.mas_right).offset(marginIcon);
+        make.width.height.mas_equalTo(55.0);
+    }];
+    
+    [btnHangupVideo mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(viewVideoCall.mas_centerX);
+        make.bottom.equalTo(btnOffCamera.mas_top).offset(-marginIcon);
+        make.width.height.mas_equalTo(70.0);
+    }];
 }
 
 
@@ -1469,7 +1513,6 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 }
 
 - (void)enableVideoForCurrentCall {
-    return;
     if (!linphone_core_video_display_enabled(LC))
         return;
     
@@ -1496,7 +1539,11 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
             [speakerButton setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
         }
     }else{
-        
+        if (speaker) {
+            [btnSpeakerVideo setImage:[UIImage imageNamed:@"speaker_enable"] forState:UIControlStateNormal];
+        }else{
+            [btnSpeakerVideo setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
+        }
     }
 }
 
@@ -1508,7 +1555,11 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
             [microButton setImage:[UIImage imageNamed:@"mute_normal"] forState:UIControlStateNormal];
         }
     }else{
-        
+        if (muted) {
+            [btnMicroVideo setImage:[UIImage imageNamed:@"mute_enable"] forState:UIControlStateNormal];
+        }else{
+            [btnMicroVideo setImage:[UIImage imageNamed:@"mute_normal"] forState:UIControlStateNormal];
+        }
     }
 }
 
@@ -1524,4 +1575,21 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     }
 }
 
+- (IBAction)btnMicroVideoClick:(id)sender {
+}
+
+- (IBAction)btnSpeakerVideoClick:(id)sender {
+}
+
+- (IBAction)btnOffCameraClick:(id)sender {
+}
+
+- (IBAction)btnSwitchCameraClick:(id)sender {
+}
+
+- (IBAction)btnKeypadVideoClick:(id)sender {
+}
+
+- (IBAction)btnHangupVideoClick:(id)sender {
+}
 @end
