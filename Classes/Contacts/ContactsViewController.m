@@ -326,7 +326,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     [searchTimer invalidate];
     searchTimer = nil;
-    searchTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self
+    searchTimer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self
                                                  selector:@selector(startSearchPhoneBook)
                                                  userInfo:nil repeats:NO];
 }

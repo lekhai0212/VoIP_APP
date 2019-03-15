@@ -235,14 +235,24 @@
     
     if (contact._number != nil && ![contact._number isKindOfClass:[NSNull class]]) {
         cell._lbPhone.text = contact._number;
-        cell.icCall.hidden = NO;
+        
         [cell.icCall setTitle:contact._number forState:UIControlStateNormal];
+        cell.icCall.hidden = NO;
+        cell.icCall.tag = AUDIO_CALL_TYPE;
         [cell.icCall addTarget:self
                         action:@selector(onIconCallClicked:)
               forControlEvents:UIControlEventTouchUpInside];
+        
+        [cell.icVideoCall setTitle:contact._number forState:UIControlStateNormal];
+        cell.icVideoCall.hidden = NO;
+        cell.icVideoCall.tag = VIDEO_CALL_TYPE;
+        [cell.icVideoCall addTarget:self
+                             action:@selector(onIconCallClicked:)
+                   forControlEvents:UIControlEventTouchUpInside];
     }else{
         cell._lbPhone.text = @"";
         cell.icCall.hidden = YES;
+        cell.icVideoCall.hidden = YES;
     }
     
     if (![AppUtils isNullOrEmpty: contact._avatar]) {
@@ -420,13 +430,23 @@
                          toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     if (![AppUtils isNullOrEmpty: sender.currentTitle]) {
-        NSString *number = [AppUtils removeAllSpecialInString: sender.currentTitle];
-        if (![AppUtils isNullOrEmpty: number]) {
-            [SipUtils makeCallWithPhoneNumber: number];
-            
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"%s: %@ make call to %@", __FUNCTION__, USERNAME, number] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+        NSString *phoneNumber = [AppUtils removeAllSpecialInString: sender.currentTitle];
+        if (![AppUtils isNullOrEmpty: phoneNumber])
+        {
+            if (sender.tag == AUDIO_CALL_TYPE) {
+                [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:IS_VIDEO_CALL_KEY];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }else{
+                [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:IS_VIDEO_CALL_KEY];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+            [LinphoneAppDelegate sharedInstance].phoneForCall = phoneNumber;
+            [[NSNotificationCenter defaultCenter] postNotificationName:getDIDListForCall object:nil];
         }
+        return;
     }
+    [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"The phone number can not empty"]
+                duration:2.0 position:CSToastPositionCenter];
 }
 
 - (void)afterFinishGetPBXContactsList: (NSNotification *)notif
@@ -575,9 +595,10 @@
             for (int iCount=0; iCount<pbxData.count; iCount++) {
                 NSDictionary *dict = [pbxData objectAtIndex: iCount];
                 NSString *name = [dict objectForKey:@"name"];
-                NSString *number = [dict objectForKey:@"number"];
-                
-                ABMultiValueAddValueAndLabel(multiPhone, (__bridge CFTypeRef)(number), (__bridge  CFStringRef)name, NULL);
+                NSString *number = [dict objectForKey:@"num"];
+                if (![AppUtils isNullOrEmpty: name] && ![AppUtils isNullOrEmpty: number]) {
+                    ABMultiValueAddValueAndLabel(multiPhone, (__bridge CFTypeRef)(number), (__bridge  CFStringRef)name, NULL);
+                }
             }
             
             ABRecordSetValue(aPerson, kABPersonPhoneProperty, multiPhone,nil);

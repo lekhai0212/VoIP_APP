@@ -268,7 +268,14 @@ static UICompositeViewDescription *compositeDescription = nil;
         cell.lbPhone.text = anItem._valueStr;
         
         [cell.icCall setTitle:anItem._valueStr forState:UIControlStateNormal];
+        cell.icCall.tag = AUDIO_CALL_TYPE;
         [cell.icCall addTarget:self
+                        action:@selector(onIconCallClicked:)
+              forControlEvents:UIControlEventTouchUpInside];
+        
+        [cell.icVideoCall setTitle:anItem._valueStr forState:UIControlStateNormal];
+        cell.icVideoCall.tag = VIDEO_CALL_TYPE;
+        [cell.icVideoCall addTarget:self
                         action:@selector(onIconCallClicked:)
               forControlEvents:UIControlEventTouchUpInside];
         
@@ -402,14 +409,23 @@ static UICompositeViewDescription *compositeDescription = nil;
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Call from %@ to %@", __FUNCTION__, USERNAME, sender.currentTitle] toFilePath:appDelegate.logFilePath];
     
     if (![AppUtils isNullOrEmpty: sender.currentTitle]) {
-        NSString *number = [AppUtils removeAllSpecialInString: sender.currentTitle];
-        if (![AppUtils isNullOrEmpty: number]) {
-            [SipUtils makeCallWithPhoneNumber: number];
+        NSString *phoneNumber = [AppUtils removeAllSpecialInString: sender.currentTitle];
+        if (![AppUtils isNullOrEmpty: phoneNumber]) {
+            if (sender.tag == AUDIO_CALL_TYPE) {
+                [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:IS_VIDEO_CALL_KEY];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }else{
+                [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:IS_VIDEO_CALL_KEY];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+            
+            [LinphoneAppDelegate sharedInstance].phoneForCall = phoneNumber;
+            [[NSNotificationCenter defaultCenter] postNotificationName:getDIDListForCall object:nil];
         }
-    }else{
-        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"The phone number can not empty"]
-                    duration:2.0 position:CSToastPositionCenter];
+        return;
     }
+    [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"The phone number can not empty"]
+                duration:2.0 position:CSToastPositionCenter];
 }
 
 - (void)updateContactListAfterDeleteContact: (ContactObject *)contact {

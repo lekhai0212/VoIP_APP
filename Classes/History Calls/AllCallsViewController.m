@@ -206,11 +206,11 @@
         cell.lbMissed.hidden = YES;
     }
     
+    NSString *strDate = [AppUtils getDateStringFromTimeInterval: aCall.timeInt];
     NSString *strTime = [AppUtils getTimeStringFromTimeInterval: aCall.timeInt];
-    cell.lbTime.text = strTime;
-    cell.lbTime.text = aCall._callTime;
     
-    cell.lbDate.text = aCall._callDate;
+    cell.lbTime.text = strTime;
+    cell.lbDate.text = strDate;
     
     if (isDeleted) {
         cell._cbDelete.hidden = NO;
@@ -253,9 +253,11 @@
     }
     
     if (aCall.callType == AUDIO_CALL_TYPE) {
+        cell._btnCall.tag = AUDIO_CALL_TYPE;
         [cell._btnCall setImage:[UIImage imageNamed:@"contact_audio_call.png"]
                        forState:UIControlStateNormal];
     }else{
+        cell._btnCall.tag = VIDEO_CALL_TYPE;
         [cell._btnCall setImage:[UIImage imageNamed:@"contact_video_call.png"]
                        forState:UIControlStateNormal];
     }
@@ -348,7 +350,16 @@
     if (![AppUtils isNullOrEmpty: sender.currentTitle]) {
         NSString *phoneNumber = [AppUtils removeAllSpecialInString: sender.currentTitle];
         if (![phoneNumber isEqualToString:@""]) {
-            [SipUtils makeCallWithPhoneNumber: phoneNumber];
+            if (sender.tag == AUDIO_CALL_TYPE) {
+                [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:IS_VIDEO_CALL_KEY];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }else{
+                [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:IS_VIDEO_CALL_KEY];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+            
+            [LinphoneAppDelegate sharedInstance].phoneForCall = phoneNumber;
+            [[NSNotificationCenter defaultCenter] postNotificationName:getDIDListForCall object:nil];
         }
         return;
     }

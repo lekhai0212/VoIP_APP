@@ -39,7 +39,8 @@
 	CXProviderConfiguration *config = [[CXProviderConfiguration alloc]
 		initWithLocalizedName:[NSBundle.mainBundle objectForInfoDictionaryKey:@"CFBundleDisplayName"]];
     if (soundEnable) {
-        config.ringtoneSound = @"callnex_ring.wav";
+        NSString *ringtone = [[NSUserDefaults standardUserDefaults] objectForKey:DEFAULT_RINGTONE];
+        config.ringtoneSound = ringtone;
     }else{
         config.ringtoneSound = @"silence.mp3";
     }
@@ -61,8 +62,7 @@
 				  withOptions:AVAudioSessionCategoryOptionAllowBluetooth
 						error:nil];
 	[audioSession setMode:AVAudioSessionModeVoiceChat error:nil];
-	double sampleRate = 44100.0;
-    //  double sampleRate = 16000.0;
+	double sampleRate = 16000.0;
 	[audioSession setPreferredSampleRate:sampleRate error:nil];
     
     NSTimeInterval bufferDuration = .005;

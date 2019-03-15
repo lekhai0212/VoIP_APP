@@ -159,6 +159,8 @@ HMLocalization *localization;
             NSString *callDirection = [rsDict objectForKey:@"call_direction"];
             NSString *callTime      = [rsDict objectForKey:@"time"];
             NSString *callDate      = [rsDict objectForKey:@"date"];
+            int time_int = [[rsDict objectForKey:@"time_int"] intValue];
+            int callType            = [[rsDict objectForKey:@"call_type"] intValue];
             
             PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: phoneNumber];
             
@@ -169,8 +171,10 @@ HMLocalization *localization;
             aCall._callDirection = callDirection;
             aCall._callTime = callTime;
             aCall._callDate = callDate;
+            aCall.timeInt = time_int;
             aCall._phoneName = contact.name;
             aCall._phoneAvatar = contact.avatar;
+            aCall.callType = callType;
             aCall.newMissedCall = [self getMissedCallUnreadWithRemote:phoneNumber onDate:dateStr ofAccount:account];
             
             [result addObject: aCall];
@@ -231,15 +235,11 @@ HMLocalization *localization;
              int callId              = [[rsDict objectForKey:@"_id"] intValue];
              NSString *status        = [rsDict objectForKey:@"status"];
              NSString *callDirection = [rsDict objectForKey:@"call_direction"];
-             // NSString *callTime      = [rsDict objectForKey:@"time"];
-             // NSString *callDate      = [rsDict objectForKey:@"date"];
+             NSString *callTime      = [rsDict objectForKey:@"time"];
+             NSString *callDate      = [rsDict objectForKey:@"date"];
              NSString *phoneNumber   = [rsDict objectForKey:@"phone_number"];
              int callType            = [[rsDict objectForKey:@"call_type"] intValue];
              long timeInt   = [[rsDict objectForKey:@"time_int"] longValue];
-             
-             NSString *callDate = [AppUtils getDateStringFromTimeInterval: timeInt];
-             NSString *callTime = [AppUtils getTimeStringFromTimeInterval: timeInt];
-             kiem tra lai cho nay, ko get history dc
              
              aCall._prefixPhone = @"";
              aCall._phoneNumber = phoneNumber;

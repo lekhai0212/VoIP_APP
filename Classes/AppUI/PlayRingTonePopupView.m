@@ -157,7 +157,7 @@
         NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:tmpFile ofType:@"mp3"];
         NSURL *soundFileURL = [NSURL URLWithString: soundFilePath];
         player = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFileURL error:nil];
-        player.numberOfLoops = -1; //Infinite
+        player.numberOfLoops = 0; //Infinite
         player.volume = 1.0;
         [player prepareToPlay];
         player.delegate = self;

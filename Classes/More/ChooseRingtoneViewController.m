@@ -49,6 +49,11 @@ static UICompositeViewDescription *compositeDescription = nil;
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
     [self getListRingTonesFromFile];
+    
+    UInt32 sessionCategory = kAudioSessionCategory_PlayAndRecord;
+    AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(sessionCategory), &sessionCategory);
+    UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_Speaker;
+    AudioSessionSetProperty (kAudioSessionProperty_OverrideAudioRoute,sizeof (audioRouteOverride),&audioRouteOverride);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -111,6 +116,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)finishedSetRingTone:(NSString *)ringtone {
     [tbList reloadData];
+    [LinphoneManager.instance startLinphoneCore];
+    [LinphoneManager.instance.providerDelegate config];
 }
 
 #pragma mark - UITableview

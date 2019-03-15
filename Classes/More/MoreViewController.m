@@ -251,11 +251,11 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case eAppInfo:{
-            //  [[PhoneMainView instance] changeCurrentView:[SendLogsViewController compositeViewDescription] push:true];
+            [[PhoneMainView instance] changeCurrentView:[AboutViewController compositeViewDescription] push:true];
             break;
         }
         case eSendLogs:{
-            //  [[PhoneMainView instance] changeCurrentView:[AboutViewController compositeViewDescription] push:true];
+            [[PhoneMainView instance] changeCurrentView:[SendLogsViewController compositeViewDescription] push:true];
             break;
         }
         case eSignOut:{

@@ -769,7 +769,9 @@ static void linphone_iphone_display_status(struct _LinphoneCore *lc, const char 
 			UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
 			content.title = NSLocalizedString(@"Incoming call", nil);
 			content.body = address;
-			content.sound = [UNNotificationSound soundNamed:@"callnex_ring.wav"];
+            
+            NSString *ringtone = [[NSUserDefaults standardUserDefaults] objectForKey:DEFAULT_RINGTONE];
+			content.sound = [UNNotificationSound soundNamed:ringtone];
 			content.categoryIdentifier = @"call_cat";
 			content.userInfo = @{ @"CallId" : callId };
 			UNNotificationRequest *req =
@@ -818,9 +820,10 @@ static void linphone_iphone_display_status(struct _LinphoneCore *lc, const char 
                     data->notification.category = @"incoming_call";
 					if ([[UIDevice currentDevice].systemVersion floatValue] >= 8 &&
 						[self lpConfigBoolForKey:@"repeat_call_notification"] == NO) {
+                        NSString *ringtone = [[NSUserDefaults standardUserDefaults] objectForKey:DEFAULT_RINGTONE];
 						NSString *ring =
 							([LinphoneManager bundleFile:[self lpConfigStringForKey:@"local_ring" inSection:@"sound"].lastPathComponent]
-								 ?: [LinphoneManager bundleFile:@"callnex_ring.wav"])
+								 ?: [LinphoneManager bundleFile:ringtone])
 								.lastPathComponent;
 						data->notification.soundName = ring;
 					} else {
@@ -2230,11 +2233,10 @@ void popup_link_account_cb(LinphoneAccountCreator *creator, LinphoneAccountCreat
     NSString *ring = @"";
     BOOL soundEnable = [AppUtils soundForCallIsEnable];
     if (soundEnable) {
-        ring = @"callnex_ring.wav";
+        ring = [[NSUserDefaults standardUserDefaults] objectForKey:DEFAULT_RINGTONE];
     }else{
         ring = @"silence.mp3";
     }
-	//  NSString *ring = ([LinphoneManager bundleFile:[self lpConfigStringForKey:@"local_ring" inSection:@"sound"].lastPathComponent]?: [LinphoneManager bundleFile:@"callnex_ring.wav"]).lastPathComponent;
     
 	NSString *ringback =
 		([LinphoneManager bundleFile:[self lpConfigStringForKey:@"remote_ring" inSection:@"sound"].lastPathComponent]
@@ -3009,7 +3011,8 @@ static int comp_call_state_paused(const LinphoneCall *call, const void *param) {
 #else
 #define APPMODE_SUFFIX @"prod"
 #endif
-        NSString *ring = ([LinphoneManager bundleFile:[self lpConfigStringForKey:@"local_ring" inSection:@"sound"].lastPathComponent]?: [LinphoneManager bundleFile:@"callnex_ring.wav"]).lastPathComponent;
+        NSString *ringtone = [[NSUserDefaults standardUserDefaults] objectForKey:DEFAULT_RINGTONE];
+        NSString *ring = ([LinphoneManager bundleFile:[self lpConfigStringForKey:@"local_ring" inSection:@"sound"].lastPathComponent]?: [LinphoneManager bundleFile:ringtone]).lastPathComponent;
         
         ring = @"";
         NSString * notif_type;
