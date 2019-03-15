@@ -106,12 +106,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneAppDelegate.m"
-            timestampString = "574187270.683677"
+            timestampString = "574274099.842522"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "2143"
             endingLineNumber = "2143"
-            landmarkName = "-insertMissedCallToDatabase:"
+            landmarkName = "-failedToCallWebService:andError:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -138,11 +138,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/CallView.m"
-            timestampString = "574187270.6842901"
+            timestampString = "574274099.843065"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "923"
-            endingLineNumber = "923"
+            startingLineNumber = "866"
+            endingLineNumber = "866"
             landmarkName = "-onNumpadClick:"
             landmarkType = "7">
          </BreakpointContent>
@@ -154,13 +154,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/CallView.m"
-            timestampString = "574187270.684356"
+            timestampString = "574274099.84349"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "295"
-            endingLineNumber = "295"
-            landmarkName = "CallView"
-            landmarkType = "3">
+            startingLineNumber = "294"
+            endingLineNumber = "294"
+            landmarkName = "-viewDidAppear:"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -170,12 +170,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneAppDelegate.m"
-            timestampString = "574187270.68442"
+            timestampString = "574274099.843951"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "2164"
             endingLineNumber = "2164"
-            landmarkName = "-failedToCallWebService:andError:"
+            landmarkName = "-successfulToCallWebService:withData:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -416,6 +416,12 @@
 		841F97E71FB4B2DC00A9A8CD /* UIConferenceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 841F97E51FB4B2DC00A9A8CD /* UIConferenceCell.xib */; };
 		842529C9201F0F9A00BF4385 /* AllContactListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 842529C7201F0F9A00BF4385 /* AllContactListViewController.m */; };
 		842529CA201F0F9A00BF4385 /* AllContactListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 842529C8201F0F9A00BF4385 /* AllContactListViewController.xib */; };
+		842814DE223ABED000E8EAC0 /* switchcam_dis.png in Resources */ = {isa = PBXBuildFile; fileRef = 842814D5223ABECC00E8EAC0 /* switchcam_dis.png */; };
+		842814DF223ABED000E8EAC0 /* switchcam_enable.png in Resources */ = {isa = PBXBuildFile; fileRef = 842814DC223ABECC00E8EAC0 /* switchcam_enable.png */; };
+		842814E0223ABED000E8EAC0 /* switchcam_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 842814DD223ABECD00E8EAC0 /* switchcam_normal.png */; };
+		842814E4223ABEDF00E8EAC0 /* cam_dis.png in Resources */ = {isa = PBXBuildFile; fileRef = 842814E1223ABEDD00E8EAC0 /* cam_dis.png */; };
+		842814E5223ABEDF00E8EAC0 /* cam_enable.png in Resources */ = {isa = PBXBuildFile; fileRef = 842814E2223ABEDE00E8EAC0 /* cam_enable.png */; };
+		842814E6223ABEDF00E8EAC0 /* cam_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 842814E3223ABEDE00E8EAC0 /* cam_normal.png */; };
 		8429870B21B29D4000150EB0 /* ic_history_bottom_bar_act.png in Resources */ = {isa = PBXBuildFile; fileRef = 842986FD21B29D3C00150EB0 /* ic_history_bottom_bar_act.png */; };
 		8429870C21B29D4000150EB0 /* ic_phonebook_bottom_bar_def.png in Resources */ = {isa = PBXBuildFile; fileRef = 8429870421B29D3D00150EB0 /* ic_phonebook_bottom_bar_def.png */; };
 		8429870D21B29D4000150EB0 /* ic_call_bottom_bar_def.png in Resources */ = {isa = PBXBuildFile; fileRef = 8429870521B29D3D00150EB0 /* ic_call_bottom_bar_def.png */; };
@@ -1526,6 +1532,12 @@
 		842529C6201F0F9A00BF4385 /* AllContactListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AllContactListViewController.h; path = Contacts/AllContactListViewController.h; sourceTree = "<group>"; };
 		842529C7201F0F9A00BF4385 /* AllContactListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AllContactListViewController.m; path = Contacts/AllContactListViewController.m; sourceTree = "<group>"; };
 		842529C8201F0F9A00BF4385 /* AllContactListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = AllContactListViewController.xib; path = Contacts/AllContactListViewController.xib; sourceTree = "<group>"; };
+		842814D5223ABECC00E8EAC0 /* switchcam_dis.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switchcam_dis.png; sourceTree = "<group>"; };
+		842814DC223ABECC00E8EAC0 /* switchcam_enable.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switchcam_enable.png; sourceTree = "<group>"; };
+		842814DD223ABECD00E8EAC0 /* switchcam_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switchcam_normal.png; sourceTree = "<group>"; };
+		842814E1223ABEDD00E8EAC0 /* cam_dis.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cam_dis.png; sourceTree = "<group>"; };
+		842814E2223ABEDE00E8EAC0 /* cam_enable.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cam_enable.png; sourceTree = "<group>"; };
+		842814E3223ABEDE00E8EAC0 /* cam_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cam_normal.png; sourceTree = "<group>"; };
 		842986FD21B29D3C00150EB0 /* ic_history_bottom_bar_act.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_history_bottom_bar_act.png; path = Resources/images/keypad/ic_history_bottom_bar_act.png; sourceTree = SOURCE_ROOT; };
 		8429870421B29D3D00150EB0 /* ic_phonebook_bottom_bar_def.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_phonebook_bottom_bar_def.png; path = Resources/images/keypad/ic_phonebook_bottom_bar_def.png; sourceTree = SOURCE_ROOT; };
 		8429870521B29D3D00150EB0 /* ic_call_bottom_bar_def.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_call_bottom_bar_def.png; path = Resources/images/keypad/ic_call_bottom_bar_def.png; sourceTree = SOURCE_ROOT; };
@@ -3162,6 +3174,12 @@
 		633FEBE11D3CD5570014B822 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				842814E1223ABEDD00E8EAC0 /* cam_dis.png */,
+				842814E2223ABEDE00E8EAC0 /* cam_enable.png */,
+				842814E3223ABEDE00E8EAC0 /* cam_normal.png */,
+				842814D5223ABECC00E8EAC0 /* switchcam_dis.png */,
+				842814DC223ABECC00E8EAC0 /* switchcam_enable.png */,
+				842814DD223ABECD00E8EAC0 /* switchcam_normal.png */,
 				84485C5722387E1600DFB862 /* hold_dis.png */,
 				84485C5822387E1600DFB862 /* hold_enable.png */,
 				84485C5622387E1500DFB862 /* hold_normal.png */,
@@ -4623,6 +4641,7 @@
 				8440F188216BA82000BB559C /* mini_key_sharp_hover.png in Resources */,
 				84E07EF72025DD8A0000CD12 /* callnex_ring.wav in Resources */,
 				84C0018521B1781200105B00 /* file_encrypt.txt in Resources */,
+				842814E0223ABED000E8EAC0 /* switchcam_normal.png in Resources */,
 				841B35922191F1360019BD45 /* ConferenceTableViewCell.xib in Resources */,
 				1592762721EC35DB009D22FD /* youtube.png in Resources */,
 				843ED6761FB66A36005FE1C1 /* SettingCell.xib in Resources */,
@@ -4651,6 +4670,7 @@
 				1523A3C521FB134D00C40F44 /* ic_save.png in Resources */,
 				84F81BC721EF6AE4009629C9 /* iPadHistoryCallCell.xib in Resources */,
 				154E400C217440FD0030A6B8 /* no_avatar_blue.png in Resources */,
+				842814E6223ABEDF00E8EAC0 /* cam_normal.png in Resources */,
 				842529CA201F0F9A00BF4385 /* AllContactListViewController.xib in Resources */,
 				D38187BD15FE342800C3EDCA /* ContactsListView.xib in Resources */,
 				84B4F0E321E8CCB600591C50 /* ic_history_bottom_bar_act@2x.png in Resources */,
@@ -4675,6 +4695,7 @@
 				84B4F0EB21E8CDA500591C50 /* ic_phonebook_bottom_bar_act@2x.png in Resources */,
 				639E9C931C0DB7BE00019A75 /* FirstLoginView.xib in Resources */,
 				840E965B223726490040CDCC /* speaker_dis.png in Resources */,
+				842814E4223ABEDF00E8EAC0 /* cam_dis.png in Resources */,
 				1521E0BE21EF3C260085EAB1 /* iPadCallHistoryViewController.xib in Resources */,
 				84C47D0A1FB62CC10015695E /* HistoryCallCell.xib in Resources */,
 				1579B72021674989002BECE3 /* ic_add_contact@2x.png in Resources */,
@@ -4814,8 +4835,10 @@
 				84C4436F1FBE01680015854C /* PolicyViewController.xib in Resources */,
 				84FE45C520E4D0740067405F /* keepawake.wav in Resources */,
 				1556A8E12181C347002E8D26 /* launch_logo.png in Resources */,
+				842814DE223ABED000E8EAC0 /* switchcam_dis.png in Resources */,
 				631098521D4660630041F2B3 /* CountryListView.xib in Resources */,
 				84C47CF71FB628540015695E /* MissedCallViewController.xib in Resources */,
+				842814E5223ABEDF00E8EAC0 /* cam_enable.png in Resources */,
 				639CEB031A1DF4EB004DE38F /* UICompositeView.xib in Resources */,
 				15A64D92216C5A3D00D194BD /* ic_call_contact.png in Resources */,
 				15857C00216DED4800DB5237 /* call_default_mini.png in Resources */,
@@ -4909,6 +4932,7 @@
 				840E964F22371CF90040CDCC /* more_send_reports.png in Resources */,
 				84C47D051FB62C660015695E /* callnex.sqlite in Resources */,
 				15A64DA5216CACD900D194BD /* ic_add_phone.png in Resources */,
+				842814DF223ABED000E8EAC0 /* switchcam_enable.png in Resources */,
 				84F81BE621EF85E8009629C9 /* ic_add_call_white.png in Resources */,
 				63F1DF511BCE986A00EDED90 /* UICallConferenceCell.xib in Resources */,
 				1584470A21F80B6C00BFC96E /* avatar.png in Resources */,

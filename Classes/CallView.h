@@ -63,13 +63,18 @@ typedef enum typeCall{
 @property(nonatomic, strong) IBOutlet UIPauseButton *callPauseButton;
 @property(nonatomic, strong) IBOutlet UIToggleButton *numpadButton;
 
-
+//  Video call view
+@property (weak, nonatomic) IBOutlet UIView *viewVideoCall;
+@property(nonatomic, strong) IBOutlet UIView *videoView;
+@property(nonatomic, strong) IBOutlet UIView *videoPreview;
+@property (weak, nonatomic) IBOutlet UILabel *lbVideoQuality;
+@property (weak, nonatomic) IBOutlet UILabel *_lbVideoTime;
+@property (weak, nonatomic) IBOutlet UILabel *lbAddressVideoCall;
 
 
 @property(nonatomic, strong) IBOutlet CallPausedTableView *pausedCallsTable;
 
-@property(nonatomic, strong) IBOutlet UIView *videoView;
-@property(nonatomic, strong) IBOutlet UIView *videoPreview;
+
 @property(nonatomic, strong) IBOutlet UIActivityIndicatorView *videoWaitingForFirstImage;
 @property(weak, nonatomic) IBOutlet UIView *callView;
 
@@ -107,10 +112,6 @@ typedef enum typeCall{
 @property(nonatomic, strong) IBOutlet UIDigitButton *hashButton;
 
 
-
-
-
-@property(weak, nonatomic) IBOutlet UIView *conferenceView;
 @property(strong, nonatomic) IBOutlet CallPausedTableView *conferenceCallsTable;
 
 - (IBAction)onRoutesClick:(id)sender;
@@ -123,15 +124,6 @@ typedef enum typeCall{
 - (IBAction)onOptionsConferenceClick:(id)sender;
 - (IBAction)onNumpadClick:(id)sender;
 - (IBAction)onChatClick:(id)sender;
-
-@property (weak, nonatomic) IBOutlet UIView *viewVideoCall;
-
-@property (weak, nonatomic) IBOutlet UILabel *_lbVideoTime;
-@property (weak, nonatomic) IBOutlet UILabel *lbAddressVideoCall;
-@property (weak, nonatomic) IBOutlet UILabel *lbStateVideoCall;
-@property (weak, nonatomic) IBOutlet UIButton *iconCaptureScreen;
-
-- (IBAction)iconCaptureScreenClicked:(UIButton *)sender;
 
 @property (nonatomic, strong) NSTimer *durationTimer;
 

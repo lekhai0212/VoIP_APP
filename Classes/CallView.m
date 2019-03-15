@@ -92,7 +92,7 @@ const NSInteger SECURE_BUTTON_TAG = 5;
 }
 
 @synthesize callView, bgAudioCall, nameLabel, lbPhoneNumber, durationLabel, _lbQuality, avatarImage, hangupButton, speakerButton, microButton, callPauseButton, numpadButton;
-@synthesize viewVideoCall, _lbVideoTime, lbAddressVideoCall, lbStateVideoCall, iconCaptureScreen;
+@synthesize viewVideoCall, _lbVideoTime, lbAddressVideoCall, lbVideoQuality;
 @synthesize durationTimer;
 
 #pragma mark - Lifecycle Functions
@@ -216,6 +216,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 
     _lbQuality.text = [NSString stringWithFormat:@"%@: %@", @"Chất lượng", @"Tốt"];
     nameLabel.text = @"";
+    lbAddressVideoCall.text = @"";
 
 	// Update on show
 	[self hideRoutes:TRUE animated:FALSE];
@@ -257,7 +258,6 @@ static UICompositeViewDescription *compositeDescription = nil;
         }
     }
     callView.hidden = !isAudioCall;
-    _conferenceView.hidden = isAudioCall;
     viewVideoCall.hidden = isAudioCall;
 }
 
@@ -509,10 +509,6 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 
 - (void)callDurationUpdate
 {
-    
-    int size = linphone_core_get_conference_size(LC);
-    NSLog(@"KL-----size: %d", size);
-    
     int duration;
     list = linphone_core_get_calls([LinphoneManager getLc]);
     if (list != NULL) {
@@ -520,9 +516,11 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     }else{
         duration = 0;
     }
-	durationLabel.text = [LinphoneUtils durationToString:duration];
-    _lbVideoTime.text = [LinphoneUtils durationToString:duration];
-
+    if (isAudioCall) {
+        durationLabel.text = [LinphoneUtils durationToString:duration];
+    }else{
+        _lbVideoTime.text = [LinphoneUtils durationToString:duration];
+    }
     if (duration > 0) {
         [self callQualityUpdate];
     }
@@ -534,67 +532,15 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     list = linphone_core_get_calls([LinphoneManager getLc]);
     
     call = (LinphoneCall*)list->data;
-    
     if(call != NULL) {
-        //FIXME double check call state before computing, may cause core dump
-        float quality = linphone_call_get_average_quality(call);
-        if(quality < 1) {
-            _lbQuality.text = [NSString stringWithFormat:@"%@: %@", @"Chất lượng", @"Kém"];
-            
-            NSRange range = [_lbQuality.text rangeOfString:@"Kém"];
-            if (range.location != NSNotFound) {
-                videoStateString = [[NSMutableAttributedString alloc] initWithString:_lbQuality.text];
-                [videoStateString addAttribute:NSForegroundColorAttributeName
-                               value:[UIColor redColor]
-                               range:NSMakeRange(range.location, range.length)];
-                lbStateVideoCall.attributedText = videoStateString;
-            }
-        } else if (quality < 2) {
-            _lbQuality.text = [NSString stringWithFormat:@"%@: %@", @"Chất lượng", @"Thấp"];
-            lbStateVideoCall.text = _lbQuality.text;
-            
-            NSRange range = [_lbQuality.text rangeOfString: @"Thấp"];
-            if (range.location != NSNotFound) {
-                videoStateString = [[NSMutableAttributedString alloc] initWithString:_lbQuality.text];
-                [videoStateString addAttribute:NSForegroundColorAttributeName
-                                         value:[UIColor orangeColor]
-                                         range:NSMakeRange(range.location, range.length)];
-                lbStateVideoCall.attributedText = videoStateString;
-            }
-        } else if (quality < 3) {
-            _lbQuality.text = [NSString stringWithFormat:@"%@: %@", @"Chất lượng",  @"Thấp"];
-            
-            NSRange range = [_lbQuality.text rangeOfString: @"Thấp"];
-            if (range.location != NSNotFound) {
-                videoStateString = [[NSMutableAttributedString alloc] initWithString:_lbQuality.text];
-                [videoStateString addAttribute:NSForegroundColorAttributeName
-                                         value:[UIColor orangeColor]
-                                         range:NSMakeRange(range.location, range.length)];
-                lbStateVideoCall.attributedText = videoStateString;
-            }
-        } else if(quality < 4){
-            _lbQuality.text = [NSString stringWithFormat:@"%@: %@", @"Chất lượng",  @"Trung bình"];
-            
-            NSRange range = [_lbQuality.text rangeOfString:@"Trung bình"];
-            if (range.location != NSNotFound) {
-                videoStateString = [[NSMutableAttributedString alloc] initWithString:_lbQuality.text];
-                [videoStateString addAttribute:NSForegroundColorAttributeName
-                                         value:[UIColor yellowColor]
-                                         range:NSMakeRange(range.location, range.length)];
-                lbStateVideoCall.attributedText = videoStateString;
-            }
-        } else{
-            _lbQuality.text = [NSString stringWithFormat:@"%@: %@", @"Chất lượng", @"Tốt"];
-            
-            NSRange range = [_lbQuality.text rangeOfString: @"Tốt"];
-            if (range.location != NSNotFound) {
-                videoStateString = [[NSMutableAttributedString alloc] initWithString:_lbQuality.text];
-                [videoStateString addAttribute:NSForegroundColorAttributeName
-                                         value:[UIColor colorWithRed:(17/255.0) green:(186/255.0) blue:(153/255.0) alpha:1.0]
-                                         range:NSMakeRange(range.location, range.length)];
-                lbStateVideoCall.attributedText = videoStateString;
-            }
+        NSMutableAttributedString *qualityAttr = [SipUtils getQualityOfCall: call];
+        if (isAudioCall) {
+            _lbQuality.attributedText = qualityAttr;
+        }else{
+            lbVideoQuality.attributedText = qualityAttr;
         }
+    }else{
+        lbVideoQuality.text = @"";
     }
 }
 
@@ -602,7 +548,6 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 	LinphoneCall *call = linphone_core_get_current_call(LC);
 
 	//  _callView.hidden = !call;
-	//  _conferenceView.hidden = !linphone_core_is_in_conference(LC);
 	//  _callPauseButton.hidden = !call && !linphone_core_is_in_conference(LC);
 
 	//  [_callPauseButton setType:UIPauseButtonType_CurrentCall call:call];
@@ -619,7 +564,6 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     }
     [callPauseButton setType:UIPauseButtonType_CurrentCall call:call];
     /*
-    _conferenceView.hidden = !linphone_core_is_in_conference(LC);
     [_conferencePauseButton setType:UIPauseButtonType_Conference call:call];    */
     
 	if (!callView.hidden) {
@@ -781,7 +725,7 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
             callPauseButton.enabled = YES;
             microButton.enabled = YES;
             
-            lbStateVideoCall.text = @"Đã kết nối";
+            lbVideoQuality.text = @"Đã kết nối";
             
             // Add tất cả các cuộc gọi vào nhóm
             if (linphone_core_get_calls_nb(LC) >= 2) {
@@ -1282,61 +1226,31 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     __block NSString *fullName = @"";
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        LinphoneCore* lc = [LinphoneManager getLc];
-        list = linphone_core_get_calls(lc);
-        if (list != NULL) {
-            LinphoneCall* call = list->data;
-            const LinphoneAddress* addr = linphone_call_get_remote_address(call);
-            if (addr != NULL) {
-                // contact name
-                char* lAddress = linphone_address_as_string_uri_only(addr);
-                if(lAddress) {
-//                    NSString *normalizedSipAddress = [FastAddressBook normalizeSipURI:[NSString stringWithUTF8String:lAddress]];
-//                    NSRange range = NSMakeRange(3, [normalizedSipAddress rangeOfString:@"@"].location - 3);
-//                    NSString *tmp = [normalizedSipAddress substringWithRange:range];
-//                    // tmp: -> :8889998007
-//                    if (tmp.length > 2) {
-//                        NSString *phoneStr = [tmp substringFromIndex: 1];
-//                        addressPhoneNumber = [[NSString alloc] initWithString: phoneStr];
-//                    }
-//                    ms_free(lAddress);
-                }
-            }
+        LinphoneCall *call = linphone_core_get_current_call([LinphoneManager getLc]);
+        if (call != NULL) {
+            addressPhoneNumber = [SipUtils getPhoneNumberOfCall:call orLinphoneAddress:nil];
             
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"_sipPhone == %@", addressPhoneNumber];
-            NSArray *filter = [appDelegate.listContacts filteredArrayUsingPredicate: predicate];
-            if (filter.count > 0) {
-                ContactObject *aContact = [filter objectAtIndex: 0];
-                avatar = aContact._avatar;
+            PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: addressPhoneNumber];
+            if ([AppUtils isNullOrEmpty: contact.name]) {
+                fullName = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
             }else{
-                for (int iCount=0; iCount<appDelegate.listContacts.count; iCount++) {
-                    ContactObject *contact = [appDelegate.listContacts objectAtIndex: iCount];
-                    predicate = [NSPredicate predicateWithFormat:@"_valueStr = %@", addressPhoneNumber];
-                    filter = [contact._listPhone filteredArrayUsingPredicate: predicate];
-                    if (filter.count > 0) {
-                        avatar = contact._avatar;
-                        break;
-                    }
-                }
-            }
-            fullName = @"LE QUANG KHAI";
-            if ([fullName isEqualToString:@""]) {
-                if ([addressPhoneNumber isEqualToString:hotline]) {
-                    fullName = @"hotline";
-                }else{
-                    fullName = addressPhoneNumber;
-                }
+                fullName = contact.name;
             }
         }
+        
         dispatch_async(dispatch_get_main_queue(), ^(void){
-            nameLabel.text = fullName;
-            lbAddressVideoCall.text = fullName;
-            lbAddressVideoCall.text = fullName;
-            
-            if (![AppUtils isNullOrEmpty: avatar]) {
-                avatarImage.image = [UIImage imageWithData: [NSData dataFromBase64String: avatar]];
+            if (isAudioCall) {
+                nameLabel.text = fullName;
+                lbPhoneNumber.text = addressPhoneNumber;
+                lbAddressVideoCall.text = fullName;
+                
+                if (![AppUtils isNullOrEmpty: avatar]) {
+                    avatarImage.image = [UIImage imageWithData: [NSData dataFromBase64String: avatar]];
+                }else{
+                    avatarImage.image = [UIImage imageNamed:@"no_avatar.png"];
+                }
             }else{
-                avatarImage.image = [UIImage imageNamed:@"no_avatar.png"];
+                lbAddressVideoCall.text = fullName;
             }
         });
     });
@@ -1359,17 +1273,17 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
         make.top.left.bottom.right.equalTo(callView);
     }];
     
+    avatarImage.clipsToBounds = YES;
+    avatarImage.layer.borderColor = UIColor.whiteColor.CGColor;
+    avatarImage.layer.borderWidth = 2.0;
+    avatarImage.layer.cornerRadius = 120/2;
     [avatarImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(callView.mas_centerX);
         make.centerY.equalTo(callView.mas_centerY);
         make.width.height.mas_equalTo(120.0);
     }];
-    avatarImage.clipsToBounds = YES;
-    avatarImage.layer.borderColor = UIColor.whiteColor.CGColor;
-    avatarImage.layer.borderWidth = 2.0;
-    avatarImage.layer.cornerRadius = 120/2;
     
-    _lbQuality.font = [UIFont systemFontOfSize:14.0 weight:UIFontWeightThin];
+    _lbQuality.font = [UIFont systemFontOfSize:16.0 weight:UIFontWeightThin];
     [_lbQuality setTextColor: [UIColor whiteColor]];
     [_lbQuality mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(callView.mas_centerX);
@@ -1441,32 +1355,55 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
         make.width.mas_equalTo(55.0);
     }];
     
-    if (SCREEN_WIDTH > 320) {
-        [_lbVideoTime setFont: [UIFont fontWithName:MYRIADPRO_REGULAR size:15.0]];
-    }else{
-        [_lbVideoTime setFont:[UIFont fontWithName:MYRIADPRO_REGULAR size:15.0]];
-    }
-    [_lbVideoTime setTextColor:[UIColor whiteColor]];
-    [_lbVideoTime setBackgroundColor:[UIColor clearColor]];
-    [_lbVideoTime setTextAlignment: NSTextAlignmentLeft];
+    //  video call view
+    float paddingVideo = 20.0;
+    [viewVideoCall mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.bottom.right.equalTo(self.view);
+    }];
     
-    float wPreviewVideo;
-    if (SCREEN_WIDTH > 320) {
-        wPreviewVideo = 100.0;
-    }else{
-        wPreviewVideo = 80.0;
-    }
+    [_videoView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.bottom.right.equalTo(viewVideoCall);
+    }];
     
-    //  _videoPreview.clipsToBounds = true;
-    [_videoPreview setFrame: CGRectMake(SCREEN_WIDTH-20-100, 20, 100, 135)];
     _videoPreview.layer.cornerRadius = 10;
     _videoPreview.layer.borderColor = [UIColor whiteColor].CGColor;
     _videoPreview.layer.borderWidth = 1.0;
     _videoPreview.clipsToBounds = YES;
+    [_videoPreview mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(viewVideoCall).offset(appDelegate._hStatus);
+        make.right.equalTo(viewVideoCall).offset(-paddingVideo);
+        make.width.mas_equalTo(100.0);
+        make.height.mas_equalTo(135.0);
+    }];
     
-    _videoView.frame = CGRectMake(0, 0, viewVideoCall.frame.size.width, viewVideoCall.frame.size.height);
+    lbAddressVideoCall.textAlignment = NSTextAlignmentLeft;
+    lbAddressVideoCall.textColor = UIColor.whiteColor;
+    lbAddressVideoCall.font = [UIFont systemFontOfSize:17.0 weight:UIFontWeightBold];
+    [lbAddressVideoCall mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(viewVideoCall).offset(appDelegate._hStatus);
+        make.left.equalTo(viewVideoCall).offset(paddingVideo);
+        make.right.equalTo(_videoPreview).offset(-paddingVideo);
+        make.height.mas_equalTo(50.0);
+    }];
     
-    iconCaptureScreen.frame = CGRectMake((viewVideoCall.frame.size.width-50)/2, viewVideoCall.frame.size.height-50-15, 50.0, 50.0);
+    _lbVideoTime.textAlignment = NSTextAlignmentLeft;
+    _lbVideoTime.textColor = UIColor.whiteColor;
+    _lbVideoTime.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
+    [_lbVideoTime mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(lbAddressVideoCall.mas_bottom).offset(3.0);
+        make.left.equalTo(lbAddressVideoCall);
+        make.right.equalTo(viewVideoCall.mas_centerX);
+        make.height.mas_equalTo(25.0);
+    }];
+    
+    lbVideoQuality.textAlignment = NSTextAlignmentLeft;
+    lbVideoQuality.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
+    [lbVideoQuality mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_lbVideoTime.mas_bottom).offset(3.0);
+        make.left.equalTo(lbAddressVideoCall);
+        make.right.equalTo(viewVideoCall.mas_centerX);
+        make.height.mas_equalTo(25.0);
+    }];
 }
 
 
@@ -1478,13 +1415,9 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 
 - (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
-    if (touch.view == _videoPreview)
-    {
+    if (touch.view == _videoPreview){
         return FALSE;
-    }
-    else
-    {
-
+    }else{
         // here is remove keyBoard code
         return TRUE;
     }
@@ -1533,51 +1466,6 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
         NSLog(@"Cannot toggle video button, because no current call");
     }
     [self displayAudioCall: true];
-}
-
-- (IBAction)iconCaptureScreenClicked:(UIButton *)sender {
-    UIImage *screengrab = [self takeAScreenShot];
-    if (screengrab != nil) {
-        [self.view makeToast:@"Sending......"];
-        [self sendCaptureImageToUser: screengrab];
-    }else{
-        
-    }
-}
-
--(UIImage *)takeAScreenShot {
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    CGSize size = CGSizeMake(_videoView.bounds.size.width*scale, _videoView.bounds.size.height*scale);
-    CGRect rect = CGRectMake(0, 0, size.width, size.height);
-    
-    UIGraphicsBeginImageContextWithOptions(size, NO, 1);
-    [_videoView drawViewHierarchyInRect:rect afterScreenUpdates:NO];
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return image;
-}
-
-
-- (void)sendCaptureImageToUser: (UIImage *)captureImage
-{
-//    NSString *remoteParty = [self getPhoneNumberOfCall];
-//    NSString *idMsgImage = [NSString stringWithFormat:@"userimage_%@", [AppUtils randomStringWithLength: 20]];
-//    NSString *detailURL = [NSString stringWithFormat:@"%@_%@.jpg", USERNAME, [AppUtils randomStringWithLength:20]];
-//
-//    int delivered = 0;
-//    if (appDelegate.xmppStream.isConnected) {
-//        delivered = 1;
-//    }
-//
-//    NSArray *fileNameArr = [AppUtils saveImageToFiles: captureImage withImage: detailURL];
-//    detailURL = [fileNameArr objectAtIndex: 0];
-//    NSString *thumbURL = [fileNameArr objectAtIndex: 1];
-//
-//    int burnMessage = [AppUtils getBurnMessageValueOfRemoteParty: remoteParty];
-//    [NSDatabase saveMessage:USERNAME toPhone:remoteParty withContent:@"" andStatus:NO withDelivered:delivered andIdMsg:idMsgImage detailsUrl:detailURL andThumbUrl:thumbURL withTypeMessage:imageMessage andExpireTime:burnMessage andRoomID:@"" andExtra:nil andDesc:appDelegate.titleCaption];
-//
-//    //  Upload image lên server
-//    [self startUploadImage:captureImage toServerWithMessageId:idMsgImage andName:detailURL];
 }
 
 - (void)enableVideoForCurrentCall {
