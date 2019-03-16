@@ -122,8 +122,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         
         [self presentViewController:mc animated:YES completion:NULL];
     }else{
-        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Can not send email. Please check your email account again!"]
-                    duration:3.0 position:CSToastPositionCenter];
+        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Can not send email. Please check your email account again!"] duration:3.0 position:CSToastPositionCenter];
     }
 }
 
@@ -231,7 +230,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
 {
     if (error) {
-        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Failed to send email. Please check again!"] duration:4.0 position:CSToastPositionCenter];
+        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Can not send email. Please check later!"] duration:4.0 position:CSToastPositionCenter];
     }else{
         [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Your email was sent. Thank you!"] duration:4.0 position:CSToastPositionCenter];
     }

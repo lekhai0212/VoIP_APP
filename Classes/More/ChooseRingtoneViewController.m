@@ -83,7 +83,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.width.height.mas_equalTo(HEADER_ICON_WIDTH);
     }];
     
-    lbTitle.font = [UIFont systemFontOfSize:16.0 weight:UIFontWeightRegular];
+    lbTitle.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
     [lbTitle mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(viewHeader).offset([LinphoneAppDelegate sharedInstance]._hStatus);
         make.bottom.equalTo(viewHeader);

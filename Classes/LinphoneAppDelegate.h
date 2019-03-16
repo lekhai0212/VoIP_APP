@@ -62,8 +62,8 @@ typedef enum eTypeHistory{
 }eTypeHistory;
 
 typedef enum eContact{
-    eContactPBX,
     eContactAll,
+    eContactPBX,
 }eContact;
 
 typedef enum{

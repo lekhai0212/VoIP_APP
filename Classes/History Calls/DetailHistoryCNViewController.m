@@ -106,36 +106,26 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)showContentWithCurrentLanguage {
     if (![AppUtils isNullOrEmpty: phoneNumber]) {
-        PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: phoneNumber];
-        if (![AppUtils isNullOrEmpty:contact.name]) {
-            _lbHeader.text = contact.name;
-        }else{
-            _lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"Calls detail"];
-        }
+        _lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"Calls detail"];
     }
 }
 
 //  Cập nhật view sau khi get xong phone number
 - (void)updateView
 {
-    if ([phoneNumber isEqualToString: hotline]) {
-        _lbName.text = [[LanguageUtil sharedInstance] getContent:@"Hotline"];
-        _imgAvatar.image = [UIImage imageNamed:@"hotline_avatar.png"];
+    PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: phoneNumber];
+    if (![AppUtils isNullOrEmpty:contact.name]) {
+        _lbName.text = contact.name;
     }else{
-        PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: phoneNumber];
-        if (![AppUtils isNullOrEmpty:contact.name]) {
-            _lbName.text = contact.name;
-        }else{
-            _lbName.text = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
-        }
-        
-        if (![AppUtils isNullOrEmpty: contact.avatar]) {
-            _imgAvatar.image = [UIImage imageWithData: [NSData dataFromBase64String: contact.avatar]];
-        }else{
-            _imgAvatar.image = [UIImage imageNamed:@"no_avatar.png"];
-        }
-        lbPhone.text = phoneNumber;
+        _lbName.text = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
     }
+    
+    if (![AppUtils isNullOrEmpty: contact.avatar]) {
+        _imgAvatar.image = [UIImage imageWithData: [NSData dataFromBase64String: contact.avatar]];
+    }else{
+        _imgAvatar.image = [UIImage imageNamed:@"no_avatar.png"];
+    }
+    lbPhone.text = phoneNumber;
     
     // Check section
     [listHistoryCalls removeAllObjects];
@@ -357,7 +347,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         }
         
         if ([aCall._status isEqualToString: aborted_call]){
-            cell.lbCallState.text = [NSString stringWithFormat:@"Bị hủy bỏ"];
+            cell.lbCallState.text = [NSString stringWithFormat:@"Hủy bỏ"];
             
         }else if ([aCall._status isEqualToString: declined_call]){
             cell.lbCallState.text = [NSString stringWithFormat:@"Bị từ chối"];
@@ -468,7 +458,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (IBAction)icDeleteClick:(UIButton *)sender
 {
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"Bạn có muốn xoá lịch sử cuộc gọi?" delegate:self cancelButtonTitle:@"Không" otherButtonTitles:@"Xoá", nil];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:[[LanguageUtil sharedInstance] getContent:@"Do you want to delete call history?"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"No"] otherButtonTitles:[[LanguageUtil sharedInstance] getContent:@"Delete"], nil];
     alertView.delegate = self;
     [alertView show];
 }

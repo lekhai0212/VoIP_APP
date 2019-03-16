@@ -17,11 +17,7 @@
 @interface KContactDetailViewController (){
     LinphoneAppDelegate *appDelegate;
     float hCell;
-    
-    YBHud *waitingHud;
     BOOL isPBXContact;
-    
-    UIButton *btnDelete;
 }
 @end
 
@@ -55,11 +51,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     //  MY CODE HERE
     appDelegate = (LinphoneAppDelegate *)[[UIApplication sharedApplication] delegate];
     [self autoLayoutForView];
-    
-    //  add waiting view
-    waitingHud = [[YBHud alloc] initWithHudType:DGActivityIndicatorAnimationTypeLineScale andText:@""];
-    waitingHud.tintColor = [UIColor whiteColor];
-    waitingHud.dimAmount = 0.5;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -83,15 +74,16 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     [self displayContactInformation];
     [_tbContactInfo reloadData];
-    
-    [btnDelete setTitle:[[LanguageUtil sharedInstance] getContent:@"Delete contact"]
-               forState:UIControlStateNormal];
 }
 
 -(void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     
-    //  [self setupFooterForTableView];
+    if (_tbContactInfo.frame.size.height >= _tbContactInfo.contentSize.height) {
+        _tbContactInfo.scrollEnabled = NO;
+    }else{
+        _tbContactInfo.scrollEnabled = YES;
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -311,28 +303,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     return hCell;
 }
 
-#pragma mark - Alertview Delegate
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 1) {
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Confirm delete this contact", __FUNCTION__] toFilePath:appDelegate.logFilePath];
-        
-        [waitingHud showInView:self.view animated:YES];
-        
-        // Remove khỏi addressbook
-        BOOL result = [ContactUtils deleteContactFromPhoneWithId: detailsContact._id_contact];
-        if(result){
-            [self updateContactListAfterDeleteContact: detailsContact];
-            
-            NSString *msgContent = [[LanguageUtil sharedInstance] getContent:@"Contact has been deleted"];
-            [self.view makeToast:msgContent duration:2.0 position:CSToastPositionCenter];
-        }
-        [waitingHud dismissAnimated:YES];
-
-        [[PhoneMainView instance] popCurrentView];
-    }
-}
-
-
 //  Added by Khai Le on 05/10/2018
 - (int)getRowForSection {
     int result = (int)detailsContact._listPhone.count;
@@ -344,64 +314,6 @@ static UICompositeViewDescription *compositeDescription = nil;
         result = result + 1;
     }
     return result;
-}
-
-- (void)setupFooterForTableView {
-    UIView *footerView = [_tbContactInfo tableFooterView];
-    if (footerView == nil) {
-        float hFooterDefault = 100.0;
-        footerView = [[UIView alloc] init];
-        footerView.backgroundColor = UIColor.greenColor;
-        if (_tbContactInfo.contentSize.height > _tbContactInfo.frame.size.height) {
-            footerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, hFooterDefault);
-            _tbContactInfo.scrollEnabled = YES;
-        }else{
-            float tmpHeight = _tbContactInfo.frame.size.height - _tbContactInfo.contentSize.height;
-            if (tmpHeight <= hFooterDefault) {
-                footerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, hFooterDefault);
-                _tbContactInfo.scrollEnabled = YES;
-            }else{
-                footerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, tmpHeight);
-                _tbContactInfo.scrollEnabled = NO;
-            }
-        }
-        footerView.backgroundColor = UIColor.clearColor;
-        _tbContactInfo.tableFooterView = footerView;
-        
-        btnDelete = [[UIButton alloc] init];
-        btnDelete.backgroundColor = [UIColor colorWithRed:(202/255.0) green:(212/255.0)
-                                                     blue:(223/255.0) alpha:1.0];
-        [btnDelete setTitleColor:UIColor.redColor forState:UIControlStateNormal];
-        [btnDelete setTitle:[[LanguageUtil sharedInstance] getContent:@"Delete contact"]
-                   forState:UIControlStateNormal];
-        btnDelete.titleLabel.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:20.0];
-        [footerView addSubview: btnDelete];
-        
-        [btnDelete mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.bottom.equalTo(footerView).offset(-25.0);
-            make.left.equalTo(footerView).offset(50);
-            make.right.equalTo(footerView).offset(-50);
-            make.height.mas_equalTo(50.0);
-        }];
-        btnDelete.clipsToBounds = YES;
-        btnDelete.layer.cornerRadius = 50.0/2;
-        
-        [btnDelete addTarget:self
-                      action:@selector(btnDeleteContactPressed:)
-            forControlEvents:UIControlEventTouchUpInside];
-    }else{
-        NSLog(@"You setted FooterView for UITableview");
-    }
-}
-
-- (void)btnDeleteContactPressed: (UIButton *)sender
-{
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
-                         toFilePath:appDelegate.logFilePath];
-    
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Delete contact"] message:[[LanguageUtil sharedInstance] getContent:@"Are you sure, you want to delete this contact?"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] otherButtonTitles:[[LanguageUtil sharedInstance] getContent:@"Accept"], nil];
-    alertView.delegate = self;
-    [alertView show];
 }
 
 - (void)onIconCallClicked: (UIButton *)sender

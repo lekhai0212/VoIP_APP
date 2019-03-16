@@ -7,13 +7,10 @@
 //
 
 #import "ContactsViewController.h"
-#import "NewContactViewController.h"
 #import "AllContactsViewController.h"
 #import "PBXContactsViewController.h"
-#import "JSONKit.h"
 #import "StatusBarView.h"
 #import "TabBarView.h"
-#import "PBXContact.h"
 
 @interface ContactsViewController (){
     AllContactsViewController *allContactsVC;
@@ -23,10 +20,6 @@
     float paddingContent;
     
     NSTimer *searchTimer;
-    WebServices *webService;
-    
-    UIActivityIndicatorView *icWaiting;
-    
 }
 @end
 
@@ -64,12 +57,9 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     self.view.backgroundColor = UIColor.clearColor;
     
-    webService = [[WebServices alloc] init];
-    webService.delegate = self;
-    
     [self autoLayoutForMainView];
     
-    currentView = eContactPBX;
+    currentView = eContactAll;
     [self updateStateIconWithView: currentView];
     
     _pageViewController.view.backgroundColor = UIColor.clearColor;
@@ -79,7 +69,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     pbxContactsVC = [[PBXContactsViewController alloc] init];
     allContactsVC = [[AllContactsViewController alloc] init];
     
-    NSArray *viewControllers = [NSArray arrayWithObject:pbxContactsVC];
+    NSArray *viewControllers = [NSArray arrayWithObject:allContactsVC];
     [_pageViewController setViewControllers:viewControllers
                                   direction:UIPageViewControllerNavigationDirectionForward
                                    animated:true completion:nil];
@@ -93,7 +83,6 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.left.right.equalTo(self.view);
         make.bottom.equalTo(self.view);
     }];
-    //  _pageViewController.view.frame = CGRectMake(0, [LinphoneAppDelegate sharedInstance]._hHeader, SCREEN_WIDTH, SCREEN_HEIGHT-[LinphoneAppDelegate sharedInstance]._hStatus-[LinphoneAppDelegate sharedInstance]._hHeader-[LinphoneAppDelegate sharedInstance]._hTabbar);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -131,34 +120,27 @@ static UICompositeViewDescription *compositeDescription = nil;
 #pragma mark – UIPageViewControllerDelegate Method
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController {
-    if (viewController == pbxContactsVC){
-        currentView = eContactPBX;
+    if (viewController == allContactsVC){
+        currentView = eContactAll;
         [self updateStateIconWithView: currentView];
         return nil;
     }else{
-        currentView = eContactAll;
+        currentView = eContactPBX;
         [self updateStateIconWithView: currentView];
-        return pbxContactsVC;
+        return allContactsVC;
     }
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {
-    if (viewController == pbxContactsVC){
-        currentView = eContactPBX;
-        [self updateStateIconWithView: currentView];
-        return allContactsVC;
-    }else{
+    if (viewController == allContactsVC){
         currentView = eContactAll;
+        [self updateStateIconWithView: currentView];
+        return pbxContactsVC;
+    }else{
+        currentView = eContactPBX;
         [self updateStateIconWithView: currentView];
         return nil;
     }
-}
-
-- (IBAction)_iconAddNewClicked:(id)sender {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
-                         toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-    
-    [[PhoneMainView instance] changeCurrentView:[NewContactViewController compositeViewDescription] push: true];
 }
 
 - (IBAction)_iconAllClicked:(id)sender {
@@ -184,13 +166,8 @@ static UICompositeViewDescription *compositeDescription = nil;
     _tfSearch.text = @"";
 }
 
-- (IBAction)_iconSyncPBXContactClicked:(UIButton *)sender {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Start sync contact with account %@", __FUNCTION__, [SipUtils getAccountIdOfDefaultProxyConfig]] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-    
-    [self startSyncPBXContactsForAccount];
-}
-
 - (IBAction)_icClearSearchClicked:(UIButton *)sender {
+    _icClearSearch.hidden = YES;
     _tfSearch.text = @"";
     [[NSNotificationCenter defaultCenter] postNotificationName:searchContactWithValue
                                                         object:_tfSearch.text];
@@ -289,15 +266,6 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.top.right.bottom.equalTo(_tfSearch);
         make.width.mas_equalTo(hTextfield);
     }];
-    
-    icWaiting = [[UIActivityIndicatorView alloc] init];
-    icWaiting.backgroundColor = UIColor.whiteColor;
-    icWaiting.alpha = 0.5;
-    icWaiting.hidden = YES;
-    [self.view addSubview: icWaiting];
-    [icWaiting mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.left.bottom.right.equalTo(self.view);
-    }];
 }
 
 //  Cập nhật trạng thái của các icon trên header
@@ -338,322 +306,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)closeKeyboard {
     [self.view endEditing: YES];
-}
-
-- (void)startSyncPBXContactsForAccount
-{
-    BOOL networkReady = [DeviceUtils checkNetworkAvailable];
-    
-    if (!networkReady) {
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Error: Device can not access to network", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-        
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
-        return;
-    }
-    
-    if ([LinphoneAppDelegate sharedInstance]._isSyncing) {
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] PBX contacts is being synchronized!", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-        
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"PBX contacts is being synchronized!"] duration:2.0 position:CSToastPositionCenter];
-        return;
-    }else{
-        NSString *service = [[NSUserDefaults standardUserDefaults] objectForKey:PBX_SERVER];
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] service = %@", __FUNCTION__, service] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-        
-        if ([service isKindOfClass:[NSNull class]] || service == nil || [service isEqualToString: @""]) {
-            [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"No account"] duration:2.0 position:CSToastPositionCenter];
-            return;
-        }
-        
-        icWaiting.hidden = NO;
-        [icWaiting startAnimating];
-        
-        [LinphoneAppDelegate sharedInstance]._isSyncing = YES;
-        
-        [self getPBXContactsWithServerName: service];
-    }
-}
-
-#pragma mark - WebServices delegate
-- (void)failedToCallWebService:(NSString *)link andError:(NSString *)error {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] link: %@.\nResponse data: %@", __FUNCTION__, link, error] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-    
-    [icWaiting stopAnimating];
-    icWaiting.hidden = YES;
-    
-    if ([link isEqualToString:getServerContacts]) {
-        [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Error"] duration:2.0 position:CSToastPositionCenter];
-    }
-}
-
-- (void)successfulToCallWebService:(NSString *)link withData:(NSDictionary *)data
-{
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] link: %@.\nResponse data: %@", __FUNCTION__, link, @[data]] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-    
-    if ([link isEqualToString:getServerContacts]) {
-        if (data != nil && [data isKindOfClass:[NSArray class]]) {
-            [self whenStartSyncPBXContacts: (NSArray *)data];
-        }
-    }
-}
-
-- (void)receivedResponeCode:(NSString *)link withCode:(int)responeCode {
-    
-}
-
-//  Xử lý pbx contacts trả về
-- (void)whenStartSyncPBXContacts: (NSArray *)data
-{
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        [self savePBXContactInPhoneBook: data];
-        [self getListPhoneWithCurrentContactPBX];
-        dispatch_async(dispatch_get_main_queue(), ^(void){
-            [self syncContactsSuccessfully];
-        });
-    });
-}
-
-- (void)startAnimationForSyncButton: (UIButton *)sender {
-    CABasicAnimation *spin;
-    spin = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
-    [spin setFromValue:@0.0f];
-    [spin setToValue:@(2*M_PI)];
-    [spin setDuration:2.5];
-    [spin setRepeatCount: HUGE_VALF];   // HUGE_VALF means infinite repeatCount
-    
-    [sender.layer addAnimation:spin forKey:@"Spin"];
-}
-
-- (void)getPBXContactsWithServerName: (NSString *)serverName
-{
-    NSMutableDictionary *jsonDict = [[NSMutableDictionary alloc] init];
-    [jsonDict setObject:AuthUser forKey:@"AuthUser"];
-    [jsonDict setObject:AuthKey forKey:@"AuthKey"];
-    [jsonDict setObject:serverName forKey:@"ServerName"];
-    [webService callWebServiceWithLink:getServerContacts withParams:jsonDict];
-    
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] jsonDict = %@", __FUNCTION__, @[jsonDict]] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-}
-
-- (void)savePBXContactInPhoneBook: (NSArray *)pbxData
-{
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
-                         toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-    
-    NSString *pbxContactName = @"";
-    
-    ABAddressBookRef addressListBook = ABAddressBookCreateWithOptions(NULL, NULL);
-    
-    NSArray *arrayOfAllPeople = (__bridge  NSArray *) ABAddressBookCopyArrayOfAllPeople(addressListBook);
-    NSUInteger peopleCounter = 0;
-    
-    BOOL exists = NO;
-    
-    for (peopleCounter = 0; peopleCounter < [arrayOfAllPeople count]; peopleCounter++)
-    {
-        ABRecordRef aPerson = (__bridge ABRecordRef)[arrayOfAllPeople objectAtIndex:peopleCounter];
-        NSString *sipNumber = (__bridge NSString *)ABRecordCopyValue(aPerson, kABPersonFirstNamePhoneticProperty);
-        if (sipNumber != nil && [sipNumber isEqualToString: keySyncPBX]) {
-            pbxContactName = [AppUtils getNameOfContact: aPerson];
-            exists = YES;
-            
-            ABRecordSetValue(aPerson, kABPersonPhoneProperty, nil, nil);
-            BOOL isSaved = ABAddressBookSave (addressListBook, nil);
-            if (isSaved) {
-                NSLog(@"Update thanh cong");
-            }
-            // Phone number
-            ABMutableMultiValueRef multiPhone = ABMultiValueCreateMutable(kABMultiStringPropertyType);
-            for (int iCount=0; iCount<pbxData.count; iCount++) {
-                NSDictionary *dict = [pbxData objectAtIndex: iCount];
-                NSString *name = [dict objectForKey:@"name"];
-                NSString *number = [dict objectForKey:@"number"];
-                
-                ABMultiValueAddValueAndLabel(multiPhone, (__bridge CFTypeRef)(number), (__bridge  CFStringRef)name, NULL);
-            }
-            
-            ABRecordSetValue(aPerson, kABPersonPhoneProperty, multiPhone,nil);
-            isSaved = ABAddressBookSave (addressListBook, nil);
-            if (isSaved) {
-                NSLog(@"Update thanh cong");
-            }
-        }
-    }
-    if (!exists) {
-        [self addContactsWithData:pbxData withContactName:nameContactSyncPBX andCompany:nameSyncCompany];
-    }
-}
-
-//  Thêm mới contact
-- (void)addContactsWithData: (NSArray *)pbxData withContactName: (NSString *)contactName andCompany: (NSString *)company
-{
-    NSString *strEmail = @"";
-    
-    NSString *strAvatar = @"";
-    UIImage *logoImage = [UIImage imageNamed:@"logo"];
-    NSData *avatarData = UIImagePNGRepresentation(logoImage);
-    if (avatarData != nil) {
-        if ([avatarData respondsToSelector:@selector(base64EncodedStringWithOptions:)]) {
-            strAvatar = [avatarData base64EncodedStringWithOptions: 0];
-        } else {
-            strAvatar = [avatarData base64Encoding];
-        }
-    }
-    
-    ABRecordRef aRecord = ABPersonCreate();
-    CFErrorRef  anError = NULL;
-    
-    // Lưu thông tin
-    ABRecordSetValue(aRecord, kABPersonFirstNameProperty, (__bridge CFTypeRef)(contactName), &anError);
-    ABRecordSetValue(aRecord, kABPersonLastNameProperty, (__bridge CFTypeRef)(@""), &anError);
-    ABRecordSetValue(aRecord, kABPersonOrganizationProperty, (__bridge CFTypeRef)(company), &anError);
-    ABRecordSetValue(aRecord, kABPersonFirstNamePhoneticProperty, (__bridge CFTypeRef)(keySyncPBX), &anError);
-    
-    ABMutableMultiValueRef email = ABMultiValueCreateMutable(kABMultiStringPropertyType);
-    ABMultiValueAddValueAndLabel(email, (__bridge CFTypeRef)(strEmail), CFSTR("email"), NULL);
-    ABRecordSetValue(aRecord, kABPersonEmailProperty, email, &anError);
-    
-    if (avatarData != nil) {
-        CFDataRef cfdata = CFDataCreate(NULL,[avatarData bytes], [avatarData length]);
-        ABPersonSetImageData(aRecord, cfdata, &anError);
-    }
-    
-    // Phone number
-    //  NSMutableArray *listPhone = [[NSMutableArray alloc] init];
-    ABMutableMultiValueRef multiPhone = ABMultiValueCreateMutable(kABMultiStringPropertyType);
-    
-    for (int iCount=0; iCount<pbxData.count; iCount++) {
-        NSDictionary *dict = [pbxData objectAtIndex: iCount];
-        NSString *name = [dict objectForKey:@"name"];
-        NSString *number = [dict objectForKey:@"number"];
-        
-        ABMultiValueAddValueAndLabel(multiPhone, (__bridge CFTypeRef)(number), (__bridge  CFStringRef)name, NULL);
-    }
-    
-    ABRecordSetValue(aRecord, kABPersonPhoneProperty, multiPhone,nil);
-    CFRelease(multiPhone);
-    
-    // Instant Message
-    NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                @"SIP", (NSString*)kABPersonInstantMessageServiceKey,
-                                @"", (NSString*)kABPersonInstantMessageUsernameKey, nil];
-    CFStringRef label = NULL; // in this case 'IM' will be set. But you could use something like = CFSTR("Personal IM");
-    CFErrorRef errorf = NULL;
-    ABMutableMultiValueRef values =  ABMultiValueCreateMutable(kABMultiDictionaryPropertyType);
-    BOOL didAdd = ABMultiValueAddValueAndLabel(values, (__bridge CFTypeRef)(dictionary), label, NULL);
-    BOOL didSet = ABRecordSetValue(aRecord, kABPersonInstantMessageProperty, values, &errorf);
-    if (!didAdd || !didSet) {
-        CFStringRef errorDescription = CFErrorCopyDescription(errorf);
-        NSLog(@"%s error %@ while inserting multi dictionary property %@ into ABRecordRef", __FUNCTION__, dictionary, errorDescription);
-        CFRelease(errorDescription);
-    }
-    CFRelease(values);
-    
-    //Address
-    ABMutableMultiValueRef address = ABMultiValueCreateMutable(kABMultiDictionaryPropertyType);
-    NSMutableDictionary *addressDict = [[NSMutableDictionary alloc] init];
-    [addressDict setObject:@"" forKey:(NSString *)kABPersonAddressStreetKey];
-    [addressDict setObject:@"" forKey:(NSString *)kABPersonAddressZIPKey];
-    [addressDict setObject:@"" forKey:(NSString *)kABPersonAddressStateKey];
-    [addressDict setObject:@"" forKey:(NSString *)kABPersonAddressCityKey];
-    [addressDict setObject:@"" forKey:(NSString *)kABPersonAddressCountryKey];
-    ABMultiValueAddValueAndLabel(address, (__bridge CFTypeRef)(addressDict), kABWorkLabel, NULL);
-    ABRecordSetValue(aRecord, kABPersonAddressProperty, address, &anError);
-    
-    if (anError != NULL) {
-        NSLog(@"error while creating..");
-    }
-    
-    ABAddressBookRef addressBook;
-    CFErrorRef error = NULL;
-    addressBook = ABAddressBookCreateWithOptions(nil, &error);
-    
-    BOOL isAdded = ABAddressBookAddRecord (addressBook,aRecord,&error);
-    
-    if(isAdded){
-        NSLog(@"added..");
-    }
-    if (error != NULL) {
-        NSLog(@"ABAddressBookAddRecord %@", error);
-    }
-    error = NULL;
-    
-    BOOL isSaved = ABAddressBookSave (addressBook,&error);
-    if(isSaved){
-        NSLog(@"saved..");
-    }
-    
-    if (error != NULL) {
-        NSLog(@"ABAddressBookSave %@", error);
-    }
-}
-
-- (void)getListPhoneWithCurrentContactPBX {
-    if ([LinphoneAppDelegate sharedInstance].pbxContacts == nil) {
-        [LinphoneAppDelegate sharedInstance].pbxContacts = [[NSMutableArray alloc] init];
-    }
-    [[LinphoneAppDelegate sharedInstance].pbxContacts removeAllObjects];
-    
-    ABAddressBookRef addressListBook = ABAddressBookCreateWithOptions(NULL, NULL);
-    NSArray *arrayOfAllPeople = (__bridge  NSArray *) ABAddressBookCopyArrayOfAllPeople(addressListBook);
-    for (int peopleCounter = (int)arrayOfAllPeople.count-1; peopleCounter >= 0; peopleCounter--)
-    {
-        ABRecordRef aPerson = (__bridge ABRecordRef)[arrayOfAllPeople objectAtIndex:peopleCounter];
-        
-        ABRecordID idContact = ABRecordGetRecordID(aPerson);
-        NSLog(@"-----id: %d", idContact);
-        
-        NSString *sipNumber = (__bridge NSString *)ABRecordCopyValue(aPerson, kABPersonFirstNamePhoneticProperty);
-        if (sipNumber != nil && [sipNumber isEqualToString: keySyncPBX])
-        {
-            ABMultiValueRef phones = ABRecordCopyValue(aPerson, kABPersonPhoneProperty);
-            if (ABMultiValueGetCount(phones) > 0)
-            {
-                for(CFIndex j = 0; j < ABMultiValueGetCount(phones); j++)
-                {
-                    CFStringRef phoneNumberRef = ABMultiValueCopyValueAtIndex(phones, j);
-                    CFStringRef locLabel = ABMultiValueCopyLabelAtIndex(phones, j);
-                    
-                    NSString *curPhoneValue = (__bridge NSString *)phoneNumberRef;
-                    curPhoneValue = [[curPhoneValue componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""];
-                    
-                    NSString *nameValue = (__bridge NSString *)locLabel;
-                    
-                    if (curPhoneValue != nil && nameValue != nil) {
-                        PBXContact *aContact = [[PBXContact alloc] init];
-                        aContact._name = nameValue;
-                        aContact._number = curPhoneValue;
-                        
-                        [[LinphoneAppDelegate sharedInstance].pbxContacts addObject: aContact];
-                    }
-                }
-                [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:idContact]
-                                                          forKey:PBX_ID_CONTACT];
-                [[NSUserDefaults standardUserDefaults] synchronize];
-            }
-        }
-    }
-}
-
-//  Thông báo kết thúc sync contacts
-- (void)syncContactsSuccessfully
-{
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:syncPBXContactsFinish object:nil];
-    
-    [icWaiting stopAnimating];
-    icWaiting.hidden = YES;
-    
-    [[LinphoneAppDelegate sharedInstance] set_isSyncing: false];
-    //  [_iconSyncPBXContact.layer removeAllAnimations];
-    
-    [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Successful"] duration:2.0 position:CSToastPositionCenter];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:searchContactWithValue
-                                                        object:_tfSearch.text];
 }
 
 @end

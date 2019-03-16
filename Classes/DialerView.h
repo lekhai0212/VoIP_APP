@@ -27,7 +27,7 @@
 
 @class UICallButton;
 @interface DialerView
-	: TPMultiLayoutViewController <UITextFieldDelegate, UICompositeViewDelegate, UIGestureRecognizerDelegate, UIActionSheetDelegate, UICallButtonDelegate, UIAlertViewDelegate, UITextViewDelegate, SearchContactPopupViewDelegate, WebServicesDelegate> {
+	: TPMultiLayoutViewController <UITextFieldDelegate, UICompositeViewDelegate, UIGestureRecognizerDelegate, UICallButtonDelegate, UIAlertViewDelegate, SearchContactPopupViewDelegate, WebServicesDelegate> {
 }
 
 

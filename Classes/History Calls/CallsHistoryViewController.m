@@ -110,6 +110,14 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     // Fake event
     [[NSNotificationCenter defaultCenter] postNotificationName:kLinphoneCallUpdate object:self];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showDeleteCallHistory:)
+                                                 name:showOrHideDeleteCallHistoryButton object:nil];
+}
+
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear: animated];
+    [[NSNotificationCenter defaultCenter] removeObserver: self];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -159,6 +167,17 @@ static UICompositeViewDescription *compositeDescription = nil;
                                                         object:[NSNumber numberWithInt:(int)_btnEdit.tag]];
 }
 
+- (void)showDeleteCallHistory: (NSNotification *)notif {
+    if ([notif.object isKindOfClass:[NSString class]]) {
+        NSString *value = [notif object];
+        if ([value isEqualToString:@"1"]) {
+            _btnEdit.hidden = NO;
+        }else{
+            _btnEdit.hidden = YES;
+        }
+    }
+}
+
 #pragma mark – UIPageViewControllerDelegate Method
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController {
@@ -188,8 +207,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 #pragma mark - My functions
 
 - (void)showContentWithCurrentLanguage {
-    [_iconAll setTitle:[[LanguageUtil sharedInstance] getContent:@"All"] forState:UIControlStateNormal];
-    [_iconMissed setTitle:[[LanguageUtil sharedInstance] getContent:@"Missed"] forState:UIControlStateNormal];
+    [_iconAll setTitle:[[LanguageUtil sharedInstance] getContent:@"All history"] forState:UIControlStateNormal];
+    [_iconMissed setTitle:[[LanguageUtil sharedInstance] getContent:@"Missed history"] forState:UIControlStateNormal];
 }
 
 //  Reset lại các UI khi vào màn hình
@@ -252,7 +271,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     _iconAll.backgroundColor = UIColor.clearColor;
     _iconAll.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-    [_iconAll setTitle:[[LanguageUtil sharedInstance] getContent:@"All"] forState:UIControlStateNormal];
+    [_iconAll setTitle:[[LanguageUtil sharedInstance] getContent:@"All history"] forState:UIControlStateNormal];
     [_iconAll setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     _iconAll.titleLabel.font = [UIFont systemFontOfSize:16.0 weight:UIFontWeightBold];
     [_iconAll mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -264,7 +283,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     _iconMissed.backgroundColor = UIColor.clearColor;
     _iconMissed.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [_iconMissed setTitle:[[LanguageUtil sharedInstance] getContent:@"Missed"] forState:UIControlStateNormal];
+    [_iconMissed setTitle:[[LanguageUtil sharedInstance] getContent:@"Missed history"] forState:UIControlStateNormal];
     [_iconMissed setTitleColor:[UIColor colorWithRed:(220/255.0) green:(220/255.0)
                                                 blue:(220/255.0) alpha:1.0]
                       forState:UIControlStateNormal];

@@ -19,10 +19,6 @@
                     <rect key="frame" x="0.0" y="292" width="375" height="375"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 </imageView>
-                <imageView clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launch_logo.png" id="P8D-kY-xHP" userLabel="bottomBarImage">
-                    <rect key="frame" x="116" y="621" width="142" height="26"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                </imageView>
                 <view contentMode="scaleAspectFit" id="4JK-Mw-ZzG">
                     <rect key="frame" x="57" y="75" width="261" height="285"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
@@ -40,16 +36,20 @@
                         </label>
                     </subviews>
                 </view>
+                <imageView clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_color.png" id="P8D-kY-xHP" userLabel="bottomBarImage">
+                    <rect key="frame" x="116" y="621" width="142" height="26"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                </imageView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="-220.80000000000001" y="850.07496251874068"/>
+            <point key="canvasLocation" x="-467" y="810"/>
         </view>
     </objects>
     <resources>
         <image name="lauch_icon.png" width="626" height="626"/>
         <image name="launch_bg.png" width="1280" height="1280"/>
-        <image name="launch_logo.png" width="152" height="40"/>
+        <image name="logo_color.png" width="500" height="132"/>
     </resources>
 </document>

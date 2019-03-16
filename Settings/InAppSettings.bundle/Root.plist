@@ -12,14 +12,6 @@
 		</dict>
 		<dict>
 			<key>Key</key>
-			<string>assistant_button</string>
-			<key>Title</key>
-			<string>Run assistant</string>
-			<key>Type</key>
-			<string>IASKButtonSpecifier</string>
-		</dict>
-		<dict>
-			<key>Key</key>
 			<string>menu_account_1</string>
 			<key>File</key>
 			<string>Account</string>

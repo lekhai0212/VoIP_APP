@@ -47,7 +47,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     [WriteLogsUtils writeForGoToScreen:@"AboutViewController"];
     
     linkToAppStore = @"";
-    lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"About"];
+    lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"App information"];
     [btnCheckForUpdate setTitle:[[LanguageUtil sharedInstance] getContent:@"Check for update"] forState:UIControlStateNormal];
     
     NSString *str = [NSString stringWithFormat:@"%@: %@\n%@: %@", [[LanguageUtil sharedInstance] getContent:@"Version"], [AppUtils getAppVersionWithBuildVersion: YES], [[LanguageUtil sharedInstance] getContent:@"Release date"], [AppUtils getBuildDate]];
@@ -117,12 +117,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 //  setup ui trong view
 - (void)setupUIForView
 {
-    if (SCREEN_WIDTH > 320) {
-        lbHeader.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:20.0];
-    }else{
-        lbHeader.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
-    }
-    
     //  header view
     [viewHeader mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self.view);
@@ -133,6 +127,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.top.left.bottom.right.equalTo(viewHeader);
     }];
     
+    lbHeader.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
     [lbHeader mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(viewHeader).offset([LinphoneAppDelegate sharedInstance]._hStatus);
         make.bottom.equalTo(viewHeader);

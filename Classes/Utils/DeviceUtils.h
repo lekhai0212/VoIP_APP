@@ -22,5 +22,6 @@
 + (void)testChangeCamera;
 + (float)getHeightLogoWelcomeForDevice;
 + (UIEdgeInsets)getEdgeOfVideoCallDialerForDevice;
++ (float)getHeightSearchViewContactForDevice;
 
 @end

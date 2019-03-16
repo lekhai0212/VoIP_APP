@@ -47,6 +47,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import <OpenGLES/EAGLDrawable.h>
 #import "UploadPicture.h"
+#import <AVFoundation/AVFoundation.h>
 
 void message_received(LinphoneCore *lc, LinphoneChatRoom *room, const LinphoneAddress *from, const char *message) {
     printf(" Message [%s] received from [%s] \n",message,linphone_address_as_string (from));
@@ -56,9 +57,12 @@ const NSInteger SECURE_BUTTON_TAG = 5;
 
 @interface CallView (){
     BOOL isAudioCall;
+    float wAvatar;
+    float wEndIcon;
+    float wSmallIcon;
+    float marginIcon;
     
     LinphoneAppDelegate *appDelegate;
-    UIFont *textFont;
     
     float marginX;
     
@@ -84,8 +88,9 @@ const NSInteger SECURE_BUTTON_TAG = 5;
     UIImageView *icWaveVideo;
     UIImageView *icOffCameraForPreview;
     
-    UIButton *testSpeakerAudio;
-    UIButton *testSpeakerVideo;
+    UIButton *btnMic;
+    
+    AVCaptureDevice *defaultDevice;
 }
 
 @end
@@ -139,6 +144,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 	_routesEarpieceButton.enabled = !IPAD;
 
+    defaultDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    
 // TODO: fixme! video preview frame is too big compared to openGL preview
 // frame, so until this is fixed, temporary disabled it.
 #if 0
@@ -190,58 +197,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     //  Add ney by Khai Le on 09/11/2017
     appDelegate = (LinphoneAppDelegate *)[[UIApplication sharedApplication] delegate];
     [speakerButton setHidden: YES];
-    
-    testSpeakerAudio = [[UIButton alloc] init];
-    [testSpeakerAudio setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
-    [testSpeakerAudio addTarget:self
-                         action:@selector(speakerOnAudioCall)
-               forControlEvents:UIControlEventTouchUpInside];
-    [callView addSubview: testSpeakerAudio];
-    [testSpeakerAudio mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(callView).offset(50.0);
-        make.left.equalTo(callView).offset(50.0);
-        make.width.height.mas_equalTo(50.0);
-    }];
-    
-    testSpeakerVideo = [[UIButton alloc] init];
-    [testSpeakerVideo setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
-    [testSpeakerVideo addTarget:self
-                         action:@selector(speakerOnVideoCall)
-               forControlEvents:UIControlEventTouchUpInside];
-    [viewVideoCall addSubview: testSpeakerVideo];
-    [testSpeakerVideo mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(viewVideoCall).offset(50.0);
-        make.left.equalTo(viewVideoCall).offset(50.0);
-        make.width.height.mas_equalTo(50.0);
-    }];
-}
-
-- (void)speakerOnAudioCall {
-    BOOL isEnabled = LinphoneManager.instance.speakerEnabled;
-    NSLog(@"KL test: current state: %d", isEnabled);
-    if (isEnabled) {
-        NSLog(@"KL test: set speaker is NO");
-        [testSpeakerAudio setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
-        [LinphoneManager.instance setSpeakerEnabled: NO];
-    }else{
-        NSLog(@"KL test: set speaker is YES");
-        [testSpeakerAudio setImage:[UIImage imageNamed:@"speaker_enable"] forState:UIControlStateNormal];
-        [LinphoneManager.instance setSpeakerEnabled: YES];
-    }
-}
-
-- (void)speakerOnVideoCall {
-    BOOL isEnabled = LinphoneManager.instance.speakerEnabled;
-    NSLog(@"KL test: current state: %d", isEnabled);
-    if (isEnabled) {
-        NSLog(@"KL test: set speaker is NO");
-        [testSpeakerVideo setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
-        [LinphoneManager.instance setSpeakerEnabled: NO];
-    }else{
-        NSLog(@"KL test: set speaker is YES");
-        [testSpeakerVideo setImage:[UIImage imageNamed:@"speaker_enable"] forState:UIControlStateNormal];
-        [LinphoneManager.instance setSpeakerEnabled: YES];
-    }
 }
 
 - (void)dealloc {
@@ -296,8 +251,13 @@ static UICompositeViewDescription *compositeDescription = nil;
 
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(callEnded)
                                                name:@"callEnded" object:nil];
+    
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(CallConnectedSuccessful)
                                                name:@"CallConnectedSuccessful" object:nil];
+    
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(updateStateForSpekearButton)
+                                               name:speakerEnabledForVideoCall object:nil];
+    
     
 	durationTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self
                                                    selector:@selector(callDurationUpdate)
@@ -312,15 +272,17 @@ static UICompositeViewDescription *compositeDescription = nil;
             [self enableVideoForCurrentCall];
             
             if (LinphoneManager.instance.speakerEnabled) {
-                [testSpeakerVideo setImage:[UIImage imageNamed:@"speaker_enable"] forState:UIControlStateNormal];
+                [btnSpeakerVideo setImage:[UIImage imageNamed:@"speaker_enable"] forState:UIControlStateNormal];
             }else{
-                [testSpeakerVideo setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
+                [btnSpeakerVideo setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
             }
         }else{
             if (LinphoneManager.instance.speakerEnabled) {
-                [testSpeakerAudio setImage:[UIImage imageNamed:@"speaker_enable"] forState:UIControlStateNormal];
+                [speakerButton setImage:[UIImage imageNamed:@"speaker_enable"]
+                               forState:UIControlStateNormal];
             }else{
-                [testSpeakerAudio setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
+                [speakerButton setImage:[UIImage imageNamed:@"speaker_normal"]
+                               forState:UIControlStateNormal];
             }
         }
     }
@@ -336,7 +298,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         UIDevice.currentDevice.proximityMonitoringEnabled = YES;
     }else{
         [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
-        UIDevice.currentDevice.proximityMonitoringEnabled = YES;
+        UIDevice.currentDevice.proximityMonitoringEnabled = NO;
     }
 
 	[PhoneMainView.instance setVolumeHidden:TRUE];
@@ -596,6 +558,27 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     if (duration > 0) {
         [self callQualityUpdate];
     }
+    
+    //  MSVideoSize receivedVideoSize = linphone_core_get_preferred_video_size(LC);
+//    MSVideoSize receivedVideoSize = linphone_call_params_get_received_video_size(linphone_call_get_remote_params((LinphoneCall*)list->data));
+//    NSLog(@"%d - %d", receivedVideoSize.width, receivedVideoSize.height);
+    
+//    MSVideoSize sent = linphone_call_params_get_sent_video_size(linphone_call_get_remote_params((LinphoneCall*)list->data));
+//    NSLog(@"sent: %d - %d", sent.width, sent.height);
+    
+    
+//    BOOL capture_enabled =  linphone_core_video_capture_enabled(LC);
+//    NSLog(@"capture_enabled = %d", capture_enabled);
+//
+//    BOOL display_enabled =  linphone_core_video_display_enabled(LC);
+//    NSLog(@"display_enabled = %d", display_enabled);
+    
+//    BOOL video_enabled =  linphone_core_video_enabled(LC);
+//    NSLog(@"video_enabled = %d", video_enabled);
+    
+    LinphoneCall *currentCall = linphone_core_get_current_call(LC);
+    MSVideoSize videoSize = linphone_call_params_get_received_video_size(linphone_call_get_current_params(currentCall));
+    NSLog(@"videoSize: %d - %d", videoSize.width, videoSize.height);
 }
 
 //  Call quality
@@ -1329,12 +1312,7 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 }
 
 - (void)setupUIForView {
-    
-    if (SCREEN_WIDTH > 320) {
-        textFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
-    }else{
-        textFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
-    }
+    [self setupSizeWithDevice];
     
     //  Audio call view
     [callView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -1345,15 +1323,16 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
         make.top.left.bottom.right.equalTo(callView);
     }];
     
-    avatarImage.clipsToBounds = YES;
-    avatarImage.layer.borderColor = UIColor.whiteColor.CGColor;
-    avatarImage.layer.borderWidth = 2.0;
-    avatarImage.layer.cornerRadius = 120/2;
     [avatarImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(callView.mas_centerX);
         make.centerY.equalTo(callView.mas_centerY);
-        make.width.height.mas_equalTo(120.0);
+        make.width.height.mas_equalTo(wAvatar);
     }];
+    avatarImage.backgroundColor = UIColor.redColor;
+    avatarImage.clipsToBounds = YES;
+    avatarImage.layer.borderColor = UIColor.whiteColor.CGColor;
+    avatarImage.layer.borderWidth = 2.0;
+    avatarImage.layer.cornerRadius = wAvatar/2;
     
     _lbQuality.font = [UIFont systemFontOfSize:16.0 weight:UIFontWeightThin];
     [_lbQuality setTextColor: [UIColor whiteColor]];
@@ -1388,43 +1367,44 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
         make.height.mas_equalTo(30);
     }];
 
-    float marginIcon = 10.0;
     [hangupButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(callView.mas_centerX);
         make.bottom.equalTo(callView).offset(-40.0);
-        make.width.height.mas_equalTo(70.0);
+        make.width.height.mas_equalTo(wEndIcon);
     }];
     [hangupButton addTarget:self
                      action:@selector(btnHangupButtonPressed)
            forControlEvents:UIControlEventTouchUpInside];
     
     [speakerButton setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
-    [speakerButton setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateDisabled];
-    speakerButton.delegate = self;
+    [speakerButton setImage:[UIImage imageNamed:@"speaker_dis"] forState:UIControlStateDisabled];
+    [speakerButton addTarget:self
+                      action:@selector(onSpeakerButtonPress:)
+            forControlEvents:UIControlEventTouchUpInside];
     [speakerButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(hangupButton.mas_centerY);
         make.right.equalTo(hangupButton.mas_left).offset(-marginIcon);
-        make.width.height.mas_equalTo(55.0);
+        make.width.height.mas_equalTo(wSmallIcon);
     }];
     
     microButton.delegate = self;
     [microButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(speakerButton);
         make.right.equalTo(speakerButton.mas_left).offset(-marginIcon);
-        make.width.mas_equalTo(55.0);
+        make.width.mas_equalTo(wSmallIcon);
     }];
     
     callPauseButton.delegate = self;
     [callPauseButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(speakerButton);
         make.left.equalTo(hangupButton.mas_right).offset(marginIcon);
-        make.width.mas_equalTo(55.0);
+        make.width.mas_equalTo(wSmallIcon);
     }];
     
     [numpadButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(speakerButton);
         make.left.equalTo(callPauseButton.mas_right).offset(marginIcon);
-        make.width.mas_equalTo(55.0);
+        make.width.mas_equalTo(wSmallIcon);
     }];
     
     //  video call view
@@ -1477,43 +1457,45 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
         make.height.mas_equalTo(25.0);
     }];
     
-    
+    btnOffCamera.tag = 0;
     [btnOffCamera mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(viewVideoCall.mas_centerX);
         make.bottom.equalTo(viewVideoCall).offset(-20.0);
-        make.width.height.mas_equalTo(55.0);
+        make.width.height.mas_equalTo(wSmallIcon);
     }];
     
-    btnSpeakerVideo.delegate = self;
+    [btnSpeakerVideo setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
+    [btnSpeakerVideo setImage:[UIImage imageNamed:@"speaker_dis"] forState:UIControlStateDisabled];
     [btnSpeakerVideo mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(btnOffCamera.mas_centerY);
         make.right.equalTo(btnOffCamera.mas_left).offset(-marginIcon);
-        make.width.height.mas_equalTo(55.0);
+        make.width.height.mas_equalTo(wSmallIcon);
     }];
     
-    btnMicroVideo.delegate = self;
+    [btnMicroVideo setImage:[UIImage imageNamed:@"mute_normal"] forState:UIControlStateNormal];
+    [btnMicroVideo setImage:[UIImage imageNamed:@"mute_dis"] forState:UIControlStateDisabled];
     [btnMicroVideo mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(btnSpeakerVideo.mas_centerY);
         make.right.equalTo(btnSpeakerVideo.mas_left).offset(-marginIcon);
-        make.width.height.mas_equalTo(55.0);
+        make.width.height.mas_equalTo(wSmallIcon);
     }];
     
     [btnSwitchCamera mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(btnOffCamera.mas_centerY);
         make.left.equalTo(btnOffCamera.mas_right).offset(marginIcon);
-        make.width.height.mas_equalTo(55.0);
+        make.width.height.mas_equalTo(wSmallIcon);
     }];
     
     [btnKeypadVideo mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(btnSwitchCamera.mas_centerY);
         make.left.equalTo(btnSwitchCamera.mas_right).offset(marginIcon);
-        make.width.height.mas_equalTo(55.0);
+        make.width.height.mas_equalTo(wSmallIcon);
     }];
     
     [btnHangupVideo mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(viewVideoCall.mas_centerX);
         make.bottom.equalTo(btnOffCamera.mas_top).offset(-marginIcon);
-        make.width.height.mas_equalTo(70.0);
+        make.width.height.mas_equalTo(wEndIcon);
     }];
 }
 
@@ -1522,6 +1504,17 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 - (void)btnHangupButtonPressed {
     // Bien cho biết mình kết thúc cuộc gọi
     appDelegate._meEnded = YES;
+}
+
+- (void)onSpeakerButtonPress: (UIButton *)sender {
+    BOOL isEnabled = LinphoneManager.instance.speakerEnabled;
+    if (isEnabled) {
+        [sender setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
+        [LinphoneManager.instance setSpeakerEnabled: NO];
+    }else{
+        [sender setImage:[UIImage imageNamed:@"speaker_enable"] forState:UIControlStateNormal];
+        [LinphoneManager.instance setSpeakerEnabled: YES];
+    }
 }
 
 - (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
@@ -1643,12 +1636,101 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 }
 
 - (IBAction)btnMicroVideoClick:(id)sender {
+    BOOL micEnable = linphone_core_mic_enabled(LC);
+    if (micEnable) {
+        linphone_core_enable_mic(LC, false);
+        [sender setImage:[UIImage imageNamed:@"mute_enable"] forState:UIControlStateNormal];
+    }else{
+        linphone_core_enable_mic(LC, true);
+        [sender setImage:[UIImage imageNamed:@"mute_normal"] forState:UIControlStateNormal];
+    }
+}
+
+- (void)updateStateForSpekearButton {
+    [btnSpeakerVideo setImage:[UIImage imageNamed:@"speaker_enable"] forState:UIControlStateNormal];
 }
 
 - (IBAction)btnSpeakerVideoClick:(id)sender {
+    BOOL isEnabled = LinphoneManager.instance.speakerEnabled;
+    if (isEnabled) {
+        [sender setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
+        [LinphoneManager.instance setSpeakerEnabled: NO];
+    }else{
+        [sender setImage:[UIImage imageNamed:@"speaker_enable"] forState:UIControlStateNormal];
+        [LinphoneManager.instance setSpeakerEnabled: YES];
+    }
 }
 
-- (IBAction)btnOffCameraClick:(id)sender {
+- (IBAction)btnOffCameraClick:(UIButton *)sender {
+    if (sender.tag == 0) {
+        linphone_core_enable_video_preview(LC, NO);
+        linphone_call_enable_camera(linphone_core_get_current_call(LC), NO);
+        sender.tag = 1;
+        
+//        if (!linphone_core_video_display_enabled(LC)){
+//            return;
+//        }
+//        NSError *error = nil;
+//        [defaultDevice lockForConfiguration:&error];
+//
+//        if (error == nil) {
+//            defaultDevice.torchMode = AVCaptureTorchModeOff;
+//        }
+//        [defaultDevice unlockForConfiguration];
+
+    }else{
+        linphone_core_enable_video_preview(LC, YES);
+        linphone_call_enable_camera(linphone_core_get_current_call(LC), YES);
+        sender.tag = 0;
+//
+//        if (!linphone_core_video_display_enabled(LC)){
+//            return;
+//        }
+//        NSError *error = nil;
+//        [defaultDevice lockForConfiguration:&error];
+//
+//        if (error == nil) {
+//            defaultDevice.torchMode = AVCaptureTorchModeOn;
+//        }
+//        [defaultDevice unlockForConfiguration];
+    }
+    return;
+    
+    if (sender.tag == 0) {
+        if (!linphone_core_video_display_enabled(LC)){
+            return;
+        }
+        LinphoneCall *call = linphone_core_get_current_call(LC);
+        if (call) {
+            LinphoneCallParams *call_params = linphone_core_create_call_params(LC,call);
+            linphone_call_params_enable_video(call_params, FALSE);
+            linphone_core_update_call(LC, call, call_params);
+            linphone_call_accept_update(call, call_params);
+            linphone_call_params_destroy(call_params);
+            
+            sender.tag = 1;
+            [sender setImage:[UIImage imageNamed:@"cam_enable"] forState:UIControlStateNormal];
+        }
+    }else{
+        if (!linphone_core_video_display_enabled(LC)){
+            return;
+        }
+        LinphoneCall *call = linphone_core_get_current_call(LC);
+        if (call) {
+            LinphoneCallAppData *callAppData = (__bridge LinphoneCallAppData *)linphone_call_get_user_pointer(call);
+            callAppData->videoRequested = TRUE; /* will be used later to notify user if video was not activated because of the linphone core*/
+            //  LinphoneCallParams *call_params = linphone_core_create_call_params(LC,call);
+            LinphoneCallParams* call_params = linphone_call_params_copy(linphone_call_get_current_params(call));
+            
+            linphone_call_params_enable_video(call_params, TRUE);
+            linphone_core_update_call(LC, call, call_params);
+            linphone_call_accept_update(call, call_params);
+            linphone_call_params_destroy(call_params);
+            
+            sender.tag = 0;
+            [sender setImage:[UIImage imageNamed:@"cam_normal"] forState:UIControlStateNormal];
+        }
+    }
 }
 
 - (IBAction)btnSwitchCameraClick:(id)sender {
@@ -1659,4 +1741,37 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 
 - (IBAction)btnHangupVideoClick:(id)sender {
 }
+
+- (void)setupSizeWithDevice {
+    NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
+    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE] || [deviceMode isEqualToString: simulator])
+    {
+        //  Screen width: 320.000000 - Screen height: 667.000000
+        wAvatar = 120.0;
+        
+    }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
+    {
+        wAvatar = 130.0;
+        wEndIcon = 70.0;
+        wSmallIcon = 55.0;
+        marginIcon = 10.0;
+        
+    }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
+    {
+        wAvatar = 150.0;
+        wEndIcon = 75.0;
+        wSmallIcon = 58.0;
+        marginIcon = 12.0;
+        
+    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS]){
+        //  Screen width: 375.000000 - Screen height: 812.000000
+        
+    }else if ([deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2]){
+        //  Screen width: 375.000000 - Screen height: 812.000000
+        
+    }else{
+        
+    }
+}
+
 @end

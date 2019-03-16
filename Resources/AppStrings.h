@@ -21,7 +21,11 @@
 #define VIDEO_CALL_TYPE 2
 
 
-#define getDIDListForCall       @"getDIDListForCall"
+#define getDIDListForCall                   @"getDIDListForCall"
+#define speakerEnabledForVideoCall          @"speakerEnabledForVideoCall"
+#define showOrHideDeleteCallHistoryButton   @"showOrHideDeleteCallHistoryButton"
+
+
 #pragma mark - API
 
 #define link_api            @"https://api.cloudcall.vn"

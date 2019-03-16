@@ -53,6 +53,7 @@
     }];
     
     name.backgroundColor = UIColor.clearColor;
+    name.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     [name mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(image);
         make.left.equalTo(image.mas_right).offset(10.0);
@@ -61,6 +62,7 @@
     }];
     
     phone.backgroundColor = UIColor.clearColor;
+    phone.textColor = UIColor.darkGrayColor;
     [phone mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(name.mas_bottom);
         make.left.right.equalTo(name);
@@ -75,15 +77,12 @@
         make.height.mas_equalTo(1.0);
     }];
     
+    name.font = [UIFont fontWithName:MYRIADPRO_BOLD size:17.0];
+    phone.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:15.0];
+    
     if (IS_IPHONE || IS_IPOD) {
-        name.font = [UIFont fontWithName:HelveticaNeue size:17.0];
-        phone.font = [UIFont fontWithName:HelveticaNeue size:14.0];
-        
         icCall.imageEdgeInsets = UIEdgeInsetsMake(8, 8, 8, 8);
     }else{
-        name.font = [UIFont systemFontOfSize:16.0 weight:UIFontWeightRegular];
-        phone.font = [UIFont systemFontOfSize:14.0 weight:UIFontWeightThin];
-        
         icCall.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
     }
 }

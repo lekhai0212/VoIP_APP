@@ -16,6 +16,7 @@
 @property (nonatomic,strong) id <NSObject, ChooseDIDPopupViewDelegate> delegate;
 @property (nonatomic, strong) NSMutableArray *listDID;
 @property (nonatomic, strong) UILabel *lbHeader;
+@property (nonatomic, strong) UILabel *lbSepa;
 @property (nonatomic, strong) UITableView *tbDIDList;
 @property (nonatomic, retain) UITapGestureRecognizer *tapGesture;
 

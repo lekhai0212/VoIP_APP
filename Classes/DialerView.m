@@ -19,8 +19,6 @@
 
 #import <AVFoundation/AVAudioSession.h>
 #import <AudioToolbox/AudioToolbox.h>
-#import "NewContactViewController.h"
-#import "AllContactListViewController.h"
 #import "PBXSettingViewController.h"
 #import "LinphoneManager.h"
 #import <AVFoundation/AVFoundation.h>
@@ -42,10 +40,17 @@
     UITapGestureRecognizer *tapOnScreen;
     NSTimer *pressTimer;
     
-    UITextView *tvSearchResult;
     SearchContactPopupView *popupSearchContacts;
     
     WebServices *webService;
+    
+    UIView *resultView;
+    UIImageView *imgAvatar;
+    UILabel *lbName;
+    UILabel *lbPhone;
+    UIButton *btnSearchNum;
+    UIButton *btnChooseContact;
+    float hAddressField;
 }
 @end
 
@@ -80,23 +85,21 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
+    [WriteLogsUtils writeForGoToScreen: @"DialerView"];
     
     if (webService == nil) {
         webService = [[WebServices alloc] init];
         webService.delegate = self;
     }
     
-    [WriteLogsUtils writeForGoToScreen: @"DialerView"];
-    
-    
-    NSString* path = [[NSBundle mainBundle] pathForResource:@"file_encrypt"
-                                                     ofType:@"txt"];
-
-    NSString* content = [NSString stringWithContentsOfFile:path
-                                                  encoding:NSUTF8StringEncoding
-                                                     error:NULL];
-    NSString *decrypt = [AESCrypt decrypt:content password:AES_KEY];
-    NSLog(@"%@", decrypt);
+//    NSString* path = [[NSBundle mainBundle] pathForResource:@"file_encrypt"
+//                                                     ofType:@"txt"];
+//
+//    NSString* content = [NSString stringWithContentsOfFile:path
+//                                                  encoding:NSUTF8StringEncoding
+//                                                     error:NULL];
+//    NSString *decrypt = [AESCrypt decrypt:content password:AES_KEY];
+//    NSLog(@"%@", decrypt);
     
     //  Added by Khai Le on 30/09/2018
     [self checkAccountForApp];
@@ -155,7 +158,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 	[super viewDidLoad];
     
     appDelegate = (LinphoneAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [self autoLayoutForView];
+    [self newAutoLayoutForView];
+    [self createSearchViewIfNeed];
     
     //  my code here
     _zeroButton.digit = '0';
@@ -219,9 +223,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 	[LinphoneManager.instance shouldPresentLinkPopup];
-    
-    //  Check for first time, after installed app
-    //  [self checkForShowFirstSettingAccount];
 }
 
 #pragma mark - Event Functions
@@ -292,7 +293,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (IBAction)btnVideoCallPress:(UIButton *)sender {
     if (_addressField.text.length > 0) {
-        tvSearchResult.hidden = YES;
+        resultView.hidden = YES;
         
         [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:IS_VIDEO_CALL_KEY];
         [[NSUserDefaults standardUserDefaults] synchronize];
@@ -325,12 +326,13 @@ static UICompositeViewDescription *compositeDescription = nil;
                                                     selector:@selector(searchPhoneBookWithThread)
                                                     userInfo:nil repeats:false];
     }else{
-        tvSearchResult.hidden = YES;
+        resultView.hidden = YES;
     }
 }
 
 - (void)onBackspaceLongClick:(id)sender {
     [self hideSearchView];
+    [self setupFrameForSearchResultWithExistsData: NO];
 }
 
 - (void)onZeroLongClick:(id)sender {
@@ -412,18 +414,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     }
 }
 
-- (IBAction)_btnHotlinePressed:(UIButton *)sender
-{
-    
-    
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[[LanguageUtil sharedInstance] getContent:@"Do you want to call to hotline for assistance?"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Close"] otherButtonTitles: [[LanguageUtil sharedInstance] getContent:@"Call"], nil];
-    alert.delegate = self;
-    alert.tag = 3;
-    [alert show];
-}
-
 - (IBAction)_btnNumberPressed:(id)sender {
     [self.view endEditing: true];
     
@@ -436,7 +426,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (IBAction)_btnCallPressed:(UIButton *)sender {
     if (_addressField.text.length > 0) {
-        tvSearchResult.hidden = YES;
+        resultView.hidden = YES;
         
         [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:IS_VIDEO_CALL_KEY];
         [[NSUserDefaults standardUserDefaults] synchronize];
@@ -471,22 +461,18 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 #pragma mark - Khai Le Functions
 
-- (void)networkDown
-{
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] OH SHITTTTTTTTT!", __FUNCTION__] toFilePath:appDelegate.logFilePath];
+- (void)networkDown {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
     
     _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"No network"];
     _lbStatus.textColor = UIColor.orangeColor;
 }
 
 - (void)searchPhoneBookWithThread {
-    //  [Khai le - 01/11/2018]: Just search contact when contact was loaded
     if (!appDelegate.contactLoaded) {
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Contacts list have not loaded successful. Please wait for a momment", __FUNCTION__] toFilePath:appDelegate.logFilePath];
-        
         return;
     }
-    //  ----
     
     NSString *searchStr = _addressField.text;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
@@ -519,11 +505,61 @@ static UICompositeViewDescription *compositeDescription = nil;
     if (_addressField.text.length > 0) {
         //  [khai le - 02/11/2018]
         if (listPhoneSearched.count > 0) {
-            tvSearchResult.hidden = NO;
-            tvSearchResult.attributedText = [ContactUtils getSearchValueFromResultForNewSearchMethod: listPhoneSearched];
+            [self setupFrameForSearchResultWithExistsData: YES];
+            [self showSearchResultOnSearchView: listPhoneSearched];
         }else{
-            tvSearchResult.hidden = YES;
+            [self setupFrameForSearchResultWithExistsData: NO];
         }
+    }else{
+        [self setupFrameForSearchResultWithExistsData: NO];
+    }
+}
+
+- (void)showSearchResultOnSearchView: (NSArray *)searchArr {
+    if (searchArr.count > 0) {
+        PhoneObject *contact = [searchArr firstObject];
+        if (![AppUtils isNullOrEmpty: contact.avatar]) {
+            imgAvatar.image = [UIImage imageWithData: [NSData dataFromBase64String: contact.avatar]];
+        }else{
+            imgAvatar.image = [UIImage imageNamed:@"no_avatar"];
+        }
+        
+        if (![AppUtils isNullOrEmpty: contact.name]) {
+            lbName.text = contact.name;
+        }else{
+            lbName.text = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
+        }
+        lbPhone.text = contact.number;
+        
+        if (searchArr.count > 1) {
+            [btnSearchNum setTitle:[NSString stringWithFormat:@"(%d)", (int)listPhoneSearched.count]
+                          forState:UIControlStateNormal];
+            btnSearchNum.enabled = YES;
+        }else{
+            [btnSearchNum setTitle:@"" forState:UIControlStateNormal];
+            btnSearchNum.enabled = NO;
+        }
+        
+    }
+}
+
+- (void)setupFrameForSearchResultWithExistsData: (BOOL)hasData {
+    if (hasData) {
+        resultView.hidden = NO;
+        [_addressField mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(_viewNumber);
+            make.bottom.equalTo(resultView.mas_top);
+            make.left.equalTo(self.view).offset(80);
+            make.right.equalTo(self.view).offset(-80);
+        }];
+    }else{
+        resultView.hidden = YES;
+        [_addressField mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(_viewNumber.mas_centerY);
+            make.left.equalTo(self.view).offset(80);
+            make.right.equalTo(self.view).offset(-80);
+            make.height.mas_equalTo(hAddressField);
+        }];
     }
 }
 
@@ -533,6 +569,246 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     LinphoneNatPolicy *LNP = linphone_core_get_nat_policy(LC);
     linphone_nat_policy_enable_ice(LNP, FALSE);
+}
+
+
+- (void)newAutoLayoutForView {
+    NSString *modelName = [DeviceUtils getModelsOfCurrentDevice];
+    
+    self.view.backgroundColor = UIColor.whiteColor;
+    //  view status
+    _viewStatus.backgroundColor = UIColor.clearColor;
+    [_viewStatus mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.right.equalTo(self.view);
+        make.height.mas_equalTo(appDelegate._hRegistrationState);
+    }];
+    
+    UIImage *logoImg = [UIImage imageNamed:@"logo_white"];
+    float wLogo = 23.0 * logoImg.size.width / logoImg.size.height;
+    _imgLogoSmall.image = logoImg;
+    [_imgLogoSmall mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_viewStatus).offset(appDelegate._hRegistrationState/4);
+        make.centerY.equalTo(_viewStatus.mas_centerY).offset(appDelegate._hStatus/2-5.0);
+        make.height.mas_equalTo(22.0);
+        make.width.mas_equalTo(wLogo);
+    }];
+    
+    //  account label
+    _lbAccount.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightBold];
+    _lbAccount.textAlignment = NSTextAlignmentCenter;
+    [_lbAccount mas_makeConstraints:^(MASConstraintMaker *make) {
+        //  make.top.bottom.equalTo(_imgLogoSmall);
+        make.centerY.equalTo(_viewStatus.mas_centerY).offset(appDelegate._hStatus/2);
+        make.centerX.equalTo(_viewStatus.mas_centerX);
+        make.width.mas_equalTo(120);
+        make.height.mas_equalTo(40.0);
+    }];
+    
+    //  status label
+    _lbStatus.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
+    _lbStatus.numberOfLines = 0;
+    [_lbStatus mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_lbAccount.mas_right);
+        make.top.bottom.equalTo(_lbAccount);
+        make.right.equalTo(_viewStatus).offset(-appDelegate._hRegistrationState/4);
+    }];
+    UITapGestureRecognizer *tapOnStatus = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(whenTappedOnStatusAccount)];
+    _lbStatus.userInteractionEnabled = YES;
+    [_lbStatus addGestureRecognizer: tapOnStatus];
+    
+    //  pad view
+    float wIcon = [DeviceUtils getSizeOfKeypadButtonForDevice: modelName];
+    float spaceMarginY = [DeviceUtils getSpaceYBetweenKeypadButtonsForDevice: modelName];
+    float spaceMarginX = [DeviceUtils getSpaceXBetweenKeypadButtonsForDevice: modelName];
+    
+    float hPadView = 5*wIcon + 6*spaceMarginY;
+    _padView.backgroundColor = UIColor.clearColor;
+    [_padView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.bottom.equalTo(self.view);
+        make.height.mas_equalTo(hPadView);
+    }];
+    
+    //  1, 2, 3
+    _twoButton.layer.cornerRadius = wIcon/2;
+    _twoButton.clipsToBounds = YES;
+    [_twoButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_padView).offset(0);
+        make.centerX.equalTo(_padView.mas_centerX);
+        make.width.height.mas_equalTo(wIcon);
+    }];
+    
+    _oneButton.layer.cornerRadius = wIcon/2;
+    _oneButton.clipsToBounds = YES;
+    [_oneButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_twoButton.mas_top);
+        make.right.equalTo(_twoButton.mas_left).offset(-spaceMarginX);
+        make.width.height.mas_equalTo(wIcon);
+    }];
+    
+    _threeButton.layer.cornerRadius = wIcon/2;
+    _threeButton.clipsToBounds = YES;
+    [_threeButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_twoButton.mas_top);
+        make.left.equalTo(_twoButton.mas_right).offset(spaceMarginX);
+        make.width.height.mas_equalTo(wIcon);
+    }];
+    
+    //  4, 5, 6
+    _fiveButton.layer.cornerRadius = wIcon/2;
+    _fiveButton.clipsToBounds = YES;
+    [_fiveButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_twoButton.mas_bottom).offset(spaceMarginY);
+        make.centerX.equalTo(_padView.mas_centerX);
+        make.width.height.mas_equalTo(wIcon);
+    }];
+    
+    _fourButton.layer.cornerRadius = wIcon/2;
+    _fourButton.clipsToBounds = YES;
+    [_fourButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_fiveButton.mas_top);
+        make.right.equalTo(_fiveButton.mas_left).offset(-spaceMarginX);
+        make.width.height.mas_equalTo(wIcon);
+    }];
+    
+    _sixButton.layer.cornerRadius = wIcon/2;
+    _sixButton.clipsToBounds = YES;
+    [_sixButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_fiveButton.mas_top);
+        make.left.equalTo(_fiveButton.mas_right).offset(spaceMarginX);
+        make.width.height.mas_equalTo(wIcon);
+    }];
+    
+    //  7, 8, 9
+    _eightButton.layer.cornerRadius = wIcon/2;
+    _eightButton.clipsToBounds = YES;
+    [_eightButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_fiveButton.mas_bottom).offset(spaceMarginY);
+        make.centerX.equalTo(_padView.mas_centerX);
+        make.width.height.mas_equalTo(wIcon);
+    }];
+    
+    _sevenButton.layer.cornerRadius = wIcon/2;
+    _sevenButton.clipsToBounds = YES;
+    [_sevenButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_eightButton.mas_top);
+        make.right.equalTo(_eightButton.mas_left).offset(-spaceMarginX);
+        make.width.height.mas_equalTo(wIcon);
+    }];
+    
+    _nineButton.layer.cornerRadius = wIcon/2;
+    _nineButton.clipsToBounds = YES;
+    [_nineButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_eightButton.mas_top);
+        make.left.equalTo(_eightButton.mas_right).offset(spaceMarginX);
+        make.width.height.mas_equalTo(wIcon);
+    }];
+    
+    //  *, 0, #
+    _zeroButton.layer.cornerRadius = wIcon/2;
+    _zeroButton.clipsToBounds = YES;
+    [_zeroButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_eightButton.mas_bottom).offset(spaceMarginY);
+        make.centerX.equalTo(_padView.mas_centerX);
+        make.width.height.mas_equalTo(wIcon);
+    }];
+    
+    _starButton.layer.cornerRadius = wIcon/2;
+    _starButton.clipsToBounds = YES;
+    [_starButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_zeroButton.mas_top);
+        make.right.equalTo(_zeroButton.mas_left).offset(-spaceMarginX);
+        make.width.height.mas_equalTo(wIcon);
+    }];
+    
+    _hashButton.layer.cornerRadius = wIcon/2;
+    _hashButton.clipsToBounds = YES;
+    [_hashButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_zeroButton.mas_top);
+        make.left.equalTo(_zeroButton.mas_right).offset(spaceMarginX);
+        make.width.height.mas_equalTo(wIcon);
+    }];
+    
+    //  fifth layer
+    _callButton.tag = TAG_AUDIO_CALL;
+    _callButton.layer.cornerRadius = wIcon/2;
+    _callButton.clipsToBounds = YES;
+    [_callButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_zeroButton.mas_bottom).offset(spaceMarginY);
+        make.centerX.equalTo(_padView.mas_centerX);
+        make.width.height.mas_equalTo(wIcon);
+    }];
+    
+    btnVideoCall.tag = TAG_VIDEO_CALL;
+    btnVideoCall.imageEdgeInsets = [DeviceUtils getEdgeOfVideoCallDialerForDevice];
+    btnVideoCall.layer.cornerRadius = wIcon/2;
+    btnVideoCall.clipsToBounds = YES;
+    [btnVideoCall mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_callButton.mas_top);
+        make.right.equalTo(_callButton.mas_left).offset(-spaceMarginX);
+        make.width.height.mas_equalTo(wIcon);
+    }];
+    
+    _backspaceButton.imageEdgeInsets = [DeviceUtils getEdgeOfVideoCallDialerForDevice];
+    _backspaceButton.layer.cornerRadius = wIcon/2;
+    _backspaceButton.clipsToBounds = YES;
+    [_backspaceButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_callButton.mas_top);
+        make.left.equalTo(_callButton.mas_right).offset(spaceMarginX);
+        make.width.height.mas_equalTo(wIcon);
+    }];
+    
+    
+    //  Number view
+    hAddressField = 60.0;
+    if ([modelName isEqualToString: IphoneX_1] || [modelName isEqualToString: IphoneX_2] || [modelName isEqualToString: IphoneXR] || [modelName isEqualToString: IphoneXS] || [modelName isEqualToString: IphoneXS_Max1] || [modelName isEqualToString: IphoneXS_Max2])
+    {
+        hAddressField = 80.0;
+    }
+    
+    [_viewNumber mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view);
+        make.top.equalTo(_viewStatus.mas_bottom);
+        make.bottom.equalTo(_padView.mas_top);
+    }];
+    
+    [_addressField mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_viewNumber.mas_centerY);
+        make.left.equalTo(self.view).offset(80);
+        make.right.equalTo(self.view).offset(-80);
+        make.height.mas_equalTo(hAddressField);
+    }];
+    _addressField.keyboardType = UIKeyboardTypePhonePad;
+    _addressField.enabled = YES;
+    _addressField.textAlignment = NSTextAlignmentCenter;
+    _addressField.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:45.0];
+    _addressField.adjustsFontSizeToFitWidth = YES;
+    _addressField.delegate = self;
+    [_addressField addTarget:self
+                      action:@selector(addressfieldDidChanged:)
+            forControlEvents:UIControlEventEditingChanged];
+    
+    lbSepa123.backgroundColor = [UIColor colorWithRed:(240/255.0) green:(240/255.0)
+                                                 blue:(240/255.0) alpha:1.0];
+    lbSepa456.backgroundColor = lbSepa789.backgroundColor = lbSepa123.backgroundColor;
+    
+    [lbSepa123 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_oneButton);
+        make.right.equalTo(_threeButton.mas_right);
+        make.top.equalTo(_oneButton.mas_bottom).offset(spaceMarginY/2);
+        make.height.mas_equalTo(1.0);
+    }];
+    
+    [lbSepa456 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(lbSepa123);
+        make.top.equalTo(_fiveButton.mas_bottom).offset(spaceMarginY/2);
+        make.height.equalTo(lbSepa123.mas_height);
+    }];
+    
+    [lbSepa789 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(lbSepa123);
+        make.top.equalTo(_eightButton.mas_bottom).offset(spaceMarginY/2);
+        make.height.equalTo(lbSepa123.mas_height);
+    }];
 }
 
 - (void)autoLayoutForView
@@ -611,20 +887,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     [_addressField addTarget:self
                       action:@selector(addressfieldDidChanged:)
             forControlEvents:UIControlEventEditingChanged];
-    
-    tvSearchResult = [[UITextView alloc] init];
-    tvSearchResult.backgroundColor = UIColor.clearColor;
-    tvSearchResult.editable = NO;
-    tvSearchResult.hidden = YES;
-    tvSearchResult.delegate = self;
-    [_viewNumber addSubview: tvSearchResult];
-    
-    [tvSearchResult mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_viewNumber).offset(10.0);
-        make.right.equalTo(_viewNumber).offset(-10.0);
-        make.top.equalTo(_addressField.mas_bottom);
-        make.height.mas_equalTo(30.0);
-    }];
     
     //  Number keypad
     float wIcon = [DeviceUtils getSizeOfKeypadButtonForDevice: modelName];
@@ -790,41 +1052,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
 }
 
-#pragma mark - Actionsheet Delegate
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (actionSheet.tag == 100) {
-        switch (buttonIndex) {
-            case 0:{
-                [self hideSearchView];
-                
-                NewContactViewController *controller = VIEW(NewContactViewController);
-                if (controller) {
-                    controller.currentPhoneNumber = _addressField.text;
-                    controller.currentName = @"";
-                }
-                [[PhoneMainView instance] changeCurrentView:[NewContactViewController compositeViewDescription]
-                                                       push:true];
-                break;
-            }
-            case 1:{
-                [self hideSearchView];
-                
-                AllContactListViewController *controller = VIEW(AllContactListViewController);
-                if (controller != nil) {
-                    controller.phoneNumber = _addressField.text;
-                }
-                [[PhoneMainView instance] changeCurrentView:[AllContactListViewController compositeViewDescription]
-                                                       push:true];
-                break;
-            }
-            default:
-                break;
-        }
-    }else if (actionSheet.tag == 101) {
-        
-    }
-}
-
 #pragma mark - Tap Gesture delegate
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
 //    if ([touch.view isDescendantOfView: _tbSearch]) {
@@ -959,8 +1186,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] internetStatus = %d", __FUNCTION__, internetStatus] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
 }
 
-- (void)whenTappedOnStatusAccount
-{
+- (void)whenTappedOnStatusAccount {
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
     
     if ([LinphoneManager instance].connectivity == none){
@@ -968,45 +1194,10 @@ static UICompositeViewDescription *compositeDescription = nil;
         return;
     }
     
-    AccountState curState = [SipUtils getStateOfDefaultProxyConfig];
-    //  No account
-    if (curState == eAccountNone) {
-        NSString *content = [[LanguageUtil sharedInstance] getContent:@"You have not set up an account yet. Do you want to setup now?"];
-        
-        UIAlertView *alertAcc = [[UIAlertView alloc] initWithTitle:nil message:content delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] otherButtonTitles: [[LanguageUtil sharedInstance] getContent:@"Go to settings"], nil];
-        alertAcc.delegate = self;
-        alertAcc.tag = 1;
-        [alertAcc show];
-        return;
-    }
-    
-    //  account was disabled
-    if (curState == eAccountOff) {
-        
-        
-        UIAlertView *alertAcc = [[UIAlertView alloc] initWithTitle:nil message:[[LanguageUtil sharedInstance] getContent:@"Do you want to enable this account?"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"No"] otherButtonTitles: [[LanguageUtil sharedInstance] getContent:@"Yes"], nil];
-        alertAcc.delegate = self;
-        alertAcc.tag = 2;
-        [alertAcc show];
-        return;
-    }
-    
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Call function %@", __FUNCTION__, @"refreshRegisters"] toFilePath:appDelegate.logFilePath];
-    [LinphoneManager.instance refreshRegisters];
-}
-
-- (void)checkForShowFirstSettingAccount {
-    NSString *needSetting = [[NSUserDefaults standardUserDefaults] objectForKey:@"SHOWED_SETTINGS_ACCOUNT_FOR_FIRST"];
-    if (needSetting == nil){
-        LinphoneProxyConfig *defaultConfig = linphone_core_get_default_proxy_config(LC);
-        if (defaultConfig == NULL) {
-            NSString *content = [[LanguageUtil sharedInstance] getContent:@"You have not set up an account yet. Do you want to setup now?"];
-            
-            UIAlertView *alertAcc = [[UIAlertView alloc] initWithTitle:nil message:content delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] otherButtonTitles: [[LanguageUtil sharedInstance] getContent:@"Go to settings?"], nil];
-            [alertAcc show];
-        }
-        [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"SHOWED_SETTINGS_ACCOUNT_FOR_FIRST"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+    LinphoneRegistrationState curState = [SipUtils getRegistrationStateOfDefaultProxyConfig];
+    if (curState != LinphoneRegistrationOk) {
+        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"Registration state is %d --->  Call %@", curState, @"refreshRegisters"] toFilePath:appDelegate.logFilePath];
+        [LinphoneManager.instance refreshRegisters];
     }
 }
 
@@ -1016,8 +1207,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         return;
     }
     if ([textfield.text isEqualToString:@""]) {
-        tvSearchResult.hidden = YES;
-        
+        resultView.hidden = YES;
     }else{
         [pressTimer invalidate];
         pressTimer = nil;
@@ -1029,7 +1219,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)hideSearchView {
     _addressField.text = @"";
-    tvSearchResult.hidden = YES;
+    resultView.hidden = YES;
 }
 
 #pragma mark - UIAlertview Delegate
@@ -1062,29 +1252,9 @@ static UICompositeViewDescription *compositeDescription = nil;
     }
 }
 
-#pragma mark - UITextview delegate
--(BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange{
-    // Call your method here.
-    if (![URL.absoluteString containsString:@"others"]) {
-        _addressField.text = URL.absoluteString;
-        tvSearchResult.hidden = YES;
-    }else{
-        float totalHeight = listPhoneSearched.count * 60.0;
-        if (totalHeight > SCREEN_HEIGHT - 70.0*2) {
-            totalHeight = SCREEN_HEIGHT - 70.0*2;
-        }
-        popupSearchContacts = [[SearchContactPopupView alloc] initWithFrame:CGRectMake(30.0, (SCREEN_HEIGHT-totalHeight)/2, SCREEN_WIDTH-60.0, totalHeight)];
-        popupSearchContacts.contacts = listPhoneSearched;
-        [popupSearchContacts.tbContacts reloadData];
-        popupSearchContacts.delegate = self;
-        [popupSearchContacts showInView:appDelegate.window animated:YES];
-    }
-    return NO;
-}
-
 - (void)selectContactFromSearchPopup:(NSString *)phoneNumber {
     _addressField.text = phoneNumber;
-    tvSearchResult.hidden = YES;
+    [self setupFrameForSearchResultWithExistsData: NO];
 }
 
 - (BOOL)fillToAddressField {
@@ -1101,6 +1271,109 @@ static UICompositeViewDescription *compositeDescription = nil;
         }
         return NO;
     }
+}
+
+- (void)createSearchViewIfNeed {
+    if (resultView == nil) {
+        resultView = [[UIView alloc] init];
+        resultView.hidden = YES;
+        resultView.layer.cornerRadius = 5.0;
+        resultView.backgroundColor = [UIColor colorWithRed:(240/255.0) green:(240/255.0)
+                                                      blue:(240/255.0) alpha:1.0];
+        [_viewNumber addSubview: resultView];
+        
+        float hSearch = [DeviceUtils getHeightSearchViewContactForDevice];
+        [resultView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.equalTo(_viewNumber.mas_centerX);
+            make.bottom.equalTo(_viewNumber);
+            make.width.mas_equalTo(260.0);
+            make.height.mas_equalTo(hSearch);
+        }];
+        
+        imgAvatar = [[UIImageView alloc] init];
+        imgAvatar.image = [UIImage imageNamed:@"no_avatar"];
+        imgAvatar.layer.cornerRadius = 40.0/2;
+        imgAvatar.clipsToBounds = YES;
+        [resultView addSubview: imgAvatar];
+        [imgAvatar mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(resultView.mas_centerY);
+            make.left.equalTo(resultView).offset(10.0);
+            make.width.height.mas_equalTo(40.0);
+        }];
+        
+        btnSearchNum = [[UIButton alloc] init];
+        [btnSearchNum setTitleColor:[UIColor colorWithRed:(101/255.0) green:(205/255.0)
+                                                     blue:(70/255.0) alpha:1.0]
+                           forState:UIControlStateNormal];
+        [btnSearchNum addTarget:self
+                         action:@selector(showSearchPopupContact)
+               forControlEvents:UIControlEventTouchUpInside];
+        [resultView addSubview: btnSearchNum];
+        [btnSearchNum mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.right.bottom.equalTo(resultView);
+            make.width.height.mas_equalTo(60.0);
+        }];
+        
+        lbName = [[UILabel alloc] init];
+        lbName.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
+        lbName.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightBold];
+        lbName.text = @"Le Quang Khai";
+        [resultView addSubview: lbName];
+        [lbName mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(resultView).offset(8.0);
+            make.left.equalTo(imgAvatar.mas_right).offset(8.0);
+            make.bottom.equalTo(imgAvatar.mas_centerY);
+            make.right.equalTo(btnSearchNum.mas_left).offset(-8.0);
+        }];
+        
+        lbPhone = [[UILabel alloc] init];
+        lbPhone.font = [UIFont systemFontOfSize:14.0 weight:UIFontWeightRegular];
+        lbPhone.textColor = UIColor.darkGrayColor;
+        lbPhone.text = @"036 343 0737";
+        [resultView addSubview: lbPhone];
+        [lbPhone mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(imgAvatar.mas_centerY);
+            make.left.right.equalTo(lbName);
+            make.bottom.equalTo(resultView).offset(-8.0);
+        }];
+        
+        btnChooseContact = [[UIButton alloc] init];
+        btnChooseContact.backgroundColor = UIColor.clearColor;
+        [btnChooseContact addTarget:self
+                         action:@selector(selecteFirstContactForSearch)
+               forControlEvents:UIControlEventTouchUpInside];
+        [resultView addSubview: btnChooseContact];
+        [btnChooseContact mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.left.bottom.equalTo(resultView);
+            make.right.equalTo(btnSearchNum.mas_left);
+        }];
+        
+    }
+}
+
+- (void)selecteFirstContactForSearch{
+    if (listPhoneSearched.count > 0) {
+        PhoneObject *contact = [listPhoneSearched firstObject];
+        _addressField.text = contact.number;
+        
+        [self setupFrameForSearchResultWithExistsData: NO];
+    }
+}
+
+- (void)showSearchPopupContact {
+    float totalHeight = listPhoneSearched.count * 60.0;
+    if (totalHeight > SCREEN_HEIGHT - 70.0*2) {
+        totalHeight = SCREEN_HEIGHT - 70.0*2;
+    }
+    if (popupSearchContacts == nil) {
+        popupSearchContacts = [[SearchContactPopupView alloc] initWithFrame:CGRectMake(30.0, (SCREEN_HEIGHT-totalHeight)/2, SCREEN_WIDTH-60.0, totalHeight)];
+    }else{
+        popupSearchContacts.frame = CGRectMake(30.0, (SCREEN_HEIGHT-totalHeight)/2, SCREEN_WIDTH-60.0, totalHeight);
+    }
+    popupSearchContacts.contacts = listPhoneSearched;
+    [popupSearchContacts.tbContacts reloadData];
+    popupSearchContacts.delegate = self;
+    [popupSearchContacts showInView:appDelegate.window animated:YES];
 }
 
 #pragma mark - Webservice delegate

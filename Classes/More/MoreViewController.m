@@ -95,22 +95,18 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)updateInformationOfUser
 {
-    if ([SipUtils getStateOfDefaultProxyConfig] != eAccountNone) {
+    if ([SipUtils getStateOfDefaultProxyConfig] != eAccountNone)
+    {
+        _lbName.text = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Account"], USERNAME];
+        
         NSString *accountID = [SipUtils getAccountIdOfDefaultProxyConfig];
         if (![AppUtils isNullOrEmpty: accountID] && accountID.length > 5) {
             NSString *ext = [accountID substringFromIndex: 5];
             lbPBXAccount.text = ext;
-            lbPBXAccount.text = [NSString stringWithFormat:@"Số nội bộ: %@", ext];
+            
+            lbPBXAccount.text = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Extension"], ext];
         }else{
-            lbPBXAccount.text = [NSString stringWithFormat:@"Số nội bộ: %@", @"N/A"];
-        }
-        
-        NSString *pbxKeyName = [NSString stringWithFormat:@"%@_%@", @"pbxName", accountID];
-        NSString *name = [[NSUserDefaults standardUserDefaults] objectForKey: pbxKeyName];
-        if (name != nil){
-            _lbName.text = name;
-        }else{
-            _lbName.text = [[LanguageUtil sharedInstance] getContent:@"Not set"];
+            lbPBXAccount.text = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Extension"], @"N/A"];
         }
         
         NSString *pbxKeyAvatar = [NSString stringWithFormat:@"%@_%@", @"pbxAvatar", accountID];
@@ -119,7 +115,6 @@ static UICompositeViewDescription *compositeDescription = nil;
             _imgAvatar.image = [UIImage imageWithData: [NSData dataFromBase64String: avatar]];
         }else{
             _imgAvatar.image = [UIImage imageNamed:@"no_avatar.png"];
-            [self downloadMyAvatar: accountID];
         }
         [self showProfileView: YES];
     }else{
@@ -294,38 +289,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 60.0;
-}
-
-- (void)downloadMyAvatar: (NSString *)myaccount
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        NSString *pbxServer = [[NSUserDefaults standardUserDefaults] objectForKey:PBX_SERVER];
-        NSString *avatarName = [NSString stringWithFormat:@"%@_%@.png", pbxServer, myaccount];
-        NSString *linkAvatar = [NSString stringWithFormat:@"%@/%@", link_picture_chat_group, avatarName];
-        NSData *data = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: linkAvatar]];
-        
-        if (data != nil) {
-            NSString *folder = [NSString stringWithFormat:@"/avatars/%@", avatarName];
-            [AppUtils saveFileToFolder:data withName: folder];
-            
-            //  save avatar to get from local
-            NSString *pbxKeyAvatar = [NSString stringWithFormat:@"%@_%@", @"pbxAvatar", myaccount];
-            
-            NSString *strAvatar = @"";
-            if ([data respondsToSelector:@selector(base64EncodedStringWithOptions:)]) {
-                strAvatar = [data base64EncodedStringWithOptions: 0];
-            } else {
-                strAvatar = [data base64Encoding];
-            }
-            
-            [[NSUserDefaults standardUserDefaults] setObject:strAvatar forKey:pbxKeyAvatar];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            
-            dispatch_async(dispatch_get_main_queue(), ^(void){
-                _imgAvatar.image = [UIImage imageWithData: data];
-            });
-        }
-    });
 }
 
 - (void)startLogout {

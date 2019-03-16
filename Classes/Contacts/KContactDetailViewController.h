@@ -11,7 +11,7 @@
 #import "MarqueeLabel.h"
 #import "ContactObject.h"
 
-@interface KContactDetailViewController : UIViewController<UICompositeViewDelegate, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
+@interface KContactDetailViewController : UIViewController<UICompositeViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
 //  view header
 @property (weak, nonatomic) IBOutlet UIView *_viewHeader;

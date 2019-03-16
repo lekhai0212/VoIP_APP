@@ -742,8 +742,8 @@
 				default:
 					MS_VIDEO_SIZE_ASSIGN(vsize, QVGA);
                     //  Close by Khai Le
-					//  bw = 380;
-                    bw = 192;
+					bw = 380;
+                    //  bw = 192;
 					break;
 			}
 			linphone_core_set_preferred_video_size(LC, vsize);

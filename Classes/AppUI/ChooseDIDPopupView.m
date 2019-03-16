@@ -9,7 +9,7 @@
 #import "ChooseDIDCell.h"
 
 @implementation ChooseDIDPopupView
-@synthesize tbDIDList, lbHeader, tapGesture, delegate, listDID;
+@synthesize tbDIDList, lbHeader, tapGesture, delegate, listDID, lbSepa;
 
 - (id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame: frame];
@@ -23,7 +23,7 @@
         lbHeader = [[UILabel alloc] init];
         lbHeader.textAlignment = NSTextAlignmentCenter;
         lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"Choose DID"];
-        lbHeader.font = [UIFont systemFontOfSize:22.0 weight:UIFontWeightSemibold];
+        lbHeader.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:22.0];
         lbHeader.textColor = [UIColor colorWithRed:(80/255.0) green:(208/255.0) blue:(135/255.0) alpha:1.0];
         [self addSubview: lbHeader];
         [lbHeader mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -40,6 +40,15 @@
         [tbDIDList mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(lbHeader.mas_bottom);
             make.left.bottom.right.equalTo(self);
+        }];
+        
+        lbSepa = [[UILabel alloc] init];
+        lbSepa.backgroundColor = [UIColor colorWithRed:(245/255.0) green:(245/255.0) blue:(245/255.0) alpha:1.0];
+        [self addSubview: lbSepa];
+        [lbSepa mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(self);
+            make.top.equalTo(lbHeader.mas_bottom);
+            make.height.mas_equalTo(1.0);
         }];
     }
     return self;

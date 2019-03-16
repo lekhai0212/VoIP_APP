@@ -8,11 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "UICompositeView.h"
-#import "WebServices.h"
 
-
-
-@interface ContactsViewController : UIViewController<UICompositeViewDelegate, UIPageViewControllerDelegate, UIPageViewControllerDataSource, UITextFieldDelegate, WebServicesDelegate>
+@interface ContactsViewController : UIViewController<UICompositeViewDelegate, UIPageViewControllerDelegate, UIPageViewControllerDataSource, UITextFieldDelegate>
 
 @property (nonatomic, retain) UIPageViewController *_pageViewController;
 

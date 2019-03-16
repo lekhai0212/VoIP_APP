@@ -70,17 +70,8 @@
         make.height.mas_equalTo(1.0);
     }];
     
-    if (IS_IPHONE || IS_IPOD) {
-        _lbName.font = [UIFont fontWithName:HelveticaNeue size:17.0];
-        _lbPhone.font = [UIFont fontWithName:HelveticaNeue size:14.0];
-        
-        icCall.imageEdgeInsets = UIEdgeInsetsMake(8, 8, 8, 8);
-    }else{
-        _lbName.font = [UIFont systemFontOfSize:16.0 weight:UIFontWeightRegular];
-        _lbPhone.font = [UIFont systemFontOfSize:14.0 weight:UIFontWeightThin];
-        
-        icCall.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
-    }
+    _lbName.font = [UIFont fontWithName:MYRIADPRO_BOLD size:17.0];
+    _lbPhone.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:15.0];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

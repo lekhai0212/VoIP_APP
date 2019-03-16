@@ -1119,6 +1119,7 @@ static void linphone_iphone_display_status(struct _LinphoneCore *lc, const char 
 		if (linphone_call_params_video_enabled(linphone_call_get_current_params(call)) && !speaker_already_enabled) {
 			[self setSpeakerEnabled:TRUE];
 			speaker_already_enabled = TRUE;
+            [[NSNotificationCenter defaultCenter] postNotificationName:speakerEnabledForVideoCall object:nil];
 		}
 	}
 
@@ -2051,7 +2052,7 @@ static LinphoneCoreVTable linphonec_vtable = {
 
 	[self setupNetworkReachabilityCallback];
 
-	NSString *path = [LinphoneManager bundleFile:@"nowebcamCIF.jpg"];
+	NSString *path = [LinphoneManager bundleFile:@"nowebcamCIF.png"];
 	if (path) {
 		const char *imagePath = [path UTF8String];
 		LOGI(@"Using '%s' as source image for no webcam", imagePath);

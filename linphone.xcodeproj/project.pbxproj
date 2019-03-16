@@ -421,6 +421,8 @@
 		840E965F223726990040CDCC /* end_call_def.png in Resources */ = {isa = PBXBuildFile; fileRef = 840E965D223726980040CDCC /* end_call_def.png */; };
 		840E9660223726990040CDCC /* end_call_act.png in Resources */ = {isa = PBXBuildFile; fileRef = 840E965E223726990040CDCC /* end_call_act.png */; };
 		840F687D21B2645D00681F7F /* ic_tick.png in Resources */ = {isa = PBXBuildFile; fileRef = 840F687C21B2645C00681F7F /* ic_tick.png */; };
+		8410CD15223CE11100C90960 /* nowebcamCIF.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8410CD14223CE11100C90960 /* nowebcamCIF.jpg */; };
+		8410CD19223D0ED400C90960 /* nowebcamCIF.png in Resources */ = {isa = PBXBuildFile; fileRef = 8410CD18223D0ED400C90960 /* nowebcamCIF.png */; };
 		8414C3CE21EB235500F54DD1 /* call_hotline.png in Resources */ = {isa = PBXBuildFile; fileRef = 8414C3CD21EB235400F54DD1 /* call_hotline.png */; };
 		8414C3D121EB23D400F54DD1 /* youtube_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 8414C3CF21EB23D300F54DD1 /* youtube_blue.png */; };
 		8414C3D221EB23D400F54DD1 /* youtube_red.png in Resources */ = {isa = PBXBuildFile; fileRef = 8414C3D021EB23D300F54DD1 /* youtube_red.png */; };
@@ -437,8 +439,6 @@
 		841EB1672169818E00B59B8E /* transfer_call.png in Resources */ = {isa = PBXBuildFile; fileRef = 841EB1632169818D00B59B8E /* transfer_call.png */; };
 		841F97E61FB4B2DC00A9A8CD /* UIConferenceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 841F97E41FB4B2DC00A9A8CD /* UIConferenceCell.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		841F97E71FB4B2DC00A9A8CD /* UIConferenceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 841F97E51FB4B2DC00A9A8CD /* UIConferenceCell.xib */; };
-		842529C9201F0F9A00BF4385 /* AllContactListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 842529C7201F0F9A00BF4385 /* AllContactListViewController.m */; };
-		842529CA201F0F9A00BF4385 /* AllContactListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 842529C8201F0F9A00BF4385 /* AllContactListViewController.xib */; };
 		842814DE223ABED000E8EAC0 /* switchcam_dis.png in Resources */ = {isa = PBXBuildFile; fileRef = 842814D5223ABECC00E8EAC0 /* switchcam_dis.png */; };
 		842814DF223ABED000E8EAC0 /* switchcam_enable.png in Resources */ = {isa = PBXBuildFile; fileRef = 842814DC223ABECC00E8EAC0 /* switchcam_enable.png */; };
 		842814E0223ABED000E8EAC0 /* switchcam_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 842814DD223ABECD00E8EAC0 /* switchcam_normal.png */; };
@@ -1556,6 +1556,8 @@
 		840E965D223726980040CDCC /* end_call_def.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = end_call_def.png; sourceTree = "<group>"; };
 		840E965E223726990040CDCC /* end_call_act.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = end_call_act.png; sourceTree = "<group>"; };
 		840F687C21B2645C00681F7F /* ic_tick.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_tick.png; sourceTree = "<group>"; };
+		8410CD14223CE11100C90960 /* nowebcamCIF.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = nowebcamCIF.jpg; sourceTree = "<group>"; };
+		8410CD18223D0ED400C90960 /* nowebcamCIF.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nowebcamCIF.png; sourceTree = "<group>"; };
 		8414C3CD21EB235400F54DD1 /* call_hotline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = call_hotline.png; sourceTree = "<group>"; };
 		8414C3CF21EB23D300F54DD1 /* youtube_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = youtube_blue.png; sourceTree = "<group>"; };
 		8414C3D021EB23D300F54DD1 /* youtube_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = youtube_red.png; sourceTree = "<group>"; };
@@ -1577,9 +1579,6 @@
 		841F97E31FB4B2DC00A9A8CD /* UIConferenceCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIConferenceCell.h; path = AppUI/UIConferenceCell.h; sourceTree = "<group>"; };
 		841F97E41FB4B2DC00A9A8CD /* UIConferenceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIConferenceCell.m; path = AppUI/UIConferenceCell.m; sourceTree = "<group>"; };
 		841F97E51FB4B2DC00A9A8CD /* UIConferenceCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = UIConferenceCell.xib; path = AppUI/UIConferenceCell.xib; sourceTree = "<group>"; };
-		842529C6201F0F9A00BF4385 /* AllContactListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AllContactListViewController.h; path = Contacts/AllContactListViewController.h; sourceTree = "<group>"; };
-		842529C7201F0F9A00BF4385 /* AllContactListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AllContactListViewController.m; path = Contacts/AllContactListViewController.m; sourceTree = "<group>"; };
-		842529C8201F0F9A00BF4385 /* AllContactListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = AllContactListViewController.xib; path = Contacts/AllContactListViewController.xib; sourceTree = "<group>"; };
 		842814D5223ABECC00E8EAC0 /* switchcam_dis.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switchcam_dis.png; sourceTree = "<group>"; };
 		842814DC223ABECC00E8EAC0 /* switchcam_enable.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switchcam_enable.png; sourceTree = "<group>"; };
 		842814DD223ABECD00E8EAC0 /* switchcam_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switchcam_normal.png; sourceTree = "<group>"; };
@@ -3222,6 +3221,8 @@
 		633FEBE11D3CD5570014B822 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				8410CD14223CE11100C90960 /* nowebcamCIF.jpg */,
+				8410CD18223D0ED400C90960 /* nowebcamCIF.png */,
 				157C726B223B8EFC00EA607F /* ringtone_stop.png */,
 				157C7268223B872000EA607F /* ringtone_pause.png */,
 				157C7267223B871E00EA607F /* ringtone_play.png */,
@@ -3649,9 +3650,6 @@
 				84AEA9211FC4FD5500DAA68A /* EditContactViewController.h */,
 				84AEA9221FC4FD5500DAA68A /* EditContactViewController.m */,
 				84AEA9231FC4FD5500DAA68A /* EditContactViewController.xib */,
-				842529C6201F0F9A00BF4385 /* AllContactListViewController.h */,
-				842529C7201F0F9A00BF4385 /* AllContactListViewController.m */,
-				842529C8201F0F9A00BF4385 /* AllContactListViewController.xib */,
 			);
 			name = Contacts;
 			sourceTree = "<group>";
@@ -4750,7 +4748,6 @@
 				84F81BC721EF6AE4009629C9 /* iPadHistoryCallCell.xib in Resources */,
 				154E400C217440FD0030A6B8 /* no_avatar_blue.png in Resources */,
 				842814E6223ABEDF00E8EAC0 /* cam_normal.png in Resources */,
-				842529CA201F0F9A00BF4385 /* AllContactListViewController.xib in Resources */,
 				D38187BD15FE342800C3EDCA /* ContactsListView.xib in Resources */,
 				157C725B223B4C3B00EA607F /* fast_browser.mp3 in Resources */,
 				84B4F0E321E8CCB600591C50 /* ic_history_bottom_bar_act@2x.png in Resources */,
@@ -4825,6 +4822,7 @@
 				84ECF9BC216679A70067B4B6 /* ic_transfer_def.png in Resources */,
 				84F81BD921EF8418009629C9 /* ic_muted_black.png in Resources */,
 				84D2320822350A720015335B /* numpad_three_hover.png in Resources */,
+				8410CD19223D0ED400C90960 /* nowebcamCIF.png in Resources */,
 				840E9660223726990040CDCC /* end_call_act.png in Resources */,
 				84D2320E22350A720015335B /* numpad_clear.png in Resources */,
 				846586951FCA9AC900C5142C /* KMessageViewController.xib in Resources */,
@@ -4900,6 +4898,7 @@
 				84D2321F22350B360015335B /* video_call_hover.png in Resources */,
 				639CEB091A1DF4FA004DE38F /* UIChatCell.xib in Resources */,
 				15906E3B217AEBCF000877A9 /* bg_button.png in Resources */,
+				8410CD15223CE11100C90960 /* nowebcamCIF.jpg in Resources */,
 				63AADBF61B6A0FF200AA16FD /* linphonerc-factory in Resources */,
 				84B4F0E421E8CCB600591C50 /* ic_history_bottom_bar_def@2x.png in Resources */,
 				63B8D68C1BCBE65600C12B09 /* ChatConversationCreateView.xib in Resources */,
@@ -5484,7 +5483,6 @@
 				84C1E2391FAEBAE100EED0B9 /* BEMPathManager.m in Sources */,
 				84CDD2391FD0E6FE003DB5AD /* UIImage+GKContact.m in Sources */,
 				D3C6526715AC1A8F0092A874 /* UIContactDetailsCell.m in Sources */,
-				842529C9201F0F9A00BF4385 /* AllContactListViewController.m in Sources */,
 				631348301B6F7B6600C6BDCB /* UIRoundBorderedButton.m in Sources */,
 				84C443881FBE101B0015854C /* PhoneObject.m in Sources */,
 				15E9B6D221F0863600F25EA1 /* TestViewController.m in Sources */,

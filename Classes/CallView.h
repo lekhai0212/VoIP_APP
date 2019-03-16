@@ -57,7 +57,7 @@ typedef enum typeCall{
 @property(weak, nonatomic) IBOutlet UILabel *durationLabel;
 @property(weak, nonatomic) IBOutlet UIRoundedImageView *avatarImage;
 @property (weak, nonatomic) IBOutlet UILabel *_lbQuality;
-@property(nonatomic, strong) IBOutlet UISpeakerButton *speakerButton;
+@property(nonatomic, strong) IBOutlet UIButton *speakerButton;
 @property(nonatomic, strong) IBOutlet UIHangUpButton *hangupButton;
 @property(nonatomic, strong) IBOutlet UIMutedMicroButton *microButton;
 @property(nonatomic, strong) IBOutlet UIPauseButton *callPauseButton;
@@ -70,8 +70,8 @@ typedef enum typeCall{
 @property (weak, nonatomic) IBOutlet UILabel *lbVideoQuality;
 @property (weak, nonatomic) IBOutlet UILabel *_lbVideoTime;
 @property (weak, nonatomic) IBOutlet UILabel *lbAddressVideoCall;
-@property (weak, nonatomic) IBOutlet UIMutedMicroButton *btnMicroVideo;
-@property (weak, nonatomic) IBOutlet UISpeakerButton *btnSpeakerVideo;
+@property (weak, nonatomic) IBOutlet UIButton *btnMicroVideo;
+@property (weak, nonatomic) IBOutlet UIButton *btnSpeakerVideo;
 @property (weak, nonatomic) IBOutlet UIButton *btnOffCamera;
 @property (weak, nonatomic) IBOutlet UICamSwitch *btnSwitchCamera;
 @property (weak, nonatomic) IBOutlet UIToggleButton *btnKeypadVideo;
@@ -79,7 +79,7 @@ typedef enum typeCall{
 
 - (IBAction)btnMicroVideoClick:(id)sender;
 - (IBAction)btnSpeakerVideoClick:(id)sender;
-- (IBAction)btnOffCameraClick:(id)sender;
+- (IBAction)btnOffCameraClick:(UIButton *)sender;
 - (IBAction)btnSwitchCameraClick:(id)sender;
 - (IBAction)btnKeypadVideoClick:(id)sender;
 - (IBAction)btnHangupVideoClick:(id)sender;

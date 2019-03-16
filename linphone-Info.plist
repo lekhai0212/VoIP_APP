@@ -88,11 +88,11 @@
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Use your BT headset</string>
 	<key>NSCameraUsageDescription</key>
-	<string>This application need access to your camera to share photos with your friends and customize avatars</string>
+	<string>Ứng dụng muốn truy cập camera của bạn để thực hiện cuộc gọi hình</string>
 	<key>NSContactsUsageDescription</key>
-	<string>This application need access to Contact to make calls with your friends</string>
+	<string>Ứng dụng muốn truy cập danh bạ của bạn để thực hiện cuộc gọi với bạn bè</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Use microphone to make audio calls</string>
+	<string>Ứng dụng muốn truy cập micro của bạn để thực hiện cuộc gọi</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Share photos with your friends and customize avatars</string>
 	<key>NSPhotoLibraryUsageDescription</key>

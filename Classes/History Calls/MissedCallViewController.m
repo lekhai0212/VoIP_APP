@@ -43,7 +43,7 @@
         textFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
     }
     
-    _lbNoCalls.font = textFont;
+    _lbNoCalls.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:20.0];
     _lbNoCalls.textColor = UIColor.grayColor;
     _lbNoCalls.textAlignment = NSTextAlignmentCenter;
     [_lbNoCalls mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -110,10 +110,14 @@
             if (listCalls.count == 0) {
                 _tbListCalls.hidden = YES;
                 _lbNoCalls.hidden = NO;
+                [[NSNotificationCenter defaultCenter] postNotificationName:showOrHideDeleteCallHistoryButton
+                                                                    object:@"0"];
             }else {
                 _tbListCalls.hidden = NO;
                 _lbNoCalls.hidden = YES;
                 [_tbListCalls reloadData];
+                [[NSNotificationCenter defaultCenter] postNotificationName:showOrHideDeleteCallHistoryButton
+                                                                    object:@"1"];
             }
         });
     });
