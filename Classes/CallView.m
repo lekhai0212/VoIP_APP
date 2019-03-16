@@ -83,6 +83,9 @@ const NSInteger SECURE_BUTTON_TAG = 5;
     UIImageView *icVideoCall;
     UIImageView *icWaveVideo;
     UIImageView *icOffCameraForPreview;
+    
+    UIButton *testSpeakerAudio;
+    UIButton *testSpeakerVideo;
 }
 
 @end
@@ -187,6 +190,58 @@ static UICompositeViewDescription *compositeDescription = nil;
     //  Add ney by Khai Le on 09/11/2017
     appDelegate = (LinphoneAppDelegate *)[[UIApplication sharedApplication] delegate];
     [speakerButton setHidden: YES];
+    
+    testSpeakerAudio = [[UIButton alloc] init];
+    [testSpeakerAudio setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
+    [testSpeakerAudio addTarget:self
+                         action:@selector(speakerOnAudioCall)
+               forControlEvents:UIControlEventTouchUpInside];
+    [callView addSubview: testSpeakerAudio];
+    [testSpeakerAudio mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(callView).offset(50.0);
+        make.left.equalTo(callView).offset(50.0);
+        make.width.height.mas_equalTo(50.0);
+    }];
+    
+    testSpeakerVideo = [[UIButton alloc] init];
+    [testSpeakerVideo setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
+    [testSpeakerVideo addTarget:self
+                         action:@selector(speakerOnVideoCall)
+               forControlEvents:UIControlEventTouchUpInside];
+    [viewVideoCall addSubview: testSpeakerVideo];
+    [testSpeakerVideo mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(viewVideoCall).offset(50.0);
+        make.left.equalTo(viewVideoCall).offset(50.0);
+        make.width.height.mas_equalTo(50.0);
+    }];
+}
+
+- (void)speakerOnAudioCall {
+    BOOL isEnabled = LinphoneManager.instance.speakerEnabled;
+    NSLog(@"KL test: current state: %d", isEnabled);
+    if (isEnabled) {
+        NSLog(@"KL test: set speaker is NO");
+        [testSpeakerAudio setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
+        [LinphoneManager.instance setSpeakerEnabled: NO];
+    }else{
+        NSLog(@"KL test: set speaker is YES");
+        [testSpeakerAudio setImage:[UIImage imageNamed:@"speaker_enable"] forState:UIControlStateNormal];
+        [LinphoneManager.instance setSpeakerEnabled: YES];
+    }
+}
+
+- (void)speakerOnVideoCall {
+    BOOL isEnabled = LinphoneManager.instance.speakerEnabled;
+    NSLog(@"KL test: current state: %d", isEnabled);
+    if (isEnabled) {
+        NSLog(@"KL test: set speaker is NO");
+        [testSpeakerVideo setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
+        [LinphoneManager.instance setSpeakerEnabled: NO];
+    }else{
+        NSLog(@"KL test: set speaker is YES");
+        [testSpeakerVideo setImage:[UIImage imageNamed:@"speaker_enable"] forState:UIControlStateNormal];
+        [LinphoneManager.instance setSpeakerEnabled: YES];
+    }
 }
 
 - (void)dealloc {
@@ -255,6 +310,18 @@ static UICompositeViewDescription *compositeDescription = nil;
     if (count > 0) {
         if (!isAudioCall) {
             [self enableVideoForCurrentCall];
+            
+            if (LinphoneManager.instance.speakerEnabled) {
+                [testSpeakerVideo setImage:[UIImage imageNamed:@"speaker_enable"] forState:UIControlStateNormal];
+            }else{
+                [testSpeakerVideo setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
+            }
+        }else{
+            if (LinphoneManager.instance.speakerEnabled) {
+                [testSpeakerAudio setImage:[UIImage imageNamed:@"speaker_enable"] forState:UIControlStateNormal];
+            }else{
+                [testSpeakerAudio setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
+            }
         }
     }
     callView.hidden = !isAudioCall;

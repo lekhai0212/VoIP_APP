@@ -10,20 +10,25 @@
 #import "MenuCell.h"
 #import "ChooseRingtoneViewController.h"
 #import "KSettingViewController.h"
+#import "SignInViewController.h"
+#import "AboutViewController.h"
+#import "SendLogsViewController.h"
 #import "PolicyViewController.h"
 #import "IntroduceViewController.h"
-#import "SendLogsViewController.h"
-#import "AboutViewController.h"
-#import "DrawingViewController.h"
 #import "TabBarView.h"
 #import "StatusBarView.h"
 #import "NSData+Base64.h"
 #import "JSONKit.h"
+#import "WebServices.h"
 
-@interface MoreViewController () {
+
+@interface MoreViewController ()<UIAlertViewDelegate, WebServicesDelegate> {
     float hInfo;
     NSMutableArray *listTitle;
     NSMutableArray *listIcon;
+    WebServices *webService;
+    
+    UIActivityIndicatorView *icWaiting;
 }
 
 @end
@@ -74,9 +79,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     [self showContentWithCurrentLanguage];
     
     [self updateInformationOfUser];
-    
-    
-    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -187,6 +189,16 @@ static UICompositeViewDescription *compositeDescription = nil;
     _tbContent.dataSource = self;
     _tbContent.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tbContent.scrollEnabled = NO;
+    
+    icWaiting = [[UIActivityIndicatorView alloc] init];
+    icWaiting.backgroundColor = UIColor.whiteColor;
+    icWaiting.alpha = 0.5;
+    icWaiting.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+    icWaiting.hidden = YES;
+    [self.view addSubview: icWaiting];
+    [icWaiting mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.bottom.right.equalTo(self.view);
+    }];
 }
 
 - (void)didReceiveMemoryWarning
@@ -259,7 +271,12 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case eSignOut:{
-            //  [[PhoneMainView instance] changeCurrentView:[AboutViewController compositeViewDescription] push:true];
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:[[LanguageUtil sharedInstance] getContent:@"Do you want to log out?"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"No"] otherButtonTitles:[[LanguageUtil sharedInstance] getContent:@"Sign out"], nil];
+            alertView.tag = 1;
+            alertView.delegate = self;
+            [alertView show];
+            
             break;
         }
         case ePrivayPolicy:{
@@ -311,8 +328,67 @@ static UICompositeViewDescription *compositeDescription = nil;
     });
 }
 
-- (void)btnSignOutPress {
+- (void)startLogout {
+    [icWaiting startAnimating];
+    icWaiting.hidden = NO;
+    
+    [[LinphoneAppDelegate sharedInstance] showWaiting: YES];
+    
+    //  clear token to avoid push when user signed out
+    [self clearPushTokenOfUser];
+}
+
+- (void)clearPushTokenOfUser {
+    if (webService == nil) {
+        webService = [[WebServices alloc] init];
+        webService.delegate = self;
+    }
+    [LinphoneAppDelegate sharedInstance]._updateTokenSuccess = NO;
+    
+    NSString *params = [NSString stringWithFormat:@"pushToken=%@&userName=%@", @"", USERNAME];
+    [webService callGETWebServiceWithFunction:update_token_func andParams:params];
+    
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, params] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+}
+
+- (void)startResetValueWhenLogout
+{
+    linphone_core_clear_proxy_config(LC);
+    [icWaiting stopAnimating];
+    icWaiting.hidden = YES;
+    
+    [[PhoneMainView instance] changeCurrentView:[SignInViewController compositeViewDescription]];
+}
+
+#pragma mark - UIAlertview delegate
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (alertView.tag == 1) {
+        if (buttonIndex == 1) {
+            [self startLogout];
+        }
+    }
+}
+
+#pragma mark - Webservice delegate
+- (void)failedToCallWebService:(NSString *)link andError:(id)error {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] link: %@\nError: %@", __FUNCTION__ , link, @[error]] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
+    if ([link isEqualToString: update_token_func]) {
+        [self startResetValueWhenLogout];
+    }
+}
+
+- (void)successfulToCallWebService:(NSString *)link withData:(NSDictionary *)data {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] link: %@\nData: %@", __FUNCTION__ , link, @[data]] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    if ([link isEqualToString: update_token_func]) {
+        [self startResetValueWhenLogout];
+    }
+}
+
+-(void)receivedResponeCode:(NSString *)link withCode:(int)responeCode {
     
 }
+
+
 
 @end

@@ -8,7 +8,6 @@
 #import <UIKit/UIKit.h>
 #import "UICompositeView.h"
 #import "WebServices.h"
-#import "WebServices.h"
 
 @interface ManagerPasswordViewController : UIViewController<UICompositeViewDelegate, WebServicesDelegate>
 

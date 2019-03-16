@@ -29,7 +29,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="42"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="background_header.png" translatesAutoresizingMaskIntoConstraints="NO" id="nIf-ZO-dA6">
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="background_header.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="nIf-ZO-dA6">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="42"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
@@ -78,7 +78,7 @@
         </view>
     </objects>
     <resources>
-        <image name="background_header.png" width="750" height="130"/>
-        <image name="ic_back.png" width="100" height="100"/>
+        <image name="background_header.jpg" width="1028" height="180"/>
+        <image name="ic_back.png" width="200" height="200"/>
     </resources>
 </document>

@@ -88,6 +88,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 #pragma mark - my functions
 
 - (NSString *)checkNewVersionOnAppStore {
+    return @"";
+    
     NSDictionary* infoDictionary = [[NSBundle mainBundle] infoDictionary];
     NSString* appID = infoDictionary[@"CFBundleIdentifier"];
     if (appID.length > 0) {
@@ -138,6 +140,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.width.mas_equalTo(200);
     }];
     
+    icBack.imageEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     [icBack mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(viewHeader);
         make.centerY.equalTo(lbHeader.mas_centerY);
@@ -162,13 +165,15 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     btnCheckForUpdate.titleLabel.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
     [btnCheckForUpdate setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+    btnCheckForUpdate.backgroundColor = [UIColor colorWithRed:(101/255.0) green:(205/255.0)
+                                                         blue:(70/255.0) alpha:1.0];
     btnCheckForUpdate.clipsToBounds = YES;
-    btnCheckForUpdate.layer.cornerRadius = 40.0/2;
+    btnCheckForUpdate.layer.cornerRadius = 45.0/2;
     [btnCheckForUpdate mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(lbVersion.mas_bottom).offset(40.0);
-        make.left.equalTo(lbVersion.mas_left);
-        make.right.equalTo(lbVersion.mas_right);
-        make.height.mas_equalTo(40.0);
+        make.centerX.equalTo(self.view.mas_centerX);
+        make.width.mas_equalTo(200.0);
+        make.height.mas_equalTo(45.0);
     }];
 }
 

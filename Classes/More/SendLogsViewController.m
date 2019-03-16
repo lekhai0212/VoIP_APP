@@ -142,6 +142,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.height.mas_equalTo([LinphoneAppDelegate sharedInstance]._hRegistrationState);
     }];
     
+    icBack.imageEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     [icBack mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(viewHeader);
         make.centerY.equalTo(lbHeader.mas_centerY);

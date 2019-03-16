@@ -30,7 +30,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="42"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="background_header.png" translatesAutoresizingMaskIntoConstraints="NO" id="dEp-Af-Yzj">
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="background_header.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="dEp-Af-Yzj">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="42"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
@@ -69,7 +69,7 @@
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m9m-Nb-O1r">
                     <rect key="frame" x="40" y="282" width="240" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="Button" backgroundImage="bg_button.png"/>
+                    <state key="normal" title="Button"/>
                     <connections>
                         <action selector="btnCheckForUpdatePress:" destination="-1" eventType="touchUpInside" id="Qd9-XC-xyf"/>
                     </connections>
@@ -77,13 +77,12 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="-130" y="102"/>
+            <point key="canvasLocation" x="-178" y="92"/>
         </view>
     </objects>
     <resources>
-        <image name="background_header.png" width="750" height="130"/>
-        <image name="bg_button.png" width="599" height="167"/>
-        <image name="ic_back.png" width="100" height="100"/>
+        <image name="background_header.jpg" width="1028" height="180"/>
+        <image name="ic_back.png" width="200" height="200"/>
         <image name="logo.png" width="626" height="626"/>
     </resources>
 </document>

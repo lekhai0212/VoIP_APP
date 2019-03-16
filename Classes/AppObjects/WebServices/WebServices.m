@@ -136,9 +136,12 @@
 
 // This method receives the error report in case of connection is not made to server.
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    NSString *strURL = [[[connection currentRequest] URL] absoluteString];
+    NSURL *requestURL = [[connection currentRequest] URL];
+    NSString *urlPath = requestURL.path;
+    NSString *function = [urlPath stringByReplacingOccurrencesOfString:@"/" withString:@""];
+    
     NSString *strError = [error.userInfo objectForKey:@"NSLocalizedDescription"];
-    [delegate failedToCallWebService:strURL andError:strError];
+    [delegate failedToCallWebService:function andError:strError];
 }
 
 // This method is used to process the data after connection has made successfully.

@@ -7,7 +7,6 @@
 
 #import <UIKit/UIKit.h>
 #import "UICompositeView.h"
-#import "WebServices.h"
 #import "QRCodeReaderDelegate.h"
 #import "RegisterPBXWithPhoneView.h"
 #import "CustomSwitchButton.h"

@@ -21,8 +21,7 @@
 #define VIDEO_CALL_TYPE 2
 
 
-#define getDIDListForCall   @"getDIDListForCall"
-
+#define getDIDListForCall       @"getDIDListForCall"
 #pragma mark - API
 
 #define link_api            @"https://api.cloudcall.vn"
