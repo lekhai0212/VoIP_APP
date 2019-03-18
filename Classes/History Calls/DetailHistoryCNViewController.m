@@ -91,10 +91,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     [self showContentWithCurrentLanguage];
     
-    // Tắt màn hình cảm biến
-    UIDevice *device = [UIDevice currentDevice];
-    [device setProximityMonitoringEnabled: NO];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateView)
                                                  name:reloadHistoryCall object:nil];
 }
@@ -267,50 +263,13 @@ static UICompositeViewDescription *compositeDescription = nil;
     gradientLayer.mask = shapeLayer;
 }
 
-#pragma mark - tableview delegate
-
-- (NSString *)convertIntToTime : (int) time{
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    NSDate *startData = [NSDate dateWithTimeIntervalSince1970:time];
-    dateFormatter.dateFormat = @"HH:mm";
-    NSString *str_time = [dateFormatter stringFromDate:startData];
-    return str_time;
-}
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-- (NSString *)checkDateCurrentAndYesterday: (NSString *)strTime {
-    NSCalendar *cal = [NSCalendar currentCalendar];
-    NSDateComponents *components = [cal components:( NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit ) fromDate:[[NSDate alloc] init]];
-    
-    [components setHour:-[components hour]];
-    [components setMinute:-[components minute]];
-    [components setSecond:-[components second]];
-    NSDate *today = [cal dateByAddingComponents:components toDate:[[NSDate alloc] init] options:0];
-    
-    [components setHour:-24];
-    [components setMinute:0];
-    [components setSecond:0];
-    NSDate *yesterday = [cal dateByAddingComponents:components toDate: today options:0];
-    
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    dateFormatter.dateFormat = @"dd/MM/yyyy";
-    
-    if ([strTime isEqualToString:[dateFormatter stringFromDate:yesterday] ]) {
-        return [[LanguageUtil sharedInstance] getContent:@"Yesterday"];
-    }
-    
-    if ([strTime isEqualToString:[dateFormatter stringFromDate:today]]) {
-        return [[LanguageUtil sharedInstance] getContent:@"Today"];
-    }
-    
-    return strTime;
-}
-
+#pragma mark - tableview delegate
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
@@ -476,6 +435,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (IBAction)iconAudioClick:(UIButton *)sender {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+     
     [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:IS_VIDEO_CALL_KEY];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
@@ -484,6 +445,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (IBAction)iconVideoClick:(UIButton *)sender {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
     [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:IS_VIDEO_CALL_KEY];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
@@ -493,10 +456,9 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 #pragma mark - Alertview delegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] alertView.tag = %d,  buttonIndex = %d", __FUNCTION__, (int)alertView.tag, (int)buttonIndex] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
     if (buttonIndex == 1) {
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
-                             toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-        
         [NSDatabase deleteCallHistoryOfRemote:phoneNumber onDate:onDate ofAccount:USERNAME];
         [[PhoneMainView instance] popCurrentView];
     }

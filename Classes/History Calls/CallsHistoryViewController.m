@@ -98,10 +98,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     [self showContentWithCurrentLanguage];
     
-    // Tắt màn hình cảm biến
-    UIDevice *device = [UIDevice currentDevice];
-    device.proximityMonitoringEnabled = NO;
-    
     //  Reset lại các UI khi vào màn hình
     [self resetUIForView];
     

@@ -88,10 +88,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    // Tắt màn hình cảm biến
-    UIDevice *device = [UIDevice currentDevice];
-    device.proximityMonitoringEnabled = NO;
-    
     if (![_tfSearch.text isEqualToString:@""]) {
         _icClearSearch.hidden = NO;
     }else{

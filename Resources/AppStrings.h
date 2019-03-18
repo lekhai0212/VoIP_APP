@@ -34,6 +34,7 @@
 #define get_contacts_func   @"GetServerContacts"
 #define get_didlist_func    @"GetDIDList"
 #define get_missedcall_func @"GetInfoMissCall"
+#define decryptRSA_func     @"DecryptRSA"
 
 
 

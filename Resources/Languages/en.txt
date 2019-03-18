@@ -4,6 +4,13 @@
 "Or sign in with QRCode" = "Or sign in with QRCode"
 "Account ID" = "Account ID"
 "Password" = "Password"
+"SCAN FROM PHOTO"   =   "SCAN FROM PHOTO"
+"Can not detect QRCode. Please check again!" = "Can not detect QRCode. Please check again!"
+"Create my QRCode" = "Create my QRCode"
+"Create QRCode" = "Create QRCode"
+"Your qrcode has been saved successful" = "Your qrcode has been saved successful"
+"Can not access to your gallery. Please check your permission!" = "Can not access to your gallery. Please check your permission!"
+"Can not access to your camera. Please check your permission!" = "Can not access to your camera. Please check your permission!"
 
 "Disabled" = "Off"
 "Online" = "Online"
@@ -295,4 +302,4 @@
 
 "Audio call" = "Audio call"
 "Video call" = "Video call"
-"Can not detect QRCode. Please check again!" = "Can not detect QRCode. Please check again!"
+

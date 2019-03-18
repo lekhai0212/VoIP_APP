@@ -59,9 +59,11 @@ typedef enum typeCall{
 @property (weak, nonatomic) IBOutlet UILabel *_lbQuality;
 @property(nonatomic, strong) IBOutlet UIButton *speakerButton;
 @property(nonatomic, strong) IBOutlet UIHangUpButton *hangupButton;
-@property(nonatomic, strong) IBOutlet UIMutedMicroButton *microButton;
+@property(nonatomic, strong) IBOutlet UIButton *microButton;
 @property(nonatomic, strong) IBOutlet UIPauseButton *callPauseButton;
 @property(nonatomic, strong) IBOutlet UIToggleButton *numpadButton;
+- (IBAction)speakerButtonPress:(UIButton *)sender;
+- (IBAction)microButtonPress:(UIButton *)sender;
 
 //  Video call view
 @property (weak, nonatomic) IBOutlet UIView *viewVideoCall;
@@ -144,7 +146,6 @@ typedef enum typeCall{
 - (IBAction)onOptionsTransferClick:(id)sender;
 - (IBAction)onOptionsAddClick:(id)sender;
 - (IBAction)onOptionsConferenceClick:(id)sender;
-- (IBAction)onNumpadClick:(id)sender;
 - (IBAction)onChatClick:(id)sender;
 
 @property (nonatomic, strong) NSTimer *durationTimer;

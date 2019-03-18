@@ -21,7 +21,7 @@
 @synthesize zeroButton;
 @synthesize sharpButton;
 @synthesize starButton;
-@synthesize iconBack, iconMiniKeypadEndCall, tfNumber, lbQualityValue, viewKeypad, bgCall;
+@synthesize iconBack, iconMiniKeypadEndCall, tfNumber, viewKeypad;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -34,15 +34,13 @@
 
 
 - (void)setupUIForView {
+    self.backgroundColor = UIColor.whiteColor;
+    
     //  Number keypad
     NSString *modelName = [DeviceUtils getModelsOfCurrentDevice];
     float wIcon = [DeviceUtils getSizeOfKeypadButtonForDevice: modelName];
     float spaceMarginY = [DeviceUtils getSpaceYBetweenKeypadButtonsForDevice: modelName];
     float spaceMarginX = [DeviceUtils getSpaceXBetweenKeypadButtonsForDevice: modelName];
-    
-    [bgCall mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.left.bottom.right.equalTo(self);
-    }];
     
     [iconMiniKeypadEndCall mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.mas_centerX);
@@ -50,20 +48,15 @@
         make.width.height.mas_equalTo(wIcon);
     }];
     
+    iconBack.imageEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     [iconBack mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self).offset([LinphoneAppDelegate sharedInstance]._hStatus);
         make.left.equalTo(self);
         make.width.height.mas_equalTo(HEADER_ICON_WIDTH);
     }];
     
-    [lbQualityValue mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.bottom.equalTo(iconBack);
-        make.left.equalTo(iconBack.mas_right).offset(10);
-        make.right.equalTo(self).offset(-10-HEADER_ICON_WIDTH);
-    }];
-    
     [tfNumber mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(lbQualityValue.mas_bottom).offset(20);
+        make.top.equalTo(iconBack.mas_bottom).offset(20);
         make.left.equalTo(self).offset(20);
         make.right.equalTo(self).offset(-20);
         make.height.mas_equalTo(60.0);

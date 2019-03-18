@@ -107,10 +107,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     //  setup cho key login
     [[LinphoneManager instance] lpConfigSetBool:FALSE forKey:@"enable_first_login_view_preference"];
     
-    // Tắt màn hình cảm biến
-    UIDevice *device = [UIDevice currentDevice];
-    [device setProximityMonitoringEnabled: false];
-    
     // invisible icon add contact & icon delete address
     _addressField.text = @"";
     
@@ -293,13 +289,19 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (IBAction)btnVideoCallPress:(UIButton *)sender {
     if (_addressField.text.length > 0) {
+        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] With _addressField.text = %@", __FUNCTION__, _addressField.text] toFilePath:appDelegate.logFilePath];
+        
         resultView.hidden = YES;
         
         [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:IS_VIDEO_CALL_KEY];
         [[NSUserDefaults standardUserDefaults] synchronize];
         
+        [LinphoneAppDelegate sharedInstance].phoneForCall = _addressField.text;
+        [[NSNotificationCenter defaultCenter] postNotificationName:getDIDListForCall object:nil];
+        
         return;
     }
+    [self fillPhoneNumberLastCall];
     
     [pressTimer invalidate];
     pressTimer = nil;
@@ -331,11 +333,15 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (void)onBackspaceLongClick:(id)sender {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
+    
     [self hideSearchView];
     [self setupFrameForSearchResultWithExistsData: NO];
 }
 
 - (void)onZeroLongClick:(id)sender {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
+    
 	// replace last character with a '+'
 	NSString *newAddress =
 		[[_addressField.text substringToIndex:[_addressField.text length] - 1] stringByAppendingString:@"+"];
@@ -344,6 +350,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (void)onOneLongClick:(id)sender {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
+    
 	LinphoneManager *lm = LinphoneManager.instance;
 	NSString *voiceMail = [lm lpConfigStringForKey:@"voice_mail_uri"];
 	LinphoneAddress *addr = [LinphoneUtils normalizeSipOrPhoneAddress:voiceMail];
@@ -361,59 +369,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 	[self.addressField resignFirstResponder];
 }
 
-- (IBAction)_btnAddCallPressed:(UIButton *)sender
-{
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] With address = %@", __FUNCTION__, _addressField.text]
-                         toFilePath:appDelegate.logFilePath];
-    
-    LinphoneManager.instance.nextCallIsTransfer = NO;
-    
-    NSString *address = _addressField.text;
-    if (address.length == 0) {
-        LinphoneCallLog *log = linphone_core_get_last_outgoing_call_log(LC);
-        if (log) {
-            LinphoneAddress *to = linphone_call_log_get_to(log);
-            const char *domain = linphone_address_get_domain(to);
-            char *bis_address = NULL;
-            LinphoneProxyConfig *def_proxy = linphone_core_get_default_proxy_config(LC);
-            
-            // if the 'to' address is on the default proxy, only present the username
-            if (def_proxy) {
-                const char *def_domain = linphone_proxy_config_get_domain(def_proxy);
-                if (def_domain && domain && !strcmp(domain, def_domain)) {
-                    bis_address = ms_strdup(linphone_address_get_username(to));
-                }
-            }
-            if (bis_address == NULL) {
-                bis_address = linphone_address_as_string_uri_only(to);
-            }
-            [_addressField setText:[NSString stringWithUTF8String:bis_address]];
-            ms_free(bis_address);
-            // return after filling the address, let the user confirm the call by pressing again
-            return;
-        }
-    }
-    
-    if ([address length] > 0) {
-        LinphoneAddress *addr = [LinphoneUtils normalizeSipOrPhoneAddress:address];
-        [LinphoneManager.instance call:addr];
-        if (addr)
-            linphone_address_destroy(addr);
-    }
-}
-
-- (IBAction)_btnTransferPressed:(UIButton *)sender {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Transfer call to %@", __FUNCTION__, _addressField.text] toFilePath:appDelegate.logFilePath];
-    
-    if (![_addressField.text isEqualToString:@""]) {
-        LinphoneManager.instance.nextCallIsTransfer = YES;
-        LinphoneAddress *addr = linphone_core_interpret_url(LC, _addressField.text.UTF8String);
-        [LinphoneManager.instance call:addr];
-        if (addr)
-            linphone_address_destroy(addr);
-    }
-}
-
 - (IBAction)_btnNumberPressed:(id)sender {
     [self.view endEditing: true];
     
@@ -428,6 +383,8 @@ static UICompositeViewDescription *compositeDescription = nil;
     if (_addressField.text.length > 0) {
         resultView.hidden = YES;
         
+        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] With _addressField.text = %@", __FUNCTION__, _addressField.text] toFilePath:appDelegate.logFilePath];
+        
         [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:IS_VIDEO_CALL_KEY];
         [[NSUserDefaults standardUserDefaults] synchronize];
         
@@ -437,6 +394,16 @@ static UICompositeViewDescription *compositeDescription = nil;
         return;
     }
     
+    [self fillPhoneNumberLastCall];
+    
+    [pressTimer invalidate];
+    pressTimer = nil;
+    pressTimer = [NSTimer scheduledTimerWithTimeInterval:0.2 target:self
+                                                selector:@selector(searchPhoneBookWithThread)
+                                                userInfo:nil repeats:false];
+}
+
+- (void)fillPhoneNumberLastCall {
     NSString *phoneNumber = [NSDatabase getLastCallOfUser];
     if (![AppUtils isNullOrEmpty: phoneNumber]) {
         if ([phoneNumber hasPrefix:@"+84"]) {
@@ -451,12 +418,6 @@ static UICompositeViewDescription *compositeDescription = nil;
         
         _addressField.text = phoneNumber;
     }
-    
-    [pressTimer invalidate];
-    pressTimer = nil;
-    pressTimer = [NSTimer scheduledTimerWithTimeInterval:0.2 target:self
-                                                selector:@selector(searchPhoneBookWithThread)
-                                                userInfo:nil repeats:false];
 }
 
 #pragma mark - Khai Le Functions
@@ -502,6 +463,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 // Search duoc danh sach
 - (void)searchContactDone
 {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
+    
     if (_addressField.text.length > 0) {
         //  [khai le - 02/11/2018]
         if (listPhoneSearched.count > 0) {
@@ -1062,6 +1025,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 #pragma mark - Call Button Delegate
 - (void)textfieldAddressChanged:(NSString *)number {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] number = %@", __FUNCTION__, number] toFilePath:appDelegate.logFilePath];
+    
     [self searchPhoneBookWithThread];
 }
 
@@ -1074,23 +1039,27 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)registrationUpdate:(LinphoneRegistrationState)state forProxy:(LinphoneProxyConfig *)proxy message:(NSString *)message
 {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"-------------------------\n[%s] Received registration state = %d, message = %@\n-------------------------\n", __FUNCTION__, state, message] toFilePath:appDelegate.logFilePath];
-    
     switch (state) {
         case LinphoneRegistrationOk: {
+            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] State is LinphoneRegistrationOk", __FUNCTION__] toFilePath:appDelegate.logFilePath];
+            
             _lbStatus.textColor = UIColor.greenColor;
             _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Online"];
             break;
         }
         case LinphoneRegistrationNone:{
-            NSLog(@"LinphoneRegistrationNone");
+            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] State is LinphoneRegistrationNone", __FUNCTION__] toFilePath:appDelegate.logFilePath];
+            
             break;
         }
         case LinphoneRegistrationCleared: {
-            NSLog(@"LinphoneRegistrationCleared");
+            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] State is LinphoneRegistrationCleared", __FUNCTION__] toFilePath:appDelegate.logFilePath];
+            
             break;
         }
         case LinphoneRegistrationFailed: {
+            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] State is LinphoneRegistrationFailed", __FUNCTION__] toFilePath:appDelegate.logFilePath];
+            
             _lbStatus.textColor = UIColor.orangeColor;
             if ([SipUtils getStateOfDefaultProxyConfig] == eAccountOff) {
                 _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Disabled"];
@@ -1100,6 +1069,8 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case LinphoneRegistrationProgress: {
+            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] State is LinphoneRegistrationProgress", __FUNCTION__] toFilePath:appDelegate.logFilePath];
+            
             _lbStatus.textColor = UIColor.whiteColor;
             _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Connecting"];
             break;
@@ -1194,11 +1165,8 @@ static UICompositeViewDescription *compositeDescription = nil;
         return;
     }
     
-    LinphoneRegistrationState curState = [SipUtils getRegistrationStateOfDefaultProxyConfig];
-    if (curState != LinphoneRegistrationOk) {
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"Registration state is %d --->  Call %@", curState, @"refreshRegisters"] toFilePath:appDelegate.logFilePath];
-        [LinphoneManager.instance refreshRegisters];
-    }
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"Call %@", @"refreshRegisters"] toFilePath:appDelegate.logFilePath];
+    [LinphoneManager.instance refreshRegisters];
 }
 
 - (void)addressfieldDidChanged: (UITextField *)textfield {
@@ -1253,6 +1221,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (void)selectContactFromSearchPopup:(NSString *)phoneNumber {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] phoneNumber = %@", __FUNCTION__, phoneNumber] toFilePath:appDelegate.logFilePath];
+    
     _addressField.text = phoneNumber;
     [self setupFrameForSearchResultWithExistsData: NO];
 }
@@ -1351,7 +1321,9 @@ static UICompositeViewDescription *compositeDescription = nil;
     }
 }
 
-- (void)selecteFirstContactForSearch{
+- (void)selecteFirstContactForSearch {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
+    
     if (listPhoneSearched.count > 0) {
         PhoneObject *contact = [listPhoneSearched firstObject];
         _addressField.text = contact.number;
@@ -1361,6 +1333,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (void)showSearchPopupContact {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
+    
     float totalHeight = listPhoneSearched.count * 60.0;
     if (totalHeight > SCREEN_HEIGHT - 70.0*2) {
         totalHeight = SCREEN_HEIGHT - 70.0*2;

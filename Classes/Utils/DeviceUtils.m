@@ -7,6 +7,7 @@
 
 #import "DeviceUtils.h"
 #import <sys/utsname.h>
+#import <AVFoundation/AVFoundation.h>
 
 @implementation DeviceUtils
 
@@ -217,6 +218,51 @@
         //  Screen width: 414.000000 - Screen height: 736.000000
         return 60.0;
     }
+}
+
++ (BOOL)isAvailableVideo
+{
+    @autoreleasepool {
+        AVCaptureDevice *captureDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+        
+        if (!captureDevice) {
+            return NO;
+        }
+        
+        NSError *error;
+        AVCaptureDeviceInput *deviceInput = [AVCaptureDeviceInput deviceInputWithDevice:captureDevice error:&error];
+        
+        if (!deviceInput || error) {
+            return NO;
+        }
+        
+        return YES;
+    }
+}
+
++ (BOOL)isAvailablePhotos
+{
+    @autoreleasepool {
+        AVCaptureDevice *captureDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+        
+        if (!captureDevice) {
+            return NO;
+        }
+        
+        NSError *error;
+        AVCaptureDeviceInput *deviceInput = [AVCaptureDeviceInput deviceInputWithDevice:captureDevice error:&error];
+        
+        if (!deviceInput || error) {
+            return NO;
+        }
+        
+        return YES;
+    }
+}
+
++ (void)enableProximityMonitoringEnabled: (BOOL)enabled {
+    UIDevice* device = [UIDevice currentDevice];
+    [device setProximityMonitoringEnabled: enabled];
 }
 
 

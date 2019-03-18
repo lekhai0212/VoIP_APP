@@ -58,10 +58,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     [WriteLogsUtils writeForGoToScreen: @"KContactDetailViewController"];
     
-    // Tắt màn hình cảm biến
-    UIDevice *device = [UIDevice currentDevice];
-    [device setProximityMonitoringEnabled: NO];
-    
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"Get contact info with id: %d", appDelegate.idContact]
                          toFilePath:appDelegate.logFilePath];
     

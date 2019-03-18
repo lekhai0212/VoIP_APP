@@ -5,6 +5,13 @@
 "Or" = ""
 "Account ID" = "Tài khoản"
 "Password" = "Mật khẩu"
+"SCAN FROM PHOTO"   =   "QUÉT ẢNH CÓ SẴN"
+"Can not detect QRCode. Please check again!" = "Không thể kiểm tra QRCode. Vui lòng kiểm tra lại!"
+"Create my QRCode" = "Mã QR của tôi"
+"Create QRCode" = "Tạo mã QR"
+"Your qrcode has been saved successful" = "Mã QR của bạn đã được lưu thành công"
+"Can not access to your gallery. Please check your permission!" = "Không thể truy cập vào thư viện ảnh. Vui lòng kiểm tra lại quyền của ứng dụng!"
+"Can not access to your camera. Please check your permission!" = "Không thể truy cập camera. Vui lòng kiểm tra lại quyền của ứng dụng!"
 
 "Disabled" = "Đã tắt"
 "Online" = "Sẵn sàng"
@@ -211,19 +218,12 @@
 "or" = "hoặc"
 "others" = "người khác"
 
-
-
-
-
-
 "Mute" = "Tắt tiếng"
 "Keypad" = "Bàn phím"
 "Speaker" = "Loa ngoài"
 "Add call" = "Thêm cuộc gọi"
 "Hold" = "Giữ cuộc gọi"
 "Transfer" = "Chuyển cuộc gọi"
-
-
 
 "We have not supported this feature yet. Please try later!" = "Chúng tôi chưa hỗ trợ tính năng này. Vui lòng thử lại sau!"
 
@@ -246,15 +246,8 @@
 "Remove Avatar"       = "Hủy ảnh đại diện"
 
 
-
-
-
-
-
-
-
 "Options" = "Tùy chọn"
-"SCAN FROM PHOTO"   =   "QUÉT ẢNH CÓ SẴN"
+
 
 "Notifications" =   "Thông báo"
 "Can not find QR Code!"=   "Không thể tìm thấy mã QR!"
@@ -298,5 +291,5 @@
 
 "Audio call" = "Gọi audio"
 "Video call" = "Gọi hình"
-"Can not detect QRCode. Please check again!" = "Không thể kiểm tra QRCode. Vui lòng kiểm tra lại!"
+
 

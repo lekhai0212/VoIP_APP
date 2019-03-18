@@ -79,18 +79,14 @@ const NSInteger SECURE_BUTTON_TAG = 5;
     
     NSMutableAttributedString *videoStateString;
     
-    //  End call trong add keypad
-    UIHangUpButton *btEndCall;
-    UIButton *btHideKeypad;
-    
     
     UIImageView *icVideoCall;
     UIImageView *icWaveVideo;
-    UIImageView *icOffCameraForPreview;
-    
-    UIButton *btnMic;
     
     AVCaptureDevice *defaultDevice;
+    
+    UIView *viewOffCam;
+    UIImageView *imgOffCam;
 }
 
 @end
@@ -209,7 +205,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 	[super viewWillAppear:animated];
 
     [self setupUIForView];
-    
+    [self createOffCameraView];
     
     NSString *isvideo = [[NSUserDefaults standardUserDefaults] objectForKey:IS_VIDEO_CALL_KEY];
     if (![AppUtils isNullOrEmpty: isvideo] && [isvideo isEqualToString:@"1"]) {
@@ -223,8 +219,8 @@ static UICompositeViewDescription *compositeDescription = nil;
     _bottomBar.clipsToBounds = YES;
     
 	LinphoneManager.instance.nextCallIsTransfer = NO;
-
-    _lbQuality.text = [NSString stringWithFormat:@"%@: %@", @"Chất lượng", @"Tốt"];
+    
+    _lbQuality.text = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Quality"], [[LanguageUtil sharedInstance] getContent:@"Good"]];
     nameLabel.text = @"";
     lbAddressVideoCall.text = @"";
 
@@ -276,6 +272,12 @@ static UICompositeViewDescription *compositeDescription = nil;
             }else{
                 [btnSpeakerVideo setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
             }
+            //  detect micro
+            if (linphone_core_mic_enabled(LC)) {
+                [btnMicroVideo setImage:[UIImage imageNamed:@"mute_normal"] forState:UIControlStateNormal];
+            }else{
+                [btnMicroVideo setImage:[UIImage imageNamed:@"mute_enable"] forState:UIControlStateNormal];
+            }
         }else{
             if (LinphoneManager.instance.speakerEnabled) {
                 [speakerButton setImage:[UIImage imageNamed:@"speaker_enable"]
@@ -283,6 +285,12 @@ static UICompositeViewDescription *compositeDescription = nil;
             }else{
                 [speakerButton setImage:[UIImage imageNamed:@"speaker_normal"]
                                forState:UIControlStateNormal];
+            }
+            //  detect micro
+            if (linphone_core_mic_enabled(LC)) {
+                [microButton setImage:[UIImage imageNamed:@"mute_normal"] forState:UIControlStateNormal];
+            }else{
+                [microButton setImage:[UIImage imageNamed:@"mute_enable"] forState:UIControlStateNormal];
             }
         }
     }
@@ -295,10 +303,10 @@ static UICompositeViewDescription *compositeDescription = nil;
 
     if (isAudioCall) {
         [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
-        UIDevice.currentDevice.proximityMonitoringEnabled = YES;
+        [DeviceUtils enableProximityMonitoringEnabled: YES];
     }else{
         [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
-        UIDevice.currentDevice.proximityMonitoringEnabled = NO;
+        [DeviceUtils enableProximityMonitoringEnabled: NO];
     }
 
 	[PhoneMainView.instance setVolumeHidden:TRUE];
@@ -326,6 +334,17 @@ static UICompositeViewDescription *compositeDescription = nil;
      forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview: normal2];    */
 }
+
+-(void)viewDidLayoutSubviews {
+    [avatarImage mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(callView.mas_centerX);
+        make.centerY.equalTo(callView.mas_centerY);
+        make.width.height.mas_equalTo(wAvatar);
+    }];
+    avatarImage.layer.cornerRadius = wAvatar/2;
+}
+
+
 
 - (void)CallConnectedSuccessful {
     [self enableVideoForCurrentCall];
@@ -371,7 +390,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 	[super viewDidDisappear:animated];
     
 	[[UIApplication sharedApplication] setIdleTimerDisabled:false];
-	UIDevice.currentDevice.proximityMonitoringEnabled = NO;
+	[DeviceUtils enableProximityMonitoringEnabled: NO];
 
 	[PhoneMainView.instance fullScreen:false];
 	// Disable tap
@@ -401,8 +420,6 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 }
 
 - (void)updateBottomBar:(LinphoneCall *)call state:(LinphoneCallState)state {
-	//  [_speakerButton update];
-	[microButton update];
 	[callPauseButton update];
 	[hangupButton update];
 
@@ -720,10 +737,6 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 		hiddenVolume = FALSE;
 	}
     
-    /*--Khong co goi conference--*/
-    [self btnHideKeypadPressed];
-    
-
 	static LinphoneCall *currentCall = NULL;
 	if (!currentCall || linphone_core_get_current_call(LC) != currentCall) {
 		currentCall = linphone_core_get_current_call(LC);
@@ -905,15 +918,7 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 
 #pragma mark - Action Functions
 
-- (IBAction)onNumpadClick:(id)sender {
-    /*  Leo Kel vin
-	if ([_numpadView isHidden]) {
-		[self hidePad:FALSE animated:ANIMATED];
-	} else {
-		[self hidePad:TRUE animated:ANIMATED];
-	}   */
-    //  [_numpadButton setBackgroundColor:[UIColor clearColor]];
-    // Install Popupview
+- (void)showMiniKeypad {
     NSArray *toplevelObject = [[NSBundle mainBundle] loadNibNamed:@"UIMiniKeypad" owner:nil options:nil];
     UIMiniKeypad *viewKeypad;
     for(id currentObject in toplevelObject){
@@ -922,17 +927,15 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
             break;
         }
     }
+    [viewKeypad.iconBack addTarget:self
+                            action:@selector(hideMiniKeypad)
+                  forControlEvents:UIControlEventTouchUpInside];
+    [callView addSubview:viewKeypad];
+    [viewKeypad mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.bottom.right.equalTo(callView);
+    }];
+    [viewKeypad setupUIForView];
     
-    float hKeyboard;
-    if (SCREEN_WIDTH > 320) {
-        hKeyboard = 280;
-    }else{
-        hKeyboard = 200;
-    }
-    
-    float keypadY = (SCREEN_HEIGHT-appDelegate._hStatus-hKeyboard)/2;
-    
-    viewKeypad.frame = CGRectMake((SCREEN_WIDTH-320)/2, keypadY, 320, hKeyboard);
     viewKeypad.tag = 10;
     [viewKeypad.zeroButton setDigit:'0'];
     [viewKeypad.zeroButton setDtmf:true] ;
@@ -958,121 +961,8 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     [viewKeypad.starButton setDtmf:true];
     [viewKeypad.sharpButton  setDigit:'#'];
     [viewKeypad.sharpButton setDtmf:true];
-    [viewKeypad setBackgroundColor:[UIColor clearColor]];
     
-    [callView addSubview:viewKeypad];
     [self fadeIn:viewKeypad];
-    
-    float wIcon = 60.0;
-    float tmpMargin = (SCREEN_WIDTH - 2*wIcon)/3;
-    float bottom;
-    
-    if (SCREEN_HEIGHT == 480) {
-        bottom = 10.0;
-    }else{
-        bottom = 25.0;
-    }
-    
-    btEndCall = [[UIHangUpButton alloc] initWithFrame:CGRectMake(tmpMargin, callView.frame.size.height-wIcon-bottom, wIcon, wIcon)];
-    [btEndCall setBackgroundImage:[UIImage imageNamed:@"decline_call_def.png"]
-                         forState: UIControlStateNormal];
-    [btEndCall setBackgroundImage:[UIImage imageNamed:@"decline_call_over.png"]
-                         forState: UIControlStateHighlighted];
-    [callView addSubview: btEndCall];
-    
-    btHideKeypad = [[UIButton alloc] initWithFrame:CGRectMake(btEndCall.frame.origin.x+btEndCall.frame.size.width+tmpMargin, btEndCall.frame.origin.y, btEndCall.frame.size.width, btEndCall.frame.size.height)];
-    [btHideKeypad setBackgroundImage:[UIImage imageNamed:@"close_keypad_def.png"]
-                            forState:UIControlStateNormal ] ;
-    [btHideKeypad setBackgroundImage:[UIImage imageNamed:@"close_keypad_act.png"]
-                            forState: UIControlStateHighlighted];
-    [btHideKeypad addTarget:self
-                     action:@selector(btnHideKeypadPressed)
-           forControlEvents:UIControlEventTouchUpInside];
-    
-    [callView addSubview: btHideKeypad];
-    
-    [hangupButton setHidden: true];
-}
-
-- (void)btnKeypadPressed {
-    NSArray *toplevelObject = [[NSBundle mainBundle] loadNibNamed:@"UIMiniKeypad" owner:nil options:nil];
-    UIMiniKeypad *viewKeypad;
-    for(id currentObject in toplevelObject){
-        if ([currentObject isKindOfClass:[UIMiniKeypad class]]) {
-            viewKeypad = (UIMiniKeypad *) currentObject;
-            break;
-        }
-    }
-    
-    float hKeyboard;
-    if (SCREEN_WIDTH > 320) {
-        hKeyboard = 280;
-    }else{
-        hKeyboard = 200;
-    }
-    
-    float keypadY = (SCREEN_HEIGHT-appDelegate._hStatus-hKeyboard)/2;
-    
-    viewKeypad.frame = CGRectMake((SCREEN_WIDTH-320)/2, keypadY, 320, hKeyboard);
-    viewKeypad.tag = 10;
-    [viewKeypad.zeroButton setDigit:'0'];
-    [viewKeypad.zeroButton setDtmf:true] ;
-    [viewKeypad.oneButton    setDigit:'1'];
-    [viewKeypad.oneButton setDtmf:true];
-    [viewKeypad.twoButton    setDigit:'2'];
-    [viewKeypad.twoButton setDtmf:true];
-    [viewKeypad.threeButton  setDigit:'3'];
-    [viewKeypad.threeButton setDtmf:true];
-    [viewKeypad.fourButton   setDigit:'4'];
-    [viewKeypad.fourButton setDtmf:true];
-    [viewKeypad.fiveButton   setDigit:'5'];
-    [viewKeypad.fiveButton setDtmf:true];
-    [viewKeypad.sixButton    setDigit:'6'];
-    [viewKeypad.sixButton setDtmf:true];
-    [viewKeypad.sevenButton  setDigit:'7'];
-    [viewKeypad.sevenButton setDtmf:true];
-    [viewKeypad.eightButton  setDigit:'8'];
-    [viewKeypad.eightButton setDtmf:true];
-    [viewKeypad.nineButton   setDigit:'9'];
-    [viewKeypad.nineButton setDtmf:true];
-    [viewKeypad.starButton   setDigit:'*'];
-    [viewKeypad.starButton setDtmf:true];
-    [viewKeypad.sharpButton  setDigit:'#'];
-    [viewKeypad.sharpButton setDtmf:true];
-    [viewKeypad setBackgroundColor:[UIColor clearColor]];
-    
-    [callView addSubview:viewKeypad];
-    [self fadeIn:viewKeypad];
-    
-    float wIcon = 60.0;
-    float tmpMargin = (SCREEN_WIDTH - 2*wIcon)/3;
-    float bottom;
-    
-    if (SCREEN_HEIGHT == 480) {
-        bottom = 10.0;
-    }else{
-        bottom = 25.0;
-    }
-    
-    btEndCall = [[UIHangUpButton alloc] initWithFrame:CGRectMake(tmpMargin, callView.frame.size.height-wIcon-bottom, wIcon, wIcon)];
-    [btEndCall setBackgroundImage:[UIImage imageNamed:@"decline_call_def.png"]
-                         forState: UIControlStateNormal];
-    [btEndCall setBackgroundImage:[UIImage imageNamed:@"decline_call_over.png"]
-                         forState: UIControlStateHighlighted];
-    [callView addSubview: btEndCall];
-    
-    btHideKeypad = [[UIButton alloc] initWithFrame:CGRectMake(btEndCall.frame.origin.x+btEndCall.frame.size.width+tmpMargin, btEndCall.frame.origin.y, btEndCall.frame.size.width, btEndCall.frame.size.height)];
-    [btHideKeypad setBackgroundImage:[UIImage imageNamed:@"close_keypad_def.png"]
-                            forState:UIControlStateNormal ] ;
-    [btHideKeypad setBackgroundImage:[UIImage imageNamed:@"close_keypad_act.png"]
-                            forState: UIControlStateHighlighted];
-    [btHideKeypad addTarget:self
-                     action:@selector(btnHideKeypadPressed)
-           forControlEvents:UIControlEventTouchUpInside];
-    
-    [callView addSubview: btHideKeypad];
-    
-    hangupButton.hidden = YES;
 }
 
 - (void)fadeIn :(UIView*)view{
@@ -1082,6 +972,22 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
         view.transform = CGAffineTransformMakeScale(1.0, 1.0);
         view.alpha = 1.0;
     }];
+}
+
+//  Hide keypad mini
+- (void)hideMiniKeypad{
+    for (UIView *subView in callView.subviews) {
+        if (subView.tag == 10) {
+            [UIView animateWithDuration:.35 animations:^{
+                subView.transform = CGAffineTransformMakeScale(1.3, 1.3);
+                subView.alpha = 0.0;
+            } completion:^(BOOL finished) {
+                if (finished) {
+                    [subView removeFromSuperview];
+                }
+            }];
+        }
+    }
 }
 
 - (IBAction)onChatClick:(id)sender {
@@ -1222,27 +1128,6 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 - (void)callEnded {
 }
 
-//  Hide keypad mini
-- (void)btnHideKeypadPressed{
-    for (UIView *subView in callView.subviews) {
-        if (subView.tag == 10) {
-            [UIView animateWithDuration:.35 animations:^{
-                subView.transform = CGAffineTransformMakeScale(1.3, 1.3);
-                subView.alpha = 0.0;
-            } completion:^(BOOL finished) {
-                if (finished) {
-                    // [[NSNotificationCenter defaultCenter] removeObserver:self];
-                    [subView removeFromSuperview];
-                }
-            }];
-        }
-    }
-    //  An footer keypad
-    btEndCall.hidden = YES;
-    btHideKeypad.hidden = YES;
-    hangupButton.hidden = NO;
-}
-
 /*----- Kết thúc cuộc gọi trong màn hình video call -----*/
 - (void)endVideoCall{
     LinphoneCore* lc = [LinphoneManager getLc];
@@ -1378,16 +1263,12 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     
     [speakerButton setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
     [speakerButton setImage:[UIImage imageNamed:@"speaker_dis"] forState:UIControlStateDisabled];
-    [speakerButton addTarget:self
-                      action:@selector(onSpeakerButtonPress:)
-            forControlEvents:UIControlEventTouchUpInside];
     [speakerButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(hangupButton.mas_centerY);
         make.right.equalTo(hangupButton.mas_left).offset(-marginIcon);
         make.width.height.mas_equalTo(wSmallIcon);
     }];
     
-    microButton.delegate = self;
     [microButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(speakerButton);
         make.right.equalTo(speakerButton.mas_left).offset(-marginIcon);
@@ -1406,6 +1287,9 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
         make.left.equalTo(callPauseButton.mas_right).offset(marginIcon);
         make.width.mas_equalTo(wSmallIcon);
     }];
+    [numpadButton addTarget:self
+                     action:@selector(showMiniKeypad)
+           forControlEvents:UIControlEventTouchUpInside];
     
     //  video call view
     float paddingVideo = 20.0;
@@ -1491,6 +1375,9 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
         make.left.equalTo(btnSwitchCamera.mas_right).offset(marginIcon);
         make.width.height.mas_equalTo(wSmallIcon);
     }];
+    [btnKeypadVideo addTarget:self
+                       action:@selector(showMiniKeypad)
+             forControlEvents:UIControlEventTouchUpInside];
     
     [btnHangupVideo mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(viewVideoCall.mas_centerX);
@@ -1506,17 +1393,6 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     appDelegate._meEnded = YES;
 }
 
-- (void)onSpeakerButtonPress: (UIButton *)sender {
-    BOOL isEnabled = LinphoneManager.instance.speakerEnabled;
-    if (isEnabled) {
-        [sender setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
-        [LinphoneManager.instance setSpeakerEnabled: NO];
-    }else{
-        [sender setImage:[UIImage imageNamed:@"speaker_enable"] forState:UIControlStateNormal];
-        [LinphoneManager.instance setSpeakerEnabled: YES];
-    }
-}
-
 - (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
     if (touch.view == _videoPreview){
@@ -1525,51 +1401,6 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
         // here is remove keyBoard code
         return TRUE;
     }
-}
-
-- (void)turnOnOrTurnOffCamera
-{
-    /*  Leo Kelvin
-    LinphoneCall *call = linphone_core_get_current_call(LC);
-    BOOL enabled = linphone_call_camera_enabled(call);
-    if (enabled) {
-        if (call != NULL)
-        {
-            //  LinphoneCallParams *call_params = linphone_core_create_call_params(LC,call);
-            LinphoneCallParams* call_params = linphone_call_params_copy(linphone_call_get_current_params(call));
-            linphone_call_enable_camera(call, FALSE);
-            linphone_core_update_call(LC, call, call_params);
-            //linphone_call_accept_update(call, call_params);
-            
-            [videoCallFooterView.footerCameraOff setBackgroundImage:[UIImage imageNamed:@"call_camera_off_selected"]
-                                      forState:UIControlStateNormal];
-            icOffCameraForPreview.hidden = NO;
-        }
-    }else{
-        if (call != NULL) {
-            linphone_call_enable_camera(call, TRUE);
-            //linphone_core_update_call(LC, call, NULL);
-            [videoCallFooterView.footerCameraOff setBackgroundImage:[UIImage imageNamed:@"call_camera_off"]
-                                      forState:UIControlStateNormal];
-            icOffCameraForPreview.hidden = YES;
-        }
-    }   */
-    [[UIApplication sharedApplication] setIdleTimerDisabled: NO];
-    
-    if (!linphone_core_video_display_enabled(LC))
-        return;
-    
-    LinphoneCall *call = linphone_core_get_current_call(LC);
-    if (call) {
-        //  LinphoneCallParams *call_params = linphone_core_create_call_params(LC,call);
-        LinphoneCallParams* call_params = linphone_call_params_copy(linphone_call_get_current_params(call));
-        linphone_call_params_enable_video(call_params, FALSE);
-        linphone_core_update_call(LC, call, call_params);
-        linphone_call_params_destroy(call_params);
-    } else {
-        NSLog(@"Cannot toggle video button, because no current call");
-    }
-    [self displayAudioCall: true];
 }
 
 - (void)enableVideoForCurrentCall {
@@ -1667,69 +1498,12 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
         linphone_call_enable_camera(linphone_core_get_current_call(LC), NO);
         sender.tag = 1;
         
-//        if (!linphone_core_video_display_enabled(LC)){
-//            return;
-//        }
-//        NSError *error = nil;
-//        [defaultDevice lockForConfiguration:&error];
-//
-//        if (error == nil) {
-//            defaultDevice.torchMode = AVCaptureTorchModeOff;
-//        }
-//        [defaultDevice unlockForConfiguration];
-
+        viewOffCam.hidden = NO;
     }else{
         linphone_core_enable_video_preview(LC, YES);
         linphone_call_enable_camera(linphone_core_get_current_call(LC), YES);
         sender.tag = 0;
-//
-//        if (!linphone_core_video_display_enabled(LC)){
-//            return;
-//        }
-//        NSError *error = nil;
-//        [defaultDevice lockForConfiguration:&error];
-//
-//        if (error == nil) {
-//            defaultDevice.torchMode = AVCaptureTorchModeOn;
-//        }
-//        [defaultDevice unlockForConfiguration];
-    }
-    return;
-    
-    if (sender.tag == 0) {
-        if (!linphone_core_video_display_enabled(LC)){
-            return;
-        }
-        LinphoneCall *call = linphone_core_get_current_call(LC);
-        if (call) {
-            LinphoneCallParams *call_params = linphone_core_create_call_params(LC,call);
-            linphone_call_params_enable_video(call_params, FALSE);
-            linphone_core_update_call(LC, call, call_params);
-            linphone_call_accept_update(call, call_params);
-            linphone_call_params_destroy(call_params);
-            
-            sender.tag = 1;
-            [sender setImage:[UIImage imageNamed:@"cam_enable"] forState:UIControlStateNormal];
-        }
-    }else{
-        if (!linphone_core_video_display_enabled(LC)){
-            return;
-        }
-        LinphoneCall *call = linphone_core_get_current_call(LC);
-        if (call) {
-            LinphoneCallAppData *callAppData = (__bridge LinphoneCallAppData *)linphone_call_get_user_pointer(call);
-            callAppData->videoRequested = TRUE; /* will be used later to notify user if video was not activated because of the linphone core*/
-            //  LinphoneCallParams *call_params = linphone_core_create_call_params(LC,call);
-            LinphoneCallParams* call_params = linphone_call_params_copy(linphone_call_get_current_params(call));
-            
-            linphone_call_params_enable_video(call_params, TRUE);
-            linphone_core_update_call(LC, call, call_params);
-            linphone_call_accept_update(call, call_params);
-            linphone_call_params_destroy(call_params);
-            
-            sender.tag = 0;
-            [sender setImage:[UIImage imageNamed:@"cam_normal"] forState:UIControlStateNormal];
-        }
+        viewOffCam.hidden = YES;
     }
 }
 
@@ -1774,4 +1548,46 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     }
 }
 
+- (void)createOffCameraView {
+    if (viewOffCam == nil) {
+        viewOffCam = [[UIView alloc] init];
+        viewOffCam.hidden = YES;
+        [_videoPreview addSubview: viewOffCam];
+        viewOffCam.backgroundColor = UIColor.blackColor;
+        [viewOffCam mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.left.bottom.right.equalTo(_videoPreview);
+        }];
+        
+        imgOffCam = [[UIImageView alloc] init];
+        imgOffCam.image = [UIImage imageNamed:@"cam_enable.png"];
+        [viewOffCam addSubview: imgOffCam];
+        [imgOffCam mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.equalTo(viewOffCam.mas_centerX);
+            make.centerY.equalTo(viewOffCam.mas_centerY);
+            make.width.height.mas_equalTo(35.0);
+        }];
+    }
+}
+
+- (IBAction)speakerButtonPress:(UIButton *)sender {
+    BOOL isEnabled = LinphoneManager.instance.speakerEnabled;
+    if (isEnabled) {
+        [sender setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
+        [LinphoneManager.instance setSpeakerEnabled: NO];
+    }else{
+        [sender setImage:[UIImage imageNamed:@"speaker_enable"] forState:UIControlStateNormal];
+        [LinphoneManager.instance setSpeakerEnabled: YES];
+    }
+}
+
+- (IBAction)microButtonPress:(UIButton *)sender {
+    BOOL micEnable = linphone_core_mic_enabled(LC);
+    if (micEnable) {
+        linphone_core_enable_mic(LC, false);
+        [sender setImage:[UIImage imageNamed:@"mute_enable"] forState:UIControlStateNormal];
+    }else{
+        linphone_core_enable_mic(LC, true);
+        [sender setImage:[UIImage imageNamed:@"mute_normal"] forState:UIControlStateNormal];
+    }
+}
 @end

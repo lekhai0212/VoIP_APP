@@ -8,6 +8,7 @@
 
 #import "MoreViewController.h"
 #import "MenuCell.h"
+#import "MyQRCodeViewController.h"
 #import "ChooseRingtoneViewController.h"
 #import "KSettingViewController.h"
 #import "SignInViewController.h"
@@ -69,10 +70,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     [super viewWillAppear: animated];
     
     [WriteLogsUtils writeForGoToScreen: @"MoreViewController"];
-    
-    // Tắt màn hình cảm biến
-    UIDevice *device = [UIDevice currentDevice];
-    [device setProximityMonitoringEnabled: NO];
     
     [self autoLayoutForMainView];
     
@@ -204,9 +201,9 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 //  Khoi tao du lieu cho view
 - (void)createDataForMenuView {
-    listTitle = [[NSMutableArray alloc] initWithObjects: [[LanguageUtil sharedInstance] getContent:@"Choose ringtone"], [[LanguageUtil sharedInstance] getContent:@"Call settings"], [[LanguageUtil sharedInstance] getContent:@"App information"], [[LanguageUtil sharedInstance] getContent:@"Send reports"], [[LanguageUtil sharedInstance] getContent:@"Sign out"], [[LanguageUtil sharedInstance] getContent:@"Privacy & Policy"], [[LanguageUtil sharedInstance] getContent:@"Answer & Support"], nil];
+    listTitle = [[NSMutableArray alloc] initWithObjects: [[LanguageUtil sharedInstance] getContent:@"Create my QRCode"], [[LanguageUtil sharedInstance] getContent:@"Choose ringtone"], [[LanguageUtil sharedInstance] getContent:@"Call settings"], [[LanguageUtil sharedInstance] getContent:@"App information"], [[LanguageUtil sharedInstance] getContent:@"Send reports"], [[LanguageUtil sharedInstance] getContent:@"Sign out"], [[LanguageUtil sharedInstance] getContent:@"Privacy & Policy"], [[LanguageUtil sharedInstance] getContent:@"Answer & Support"], nil];
     
-    listIcon = [[NSMutableArray alloc] initWithObjects: @"more_ringtone", @"more_call_settings", @"more_app_info", @"more_send_reports", @"more_signout", @"more_policy", @"more_support", nil];
+    listIcon = [[NSMutableArray alloc] initWithObjects: @"qrcode", @"more_ringtone", @"more_call_settings", @"more_app_info", @"more_send_reports", @"more_signout", @"more_policy", @"more_support", nil];
 }
 
 #pragma mark - uitableview delegate
@@ -249,6 +246,10 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     switch (indexPath.row) {
+        case eCreateQRCode:{
+            [[PhoneMainView instance] changeCurrentView:[MyQRCodeViewController compositeViewDescription] push:true];
+            break;
+        }
         case eRingtone:{
             [[PhoneMainView instance] changeCurrentView:[ChooseRingtoneViewController compositeViewDescription] push:true];
             break;

@@ -23,5 +23,8 @@
 + (float)getHeightLogoWelcomeForDevice;
 + (UIEdgeInsets)getEdgeOfVideoCallDialerForDevice;
 + (float)getHeightSearchViewContactForDevice;
++ (BOOL)isAvailableVideo;
++ (BOOL)isAvailablePhotos;
++ (void)enableProximityMonitoringEnabled: (BOOL)enabled;
 
 @end
