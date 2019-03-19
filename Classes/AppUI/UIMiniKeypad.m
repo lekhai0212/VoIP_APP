@@ -62,7 +62,7 @@
     tfNumber.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:45.0];
     tfNumber.adjustsFontSizeToFitWidth = YES;
     tfNumber.backgroundColor = UIColor.clearColor;
-    tfNumber.textColor = UIColor.whiteColor;
+    tfNumber.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     [tfNumber setBorderStyle: UITextBorderStyleNone];
     
     [viewKeypad mas_makeConstraints:^(MASConstraintMaker *make) {

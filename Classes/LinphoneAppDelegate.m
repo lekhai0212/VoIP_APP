@@ -2077,7 +2077,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 - (void)updateCustomerTokenIOS {
     if (USERNAME != nil) {
         NSString *destToken = [NSString stringWithFormat:@"ios%@", _deviceToken];
-        NSString *params = [NSString stringWithFormat:@"pushToken=%@&userName=%@", destToken, USERNAME];
+        NSString *params = [NSString stringWithFormat:@"pushToken=%@&userName=%@&del=0", destToken, USERNAME];
         [webService callGETWebServiceWithFunction:update_token_func andParams:params];
         
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, params] toFilePath:logFilePath];

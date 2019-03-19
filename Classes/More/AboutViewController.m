@@ -127,7 +127,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.top.left.bottom.right.equalTo(viewHeader);
     }];
     
-    lbHeader.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
+    lbHeader.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:20.0];
     [lbHeader mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(viewHeader).offset([LinphoneAppDelegate sharedInstance]._hStatus);
         make.bottom.equalTo(viewHeader);
@@ -151,6 +151,8 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.width.height.mas_equalTo(120.0);
     }];
     
+    lbVersion.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:20.0];
+    lbVersion.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     [lbVersion mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(imgAppLogo.mas_bottom).offset(40.0);
         make.left.equalTo(self.view).offset(20.0);
@@ -158,7 +160,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.height.mas_lessThanOrEqualTo(100.0);
     }];
     
-    btnCheckForUpdate.titleLabel.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
+    btnCheckForUpdate.titleLabel.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:20.0];
     [btnCheckForUpdate setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     btnCheckForUpdate.backgroundColor = [UIColor colorWithRed:(101/255.0) green:(205/255.0)
                                                          blue:(70/255.0) alpha:1.0];

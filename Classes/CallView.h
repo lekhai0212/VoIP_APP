@@ -33,6 +33,7 @@
 #import "UIDigitButton.h"
 #import "UIRoundedImageView.h"
 #import "UIBouncingView.h"
+#import "MarqueeLabel.h"
 
 typedef enum typeCall{
     callIncoming,
@@ -52,7 +53,7 @@ typedef enum typeCall{
 
 
 @property (weak, nonatomic) IBOutlet UIImageView *bgAudioCall;
-@property(weak, nonatomic) IBOutlet UILabel *nameLabel;
+@property(weak, nonatomic) IBOutlet MarqueeLabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *lbPhoneNumber;
 @property(weak, nonatomic) IBOutlet UILabel *durationLabel;
 @property(weak, nonatomic) IBOutlet UIRoundedImageView *avatarImage;
@@ -71,7 +72,7 @@ typedef enum typeCall{
 @property(nonatomic, strong) IBOutlet UIView *videoPreview;
 @property (weak, nonatomic) IBOutlet UILabel *lbVideoQuality;
 @property (weak, nonatomic) IBOutlet UILabel *_lbVideoTime;
-@property (weak, nonatomic) IBOutlet UILabel *lbAddressVideoCall;
+@property (weak, nonatomic) IBOutlet MarqueeLabel *lbAddressVideoCall;
 @property (weak, nonatomic) IBOutlet UIButton *btnMicroVideo;
 @property (weak, nonatomic) IBOutlet UIButton *btnSpeakerVideo;
 @property (weak, nonatomic) IBOutlet UIButton *btnOffCamera;

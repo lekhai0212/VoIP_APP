@@ -108,7 +108,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     [[LinphoneManager instance] lpConfigSetBool:FALSE forKey:@"enable_first_login_view_preference"];
     
     // invisible icon add contact & icon delete address
-    _addressField.text = @"";
+    [self hideSearchView];
     
     //  update token of device if not yet
     if (![LinphoneAppDelegate sharedInstance]._updateTokenSuccess && ![AppUtils isNullOrEmpty: [LinphoneAppDelegate sharedInstance]._deviceToken])

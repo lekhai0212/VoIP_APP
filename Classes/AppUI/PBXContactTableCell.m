@@ -49,6 +49,7 @@
         make.height.equalTo(icCall.mas_height);
     }];
     
+    _lbName.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     [_lbName mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_imgAvatar);
         make.left.equalTo(_imgAvatar.mas_right).offset(10);

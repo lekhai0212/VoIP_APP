@@ -198,6 +198,8 @@
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 								duration:(NSTimeInterval)duration {
+    duration = 0;
+    
 	currentOrientation = toInterfaceOrientation;
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 	[self.mainViewController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
@@ -209,6 +211,8 @@
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 										 duration:(NSTimeInterval)duration {
+    duration = 0;
+    
 	[super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation
 											duration:duration]; // Will invoke TPMultiLayout
 	[self.mainViewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
