@@ -30,5 +30,8 @@
 
 - (void)setupUIForView;
 - (IBAction)onDigitPress:(UIDigitButton *)sender;
+@property (weak, nonatomic) IBOutlet UILabel *lbSepa123;
+@property (weak, nonatomic) IBOutlet UILabel *lbSepa456;
+@property (weak, nonatomic) IBOutlet UILabel *lbSepa789;
 
 @end

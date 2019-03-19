@@ -21,7 +21,7 @@
 @synthesize zeroButton;
 @synthesize sharpButton;
 @synthesize starButton;
-@synthesize iconBack, iconMiniKeypadEndCall, tfNumber, viewKeypad;
+@synthesize iconBack, iconMiniKeypadEndCall, tfNumber, viewKeypad, lbSepa123, lbSepa456, lbSepa789;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -38,15 +38,10 @@
     
     //  Number keypad
     NSString *modelName = [DeviceUtils getModelsOfCurrentDevice];
+    
     float wIcon = [DeviceUtils getSizeOfKeypadButtonForDevice: modelName];
     float spaceMarginY = [DeviceUtils getSpaceYBetweenKeypadButtonsForDevice: modelName];
     float spaceMarginX = [DeviceUtils getSpaceXBetweenKeypadButtonsForDevice: modelName];
-    
-    [iconMiniKeypadEndCall mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.mas_centerX);
-        make.bottom.equalTo(self).offset(-20);
-        make.width.height.mas_equalTo(wIcon);
-    }];
     
     iconBack.imageEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     [iconBack mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -71,15 +66,33 @@
     [tfNumber setBorderStyle: UITextBorderStyleNone];
     
     [viewKeypad mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self);
-        make.top.equalTo(tfNumber.mas_bottom).offset(10);
-        make.bottom.equalTo(iconMiniKeypadEndCall.mas_top).offset(-10);
+        make.left.right.bottom.equalTo(self);
+        make.top.equalTo(tfNumber.mas_bottom);
     }];
     
+    //  7   8   9
+    [eightButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(viewKeypad.mas_centerY);
+        make.centerX.equalTo(viewKeypad.mas_centerX);
+        make.width.height.mas_equalTo(wIcon);
+    }];
     
+    [sevenButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(eightButton);
+        make.right.equalTo(eightButton.mas_left).offset(-spaceMarginX);
+        make.width.height.mas_equalTo(wIcon);
+    }];
+    
+    [nineButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(eightButton);
+        make.left.equalTo(eightButton.mas_right).offset(spaceMarginX);
+        make.width.height.mas_equalTo(wIcon);
+    }];
+    
+    //  4   5   6
     [fiveButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(viewKeypad.mas_centerX);
-        make.bottom.equalTo(viewKeypad.mas_centerY).offset(-spaceMarginY/2);
+        make.bottom.equalTo(eightButton.mas_top).offset(-spaceMarginY);
         make.width.height.mas_equalTo(wIcon);
     }];
     
@@ -95,6 +108,7 @@
         make.width.height.mas_equalTo(wIcon);
     }];
     
+    //  1   2   3
     [twoButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(fiveButton.mas_top).offset(-spaceMarginY);
         make.centerX.equalTo(viewKeypad.mas_centerX);
@@ -113,24 +127,7 @@
         make.width.height.mas_equalTo(wIcon);
     }];
     
-    [eightButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(fiveButton.mas_bottom).offset(spaceMarginY);
-        make.centerX.equalTo(viewKeypad.mas_centerX);
-        make.width.height.mas_equalTo(wIcon);
-    }];
-    
-    [sevenButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(eightButton);
-        make.right.equalTo(eightButton.mas_left).offset(-spaceMarginX);
-        make.width.height.mas_equalTo(wIcon);
-    }];
-    
-    [nineButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(eightButton);
-        make.left.equalTo(eightButton.mas_right).offset(spaceMarginX);
-        make.width.height.mas_equalTo(wIcon);
-    }];
-    
+    //  *   0   #
     [zeroButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(eightButton.mas_bottom).offset(spaceMarginY);
         make.centerX.equalTo(viewKeypad.mas_centerX);
@@ -147,6 +144,35 @@
         make.top.equalTo(zeroButton);
         make.left.equalTo(zeroButton.mas_right).offset(spaceMarginX);
         make.width.height.mas_equalTo(wIcon);
+    }];
+    
+    [iconMiniKeypadEndCall mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(viewKeypad.mas_centerX);
+        make.top.equalTo(zeroButton.mas_bottom).offset(spaceMarginY);
+        make.width.height.mas_equalTo(wIcon);
+    }];
+    
+    lbSepa123.backgroundColor = [UIColor colorWithRed:(240/255.0) green:(240/255.0)
+                                                 blue:(240/255.0) alpha:1.0];
+    lbSepa456.backgroundColor = lbSepa789.backgroundColor = lbSepa123.backgroundColor;
+    
+    [lbSepa123 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(oneButton);
+        make.right.equalTo(threeButton.mas_right);
+        make.top.equalTo(oneButton.mas_bottom).offset(spaceMarginY/2);
+        make.height.mas_equalTo(1.0);
+    }];
+    
+    [lbSepa456 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(lbSepa123);
+        make.top.equalTo(fiveButton.mas_bottom).offset(spaceMarginY/2);
+        make.height.equalTo(lbSepa123.mas_height);
+    }];
+    
+    [lbSepa789 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(lbSepa123);
+        make.top.equalTo(eightButton.mas_bottom).offset(spaceMarginY/2);
+        make.height.equalTo(lbSepa123.mas_height);
     }];
 }
 

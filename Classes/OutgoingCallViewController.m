@@ -110,7 +110,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear: animated];
-    [DeviceUtils enableProximityMonitoringEnabled: NO];
 }
 
 - (void)viewDidLayoutSubviews {

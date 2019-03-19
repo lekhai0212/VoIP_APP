@@ -317,6 +317,13 @@ static UICompositeViewDescription *compositeDescription = nil;
 	LinphoneCallState state = (call != NULL) ? linphone_call_get_state(call) : 0;
 	[self callUpdate:call state:state animated:FALSE];
     
+    [avatarImage mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(callView.mas_centerX);
+        make.centerY.equalTo(callView.mas_centerY);
+        make.width.height.mas_equalTo(wAvatar);
+    }];
+    avatarImage.layer.cornerRadius = wAvatar/2;
+    
     /*
     UIButton *normal = [[UIButton alloc] initWithFrame:CGRectMake(180, 50, 100, 50)];
     normal.backgroundColor = UIColor.redColor;
@@ -334,17 +341,6 @@ static UICompositeViewDescription *compositeDescription = nil;
      forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview: normal2];    */
 }
-
--(void)viewDidLayoutSubviews {
-    [avatarImage mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(callView.mas_centerX);
-        make.centerY.equalTo(callView.mas_centerY);
-        make.width.height.mas_equalTo(wAvatar);
-    }];
-    avatarImage.layer.cornerRadius = wAvatar/2;
-}
-
-
 
 - (void)CallConnectedSuccessful {
     [self enableVideoForCurrentCall];
