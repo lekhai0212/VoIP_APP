@@ -145,6 +145,9 @@
 		15CA86D3221A7416002A8AE7 /* iPadAllContactsListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15CA86D1221A7416002A8AE7 /* iPadAllContactsListViewController.xib */; };
 		15CAA27721F02A6A00D3739A /* ic_end_call_red.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CAA26F21F02A6700D3739A /* ic_end_call_red.png */; };
 		15CAA27821F02A6A00D3739A /* ic_end_call_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CAA27621F02A6900D3739A /* ic_end_call_white.png */; };
+		15CAD27222436CE1007F43C5 /* speaker_bluetooth_enable.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CAD26A22436CD4007F43C5 /* speaker_bluetooth_enable.png */; };
+		15CAD27322436CE1007F43C5 /* speaker_bluetooth_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CAD27122436CD7007F43C5 /* speaker_bluetooth_normal.png */; };
+		15CAD27C224378AD007F43C5 /* push.php in Resources */ = {isa = PBXBuildFile; fileRef = 15CAD275224378AC007F43C5 /* push.php */; };
 		15D21BE42176E70000FEBED2 /* EditProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15D21BE22176E6FF00FEBED2 /* EditProfileViewController.m */; };
 		15D21BE52176E70000FEBED2 /* EditProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15D21BE32176E70000FEBED2 /* EditProfileViewController.xib */; };
 		15D480E621EC8FBE00213F45 /* iPadAccountSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15D480E421EC8FBE00213F45 /* iPadAccountSettingsViewController.m */; };
@@ -1174,6 +1177,9 @@
 		15CA86D1221A7416002A8AE7 /* iPadAllContactsListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = iPadAllContactsListViewController.xib; path = iPad/Contacts/iPadAllContactsListViewController.xib; sourceTree = "<group>"; };
 		15CAA26F21F02A6700D3739A /* ic_end_call_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_end_call_red.png; sourceTree = "<group>"; };
 		15CAA27621F02A6900D3739A /* ic_end_call_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_end_call_white.png; sourceTree = "<group>"; };
+		15CAD26A22436CD4007F43C5 /* speaker_bluetooth_enable.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = speaker_bluetooth_enable.png; sourceTree = "<group>"; };
+		15CAD27122436CD7007F43C5 /* speaker_bluetooth_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = speaker_bluetooth_normal.png; sourceTree = "<group>"; };
+		15CAD275224378AC007F43C5 /* push.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = push.php; sourceTree = "<group>"; };
 		15D21BE12176E6FF00FEBED2 /* EditProfileViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = EditProfileViewController.h; path = More/EditProfileViewController.h; sourceTree = "<group>"; };
 		15D21BE22176E6FF00FEBED2 /* EditProfileViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = EditProfileViewController.m; path = More/EditProfileViewController.m; sourceTree = "<group>"; };
 		15D21BE32176E70000FEBED2 /* EditProfileViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = EditProfileViewController.xib; path = More/EditProfileViewController.xib; sourceTree = "<group>"; };
@@ -3185,6 +3191,8 @@
 			isa = PBXGroup;
 			children = (
 				1508C74B223F8A92000ECA9A /* not_qrcode.png */,
+				15CAD26A22436CD4007F43C5 /* speaker_bluetooth_enable.png */,
+				15CAD27122436CD7007F43C5 /* speaker_bluetooth_normal.png */,
 				8410CD14223CE11100C90960 /* nowebcamCIF.jpg */,
 				157C726B223B8EFC00EA607F /* ringtone_stop.png */,
 				157C7268223B872000EA607F /* ringtone_pause.png */,
@@ -3375,6 +3383,7 @@
 		63AADBC31B6A0FF200AA16FD /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				15CAD275224378AC007F43C5 /* push.php */,
 				84C0017E21B1781200105B00 /* file_encrypt.txt */,
 				8442A3611FB1320F00F08F11 /* Fonts */,
 				84C1E2261FAEB93400EED0B9 /* Languages */,
@@ -4732,6 +4741,7 @@
 				84D2320122350A720015335B /* numpad_five_hover.png in Resources */,
 				84CD487E22186E8A000EC31B /* iPadNotChoosednMoreViewController.xib in Resources */,
 				84ECF9BE216679A70067B4B6 /* ic_speaker_def.png in Resources */,
+				15CAD27222436CE1007F43C5 /* speaker_bluetooth_enable.png in Resources */,
 				84D2320022350A720015335B /* numpad_one_hover.png in Resources */,
 				8454877B221864400065E3A4 /* iPadEditProfileViewController.xib in Resources */,
 				84515E67200EEE1A007246E9 /* msg.wav in Resources */,
@@ -4884,6 +4894,7 @@
 				153D00592164D9D3007B69B3 /* hotline_hover.png in Resources */,
 				159E0879217984F00056E2BB /* RegisterPBXWithPhoneView.xib in Resources */,
 				842DEC441FC478F300E7F74D /* UIMiniKeypad.xib in Resources */,
+				15CAD27322436CE1007F43C5 /* speaker_bluetooth_normal.png in Resources */,
 				84ECF9C6216679A70067B4B6 /* ic_addcall_dis.png in Resources */,
 				84FEC5CA22394F0200E6A0F5 /* ChooseDIDCell.xib in Resources */,
 				15F2E5FC216B575D0076CB1F /* background_more.png in Resources */,
@@ -4923,6 +4934,7 @@
 				848C5D9621F436DD00094D7C /* ic_pause_call_gray.png in Resources */,
 				84F81BE921EF86C3009629C9 /* ic_keyboard_white.png in Resources */,
 				84ECF9BD216679A70067B4B6 /* ic_keypad_def.png in Resources */,
+				15CAD27C224378AD007F43C5 /* push.php in Resources */,
 				841B359C2191F26D0019BD45 /* ic-pause-active.png in Resources */,
 				84D2321422350A720015335B /* numpad_star_hover.png in Resources */,
 				15857BFE216DEC0000DB5237 /* UIContactPhoneCell.xib in Resources */,
