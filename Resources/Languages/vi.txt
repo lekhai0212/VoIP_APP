@@ -102,7 +102,7 @@
 
 "Do you want to delete call history?" = "Bạn có muốn xoá lịch sử cuộc gọi?"
 "Calls detail" = "Chi tiết cuộc gọi"
-
+"Hide" = "Ẩn"
 
 
 

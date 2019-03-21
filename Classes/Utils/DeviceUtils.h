@@ -7,6 +7,12 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum {
+    eReceiver = 1,
+    eSpeaker,
+    eEarphone,
+}TypeOutputRoute;
+
 @interface DeviceUtils : NSObject
 
 + (NSString *)getModelsOfCurrentDevice;
@@ -27,4 +33,10 @@
 + (BOOL)isAvailablePhotos;
 + (void)enableProximityMonitoringEnabled: (BOOL)enabled;
 
+//  Check device connected to bluetooth earphone
++ (BOOL)isConnectedEarPhone;
++ (NSString *)getNameOfEarPhoneConnected;
+
+//  check current route used bluetooth
++ (TypeOutputRoute)getCurrentRouteForCall;
 @end

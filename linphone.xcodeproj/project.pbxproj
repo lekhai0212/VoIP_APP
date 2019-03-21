@@ -434,6 +434,8 @@
 		8414C3D121EB23D400F54DD1 /* youtube_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 8414C3CF21EB23D300F54DD1 /* youtube_blue.png */; };
 		8414C3D221EB23D400F54DD1 /* youtube_red.png in Resources */ = {isa = PBXBuildFile; fileRef = 8414C3D021EB23D300F54DD1 /* youtube_red.png */; };
 		8414C3D421EB23FD00F54DD1 /* facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 8414C3D321EB23FC00F54DD1 /* facebook.png */; };
+		8417DEA92243F35900F649F1 /* route_tick.png in Resources */ = {isa = PBXBuildFile; fileRef = 8417DEA22243F35800F649F1 /* route_tick.png */; };
+		8417DEAB2243FA0200F649F1 /* speaker_bluetooth_dis.png in Resources */ = {isa = PBXBuildFile; fileRef = 8417DEAA2243FA0200F649F1 /* speaker_bluetooth_dis.png */; };
 		8419017620EAA01B003F524C /* PulsingHaloLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8419016E20EAA01B003F524C /* PulsingHaloLayer.m */; };
 		841B35912191F1360019BD45 /* ConferenceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 841B358F2191F1360019BD45 /* ConferenceTableViewCell.m */; };
 		841B35922191F1360019BD45 /* ConferenceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 841B35902191F1360019BD45 /* ConferenceTableViewCell.xib */; };
@@ -513,6 +515,10 @@
 		8459953B216F8CE00004143A /* ic_add_def@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84599539216F8CDF0004143A /* ic_add_def@2x.png */; };
 		845A13311FE2C70300640B51 /* PBXContactTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 845A132F1FE2C70300640B51 /* PBXContactTableCell.m */; };
 		845A13321FE2C70300640B51 /* PBXContactTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 845A13301FE2C70300640B51 /* PBXContactTableCell.xib */; };
+		845D98272243ECEF00D09A04 /* ChooseRouteOutputCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 845D98252243ECEF00D09A04 /* ChooseRouteOutputCell.m */; };
+		845D98282243ECEF00D09A04 /* ChooseRouteOutputCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 845D98262243ECEF00D09A04 /* ChooseRouteOutputCell.xib */; };
+		845D98312243F00200D09A04 /* route_earphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 845D982F2243F00100D09A04 /* route_earphone.png */; };
+		845D98322243F00200D09A04 /* route_speaker.png in Resources */ = {isa = PBXBuildFile; fileRef = 845D98302243F00100D09A04 /* route_speaker.png */; };
 		846586951FCA9AC900C5142C /* KMessageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 846586921FCA9AC600C5142C /* KMessageViewController.xib */; };
 		846586961FCA9AC900C5142C /* KMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 846586931FCA9AC700C5142C /* KMessageViewController.m */; };
 		846586991FCA9BD600C5142C /* SwipeableTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 846586981FCA9BD600C5142C /* SwipeableTableViewCell.m */; };
@@ -1554,6 +1560,8 @@
 		8414C3CF21EB23D300F54DD1 /* youtube_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = youtube_blue.png; sourceTree = "<group>"; };
 		8414C3D021EB23D300F54DD1 /* youtube_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = youtube_red.png; sourceTree = "<group>"; };
 		8414C3D321EB23FC00F54DD1 /* facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook.png; sourceTree = "<group>"; };
+		8417DEA22243F35800F649F1 /* route_tick.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = route_tick.png; sourceTree = "<group>"; };
+		8417DEAA2243FA0200F649F1 /* speaker_bluetooth_dis.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = speaker_bluetooth_dis.png; sourceTree = "<group>"; };
 		8419016B20EAA01B003F524C /* PulsingHaloLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PulsingHaloLayer.h; sourceTree = "<group>"; };
 		8419016D20EAA01B003F524C /* PulsingHalo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PulsingHalo.h; sourceTree = "<group>"; };
 		8419016E20EAA01B003F524C /* PulsingHaloLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PulsingHaloLayer.m; sourceTree = "<group>"; };
@@ -1658,6 +1666,11 @@
 		845A132E1FE2C70300640B51 /* PBXContactTableCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PBXContactTableCell.h; path = AppUI/PBXContactTableCell.h; sourceTree = "<group>"; };
 		845A132F1FE2C70300640B51 /* PBXContactTableCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PBXContactTableCell.m; path = AppUI/PBXContactTableCell.m; sourceTree = "<group>"; };
 		845A13301FE2C70300640B51 /* PBXContactTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = PBXContactTableCell.xib; path = AppUI/PBXContactTableCell.xib; sourceTree = "<group>"; };
+		845D98242243ECEF00D09A04 /* ChooseRouteOutputCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ChooseRouteOutputCell.h; path = AppUI/ChooseRouteOutputCell.h; sourceTree = "<group>"; };
+		845D98252243ECEF00D09A04 /* ChooseRouteOutputCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ChooseRouteOutputCell.m; path = AppUI/ChooseRouteOutputCell.m; sourceTree = "<group>"; };
+		845D98262243ECEF00D09A04 /* ChooseRouteOutputCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ChooseRouteOutputCell.xib; path = AppUI/ChooseRouteOutputCell.xib; sourceTree = "<group>"; };
+		845D982F2243F00100D09A04 /* route_earphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = route_earphone.png; sourceTree = "<group>"; };
+		845D98302243F00100D09A04 /* route_speaker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = route_speaker.png; sourceTree = "<group>"; };
 		846586921FCA9AC600C5142C /* KMessageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = KMessageViewController.xib; path = Chats/KMessageViewController.xib; sourceTree = "<group>"; };
 		846586931FCA9AC700C5142C /* KMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KMessageViewController.m; path = Chats/KMessageViewController.m; sourceTree = "<group>"; };
 		846586941FCA9AC800C5142C /* KMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KMessageViewController.h; path = Chats/KMessageViewController.h; sourceTree = "<group>"; };
@@ -3191,8 +3204,12 @@
 			isa = PBXGroup;
 			children = (
 				1508C74B223F8A92000ECA9A /* not_qrcode.png */,
+				845D982F2243F00100D09A04 /* route_earphone.png */,
+				8417DEA22243F35800F649F1 /* route_tick.png */,
+				845D98302243F00100D09A04 /* route_speaker.png */,
 				15CAD26A22436CD4007F43C5 /* speaker_bluetooth_enable.png */,
 				15CAD27122436CD7007F43C5 /* speaker_bluetooth_normal.png */,
+				8417DEAA2243FA0200F649F1 /* speaker_bluetooth_dis.png */,
 				8410CD14223CE11100C90960 /* nowebcamCIF.jpg */,
 				157C726B223B8EFC00EA607F /* ringtone_stop.png */,
 				157C7268223B872000EA607F /* ringtone_pause.png */,
@@ -3843,6 +3860,9 @@
 				157C725F223B52C700EA607F /* ChooseRingToneCell.xib */,
 				157C7262223B687000EA607F /* PlayRingTonePopupView.h */,
 				157C7263223B687000EA607F /* PlayRingTonePopupView.m */,
+				845D98242243ECEF00D09A04 /* ChooseRouteOutputCell.h */,
+				845D98252243ECEF00D09A04 /* ChooseRouteOutputCell.m */,
+				845D98262243ECEF00D09A04 /* ChooseRouteOutputCell.xib */,
 			);
 			name = AppUI;
 			sourceTree = "<group>";
@@ -4684,10 +4704,12 @@
 				84969C30222BAF51008C7E1B /* ic_muted_red.png in Resources */,
 				157C7253223B4B1B00EA607F /* lenovo_suond.mp3 in Resources */,
 				157C7261223B52C700EA607F /* ChooseRingToneCell.xib in Resources */,
+				8417DEAB2243FA0200F649F1 /* speaker_bluetooth_dis.png in Resources */,
 				15B292C321FC0AF4005B6568 /* ic_speaker_ble_dis.png in Resources */,
 				1523A3C521FB134D00C40F44 /* ic_save.png in Resources */,
 				157C7254223B4B1B00EA607F /* smekh_rebenka_mix.mp3 in Resources */,
 				84F81BC721EF6AE4009629C9 /* iPadHistoryCallCell.xib in Resources */,
+				845D98282243ECEF00D09A04 /* ChooseRouteOutputCell.xib in Resources */,
 				154E400C217440FD0030A6B8 /* no_avatar_blue.png in Resources */,
 				842814E6223ABEDF00E8EAC0 /* cam_normal.png in Resources */,
 				D38187BD15FE342800C3EDCA /* ContactsListView.xib in Resources */,
@@ -4780,6 +4802,7 @@
 				84D231E12235034A0015335B /* menu_dialer_act.png in Resources */,
 				156E176021E85BAE00C15E79 /* HomeSplitViewController.xib in Resources */,
 				8494CBA022102F1B001D6FB4 /* ic_trash_ipad.png in Resources */,
+				845D98322243F00200D09A04 /* route_speaker.png in Resources */,
 				848C5D9C21F4376200094D7C /* ic_keyboard_gray.png in Resources */,
 				15E9B6D321F0863600F25EA1 /* TestViewController.xib in Resources */,
 				84D2320A22350A720015335B /* numpad_six_hover.png in Resources */,
@@ -4846,6 +4869,7 @@
 				84B4F0EE21E8D5F400591C50 /* ic_call_bottom_bar_def@3x.png in Resources */,
 				84F81BD221EF7F18009629C9 /* ic_shrink.png in Resources */,
 				D38187D915FE347700C3EDCA /* CallIncomingView.xib in Resources */,
+				845D98312243F00200D09A04 /* route_earphone.png in Resources */,
 				84D23225223539FB0015335B /* contact_audio_call.png in Resources */,
 				84D231DB2235034A0015335B /* menu_more_def.png in Resources */,
 				63CDC45F1C3BDE370085F529 /* ringback.wav in Resources */,
@@ -4967,6 +4991,7 @@
 				15CA86D3221A7416002A8AE7 /* iPadAllContactsListViewController.xib in Resources */,
 				63B81A0C1B57DA33009604A6 /* LICENSE.txt in Resources */,
 				1521E0B921EF3B810085EAB1 /* iPadKeypadViewController.xib in Resources */,
+				8417DEA92243F35900F649F1 /* route_tick.png in Resources */,
 				15EE0A67223A517000B69344 /* HistoryCallDetailTableViewCell.xib in Resources */,
 				84B290C121EDB2940039E1A2 /* iPadChangePasswordViewController.xib in Resources */,
 				1579B72121674989002BECE3 /* ic_edit.png in Resources */,
@@ -5298,6 +5323,7 @@
 				84D032221FB531B5002D2524 /* KContactDetailViewController.m in Sources */,
 				84C443931FBE10840015854C /* SettingItem.m in Sources */,
 				8489DECF2160B16100A7A1DD /* NewSettingCell.m in Sources */,
+				845D98272243ECEF00D09A04 /* ChooseRouteOutputCell.m in Sources */,
 				84EDEE531FB7136200FF665C /* LanguageObject.m in Sources */,
 				84EDEE571FB7137200FF665C /* LanguageCell.m in Sources */,
 				D35497FE15875372000081D8 /* ContactsListView.m in Sources */,

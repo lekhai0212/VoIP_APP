@@ -38,7 +38,7 @@
 #import "UIConferenceCell.h"
 #import "ContactDetailObj.h"
 #import "UIMiniKeypad.h"
-
+#import "ChooseRouteOutputCell.h"
 #import "NSDatabase.h"
 
 #import <OpenGLES/EAGL.h>
@@ -55,7 +55,7 @@ void message_received(LinphoneCore *lc, LinphoneChatRoom *room, const LinphoneAd
 
 const NSInteger SECURE_BUTTON_TAG = 5;
 
-@interface CallView (){
+@interface CallView ()<UITableViewDelegate, UITableViewDataSource>{
     BOOL isAudioCall;
     float wAvatar;
     float wEndIcon;
@@ -87,6 +87,8 @@ const NSInteger SECURE_BUTTON_TAG = 5;
     
     UIView *viewOffCam;
     UIImageView *imgOffCam;
+    
+    UITableViewController *tbRoutes;
 }
 
 @end
@@ -276,7 +278,26 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     int count = linphone_core_get_calls_nb([LinphoneManager getLc]);
     if (count > 0) {
-        if (!isAudioCall) {
+        if (isAudioCall) {
+            if ([DeviceUtils getCurrentRouteForCall] == eEarphone) {
+                [speakerButton setImage:[UIImage imageNamed:@"speaker_bluetooth_enable"]
+                               forState:UIControlStateNormal];
+            }else{
+                if (LinphoneManager.instance.speakerEnabled) {
+                    [speakerButton setImage:[UIImage imageNamed:@"speaker_enable"]
+                                   forState:UIControlStateNormal];
+                }else{
+                    [speakerButton setImage:[UIImage imageNamed:@"speaker_normal"]
+                                   forState:UIControlStateNormal];
+                }
+                //  detect micro
+                if (linphone_core_mic_enabled(LC)) {
+                    [microButton setImage:[UIImage imageNamed:@"mute_normal"] forState:UIControlStateNormal];
+                }else{
+                    [microButton setImage:[UIImage imageNamed:@"mute_enable"] forState:UIControlStateNormal];
+                }
+            }
+        }else{
             linphone_call_enable_camera(linphone_core_get_current_call(LC), NO);
             [self performSelector:@selector(tryToUpdateCamera) withObject:nil afterDelay:1.0];
             
@@ -293,20 +314,6 @@ static UICompositeViewDescription *compositeDescription = nil;
             }else{
                 [btnMicroVideo setImage:[UIImage imageNamed:@"mute_enable"] forState:UIControlStateNormal];
             }
-        }else{
-            if (LinphoneManager.instance.speakerEnabled) {
-                [speakerButton setImage:[UIImage imageNamed:@"speaker_enable"]
-                               forState:UIControlStateNormal];
-            }else{
-                [speakerButton setImage:[UIImage imageNamed:@"speaker_normal"]
-                               forState:UIControlStateNormal];
-            }
-            //  detect micro
-            if (linphone_core_mic_enabled(LC)) {
-                [microButton setImage:[UIImage imageNamed:@"mute_normal"] forState:UIControlStateNormal];
-            }else{
-                [microButton setImage:[UIImage imageNamed:@"mute_enable"] forState:UIControlStateNormal];
-            }
         }
     }
     callView.hidden = !isAudioCall;
@@ -317,9 +324,25 @@ static UICompositeViewDescription *compositeDescription = nil;
     linphone_call_enable_camera(linphone_core_get_current_call(LC), YES);
 }
 
+- (void)checkBluetoothForCall {
+    AVAudioSessionRouteDescription *currentRoute = [[AVAudioSession sharedInstance] currentRoute];
+    NSArray *outputs = currentRoute.outputs;
+    for (AVAudioSessionPortDescription *route in outputs) {
+        NSLog(@"Detect ble: %@", route.portType);
+    }
+}
+
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 
+    UIButton *btnCheck = [[UIButton alloc] initWithFrame:CGRectMake(20, 20, 100, 50)];
+    btnCheck.backgroundColor = UIColor.redColor;
+    [btnCheck setTitle:@"CHECK" forState:UIControlStateNormal];
+    [btnCheck addTarget:self
+                 action:@selector(checkBluetoothForCall)
+       forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview: btnCheck];
+    
     if (isAudioCall) {
         NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationPortrait];
         [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
@@ -709,6 +732,7 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 }
 
 - (void)hideSpeaker:(BOOL)hidden {
+    return;
 	speakerButton.hidden = hidden;
 	_routesButton.hidden = !hidden;
 }
@@ -1593,13 +1617,18 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 }
 
 - (IBAction)speakerButtonPress:(UIButton *)sender {
-    BOOL isEnabled = LinphoneManager.instance.speakerEnabled;
-    if (isEnabled) {
-        [sender setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
-        [LinphoneManager.instance setSpeakerEnabled: NO];
+    if ([DeviceUtils isConnectedEarPhone]) {
+        [self showOptionChooseRouteOutputForCall];
+        
     }else{
-        [sender setImage:[UIImage imageNamed:@"speaker_enable"] forState:UIControlStateNormal];
-        [LinphoneManager.instance setSpeakerEnabled: YES];
+        BOOL isEnabled = LinphoneManager.instance.speakerEnabled;
+        if (isEnabled) {
+            [sender setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
+            [LinphoneManager.instance setSpeakerEnabled: NO];
+        }else{
+            [sender setImage:[UIImage imageNamed:@"speaker_enable"] forState:UIControlStateNormal];
+            [LinphoneManager.instance setSpeakerEnabled: YES];
+        }
     }
 }
 
@@ -1613,4 +1642,103 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
         [sender setImage:[UIImage imageNamed:@"mute_normal"] forState:UIControlStateNormal];
     }
 }
+
+- (void)showOptionChooseRouteOutputForCall {
+    UIAlertController * alertViewController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction* hideAction = [UIAlertAction actionWithTitle:[[LanguageUtil sharedInstance] getContent:@"Hide"] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){}];
+    [hideAction setValue:UIColor.redColor forKey:@"titleTextColor"];
+    [alertViewController addAction: hideAction];
+    
+    
+    tbRoutes = [[UITableViewController alloc] init];
+    tbRoutes.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    tbRoutes.tableView.delegate = self;
+    tbRoutes.tableView.scrollEnabled = NO;
+    tbRoutes.tableView.dataSource = self;
+    [alertViewController setValue:tbRoutes forKey:@"contentViewController"];
+    
+    NSLayoutConstraint *height = [NSLayoutConstraint constraintWithItem:alertViewController.view attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:58*4];
+    [alertViewController.view addConstraint: height];
+    
+    [self presentViewController:alertViewController animated:YES completion:nil];
+}
+
+#pragma mark - UITableview route
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 3;
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *identifier = @"ChooseRouteOutputCell";
+    ChooseRouteOutputCell *cell = [tableView dequeueReusableCellWithIdentifier: identifier];
+    if (cell == nil) {
+        cell = [[[NSBundle mainBundle] loadNibNamed:@"ChooseRouteOutputCell" owner:nil options:nil] lastObject];
+    }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    TypeOutputRoute routeType = [DeviceUtils getCurrentRouteForCall];
+    switch (indexPath.row) {
+        case 0:{
+            cell.lbContent.text = [DeviceUtils getNameOfEarPhoneConnected];
+            cell.imgType.image = [UIImage imageNamed:@"route_earphone"];
+            cell.imgType.hidden = NO;
+            if (routeType == eEarphone) {
+                cell.imgSelected.hidden = NO;
+            }else{
+                cell.imgSelected.hidden = YES;
+            }
+            break;
+        }
+        case 1:{
+            cell.lbContent.text = @"iPhone";
+            cell.imgType.hidden = YES;
+            if (routeType == eReceiver) {
+                cell.imgSelected.hidden = NO;
+            }else{
+                cell.imgSelected.hidden = YES;
+            }
+            break;
+        }
+        case 2:{
+            cell.lbContent.text = [[LanguageUtil sharedInstance] getContent:@"Speaker"];
+            cell.imgType.image = [UIImage imageNamed:@"route_speaker"];
+            cell.imgType.hidden = NO;
+            if (routeType == eSpeaker) {
+                cell.imgSelected.hidden = NO;
+            }else{
+                cell.imgSelected.hidden = YES;
+            }
+            break;
+        }
+        default:
+            break;
+    }
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    switch (indexPath.row) {
+        case 0:{
+            break;
+        }
+        case 1:{
+            break;
+        }
+        case 2:{
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 58.0;
+}
+
 @end

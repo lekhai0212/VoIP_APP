@@ -2735,7 +2735,9 @@ static int comp_call_state_paused(const LinphoneCall *call, const void *param) {
     
 	if (newRoute && (unsigned long)newRoute.outputs.count > 0) {
 		NSString *route = newRoute.outputs[0].portType;
-		NSLog(@"Current audio route is [%s]", [route UTF8String]);
+        NSLog(@"Detect BLE: newRoute = %@", route);
+        
+        NSLog(@"Detect BLE: Current audio route is [%s]", [route UTF8String]);
 
 		_speakerEnabled = [route isEqualToString:AVAudioSessionPortBuiltInSpeaker];
 		if (([[AudioHelper bluetoothRoutes] containsObject:route]) && !_speakerEnabled) {

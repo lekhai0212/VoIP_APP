@@ -265,5 +265,48 @@
     [device setProximityMonitoringEnabled: enabled];
 }
 
++ (BOOL)isConnectedEarPhone {
+    NSArray *bluetoothPorts = @[ AVAudioSessionPortBluetoothA2DP, AVAudioSessionPortBluetoothLE, AVAudioSessionPortBluetoothHFP ];
+    
+    NSArray *routes = [[AVAudioSession sharedInstance] availableInputs];
+    for (AVAudioSessionPortDescription *route in routes) {
+        if ([bluetoothPorts containsObject:route.portType]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
++ (NSString *)getNameOfEarPhoneConnected {
+    NSArray *bluetoothPorts = @[ AVAudioSessionPortBluetoothA2DP, AVAudioSessionPortBluetoothLE, AVAudioSessionPortBluetoothHFP ];
+    
+    NSArray *routes = [[AVAudioSession sharedInstance] availableInputs];
+    for (AVAudioSessionPortDescription *route in routes) {
+        if ([bluetoothPorts containsObject:route.portType]) {
+            return route.portName;
+        }
+    }
+    return @"";
+}
+
+//  check current route used bluetooth
++ (TypeOutputRoute)getCurrentRouteForCall {
+    AVAudioSessionRouteDescription *currentRoute = [[AVAudioSession sharedInstance] currentRoute];
+    NSArray *outputs = currentRoute.outputs;
+    for (AVAudioSessionPortDescription *route in outputs) {
+        if (route.portType == AVAudioSessionPortBuiltInReceiver) {
+            return eReceiver;
+            
+        }else if (route.portType == AVAudioSessionPortBuiltInSpeaker) {
+            return eSpeaker;
+            
+        }else if (route.portType == AVAudioSessionPortBluetoothHFP || route.portType == AVAudioSessionPortBluetoothLE || route.portType == AVAudioSessionPortBluetoothA2DP) {
+            return eEarphone;
+        }
+    }
+    return eReceiver;
+}
+
+
 
 @end
