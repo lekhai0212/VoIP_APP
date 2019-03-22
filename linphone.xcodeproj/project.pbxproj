@@ -523,7 +523,6 @@
 		846586961FCA9AC900C5142C /* KMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 846586931FCA9AC700C5142C /* KMessageViewController.m */; };
 		846586991FCA9BD600C5142C /* SwipeableTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 846586981FCA9BD600C5142C /* SwipeableTableViewCell.m */; };
 		84699CBF21FCCD6300C82EFD /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84699CB521FCC03800C82EFD /* CoreBluetooth.framework */; };
-		84699CC121FCD90D00C82EFD /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84699CC021FCD90D00C82EFD /* ExternalAccessory.framework */; };
 		846B716920E240410019AD41 /* SipUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 846B716120E240400019AD41 /* SipUtils.m */; };
 		84767D6321664C2900561A85 /* ic_call_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 84767D6221664C2900561A85 /* ic_call_back.png */; };
 		8482CE2A2115554000E26650 /* PBXSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8482CE282115554000E26650 /* PBXSettingViewController.m */; };
@@ -1677,7 +1676,6 @@
 		846586971FCA9BD500C5142C /* SwipeableTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwipeableTableViewCell.h; path = AppUI/SwipeableTableViewCell.h; sourceTree = "<group>"; };
 		846586981FCA9BD600C5142C /* SwipeableTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwipeableTableViewCell.m; path = AppUI/SwipeableTableViewCell.m; sourceTree = "<group>"; };
 		84699CB521FCC03800C82EFD /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
-		84699CC021FCD90D00C82EFD /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
 		846B716120E240400019AD41 /* SipUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SipUtils.m; path = AppObjects/SipUtils.m; sourceTree = "<group>"; };
 		846B716820E240410019AD41 /* SipUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SipUtils.h; path = AppObjects/SipUtils.h; sourceTree = "<group>"; };
 		84767D6221664C2900561A85 /* ic_call_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_call_back.png; sourceTree = "<group>"; };
@@ -2448,7 +2446,6 @@
 				70E542F513E147EB002BA2C0 /* QuartzCore.framework in Frameworks */,
 				2264B6D211200342002C2C53 /* SystemConfiguration.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
-				84699CC121FCD90D00C82EFD /* ExternalAccessory.framework in Frameworks */,
 				F0B026F31AA710AF00FF49F7 /* libiconv.dylib in Frameworks */,
 				F05BAA621A5D594E00411815 /* libz.dylib in Frameworks */,
 				344ABDF114850AE9007420B6 /* libc++.1.dylib in Frameworks */,
@@ -3001,7 +2998,6 @@
 			isa = PBXGroup;
 			children = (
 				1508C74D223F92F5000ECA9A /* Photos.framework */,
-				84699CC021FCD90D00C82EFD /* ExternalAccessory.framework */,
 				84699CB521FCC03800C82EFD /* CoreBluetooth.framework */,
 				84E2BB47200A4B9200F152C1 /* AVKit.framework */,
 				844DEF071FE8D3410047A358 /* Intents.framework */,
@@ -4515,7 +4511,7 @@
 				LastUpgradeCheck = 0820;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
-						DevelopmentTeam = JWYJ345PPC;
+						DevelopmentTeam = 4LY8SQLV6P;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.InAppPurchase = {
@@ -4525,20 +4521,20 @@
 								enabled = 1;
 							};
 							com.apple.WAC = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
 					F08F118319C09C6A007D70C2 = {
-						DevelopmentTeam = JWYJ345PPC;
+						DevelopmentTeam = 4LY8SQLV6P;
 						TestTargetID = F0BB8BD41936208100974404;
 					};
 					F0BB8BD41936208100974404 = {
-						DevelopmentTeam = JWYJ345PPC;
+						DevelopmentTeam = 4LY8SQLV6P;
 					};
 					F0F951FF1A6AEB1000254160 = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = JWYJ345PPC;
+						DevelopmentTeam = 4LY8SQLV6P;
 						TestTargetID = 1D6058900D05DD3D006BFB54;
 					};
 				};
@@ -6049,11 +6045,11 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_UNREACHABLE_CODE = NO;
 				CODE_SIGN_ENTITLEMENTS = linphone.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Thuan Phuoc Tran (TGFVP599Q6)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Thuan Phuoc Tran (TGFVP599Q6)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Son Le (79M77CN537)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Son Le (79M77CN537)";
 				COMPRESS_PNG_FILES = NO;
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = JWYJ345PPC;
+				DEVELOPMENT_TEAM = 4LY8SQLV6P;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)";
 				GCC_C_LANGUAGE_STANDARD = c99;
@@ -6095,10 +6091,10 @@
 					"-ObjC",
 					"-lxml2",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.ods.cloudfonevn;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhanhoa.cloudcall;
 				PRODUCT_NAME = linphone;
 				PROVISIONING_PROFILE = "9ba894d8-f515-44bd-be45-7fcdf2b92481";
-				PROVISIONING_PROFILE_SPECIFIER = "CLOUDFONEVN Development";
+				PROVISIONING_PROFILE_SPECIFIER = "CloudCall Development";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "$(inherited)";
@@ -6158,11 +6154,11 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_UNREACHABLE_CODE = NO;
 				CODE_SIGN_ENTITLEMENTS = linphone.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Thuan Phuoc Tran (TGFVP599Q6)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Thuan Phuoc Tran (TGFVP599Q6)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Son Le (4LY8SQLV6P)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Son Le (4LY8SQLV6P)";
 				COMPRESS_PNG_FILES = NO;
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = JWYJ345PPC;
+				DEVELOPMENT_TEAM = 4LY8SQLV6P;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)";
 				GCC_C_LANGUAGE_STANDARD = c99;
@@ -6204,10 +6200,10 @@
 					"-ObjC",
 					"-lxml2",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.ods.cloudfonevn;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhanhoa.cloudcall;
 				PRODUCT_NAME = linphone;
 				PROVISIONING_PROFILE = "9ba894d8-f515-44bd-be45-7fcdf2b92481";
-				PROVISIONING_PROFILE_SPECIFIER = "CLOUDFONEVN Development";
+				PROVISIONING_PROFILE_SPECIFIER = "CloudCall Adhoc";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "$(inherited)";
@@ -6267,11 +6263,11 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_UNREACHABLE_CODE = NO;
 				CODE_SIGN_ENTITLEMENTS = linphone.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Thuan Phuoc Tran (TGFVP599Q6)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Thuan Phuoc Tran (TGFVP599Q6)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Son Le (4LY8SQLV6P)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Son Le (4LY8SQLV6P)";
 				COMPRESS_PNG_FILES = NO;
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = JWYJ345PPC;
+				DEVELOPMENT_TEAM = 4LY8SQLV6P;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)";
 				GCC_C_LANGUAGE_STANDARD = c99;
@@ -6313,10 +6309,10 @@
 					"-ObjC",
 					"-lxml2",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.ods.cloudfonevn;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhanhoa.cloudcall;
 				PRODUCT_NAME = linphone;
 				PROVISIONING_PROFILE = "9ba894d8-f515-44bd-be45-7fcdf2b92481";
-				PROVISIONING_PROFILE_SPECIFIER = "CLOUDFONEVN Development";
+				PROVISIONING_PROFILE_SPECIFIER = "CloudCall Distribution";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "$(inherited)";
@@ -6376,11 +6372,11 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_UNREACHABLE_CODE = NO;
 				CODE_SIGN_ENTITLEMENTS = linphone.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Thuan Phuoc Tran (TGFVP599Q6)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Thuan Phuoc Tran (TGFVP599Q6)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Son Le (4LY8SQLV6P)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Son Le (4LY8SQLV6P)";
 				COMPRESS_PNG_FILES = NO;
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = JWYJ345PPC;
+				DEVELOPMENT_TEAM = 4LY8SQLV6P;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)";
 				GCC_C_LANGUAGE_STANDARD = c99;
@@ -6422,10 +6418,10 @@
 					"-ObjC",
 					"-lxml2",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.ods.cloudfonevn;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhanhoa.cloudcall;
 				PRODUCT_NAME = linphone;
 				PROVISIONING_PROFILE = "9ba894d8-f515-44bd-be45-7fcdf2b92481";
-				PROVISIONING_PROFILE_SPECIFIER = "CLOUDFONEVN Development";
+				PROVISIONING_PROFILE_SPECIFIER = "CloudCall Adhoc";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "$(inherited)";
@@ -6494,7 +6490,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = JWYJ345PPC;
+				DEVELOPMENT_TEAM = 4LY8SQLV6P;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -6548,7 +6544,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
-				DEVELOPMENT_TEAM = JWYJ345PPC;
+				DEVELOPMENT_TEAM = 4LY8SQLV6P;
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -6596,7 +6592,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
-				DEVELOPMENT_TEAM = JWYJ345PPC;
+				DEVELOPMENT_TEAM = 4LY8SQLV6P;
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -6644,7 +6640,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
-				DEVELOPMENT_TEAM = JWYJ345PPC;
+				DEVELOPMENT_TEAM = 4LY8SQLV6P;
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -6693,7 +6689,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = JWYJ345PPC;
+				DEVELOPMENT_TEAM = 4LY8SQLV6P;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -6753,7 +6749,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
-				DEVELOPMENT_TEAM = JWYJ345PPC;
+				DEVELOPMENT_TEAM = 4LY8SQLV6P;
 				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6807,7 +6803,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
-				DEVELOPMENT_TEAM = JWYJ345PPC;
+				DEVELOPMENT_TEAM = 4LY8SQLV6P;
 				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6861,7 +6857,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
-				DEVELOPMENT_TEAM = JWYJ345PPC;
+				DEVELOPMENT_TEAM = 4LY8SQLV6P;
 				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6912,7 +6908,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = JWYJ345PPC;
+				DEVELOPMENT_TEAM = 4LY8SQLV6P;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -6965,7 +6961,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
-				DEVELOPMENT_TEAM = JWYJ345PPC;
+				DEVELOPMENT_TEAM = 4LY8SQLV6P;
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -7012,7 +7008,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
-				DEVELOPMENT_TEAM = JWYJ345PPC;
+				DEVELOPMENT_TEAM = 4LY8SQLV6P;
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -7059,7 +7055,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
-				DEVELOPMENT_TEAM = JWYJ345PPC;
+				DEVELOPMENT_TEAM = 4LY8SQLV6P;
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
