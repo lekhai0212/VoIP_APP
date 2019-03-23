@@ -349,6 +349,13 @@
     return hCell;
 }
 
+- (void)scrollViewDidScroll:(UIScrollView*)scrollView {
+    CGPoint scrollViewOffset = scrollView.contentOffset;
+    if (scrollViewOffset.y < 0) {
+        [scrollView setContentOffset:CGPointMake(0, 0)];
+    }
+}
+
 - (void)btnCallOnCellPressed: (UIButton *)sender {
     if (![AppUtils isNullOrEmpty: sender.currentTitle]) {
         NSString *phoneNumber = [AppUtils removeAllSpecialInString: sender.currentTitle];

@@ -166,6 +166,7 @@ typedef enum{
 @property (nonatomic, strong) VideoCallView *videoCallView;
 
 @property (nonatomic, strong) NSString *phoneForCall;
+@property (nonatomic, assign) BOOL configPushToken;
 
 @end
 

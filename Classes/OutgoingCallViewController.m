@@ -115,6 +115,9 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(uiForiPhoneReceiverEnabled)
                                                name:@"iPhoneReceiverEnabled" object:nil];
+    
+    NSNumber *value = [NSNumber numberWithInt:UIDeviceOrientationLandscapeLeft];
+    [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -450,8 +453,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (IBAction)btnSpeakerPress:(UIButton *)sender {
     if ([DeviceUtils isConnectedEarPhone]) {
-        [self showOptionChooseRouteOutputForCall];
-        
+        //  [self showOptionChooseRouteOutputForCall];
     }else{
         BOOL isEnabled = LinphoneManager.instance.speakerEnabled;
         if (isEnabled) {

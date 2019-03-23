@@ -308,6 +308,13 @@
     }
 }
 
+- (void)scrollViewDidScroll:(UIScrollView*)scrollView {
+    CGPoint scrollViewOffset = scrollView.contentOffset;
+    if (scrollViewOffset.y < 0) {
+        [scrollView setContentOffset:CGPointMake(0, 0)];
+    }
+}
+
 - (void)didTapCheckBox:(BEMCheckBox *)checkBox {
     NSIndexPath *indexPath = [checkBox _indexPath];
     if (listDelete == nil) {

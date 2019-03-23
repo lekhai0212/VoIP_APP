@@ -24,6 +24,7 @@
                 <outlet property="fiveButton" destination="31" id="195"/>
                 <outlet property="fourButton" destination="30" id="194"/>
                 <outlet property="hashButton" destination="41" id="4Vx-Tl-ywI"/>
+                <outlet property="icClear" destination="hrm-vb-oyF" id="20r-t7-sst"/>
                 <outlet property="landscapeView" destination="171" id="mdM-t5-k4V"/>
                 <outlet property="lbSepa123" destination="5ra-kU-wXt" id="R0Q-ex-fZc"/>
                 <outlet property="lbSepa456" destination="UZ0-hm-zK6" id="cb3-uk-xyC"/>
@@ -95,6 +96,14 @@
                                         <outlet property="delegate" destination="-1" id="190"/>
                                     </connections>
                                 </textField>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="hrm-vb-oyF">
+                                    <rect key="frame" x="256" y="10" width="40" height="40"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <state key="normal" image="ic_error.png"/>
+                                    <connections>
+                                        <action selector="icClearClick:" destination="-1" eventType="touchUpInside" id="IDF-eb-21e"/>
+                                    </connections>
+                                </button>
                             </subviews>
                         </view>
                         <view contentMode="scaleToFill" id="180" userLabel="pad">
@@ -343,7 +352,7 @@
             <color key="backgroundColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="-194" y="-931"/>
+            <point key="canvasLocation" x="-330" y="-963"/>
         </view>
     </objects>
     <resources>
@@ -351,6 +360,7 @@
         <image name="backspace_hover_1" width="241" height="149"/>
         <image name="call_default.png" width="201" height="201"/>
         <image name="call_hover.png" width="201" height="201"/>
+        <image name="ic_error.png" width="200" height="200"/>
         <image name="ic_logo" width="200" height="200"/>
         <image name="numpad_clear.png" width="201" height="201"/>
         <image name="numpad_eight_default.png" width="261" height="261"/>

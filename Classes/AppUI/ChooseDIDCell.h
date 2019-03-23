@@ -11,6 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ChooseDIDCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *lbDIDNumber;
+@property (weak, nonatomic) IBOutlet UILabel *lbTitle;
 
 @end
 

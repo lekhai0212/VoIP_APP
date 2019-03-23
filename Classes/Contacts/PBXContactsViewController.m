@@ -497,6 +497,7 @@
             [waitingView stopAnimating];
             waitingView.hidden = YES;
             [waitingView removeFromSuperview];
+            waitingView = nil;
         }
     }else{
         if (waitingView == nil) {
@@ -506,6 +507,7 @@
             waitingView.alpha = 0.5;
             [[LinphoneAppDelegate sharedInstance].window addSubview: waitingView];
         }
+        //  [[LinphoneAppDelegate sharedInstance].window bringSubviewToFront: waitingView];
         [waitingView startAnimating];
         waitingView.hidden = NO;
     }

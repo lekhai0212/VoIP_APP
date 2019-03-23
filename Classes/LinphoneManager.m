@@ -2092,7 +2092,8 @@ static LinphoneCoreVTable linphonec_vtable = {
 		linphone_core_enable_video_capture(theLinphoneCore, FALSE);
 	}
 	
-	[self enableProxyPublish:([UIApplication sharedApplication].applicationState == UIApplicationStateActive)];
+	//  [self enableProxyPublish:([UIApplication sharedApplication].applicationState == UIApplicationStateActive)];
+    [self enableProxyPublish:NO];
 
 	LOGI(@"Linphone [%s]  started on [%s]", linphone_core_get_version(), [[UIDevice currentDevice].model UTF8String]);
 
@@ -2495,6 +2496,7 @@ static int comp_call_state_paused(const LinphoneCall *call, const void *param) {
 }
 
 - (void)enableProxyPublish:(BOOL)enabled {
+    enabled = NO;
 	if (linphone_core_get_global_state(LC) != LinphoneGlobalOn || !linphone_core_get_default_friend_list(LC)) {
 		LOGW(@"Not changing presence configuration because linphone core not ready yet");
 		return;
@@ -2640,7 +2642,8 @@ static int comp_call_state_paused(const LinphoneCall *call, const void *param) {
 		}
 	}
 
-	[self enableProxyPublish:YES];
+	//  [self enableProxyPublish:YES];
+    [self enableProxyPublish:NO];
 }
 
 - (void)beginInterruption {
@@ -3053,17 +3056,12 @@ static int comp_call_state_paused(const LinphoneCall *call, const void *param) {
             silent = @"";
         }
         
-        
-        NSString *machine = [self machineName];
-        NSString *systemVersion = [[UIDevice currentDevice] systemVersion];
-        NSString *deviceInfo = [NSString stringWithFormat:@"%@_%@", machine, systemVersion];
-        
-        NSString *params = [NSString stringWithFormat:@"app-id=%@.%@;pn-type=%@;i-push=%@;",
-                            [[NSBundle mainBundle] bundleIdentifier], APPMODE_SUFFIX, deviceInfo, [LinphoneAppDelegate sharedInstance]._deviceToken];
-        
-        NSLog(@"Proxy config %s configured for push notifications with contact: %@",
-              linphone_proxy_config_get_identity(proxyCfg), params);
-        linphone_proxy_config_set_contact_uri_parameters(proxyCfg, [params UTF8String]);
+        //  NSString *machine = [self machineName];
+        //  NSString *systemVersion = [[UIDevice currentDevice] systemVersion];
+        //  NSString *deviceInfo = [NSString stringWithFormat:@"%@_%@", machine, systemVersion];
+        //  NSString *params = [NSString stringWithFormat:@"app-id=%@.%@;pn-type=%@;i-push=%@;",[[NSBundle mainBundle] bundleIdentifier], APPMODE_SUFFIX, deviceInfo, [LinphoneAppDelegate sharedInstance]._deviceToken];
+        //  NSLog(@"Proxy config %s configured for push notifications with contact: %@", linphone_proxy_config_get_identity(proxyCfg), params);
+        //  linphone_proxy_config_set_contact_uri_parameters(proxyCfg, [params UTF8String]);
         linphone_proxy_config_set_contact_parameters(proxyCfg, NULL);
     }else {
         linphone_proxy_config_set_contact_uri_parameters(proxyCfg, NULL);

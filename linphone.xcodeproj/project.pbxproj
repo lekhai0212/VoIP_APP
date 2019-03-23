@@ -7,10 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1508C741223F82C6000ECA9A /* MyQRCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1508C73F223F82C6000ECA9A /* MyQRCodeViewController.m */; };
-		1508C742223F82C6000ECA9A /* MyQRCodeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1508C740223F82C6000ECA9A /* MyQRCodeViewController.xib */; };
 		1508C74A223F8782000ECA9A /* ic_download.png in Resources */ = {isa = PBXBuildFile; fileRef = 1508C749223F8781000ECA9A /* ic_download.png */; };
-		1508C74C223F8A93000ECA9A /* not_qrcode.png in Resources */ = {isa = PBXBuildFile; fileRef = 1508C74B223F8A92000ECA9A /* not_qrcode.png */; };
 		1508C757223FB10A000ECA9A /* ic_back_act.png in Resources */ = {isa = PBXBuildFile; fileRef = 1508C750223FB109000ECA9A /* ic_back_act.png */; };
 		1521E0A821EED5140085EAB1 /* iPadNewContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1521E0A621EED5140085EAB1 /* iPadNewContactViewController.m */; };
 		1521E0A921EED5140085EAB1 /* iPadNewContactViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1521E0A721EED5140085EAB1 /* iPadNewContactViewController.xib */; };
@@ -485,6 +482,7 @@
 		8442A36B1FB13C0F00F08F11 /* ContactsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8442A3691FB13C0F00F08F11 /* ContactsViewController.xib */; };
 		8442A3791FB13D0D00F08F11 /* PBXContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8442A3771FB13D0D00F08F11 /* PBXContactsViewController.m */; };
 		8442A37A1FB13D0D00F08F11 /* PBXContactsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8442A3781FB13D0D00F08F11 /* PBXContactsViewController.xib */; };
+		84449F3B22468D6A00E13E0F /* ic_error.png in Resources */ = {isa = PBXBuildFile; fileRef = 84449F3A22468D6900E13E0F /* ic_error.png */; };
 		8444C41A22262C4500D11166 /* bg_button_login.png in Resources */ = {isa = PBXBuildFile; fileRef = 8444C41322262C4400D11166 /* bg_button_login.png */; };
 		84485C5322387DEE00DFB862 /* keypad_enable.png in Resources */ = {isa = PBXBuildFile; fileRef = 84485C4A22387DEC00DFB862 /* keypad_enable.png */; };
 		84485C5422387DEE00DFB862 /* keypad_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 84485C5122387DEC00DFB862 /* keypad_normal.png */; };
@@ -1001,11 +999,7 @@
 /* Begin PBXFileReference section */
 		04384AF25CC5D4D3E47815DA /* Pods-linphoneTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-linphoneTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-linphoneTests/Pods-linphoneTests.release.xcconfig"; sourceTree = "<group>"; };
 		045B5CB218D72E9A0088350C /* libbzrtp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbzrtp.a; path = "liblinphone-sdk/apple-darwin/lib/libbzrtp.a"; sourceTree = "<group>"; };
-		1508C73E223F82C6000ECA9A /* MyQRCodeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MyQRCodeViewController.h; path = More/MyQRCodeViewController.h; sourceTree = "<group>"; };
-		1508C73F223F82C6000ECA9A /* MyQRCodeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MyQRCodeViewController.m; path = More/MyQRCodeViewController.m; sourceTree = "<group>"; };
-		1508C740223F82C6000ECA9A /* MyQRCodeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MyQRCodeViewController.xib; path = More/MyQRCodeViewController.xib; sourceTree = "<group>"; };
 		1508C749223F8781000ECA9A /* ic_download.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_download.png; sourceTree = "<group>"; };
-		1508C74B223F8A92000ECA9A /* not_qrcode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = not_qrcode.png; sourceTree = "<group>"; };
 		1508C74D223F92F5000ECA9A /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		1508C750223FB109000ECA9A /* ic_back_act.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_back_act.png; sourceTree = "<group>"; };
 		1521E0A521EED5140085EAB1 /* iPadNewContactViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iPadNewContactViewController.h; path = iPad/Contacts/iPadNewContactViewController.h; sourceTree = "<group>"; };
@@ -1624,6 +1618,7 @@
 		8442A3761FB13D0D00F08F11 /* PBXContactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PBXContactsViewController.h; path = Contacts/PBXContactsViewController.h; sourceTree = "<group>"; };
 		8442A3771FB13D0D00F08F11 /* PBXContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PBXContactsViewController.m; path = Contacts/PBXContactsViewController.m; sourceTree = "<group>"; };
 		8442A3781FB13D0D00F08F11 /* PBXContactsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PBXContactsViewController.xib; path = Contacts/PBXContactsViewController.xib; sourceTree = "<group>"; };
+		84449F3A22468D6900E13E0F /* ic_error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_error.png; sourceTree = "<group>"; };
 		8444C41322262C4400D11166 /* bg_button_login.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_button_login.png; sourceTree = "<group>"; };
 		84485C4A22387DEC00DFB862 /* keypad_enable.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = keypad_enable.png; sourceTree = "<group>"; };
 		84485C5122387DEC00DFB862 /* keypad_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = keypad_normal.png; sourceTree = "<group>"; };
@@ -3199,7 +3194,7 @@
 		633FEBE11D3CD5570014B822 /* images */ = {
 			isa = PBXGroup;
 			children = (
-				1508C74B223F8A92000ECA9A /* not_qrcode.png */,
+				84449F3A22468D6900E13E0F /* ic_error.png */,
 				845D982F2243F00100D09A04 /* route_earphone.png */,
 				8417DEA22243F35800F649F1 /* route_tick.png */,
 				845D98302243F00100D09A04 /* route_speaker.png */,
@@ -3536,9 +3531,6 @@
 				843ED65D1FB658F9005FE1C1 /* MoreViewController.h */,
 				843ED65E1FB658F9005FE1C1 /* MoreViewController.m */,
 				843ED65F1FB658F9005FE1C1 /* MoreViewController.xib */,
-				1508C73E223F82C6000ECA9A /* MyQRCodeViewController.h */,
-				1508C73F223F82C6000ECA9A /* MyQRCodeViewController.m */,
-				1508C740223F82C6000ECA9A /* MyQRCodeViewController.xib */,
 				15EE0A6E223A61CA00B69344 /* ChooseRingtoneViewController.h */,
 				15EE0A6F223A61CA00B69344 /* ChooseRingtoneViewController.m */,
 				15EE0A70223A61CA00B69344 /* ChooseRingtoneViewController.xib */,
@@ -4742,7 +4734,6 @@
 				15A2B8AD2232600B00DA6342 /* bg_signin.png in Resources */,
 				840E965C223726490040CDCC /* speaker_enable.png in Resources */,
 				15A2B8AA22325F6F00DA6342 /* logo_white.png in Resources */,
-				1508C74C223F8A93000ECA9A /* not_qrcode.png in Resources */,
 				158A2A322233654100C535E0 /* OutgoingCallViewController.xib in Resources */,
 				84B4F0E721E8CD4E00591C50 /* ic_more_bottom_bar_act@2x.png in Resources */,
 				15CAA27821F02A6A00D3739A /* ic_end_call_white.png in Resources */,
@@ -4818,7 +4809,6 @@
 				8429871121B29D4000150EB0 /* ic_more_bottom_bar_def.png in Resources */,
 				84485C5322387DEE00DFB862 /* keypad_enable.png in Resources */,
 				D38187B115FE340500C3EDCA /* ChatsListView.xib in Resources */,
-				1508C742223F82C6000ECA9A /* MyQRCodeViewController.xib in Resources */,
 				1521E0B721EF3B810085EAB1 /* iPadDialerViewController.xib in Resources */,
 				84D032191FB52E7A002D2524 /* AllContactsViewController.xib in Resources */,
 				84F742BE20163334000F7FFF /* FriendForAcceptCell.xib in Resources */,
@@ -4954,6 +4944,7 @@
 				848C5D9621F436DD00094D7C /* ic_pause_call_gray.png in Resources */,
 				84F81BE921EF86C3009629C9 /* ic_keyboard_white.png in Resources */,
 				84ECF9BD216679A70067B4B6 /* ic_keypad_def.png in Resources */,
+				84449F3B22468D6A00E13E0F /* ic_error.png in Resources */,
 				15CAD27C224378AD007F43C5 /* push.php in Resources */,
 				841B359C2191F26D0019BD45 /* ic-pause-active.png in Resources */,
 				84D2321422350A720015335B /* numpad_star_hover.png in Resources */,
@@ -5392,7 +5383,6 @@
 				633888451BFB2C49001D5E7B /* HPGrowingTextView.m in Sources */,
 				84C47D091FB62CC10015695E /* HistoryCallCell.m in Sources */,
 				63F1DF441BCE618E00EDED90 /* UIAddressTextField.m in Sources */,
-				1508C741223F82C6000ECA9A /* MyQRCodeViewController.m in Sources */,
 				842DEC431FC478F300E7F74D /* UIMiniKeypad.m in Sources */,
 				1578D07121AD3DDF00E8BA5F /* SendLogFileCell.m in Sources */,
 				D3EA540D1598528B0037DC6B /* ChatsListTableView.m in Sources */,
@@ -6203,7 +6193,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhanhoa.cloudcall;
 				PRODUCT_NAME = linphone;
 				PROVISIONING_PROFILE = "9ba894d8-f515-44bd-be45-7fcdf2b92481";
-				PROVISIONING_PROFILE_SPECIFIER = "CloudCall Adhoc";
+				PROVISIONING_PROFILE_SPECIFIER = "CloudCall Distribution";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "$(inherited)";
@@ -6421,7 +6411,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhanhoa.cloudcall;
 				PRODUCT_NAME = linphone;
 				PROVISIONING_PROFILE = "9ba894d8-f515-44bd-be45-7fcdf2b92481";
-				PROVISIONING_PROFILE_SPECIFIER = "CloudCall Adhoc";
+				PROVISIONING_PROFILE_SPECIFIER = "CloudCall Distribution";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "$(inherited)";

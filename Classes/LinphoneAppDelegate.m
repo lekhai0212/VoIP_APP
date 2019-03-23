@@ -92,7 +92,7 @@
 @synthesize webService, keepAwakeTimer, listNumber, listInfoPhoneNumber, supportLoginWithPhoneNumber, logFilePath, dbQueue, splashScreen;
 @synthesize supportVoice;
 @synthesize homeSplitVC, contactType, historyType, callTransfered, hNavigation, hasBluetoothEar, ipadWaiting;
-@synthesize audioCallView, videoCallView, phoneForCall;
+@synthesize audioCallView, videoCallView, phoneForCall, configPushToken;
 
 #pragma mark - Lifecycle Functions
 
@@ -633,6 +633,11 @@ void onUncaughtException(NSException* exception)
         // Send an alert telling user to change privacy setting in settings app
     }
     
+    //  get missed callfrom server
+    if (USERNAME != nil && ![USERNAME isEqualToString: @""]) {
+        //  [self getMissedCallFromServer];
+    }
+    
 	return YES;
 }
 
@@ -736,7 +741,6 @@ void onUncaughtException(NSException* exception)
     sound = default;
     title = Cloudfone;
     */
-    
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] userInfo = %@", __FUNCTION__, @[userInfo]] toFilePath:logFilePath];
     
     NSDictionary *aps = [userInfo objectForKey:@"aps"];
@@ -2111,7 +2115,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, params] toFilePath:logFilePath];
     
-    
     [[NSUserDefaults standardUserDefaults] setObject:dateTo forKey:DATE_FROM];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
@@ -2162,14 +2165,11 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     if ([link isEqualToString: update_token_func]) {
         _updateTokenSuccess = true;
         
-    }else if ([link isEqualToString: GetInfoMissCall]){
-        [self insertMissedCallToDatabase: data];
-        
     }else if ([link isEqualToString: get_didlist_func]) {
         [self showPopupToChooseDID: data];
         
     }else if ([link isEqualToString: get_missedcall_func]) {
-        NSLog(@"%@", data);
+        [self insertMissedCallToDatabase: data];
     }
 }
 
@@ -2219,8 +2219,13 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 - (void)registrationUpdate:(LinphoneRegistrationState)state forProxy:(LinphoneProxyConfig *)proxy message:(NSString *)message {
     switch (state) {
         case LinphoneRegistrationOk: {
-            //  get missed callfrom server
-            [self getMissedCallFromServer];
+            if (!configPushToken) {
+                LinphoneProxyConfig *defaultConfig = linphone_core_get_default_proxy_config(LC);
+                if (defaultConfig) {
+                    [[LinphoneManager instance] configurePushTokenForProxyConfig:defaultConfig];
+                }
+                configPushToken = YES;
+            }
             
             //  [Khai Le - 15/12/2018]
             if (!splashScreen.hidden) {

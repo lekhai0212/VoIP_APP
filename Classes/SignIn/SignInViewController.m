@@ -52,11 +52,11 @@ static UICompositeViewDescription *compositeDescription = nil;
     // Do any additional setup after loading the view from its nib.
     [self setupUIForView];
     
-//    tfAccountID.text = @"nhcla150";
-//    tfPassword.text = @"f7NnFKI1Kv";
+    tfAccountID.text = @"nhcla150";
+    tfPassword.text = @"f7NnFKI1Kv";
     
-    tfAccountID.text = @"nhcla151";
-    tfPassword.text = @"5obr8jHH2q";
+//    tfAccountID.text = @"nhcla151";
+//    tfPassword.text = @"5obr8jHH2q";
     
     icWaiting = [[UIActivityIndicatorView alloc] init];
     icWaiting.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;

@@ -87,8 +87,6 @@ const NSInteger SECURE_BUTTON_TAG = 5;
     
     UIView *viewOffCam;
     UIImageView *imgOffCam;
-    
-    UITableViewController *tbRoutes;
 }
 
 @end
@@ -803,18 +801,15 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
             break;
         }
         case LinphoneCallConnected:{
-            
-            LinphoneCall* currentCall = linphone_core_get_current_call(LC);
-            
-            LinphoneCallParams* paramsCopy = linphone_call_params_copy(linphone_call_get_current_params(currentCall));
             //  ghi am
-//            linphone_call_params_set_privacy(paramsCopy, 1);
+            /*
+            LinphoneCall* currentCall = linphone_core_get_current_call(LC);
+            LinphoneCallParams* paramsCopy = linphone_call_params_copy(linphone_call_get_current_params(currentCall));
+            linphone_call_params_set_privacy(paramsCopy, 1);
             const char* lPlay = [[self createDirectory] cStringUsingEncoding:[NSString defaultCStringEncoding]];
-            
             linphone_call_params_set_record_file(paramsCopy,lPlay);
-            
             NSLog(@"File : %s",linphone_call_params_get_record_file(paramsCopy));
-            linphone_call_start_recording(currentCall);
+            linphone_call_start_recording(currentCall); */
             
             btnNumpad.enabled = YES;
             speakerButton.enabled = YES;
@@ -1654,15 +1649,19 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     [alertViewController addAction: hideAction];
     
     
-    tbRoutes = [[UITableViewController alloc] init];
-    tbRoutes.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    tbRoutes.tableView.delegate = self;
-    tbRoutes.tableView.scrollEnabled = NO;
-    tbRoutes.tableView.dataSource = self;
-    [alertViewController setValue:tbRoutes forKey:@"contentViewController"];
+    UIViewController *contentVC = [[UIViewController alloc] init];
+    [contentVC setPreferredContentSize:CGSizeMake(alertViewController.view.frame.size.width, 58.0*3)];
     
-    NSLayoutConstraint *height = [NSLayoutConstraint constraintWithItem:alertViewController.view attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:58*4];
-    [alertViewController.view addConstraint: height];
+    UITableView *tbRoutes = [[UITableView alloc] init];
+    tbRoutes.separatorStyle = UITableViewCellSeparatorStyleNone;
+    tbRoutes.delegate = self;
+    tbRoutes.scrollEnabled = NO;
+    tbRoutes.dataSource = self;
+    [contentVC.view addSubview: tbRoutes];
+    [tbRoutes mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.bottom.right.equalTo(contentVC.view);
+    }];
+    [alertViewController setValue:contentVC forKey:@"contentViewController"];
     
     [self presentViewController:alertViewController animated:YES completion:nil];
 }

@@ -55,9 +55,6 @@ INIT_WITH_COMMON_CF {
 			linphone_core_update_call(LC, call, NULL);
 		}
 	}
-    
-    goi video call, chuyen qua camera sau, end call, goi lai bi loi
-    
 }
 
 @end

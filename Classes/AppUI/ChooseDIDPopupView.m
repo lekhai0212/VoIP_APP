@@ -11,6 +11,10 @@
 @implementation ChooseDIDPopupView
 @synthesize tbDIDList, lbHeader, tapGesture, delegate, listDID, lbSepa;
 
+-(void)layoutSubviews {
+    NSLog(@"layoutSubviews");
+}
+
 - (id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame: frame];
     if (self) {
@@ -78,6 +82,8 @@
     [UIView animateWithDuration:.35 animations:^{
         self.alpha = 1;
         self.transform = CGAffineTransformMakeScale(1, 1);
+    }completion:^(BOOL finished) {
+        [self updateScrollEnable];
     }];
 }
 
@@ -108,6 +114,14 @@
     [self.superview removeGestureRecognizer:tapGesture];
 }
 
+- (void)updateScrollEnable {
+    if (tbDIDList.frame.size.height < tbDIDList.contentSize.height) {
+        tbDIDList.scrollEnabled = YES;
+    }else{
+        tbDIDList.scrollEnabled = NO;
+    }
+}
+
 #pragma mark - UITableview delegate
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
@@ -128,7 +142,8 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     if (indexPath.row == 0) {
-        cell.lbDIDNumber.text = [[LanguageUtil sharedInstance] getContent:@"Default DID"];
+        cell.lbTitle.text = [[LanguageUtil sharedInstance] getContent:@"Default DID"];
+        cell.lbDIDNumber.text = @"";
     }else{
         NSDictionary *info = [listDID objectAtIndex: indexPath.row-1];
         NSString *did = [info objectForKey:@"did"];

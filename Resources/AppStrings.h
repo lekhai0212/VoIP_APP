@@ -5,6 +5,7 @@
 //  Created by admin on 11/5/17.
 //
 //
+//  linphone_proxy_config_enable_publish
 
 #ifndef AppStrings_h
 #define AppStrings_h
@@ -191,7 +192,6 @@
 #define getServerContacts       @"GetServerContacts"
 #define DecryptRSA              @"DecryptRSA"
 #define PushSharp               @"PushSharp"
-#define GetInfoMissCall         @"GetInfoMissCall"
 #define ChangeExtPass           @"ChangeExtPass"
 
 

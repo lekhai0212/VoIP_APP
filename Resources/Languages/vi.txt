@@ -73,7 +73,7 @@
 "Can not send email. Please check later!" = "Không thể gửi email. Vui lòng thử lại sau!"
 "Your email was sent. Thank you." = "Email của bạn đã được gửi. Xin cảm ơn."
 
-"Choose DID" = "Chọn đầu số"
+"Choose DID" = "Chọn số gọi ra"
 "Default DID" = "Mặc định"
 "Can not get DID list" = "Không thể lấy danh sách đầu số"
 

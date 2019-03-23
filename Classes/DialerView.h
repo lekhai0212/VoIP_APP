@@ -33,6 +33,7 @@
 
 @property(nonatomic, strong) IBOutlet UICallButton *callButton;
 @property(weak, nonatomic) IBOutlet UIIconButton *backspaceButton;
+@property (weak, nonatomic) IBOutlet UIButton *icClear;
 
 @property(nonatomic, strong) IBOutlet UIDigitButton *oneButton;
 @property(nonatomic, strong) IBOutlet UIDigitButton *twoButton;
@@ -68,5 +69,6 @@
 
 - (IBAction)_btnNumberPressed:(id)sender;
 - (IBAction)_btnCallPressed:(UIButton *)sender;
+- (IBAction)icClearClick:(UIButton *)sender;
 
 @end

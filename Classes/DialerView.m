@@ -56,7 +56,7 @@
 
 @implementation DialerView
 @synthesize _viewStatus, _imgLogoSmall, _lbAccount, _lbStatus;
-@synthesize _viewNumber;
+@synthesize _viewNumber, icClear;
 @synthesize lbSepa123, lbSepa456, lbSepa789, btnVideoCall;
 
 #pragma mark - UICompositeViewDelegate Functions
@@ -195,6 +195,11 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 -(void)viewDidLayoutSubviews {
     //  _imgLogoSmall.hidden = YES;
+    if ([_addressField.text isEqualToString:@""]) {
+        icClear.hidden = YES;
+    }else{
+        icClear.hidden = NO;
+    }
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
@@ -403,6 +408,13 @@ static UICompositeViewDescription *compositeDescription = nil;
                                                 userInfo:nil repeats:false];
 }
 
+- (IBAction)icClearClick:(UIButton *)sender {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
+    
+    [self hideSearchView];
+    [self setupFrameForSearchResultWithExistsData: NO];
+}
+
 - (void)fillPhoneNumberLastCall {
     NSString *phoneNumber = [NSDatabase getLastCallOfUser];
     if (![AppUtils isNullOrEmpty: phoneNumber]) {
@@ -515,6 +527,13 @@ static UICompositeViewDescription *compositeDescription = nil;
             make.left.equalTo(self.view).offset(80);
             make.right.equalTo(self.view).offset(-80);
         }];
+        
+        icClear.hidden = NO;
+        [icClear mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(_addressField.mas_centerY);
+            make.left.equalTo(_addressField.mas_right);
+            make.width.height.mas_equalTo(50.0);
+        }];
     }else{
         resultView.hidden = YES;
         [_addressField mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -523,11 +542,19 @@ static UICompositeViewDescription *compositeDescription = nil;
             make.right.equalTo(self.view).offset(-80);
             make.height.mas_equalTo(hAddressField);
         }];
+        
+        icClear.hidden = YES;
+        [icClear mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(_addressField.mas_centerY);
+            make.left.equalTo(_addressField.mas_right);
+            make.width.height.mas_equalTo(50.0);
+        }];
     }
 }
 
 - (void)enableNAT
 {
+    return;
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
     
     LinphoneNatPolicy *LNP = linphone_core_get_nat_policy(LC);
@@ -749,6 +776,15 @@ static UICompositeViewDescription *compositeDescription = nil;
     [_addressField addTarget:self
                       action:@selector(addressfieldDidChanged:)
             forControlEvents:UIControlEventEditingChanged];
+    
+    icClear.hidden = YES;
+    icClear.imageEdgeInsets = UIEdgeInsetsMake(12, 12, 12, 12);
+    [icClear mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_addressField.mas_centerY);
+        make.left.equalTo(_addressField.mas_right);
+        make.width.height.mas_equalTo(50.0);
+    }];
+    
     
     lbSepa123.backgroundColor = [UIColor colorWithRed:(240/255.0) green:(240/255.0)
                                                  blue:(240/255.0) alpha:1.0];

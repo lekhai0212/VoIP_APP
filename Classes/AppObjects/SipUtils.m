@@ -201,7 +201,7 @@
     
     linphone_proxy_config_set_server_addr(config, strAddress.UTF8String);
     
-    linphone_proxy_config_enable_publish(config, TRUE);
+    linphone_proxy_config_enable_publish(config, FALSE);
     linphone_proxy_config_enable_register(config, TRUE);
     
     LinphoneAuthInfo *info =
