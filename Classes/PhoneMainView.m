@@ -383,8 +383,8 @@ static RootViewManager *rootViewManagerInstance = nil;
 		case LinphoneCallStreamsRunning: {
             //  Add new by Khai Le on 05/07/2018
             if (![PhoneMainView.instance.currentView isEqual: CallView.compositeViewDescription]) {
-                NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationLandscapeLeft];
-                [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
+//                NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationLandscapeLeft];
+//                [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
                 
                 [self changeCurrentView:CallView.compositeViewDescription push:TRUE];
             }else{

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -73,11 +73,11 @@
             <connections>
                 <outlet property="view" destination="106" id="166"/>
             </connections>
-            <point key="canvasLocation" x="2646.0159999999996" y="-9.4627987036626315"/>
+            <point key="canvasLocation" x="4233.6255999999994" y="-8.5122627019453958"/>
         </tableViewController>
         <tableViewController id="sif-q0-7oE" userLabel="conferenceCallsTableController" customClass="CallConferenceTableView">
             <extendedEdge key="edgesForExtendedLayout"/>
-            <point key="canvasLocation" x="516.096" y="-24.748858148040725"/>
+            <point key="canvasLocation" x="825.75360000000001" y="-22.262840912780263"/>
         </tableViewController>
         <view contentMode="scaleToFill" id="a4W-5M-X2Z" userLabel="iphone6View">
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -624,7 +624,7 @@
                 </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-            <point key="canvasLocation" x="-28893" y="-1353"/>
+            <point key="canvasLocation" x="-46602" y="-1283"/>
         </view>
         <view contentMode="scaleToFill" id="heN-QM-XwE" userLabel="iphone6View">
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -1215,7 +1215,7 @@
                 </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-            <point key="canvasLocation" x="-181.75999999999999" y="-75.254726459858546"/>
+            <point key="canvasLocation" x="-290.81599999999997" y="-67.695406110817288"/>
         </view>
     </objects>
     <resources>

@@ -297,7 +297,7 @@
         if (route.portType == AVAudioSessionPortBuiltInReceiver) {
             return eReceiver;
             
-        }else if (route.portType == AVAudioSessionPortBuiltInSpeaker) {
+        }else if (route.portType == AVAudioSessionPortBuiltInSpeaker || [[route.portType lowercaseString] containsString:@"speaker"]) {
             return eSpeaker;
             
         }else if (route.portType == AVAudioSessionPortBluetoothHFP || route.portType == AVAudioSessionPortBluetoothLE || route.portType == AVAudioSessionPortBluetoothA2DP) {

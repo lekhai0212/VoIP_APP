@@ -8,11 +8,12 @@
 #import "OutgoingCallViewController.h"
 #import "StatusBarView.h"
 #import "NSData+Base64.h"
+#import "ChooseRouteOutputCell.h"
 
 #define kMaxRadius 200
 #define kMaxDuration 10
 
-@interface OutgoingCallViewController (){
+@interface OutgoingCallViewController ()<UITableViewDelegate, UITableViewDataSource>{
     float wIconEndCall;
     float wSmallIcon;
     float wAvatar;
@@ -63,7 +64,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
     
-    _btnSpeaker.delegate = self;
     _btnMute.delegate = self;
     
     PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: _phoneNumber];
@@ -106,6 +106,15 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(callUpdateEvent:)
                                                name:kLinphoneCallUpdate object:nil];
+    
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(uiForBluetoothEnabled)
+                                               name:@"bluetoothEnabled" object:nil];
+    
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(uiForSpeakerEnabled)
+                                               name:@"speakerEnabled" object:nil];
+    
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(uiForiPhoneReceiverEnabled)
+                                               name:@"iPhoneReceiverEnabled" object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -129,8 +138,8 @@ static UICompositeViewDescription *compositeDescription = nil;
     [super viewWillAppear: animated];
     [[NSNotificationCenter defaultCenter] removeObserver: self];
     
-    NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationLandscapeLeft];
-    [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
+//    NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationLandscapeLeft];
+//    [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -437,6 +446,169 @@ static UICompositeViewDescription *compositeDescription = nil;
     }else{
         [_btnMute setImage:[UIImage imageNamed:@"mute_normal"] forState:UIControlStateNormal];
     }
+}
+
+- (IBAction)btnSpeakerPress:(UIButton *)sender {
+    if ([DeviceUtils isConnectedEarPhone]) {
+        [self showOptionChooseRouteOutputForCall];
+        
+    }else{
+        BOOL isEnabled = LinphoneManager.instance.speakerEnabled;
+        if (isEnabled) {
+            [sender setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
+            [LinphoneManager.instance setSpeakerEnabled: NO];
+        }else{
+            [sender setImage:[UIImage imageNamed:@"speaker_enable"] forState:UIControlStateNormal];
+            [LinphoneManager.instance setSpeakerEnabled: YES];
+        }
+    }
+}
+
+- (void)showOptionChooseRouteOutputForCall {
+    UIAlertController * alertViewController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction* hideAction = [UIAlertAction actionWithTitle:[[LanguageUtil sharedInstance] getContent:@"Hide"] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){}];
+    [hideAction setValue:UIColor.redColor forKey:@"titleTextColor"];
+    [alertViewController addAction: hideAction];
+    
+    
+    UITableViewController *tbRoutes = [[UITableViewController alloc] init];
+    tbRoutes.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    tbRoutes.tableView.delegate = self;
+    tbRoutes.tableView.scrollEnabled = NO;
+    tbRoutes.tableView.dataSource = self;
+    [alertViewController setValue:tbRoutes forKey:@"contentViewController"];
+    
+    NSLayoutConstraint *height = [NSLayoutConstraint constraintWithItem:alertViewController.view attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:58*4];
+    [alertViewController.view addConstraint: height];
+    
+    [self presentViewController:alertViewController animated:YES completion:nil];
+}
+
+#pragma mark - UITableview route
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 3;
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *identifier = @"ChooseRouteOutputCell";
+    ChooseRouteOutputCell *cell = [tableView dequeueReusableCellWithIdentifier: identifier];
+    if (cell == nil) {
+        cell = [[[NSBundle mainBundle] loadNibNamed:@"ChooseRouteOutputCell" owner:nil options:nil] lastObject];
+    }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    TypeOutputRoute routeType = [DeviceUtils getCurrentRouteForCall];
+    switch (indexPath.row) {
+        case 0:{
+            cell.lbContent.text = [DeviceUtils getNameOfEarPhoneConnected];
+            cell.imgType.image = [UIImage imageNamed:@"route_earphone"];
+            cell.imgType.hidden = NO;
+            if (routeType == eEarphone) {
+                cell.imgSelected.hidden = NO;
+            }else{
+                cell.imgSelected.hidden = YES;
+            }
+            break;
+        }
+        case 1:{
+            cell.lbContent.text = @"iPhone";
+            cell.imgType.hidden = YES;
+            if (routeType == eReceiver) {
+                cell.imgSelected.hidden = NO;
+            }else{
+                cell.imgSelected.hidden = YES;
+            }
+            break;
+        }
+        case 2:{
+            cell.lbContent.text = [[LanguageUtil sharedInstance] getContent:@"Speaker"];
+            cell.imgType.image = [UIImage imageNamed:@"route_speaker"];
+            cell.imgType.hidden = NO;
+            if (routeType == eSpeaker) {
+                cell.imgSelected.hidden = NO;
+            }else{
+                cell.imgSelected.hidden = YES;
+            }
+            break;
+        }
+        default:
+            break;
+    }
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self dismissViewControllerAnimated:YES completion:^{
+        switch (indexPath.row) {
+            case 0:{
+                [self setBluetoothEarphoneForCurrentCall];
+                break;
+            }
+            case 1:{
+                [self setiPhoneRouteForCall];
+                break;
+            }
+            case 2:{
+                [self setSpeakerForCurrentCall];
+                break;
+            }
+            default:
+                break;
+        }
+    }];
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 58.0;
+}
+
+- (void)setSpeakerForCurrentCall {
+    [LinphoneManager.instance setSpeakerEnabled:TRUE];
+    [self performSelector:@selector(disableBluetooth)
+               withObject:nil afterDelay:0.5];
+}
+
+- (void)disableBluetooth{
+    [LinphoneManager.instance setBluetoothEnabled:FALSE];
+}
+
+- (void)enableBluetooth{
+    [LinphoneManager.instance setBluetoothEnabled:TRUE];
+}
+
+- (void)setBluetoothEarphoneForCurrentCall {
+    [LinphoneManager.instance setSpeakerEnabled:TRUE];
+    [self performSelector:@selector(enableBluetooth)
+               withObject:nil afterDelay:0.25];
+}
+
+- (void)setiPhoneRouteForCall {
+    [LinphoneManager.instance setSpeakerEnabled:FALSE];
+    [self performSelector:@selector(disableBluetooth)
+               withObject:nil afterDelay:0.5];
+}
+
+- (void)uiForBluetoothEnabled {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_btnSpeaker setImage:[UIImage imageNamed:@"speaker_bluetooth_enable"] forState:UIControlStateNormal];
+    });
+}
+
+- (void)uiForSpeakerEnabled {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_btnSpeaker setImage:[UIImage imageNamed:@"speaker_enable"] forState:UIControlStateNormal];
+    });
+}
+
+- (void)uiForiPhoneReceiverEnabled{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_btnSpeaker setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
+    });
 }
 
 @end

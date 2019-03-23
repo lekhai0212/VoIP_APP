@@ -9,7 +9,7 @@
 #import "UICompositeView.h"
 #import "PulsingHaloLayer.h"
 
-@interface OutgoingCallViewController : UIViewController<UICompositeViewDelegate, CAAnimationDelegate, UISpeakerButtonDelegate, UIMutedMicroButtonDelegate>
+@interface OutgoingCallViewController : UIViewController<UICompositeViewDelegate, CAAnimationDelegate, UIMutedMicroButtonDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *_imgBackground;
 @property (weak, nonatomic) IBOutlet UIImageView *_imgAvatar;
@@ -18,7 +18,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *_imgCallState;
 @property (weak, nonatomic) IBOutlet UIButton *_btnEndCall;
 @property (weak, nonatomic) IBOutlet UILabel *lbPhone;
-@property (weak, nonatomic) IBOutlet UISpeakerButton *_btnSpeaker;
+@property (weak, nonatomic) IBOutlet UIButton *_btnSpeaker;
 @property (weak, nonatomic) IBOutlet UIMutedMicroButton *_btnMute;
 
 - (IBAction)_btnEndCallPressed:(UIButton *)sender;
@@ -27,5 +27,6 @@
 @property (nonatomic, strong) NSString *_phoneNumber;
 
 @property (nonatomic, weak) PulsingHaloLayer *halo;
+- (IBAction)btnSpeakerPress:(UIButton *)sender;
 
 @end

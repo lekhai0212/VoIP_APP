@@ -1117,9 +1117,13 @@ static void linphone_iphone_display_status(struct _LinphoneCore *lc, const char 
 		state == LinphoneCallStreamsRunning)
     {
 		if (linphone_call_params_video_enabled(linphone_call_get_current_params(call)) && !speaker_already_enabled) {
-			[self setSpeakerEnabled:TRUE];
-			speaker_already_enabled = TRUE;
-            [[NSNotificationCenter defaultCenter] postNotificationName:speakerEnabledForVideoCall object:nil];
+            if ([DeviceUtils isConnectedEarPhone]) {
+                //  Not enable speaker when device has been connected with bluetooth earphone
+            }else{
+                [self setSpeakerEnabled:TRUE];
+                speaker_already_enabled = TRUE;
+                [[NSNotificationCenter defaultCenter] postNotificationName:speakerEnabledForVideoCall object:nil];
+            }
 		}
 	}
 
@@ -2735,10 +2739,9 @@ static int comp_call_state_paused(const LinphoneCall *call, const void *param) {
     
 	if (newRoute && (unsigned long)newRoute.outputs.count > 0) {
 		NSString *route = newRoute.outputs[0].portType;
+        
         NSLog(@"Detect BLE: newRoute = %@", route);
         
-        NSLog(@"Detect BLE: Current audio route is [%s]", [route UTF8String]);
-
 		_speakerEnabled = [route isEqualToString:AVAudioSessionPortBuiltInSpeaker];
 		if (([[AudioHelper bluetoothRoutes] containsObject:route]) && !_speakerEnabled) {
 			_bluetoothAvailable = TRUE;
@@ -2758,6 +2761,16 @@ static int comp_call_state_paused(const LinphoneCall *call, const void *param) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"headsetPluginChanged" object:headphonesObj];
             }
         }
+        
+        //  [Khai Le - 23/03/2019]
+        if (([[AudioHelper bluetoothRoutes] containsObject:route]) && !_speakerEnabled) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"bluetoothEnabled" object:nil];
+        }else if ([[route lowercaseString] containsString:@"speaker"]){
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"speakerEnabled" object:nil];
+        }else{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"iPhoneReceiverEnabled" object:nil];
+        }
+        //
         
 	}
 }

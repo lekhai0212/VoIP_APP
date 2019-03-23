@@ -215,11 +215,10 @@ static UICompositeViewDescription *compositeDescription = nil;
 	[super viewWillAppear:animated];
     
     [self setupUIForView];
-    [self createOffCameraView];
-    
     NSString *isvideo = [[NSUserDefaults standardUserDefaults] objectForKey:IS_VIDEO_CALL_KEY];
     if (![AppUtils isNullOrEmpty: isvideo] && [isvideo isEqualToString:@"1"]) {
         isAudioCall = NO;
+        [self createOffCameraView];
     }else{
         isAudioCall = YES;
     }
@@ -268,6 +267,14 @@ static UICompositeViewDescription *compositeDescription = nil;
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(updateStateForSpekearButton)
                                                name:speakerEnabledForVideoCall object:nil];
     
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(uiForBluetoothEnabled)
+                                               name:@"bluetoothEnabled" object:nil];
+    
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(uiForSpeakerEnabled)
+                                               name:@"speakerEnabled" object:nil];
+    
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(uiForiPhoneReceiverEnabled)
+                                               name:@"iPhoneReceiverEnabled" object:nil];
     
 	durationTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self
                                                    selector:@selector(callDurationUpdate)
@@ -290,24 +297,31 @@ static UICompositeViewDescription *compositeDescription = nil;
                     [speakerButton setImage:[UIImage imageNamed:@"speaker_normal"]
                                    forState:UIControlStateNormal];
                 }
-                //  detect micro
-                if (linphone_core_mic_enabled(LC)) {
-                    [microButton setImage:[UIImage imageNamed:@"mute_normal"] forState:UIControlStateNormal];
-                }else{
-                    [microButton setImage:[UIImage imageNamed:@"mute_enable"] forState:UIControlStateNormal];
-                }
             }
-        }else{
-            linphone_call_enable_camera(linphone_core_get_current_call(LC), NO);
-            [self performSelector:@selector(tryToUpdateCamera) withObject:nil afterDelay:1.0];
+            //  detect micro
+            if (linphone_core_mic_enabled(LC)) {
+                [microButton setImage:[UIImage imageNamed:@"mute_normal"] forState:UIControlStateNormal];
+            }else{
+                [microButton setImage:[UIImage imageNamed:@"mute_enable"] forState:UIControlStateNormal];
+            }
             
+        }else{
+            [self performSelector:@selector(tryToUpdateCamera) withObject:nil afterDelay:1.0];
             [self enableVideoForCurrentCall];
             
-            if (LinphoneManager.instance.speakerEnabled) {
-                [btnSpeakerVideo setImage:[UIImage imageNamed:@"speaker_enable"] forState:UIControlStateNormal];
+            if ([DeviceUtils getCurrentRouteForCall] == eEarphone) {
+                [btnSpeakerVideo setImage:[UIImage imageNamed:@"speaker_bluetooth_enable"]
+                               forState:UIControlStateNormal];
             }else{
-                [btnSpeakerVideo setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
+                if (LinphoneManager.instance.speakerEnabled) {
+                    [btnSpeakerVideo setImage:[UIImage imageNamed:@"speaker_enable"]
+                                     forState:UIControlStateNormal];
+                }else{
+                    [btnSpeakerVideo setImage:[UIImage imageNamed:@"speaker_normal"]
+                                     forState:UIControlStateNormal];
+                }
             }
+            
             //  detect micro
             if (linphone_core_mic_enabled(LC)) {
                 [btnMicroVideo setImage:[UIImage imageNamed:@"mute_normal"] forState:UIControlStateNormal];
@@ -324,30 +338,14 @@ static UICompositeViewDescription *compositeDescription = nil;
     linphone_call_enable_camera(linphone_core_get_current_call(LC), YES);
 }
 
-- (void)checkBluetoothForCall {
-    AVAudioSessionRouteDescription *currentRoute = [[AVAudioSession sharedInstance] currentRoute];
-    NSArray *outputs = currentRoute.outputs;
-    for (AVAudioSessionPortDescription *route in outputs) {
-        NSLog(@"Detect ble: %@", route.portType);
-    }
-}
-
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
-
-    UIButton *btnCheck = [[UIButton alloc] initWithFrame:CGRectMake(20, 20, 100, 50)];
-    btnCheck.backgroundColor = UIColor.redColor;
-    [btnCheck setTitle:@"CHECK" forState:UIControlStateNormal];
-    [btnCheck addTarget:self
-                 action:@selector(checkBluetoothForCall)
-       forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview: btnCheck];
     
     if (isAudioCall) {
         NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationPortrait];
         [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
     }else{
-        UIButton *testBtn = [[UIButton alloc] initWithFrame:CGRectMake(20, 20, 100, 40)];
+        UIButton *testBtn = [[UIButton alloc] initWithFrame:CGRectMake(20, 40, 100, 40)];
         testBtn.backgroundColor = UIColor.redColor;
         [testBtn addTarget:self
                     action:@selector(changeRotationOfDevice)
@@ -628,9 +626,9 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 //    BOOL video_enabled =  linphone_core_video_enabled(LC);
 //    NSLog(@"video_enabled = %d", video_enabled);
     
-    LinphoneCall *currentCall = linphone_core_get_current_call(LC);
-    MSVideoSize videoSize = linphone_call_params_get_received_video_size(linphone_call_get_current_params(currentCall));
-    NSLog(@"videoSize: %d - %d", videoSize.width, videoSize.height);
+//    LinphoneCall *currentCall = linphone_core_get_current_call(LC);
+//    MSVideoSize videoSize = linphone_call_params_get_received_video_size(linphone_call_get_current_params(currentCall));
+//    NSLog(@"videoSize: %d - %d", videoSize.width, videoSize.height);
 }
 
 //  Call quality
@@ -1525,13 +1523,18 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 }
 
 - (IBAction)btnSpeakerVideoClick:(id)sender {
-    BOOL isEnabled = LinphoneManager.instance.speakerEnabled;
-    if (isEnabled) {
-        [sender setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
-        [LinphoneManager.instance setSpeakerEnabled: NO];
+    if ([DeviceUtils isConnectedEarPhone]) {
+        [self showOptionChooseRouteOutputForCall];
+        
     }else{
-        [sender setImage:[UIImage imageNamed:@"speaker_enable"] forState:UIControlStateNormal];
-        [LinphoneManager.instance setSpeakerEnabled: YES];
+        BOOL isEnabled = LinphoneManager.instance.speakerEnabled;
+        if (isEnabled) {
+            [sender setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
+            [LinphoneManager.instance setSpeakerEnabled: NO];
+        }else{
+            [sender setImage:[UIImage imageNamed:@"speaker_enable"] forState:UIControlStateNormal];
+            [LinphoneManager.instance setSpeakerEnabled: YES];
+        }
     }
 }
 
@@ -1722,23 +1725,90 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    switch (indexPath.row) {
-        case 0:{
-            break;
+    [self dismissViewControllerAnimated:YES completion:^{
+        switch (indexPath.row) {
+            case 0:{
+                [self setBluetoothEarphoneForCurrentCall];
+                break;
+            }
+            case 1:{
+                [self setiPhoneRouteForCall];
+                break;
+            }
+            case 2:{
+                [self setSpeakerForCurrentCall];
+                break;
+            }
+            default:
+                break;
         }
-        case 1:{
-            break;
-        }
-        case 2:{
-            break;
-        }
-        default:
-            break;
-    }
+    }];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 58.0;
 }
 
+- (void)setSpeakerForCurrentCall {
+    [LinphoneManager.instance setSpeakerEnabled:TRUE];
+    [self performSelector:@selector(disableBluetooth)
+               withObject:nil afterDelay:0.5];
+}
+
+- (void)disableBluetooth{
+    [LinphoneManager.instance setBluetoothEnabled:FALSE];
+}
+
+- (void)enableBluetooth{
+    [LinphoneManager.instance setBluetoothEnabled:TRUE];
+}
+
+- (void)setBluetoothEarphoneForCurrentCall {
+    [LinphoneManager.instance setSpeakerEnabled:TRUE];
+    [self performSelector:@selector(enableBluetooth)
+               withObject:nil afterDelay:0.25];
+}
+
+- (void)setiPhoneRouteForCall {
+    [LinphoneManager.instance setSpeakerEnabled:FALSE];
+    [self performSelector:@selector(disableBluetooth)
+               withObject:nil afterDelay:0.5];
+}
+
+- (void)uiForBluetoothEnabled {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (isAudioCall) {
+            [speakerButton setImage:[UIImage imageNamed:@"speaker_bluetooth_enable"]
+                           forState:UIControlStateNormal];
+        }else{
+            [btnSpeakerVideo setImage:[UIImage imageNamed:@"speaker_bluetooth_enable"]
+                             forState:UIControlStateNormal];
+        }
+    });
+}
+
+- (void)uiForSpeakerEnabled {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (isAudioCall) {
+            [speakerButton setImage:[UIImage imageNamed:@"speaker_enable"]
+                           forState:UIControlStateNormal];
+        }else{
+            [btnSpeakerVideo setImage:[UIImage imageNamed:@"speaker_enable"]
+                             forState:UIControlStateNormal];
+        }
+    });
+}
+
+- (void)uiForiPhoneReceiverEnabled{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (isAudioCall) {
+            [speakerButton setImage:[UIImage imageNamed:@"speaker_normal"]
+                           forState:UIControlStateNormal];
+        }else{
+            [btnSpeakerVideo setImage:[UIImage imageNamed:@"speaker_normal"]
+                             forState:UIControlStateNormal];
+        }
+    });
+}
+    
 @end
