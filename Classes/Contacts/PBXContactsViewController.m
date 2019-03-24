@@ -16,16 +16,16 @@
 
 @interface PBXContactsViewController (){
     BOOL isSearching;
-    float hCell;
     
     UIFont *textFont;
+    UIFont *headerFont;
     
     NSMutableArray *listSearch;
     NSMutableDictionary *contactSections;
     NSArray *listCharacter;
     BOOL isFound;
     BOOL found;
-    
+    float wIconSync;
     float hSection;
     NSMutableArray *pbxList;
     
@@ -45,8 +45,6 @@
     [super viewDidLoad];
     
     //  my code here
-    hSection = 35.0;
-    
     [self autoLayoutForView];
     [self addHeaderForTableContactsView];
     
@@ -148,24 +146,23 @@
 
 - (void)addHeaderForTableContactsView {
     UIView *headerView = [[UIView alloc] init];
-    headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 50.0);
+    headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 40.0);
     headerView.backgroundColor = [UIColor colorWithRed:(240/255.0) green:(240/255.0)
                                                   blue:(240/255.0) alpha:1.0];
-    
     float marginLeft = 20.0;
     
     //  getSyncTitleContentWithFont
     btnSyncContacts = [[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-10-100, 0, 100, headerView.frame.size.height)];
     btnSyncContacts.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     
-    [btnSyncContacts setAttributedTitle:[self getSyncTitleContentWithFont:[UIFont systemFontOfSize:17.0 weight:UIFontWeightBold] andSizeIcon:20.0] forState:UIControlStateNormal];
+    [btnSyncContacts setAttributedTitle:[self getSyncTitleContentWithFont:headerFont andSizeIcon:wIconSync] forState:UIControlStateNormal];
     [headerView addSubview: btnSyncContacts];
     [btnSyncContacts addTarget:self
                         action:@selector(btnSyncContactsPress:)
               forControlEvents:UIControlEventTouchUpInside];
     
     lbAllContacts = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-2*marginLeft-btnSyncContacts.frame.size.width-10.0, headerView.frame.size.height)];
-    lbAllContacts.font = [UIFont systemFontOfSize:17.0 weight:UIFontWeightBold];
+    lbAllContacts.font = headerFont;
     lbAllContacts.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     [headerView addSubview: lbAllContacts];
     
@@ -175,16 +172,33 @@
 
 //  setup thông tin cho tableview
 - (void)autoLayoutForView {
-    float wIconSync;
-    if (SCREEN_WIDTH > 320) {
-        textFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
-        wIconSync = 30.0;
-    }else{
-        textFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
-        wIconSync = 26.0;
-    }
+    NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
+    wIconSync = 28.0;
+    hSection = 30.0;
     
-    hCell = 65.0;
+    textFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
+    headerFont = [UIFont fontWithName:MYRIADPRO_BOLD size:16.0];
+    
+    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE])
+    {
+        textFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
+        headerFont = [UIFont fontWithName:MYRIADPRO_BOLD size:16.0];
+        hSection = 20.0;
+        wIconSync = 17.0;
+        
+    }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2]) {
+        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
+        
+    }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2] || [deviceMode isEqualToString: simulator])
+    {
+        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:20.0];
+        headerFont = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
+        
+    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2])
+    {
+        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:20.0];
+        
+    }
     
     //  table contacts
     _tbContacts.alwaysBounceVertical = NO;
@@ -323,7 +337,7 @@
 //}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return hCell;
+    return 65.0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{

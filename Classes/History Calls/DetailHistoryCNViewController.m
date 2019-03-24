@@ -95,6 +95,14 @@ static UICompositeViewDescription *compositeDescription = nil;
                                                  name:reloadHistoryCall object:nil];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    if (_tbHistory.frame.size.height < _tbHistory.contentSize.height) {
+        _tbHistory.scrollEnabled = YES;
+    }else{
+        _tbHistory.scrollEnabled = NO;
+    }
+}
+
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear: animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -141,31 +149,57 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)setupUIForView
 {
-    self.view.backgroundColor = UIColor.whiteColor;
-    if (SCREEN_WIDTH > 320) {
-        textFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
-        
-        _lbHeader.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:20.0];
-    }else{
-        textFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
-        
-        _lbHeader.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
-    }
-    //  header
+    float sizeIcon = 60.0;
+    float hAvatar = 100.0;
+    UIFont *fontName = [UIFont fontWithName:MYRIADPRO_BOLD size:16.0];
+    UIFont *fontPhone = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
     float hHeader = 220+[LinphoneAppDelegate sharedInstance]._hStatus;
+    UIEdgeInsets backEdge = UIEdgeInsetsMake(5, 5, 5, 5);
+    float hInfo = 80.0;
+    
+    NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
+    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE] || [deviceMode isEqualToString: simulator])
+    {
+        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
+        fontName = [UIFont fontWithName:MYRIADPRO_BOLD size:16.0];
+        fontPhone = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
+        
+        sizeIcon = 50.0;
+        hAvatar = 80.0;
+        hHeader = 200+[LinphoneAppDelegate sharedInstance]._hStatus;
+        backEdge = UIEdgeInsetsMake(6.5, 6.5, 6.5, 6.5);
+        hInfo = 65.0;
+        
+    }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2]) {
+        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
+        
+    }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
+    {
+        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:20.0];
+        
+    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2])
+    {
+        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:20.0];
+        
+    }
+    
+    self.view.backgroundColor = UIColor.whiteColor;
+    
+    //  header
+    
     [_viewHeader mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self.view);
         make.height.mas_equalTo(hHeader);
     }];
     
-    _iconBack.imageEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
+    _iconBack.imageEdgeInsets = backEdge;
     [_iconBack mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_viewHeader).offset([LinphoneAppDelegate sharedInstance]._hStatus+5.0);
         make.left.equalTo(_viewHeader);
         make.width.height.mas_equalTo(HEADER_ICON_WIDTH);
     }];
     
-    icDelete.imageEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
+    icDelete.imageEdgeInsets = backEdge;
     [icDelete mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_iconBack);
         make.right.equalTo(_viewHeader).offset(-5);
@@ -173,23 +207,24 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.height.equalTo(_iconBack.mas_height);
     }];
     
+    _lbHeader.font = textFont;
     [_lbHeader mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(_iconBack);
         make.left.equalTo(_iconBack.mas_right).offset(5);
         make.right.equalTo(icDelete.mas_left).offset(-5);
     }];
     
-    _imgAvatar.layer.cornerRadius = 100.0/2;
+    _imgAvatar.layer.cornerRadius = hAvatar/2;
     _imgAvatar.layer.borderWidth = 2.0;
     _imgAvatar.layer.borderColor = UIColor.whiteColor.CGColor;
     _imgAvatar.clipsToBounds = YES;
     [_imgAvatar mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_lbHeader.mas_bottom).offset(10);
         make.centerX.equalTo(_viewHeader.mas_centerX);
-        make.width.height.mas_equalTo(100.0);
+        make.width.height.mas_equalTo(hAvatar);
     }];
     
-    _lbName.font = [UIFont systemFontOfSize:16.0 weight:UIFontWeightBold];
+    _lbName.font = fontName;
     _lbName.textColor = UIColor.whiteColor;
     [_lbName mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_imgAvatar.mas_bottom);
@@ -197,7 +232,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.height.mas_equalTo(30.0);
     }];
     
-    lbPhone.font = [UIFont systemFontOfSize:17.0 weight:UIFontWeightBold];
+    lbPhone.font = fontPhone;
     lbPhone.textColor = UIColor.whiteColor;
     [lbPhone mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_lbName.mas_bottom);
@@ -209,21 +244,21 @@ static UICompositeViewDescription *compositeDescription = nil;
     [viewInfo mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_viewHeader.mas_bottom);
         make.left.right.equalTo(self.view);
-        make.height.mas_equalTo(80.0);
+        make.height.mas_equalTo(hInfo);
     }];
     
     iconVideo.imageEdgeInsets = UIEdgeInsetsMake(2, 2, 2, 2);
     [iconVideo mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(viewInfo);
+        make.centerY.equalTo(viewInfo.mas_centerY);
         make.right.equalTo(viewInfo.mas_centerX).offset(-8.0);
-        make.width.height.mas_equalTo(60.0);
+        make.width.height.mas_equalTo(sizeIcon);
     }];
     
     iconAudio.imageEdgeInsets = UIEdgeInsetsMake(2, 2, 2, 2);
     [iconAudio mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(iconVideo);
         make.left.equalTo(viewInfo.mas_centerX).offset(8.0);
-        make.width.mas_equalTo(60.0);
+        make.width.mas_equalTo(sizeIcon);
     }];
     
     //  content
@@ -234,11 +269,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     _tbHistory.delegate = self;
     _tbHistory.dataSource = self;
     _tbHistory.separatorStyle = UITableViewCellSeparatorStyleNone;
-    
-    UIView *headerView = [[UIView alloc] init];
-    headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 70.0/2);
-    headerView.backgroundColor = UIColor.clearColor;
-    _tbHistory.tableHeaderView = headerView;
     
     listHistoryCalls = [[NSMutableArray alloc] init];
     

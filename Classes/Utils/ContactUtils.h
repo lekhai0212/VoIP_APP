@@ -13,7 +13,7 @@
 + (NSString *)getContactNameWithNumber: (NSString *)number;
 + (NSAttributedString *)getSearchValueFromResultForNewSearchMethod: (NSArray *)searchs;
 + (ContactObject *)getContactWithId: (int)idContact;
-+ (PBXContact *)getPBXContactWithId: (int)idContact;
++ (PBXContact *)getPBXContactWithExtension: (NSString *)ext;
 + (void)addBorderForImageView: (UIImageView *)imageView withRectSize: (float)rectSize strokeWidth: (int)stroke strokeColor: (UIColor *)strokeColor radius: (float)radius;
 + (void)addNewContacts;
 + (BOOL)deleteContactFromPhoneWithId: (int)recordId;

@@ -28,6 +28,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *tfAccountID;
 @property (weak, nonatomic) IBOutlet UIButton *btnAccountID;
 
+@property (weak, nonatomic) IBOutlet UIButton *btnShowPass;
 @property (weak, nonatomic) IBOutlet UITextField *tfPassword;
 @property (weak, nonatomic) IBOutlet UIButton *btnPassword;
 @property (weak, nonatomic) IBOutlet UIButton *btnSignIn;
@@ -36,5 +37,6 @@
 - (IBAction)iconBackPress:(UIButton *)sender;
 - (IBAction)btnQRCodePress:(UIButton *)sender;
 - (IBAction)btnSignInPress:(UIButton *)sender;
+- (IBAction)btnShowPassPress:(UIButton *)sender;
 
 @end

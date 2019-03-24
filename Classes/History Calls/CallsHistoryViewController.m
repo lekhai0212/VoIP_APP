@@ -233,10 +233,23 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 //  setup trạng thái cho các button
 - (void)autoLayoutForView {
-    if (SCREEN_WIDTH > 320) {
-        textFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
-    }else{
-        textFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
+    NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
+    
+    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE])
+    {
+        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:16.0];
+        
+    }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2]) {
+        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
+        
+    }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2] || [deviceMode isEqualToString: simulator])
+    {
+        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:20.0];
+        
+    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2])
+    {
+        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:20.0];
+        
     }
     
     float hHeader = [LinphoneAppDelegate sharedInstance]._hRegistrationState;
@@ -269,7 +282,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     _iconAll.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     [_iconAll setTitle:[[LanguageUtil sharedInstance] getContent:@"All history"] forState:UIControlStateNormal];
     [_iconAll setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
-    _iconAll.titleLabel.font = [UIFont systemFontOfSize:16.0 weight:UIFontWeightBold];
+    _iconAll.titleLabel.font = textFont;
     [_iconAll mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(lbSepa.mas_left).offset(-padding);
         make.top.equalTo(_viewHeader).offset(marginTop);
@@ -283,7 +296,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     [_iconMissed setTitleColor:[UIColor colorWithRed:(220/255.0) green:(220/255.0)
                                                 blue:(220/255.0) alpha:1.0]
                       forState:UIControlStateNormal];
-    _iconMissed.titleLabel.font = _iconAll.titleLabel.font;
+    _iconMissed.titleLabel.font = textFont;
     [_iconMissed mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(_iconAll);
         make.left.equalTo(lbSepa.mas_right).offset(padding);
@@ -292,7 +305,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     _btnEdit.imageEdgeInsets = UIEdgeInsetsMake(8, 8, 8, 8);
     [_btnEdit mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(_viewHeader.mas_right).offset(-10);
+        make.right.equalTo(_viewHeader.mas_right).offset(-5);
         make.centerY.equalTo(_iconAll.mas_centerY);
         make.width.height.equalTo(_iconAll.mas_height);
     }];

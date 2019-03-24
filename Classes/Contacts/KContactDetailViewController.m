@@ -114,28 +114,50 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)autoLayoutForView
 {
     self.view.backgroundColor = UIColor.whiteColor;
-    if (SCREEN_WIDTH > 320) {
-        hCell = 70.0;
-    }else{
+    
+    UIEdgeInsets backEdge = UIEdgeInsetsMake(5, 5, 5, 5);
+    float wAvatar = 100.0;
+    float hHeader = 180+[LinphoneAppDelegate sharedInstance]._hStatus;
+    hCell = 70.0;
+    UIFont *textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:20.0];
+    
+    NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
+    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE] || [deviceMode isEqualToString: simulator])
+    {
+        backEdge = UIEdgeInsetsMake(6.5, 6.5, 6.5, 6.5);
+        wAvatar = 80.0;
+        hHeader = 170+[LinphoneAppDelegate sharedInstance]._hStatus;
         hCell = 60.0;
+        
+        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
+        
+    }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2]) {
+        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
+        
+    }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
+    {
+        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:20.0];
+        
+    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2])
+    {
+        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:20.0];
+        
     }
     
     //  header
-    float hHeader = 180+[LinphoneAppDelegate sharedInstance]._hStatus;
     _viewHeader.backgroundColor = UIColor.clearColor;
     [_viewHeader mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self.view);
         make.height.mas_equalTo(hHeader);
     }];
     
-    _iconBack.imageEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
+    _iconBack.imageEdgeInsets = backEdge;
     [_iconBack mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_viewHeader).offset(appDelegate._hStatus);
         make.left.equalTo(_viewHeader);
         make.width.height.mas_equalTo(HEADER_ICON_WIDTH);
     }];
     
-    float wAvatar = 100.0;
     _imgAvatar.layer.cornerRadius = wAvatar/2;
     _imgAvatar.layer.borderWidth = 2.0;
     _imgAvatar.layer.borderColor = UIColor.whiteColor.CGColor;
@@ -156,7 +178,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     _lbContactName.animationCurve = UIViewAnimationOptionCurveEaseInOut;
     _lbContactName.fadeLength = 10.0;
     _lbContactName.continuousMarqueeExtraBuffer = 10.0f;
-    _lbContactName.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightSemibold];
+    _lbContactName.font = textFont;
     _lbContactName.textColor = UIColor.whiteColor;
     
     

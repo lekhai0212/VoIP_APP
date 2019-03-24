@@ -17,11 +17,11 @@ typedef enum {
 
 + (NSString *)getModelsOfCurrentDevice;
 //  [Khai le - 28/10/2018]
-+ (float)getSizeOfKeypadButtonForDevice: (NSString *)deviceMode;
-+ (float)getSpaceXBetweenKeypadButtonsForDevice: (NSString *)deviceMode;
-+ (float)getSpaceYBetweenKeypadButtonsForDevice: (NSString *)deviceMode;
++ (float)getSizeOfKeypadButtonForDevice;
++ (float)getSpaceXBetweenKeypadButtonsForDevice;
++ (float)getSpaceYBetweenKeypadButtonsForDevice;
 + (BOOL)checkNetworkAvailable;
-+ (float)getHeightForAddressTextFieldDialerWithDevice: (NSString *)deviceMode;
++ (float)getHeightForAddressTextFieldDialerWithDevice;
 + (void)cleanLogFolder;
 + (NSString *)convertLogFileName: (NSString *)fileName;
 + (float)getSizeOfIconEndCall;
@@ -29,6 +29,7 @@ typedef enum {
 + (float)getHeightLogoWelcomeForDevice;
 + (UIEdgeInsets)getEdgeOfVideoCallDialerForDevice;
 + (float)getHeightSearchViewContactForDevice;
++ (float)getHeightAvatarSearchViewForDevice;
 + (BOOL)isAvailableVideo;
 + (BOOL)isAvailablePhotos;
 + (void)enableProximityMonitoringEnabled: (BOOL)enabled;

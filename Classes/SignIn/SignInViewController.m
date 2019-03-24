@@ -25,7 +25,7 @@
 
 @implementation SignInViewController
 @synthesize viewWelcome, imgWelcome, imgLogoWelcome, lbSlogan, btnStart;
-@synthesize viewSignIn, iconBack, imgLogo, lbHeader, btnAccountID, tfAccountID, btnPassword, tfPassword, btnSignIn, btnQRCode;
+@synthesize viewSignIn, iconBack, imgLogo, lbHeader, btnAccountID, tfAccountID, btnPassword, tfPassword, btnSignIn, btnQRCode, btnShowPass;
 
 #pragma mark - UICompositeViewDelegate Functions
 static UICompositeViewDescription *compositeDescription = nil;
@@ -52,11 +52,11 @@ static UICompositeViewDescription *compositeDescription = nil;
     // Do any additional setup after loading the view from its nib.
     [self setupUIForView];
     
-    tfAccountID.text = @"nhcla150";
-    tfPassword.text = @"f7NnFKI1Kv";
+//    tfAccountID.text = @"nhcla150";
+//    tfPassword.text = @"f7NnFKI1Kv";
     
-//    tfAccountID.text = @"nhcla151";
-//    tfPassword.text = @"5obr8jHH2q";
+    tfAccountID.text = @"nhcla151";
+    tfPassword.text = @"5obr8jHH2q";
     
     icWaiting = [[UIActivityIndicatorView alloc] init];
     icWaiting.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
@@ -88,6 +88,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear: animated];
     //  [self showWelcomeView];
+    [[NSNotificationCenter defaultCenter] removeObserver: self];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -107,6 +108,19 @@ static UICompositeViewDescription *compositeDescription = nil;
 
     [self performSelector:@selector(startLogin:) withObject:sender afterDelay:0.15];
 }
+
+- (IBAction)btnShowPassPress:(UIButton *)sender {
+    if (sender.tag == 0) {
+        sender.tag = 1;
+        [sender setImage:[UIImage imageNamed:@"ic_show_pass"] forState:UIControlStateNormal];
+        tfPassword.secureTextEntry = NO;
+    }else{
+        sender.tag = 0;
+        [sender setImage:[UIImage imageNamed:@"ic_hide_pass"] forState:UIControlStateNormal];
+        tfPassword.secureTextEntry = YES;
+    }
+}
+
 - (void)startLogin: (UIButton *)sender {
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] userName = %@, password = %@", __FUNCTION__, tfAccountID.text, tfPassword.text] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
@@ -212,11 +226,11 @@ static UICompositeViewDescription *compositeDescription = nil;
         hLogo = 40.0;
         marginTop = 10.0;
         marginSlogan = 20.0;
-        wButtonStart = 160.0;
-        hButtonStart = 40.0;
-        sloganFont = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
+        wButtonStart = 150.0;
+        hButtonStart = 38.0;
+        sloganFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
         
-        padding = 20.0;
+        padding = 30.0;
         hLogoColor = 30.0;
         topPadding = 10.0;
         headerFont = [UIFont systemFontOfSize:18.0 weight:UIFontWeightBold];
@@ -235,6 +249,8 @@ static UICompositeViewDescription *compositeDescription = nil;
         
         edgeBack = 15.0;
         
+        btnStart.titleLabel.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightMedium];
+        
     }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
     {
         //  Screen width: 375.000000 - Screen height: 667.000000
@@ -243,7 +259,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         marginSlogan = 30.0;
         wButtonStart = 170.0;
         hButtonStart = 50.0;
-        sloganFont = [UIFont systemFontOfSize:18.0 weight:UIFontWeightRegular];
+        sloganFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
         
         padding = 25.0;
         topPadding = 15.0;
@@ -254,25 +270,29 @@ static UICompositeViewDescription *compositeDescription = nil;
         headerFont = [UIFont systemFontOfSize:20.0 weight:UIFontWeightBold];
         
         btnMarginTop = 20.0;
-    }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
+        btnStart.titleLabel.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightMedium];
+        
+    }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2] || [deviceMode isEqualToString: simulator])
     {
         //  Screen width: 414.000000 - Screen height: 736.000000
-        hLogo = 55.0;
+        hLogo = 50.0;
         
         padding = 30.0;
         hLogoColor = 50.0;
         topPadding = 10.0;
         edgeBack = 14.0;
         edge = 12.0;
+        sloganFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:22.0];
         
         accMargin = 20.0;
         headerFont = [UIFont systemFontOfSize:26.0 weight:UIFontWeightBold];
         hTextfield = 46.0;
         hBTN = 50.0;
-        buttonFont = [UIFont systemFontOfSize:20.0 weight:UIFontWeightRegular];
+        buttonFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:22.0];
         btnMarginTop = 30.0;
+        btnStart.titleLabel.font = [UIFont systemFontOfSize:22.0 weight:UIFontWeightMedium];
         
-    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2]  || [deviceMode isEqualToString: simulator]){
+    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2]){
         //  Screen width: 375.000000 - Screen height: 812.000000;
         hLogo = 55.0;
         sloganFont = [UIFont systemFontOfSize:20.0 weight:UIFontWeightRegular];
@@ -284,6 +304,8 @@ static UICompositeViewDescription *compositeDescription = nil;
         hLogoColor = 50.0;
         headerFont = [UIFont systemFontOfSize:25.0 weight:UIFontWeightBold];
         accMargin = 20.0;
+        
+        btnStart.titleLabel.font = [UIFont systemFontOfSize:22.0 weight:UIFontWeightMedium];
     }else{
         hLogo = 60.0;
     }
@@ -312,7 +334,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.height.mas_equalTo(textSize.height + 10);
     }];
     
-    btnStart.titleLabel.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightMedium];
+    
     [btnStart setTitle:[[[LanguageUtil sharedInstance] getContent:@"Start"] uppercaseString] forState:UIControlStateNormal];
     [btnStart setTitleColor:[UIColor colorWithRed:(60/255.0) green:(75/255.0)
                                              blue:(102/255.0) alpha:1.0] forState:UIControlStateNormal];
@@ -416,6 +438,18 @@ static UICompositeViewDescription *compositeDescription = nil;
     tfPassword.borderStyle = UITextBorderStyleNone;
     tfPassword.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, hTextfield-edge, hTextfield)];
     tfPassword.leftViewMode = UITextFieldViewModeAlways;
+    
+    tfPassword.rightView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, hTextfield, hTextfield)];
+    tfPassword.rightViewMode = UITextFieldViewModeAlways;
+    
+    //  show, hide password
+    btnShowPass.tag = 0;
+    btnShowPass.imageEdgeInsets = UIEdgeInsetsMake(6,6, 6, 6);
+    [btnShowPass mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(tfPassword).offset(edge);
+        make.top.bottom.equalTo(tfPassword);
+        make.width.mas_equalTo(hTextfield);
+    }];
     
     UILabel *lbPassword = [[UILabel alloc] init];
     lbPassword.backgroundColor = lbAccount.backgroundColor;

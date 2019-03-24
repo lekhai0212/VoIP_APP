@@ -499,24 +499,7 @@ void onUncaughtException(NSException* exception)
     hostReachable = [Reachability reachabilityWithHostName:@"www.apple.com"];
     [hostReachable startNotifier];
     
-    _hStatus = [application statusBarFrame].size.height;
-    
-    float wMenu = SCREEN_WIDTH/4;
-    _hTabbar = wMenu * 130/250;
-    
-    if (SCREEN_WIDTH <= 375 && SCREEN_WIDTH > 320) {
-        _hRegistrationState = 44.0 + _hStatus;
-        _wSubMenu = 60.0;
-        _hHeader = 50.0;
-    }else if (SCREEN_WIDTH > 375){
-        _hRegistrationState = 44.0 + _hStatus;
-        _wSubMenu = 100.0;
-        _hHeader = 50.0;
-    }else{
-        _hRegistrationState = 34.0 + _hStatus;
-        _wSubMenu = 40.0;
-        _hHeader = 42.0;
-    }
+    [self setupValueForDevice];
     
     listNumber = [[NSArray alloc] initWithObjects: @"+", @"0", @"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", nil];
     
@@ -2573,14 +2556,21 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 - (void)showPopupToChooseDID: (id)data {
     if ([data isKindOfClass:[NSArray class]] && data != nil) {
-        float popupHeight;
-        if ([(NSArray *)data count] > 6) {
-            popupHeight = 60.0 + 7*60.0;
-        }else{
-            popupHeight = 60.0 + ([(NSArray *)data count] + 1) * 60.0;
+        float wPopup = 300.0;
+        float hCell = 60.0;
+        if (SCREEN_WIDTH == 320) {
+            wPopup = 280.0;
+            hCell = 50.0;
         }
         
-        ChooseDIDPopupView *popupDID = [[ChooseDIDPopupView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-300.0)/2, (SCREEN_HEIGHT-popupHeight)/2, 300.0, popupHeight)];
+        float popupHeight;
+        if ([(NSArray *)data count] > 6) {
+            popupHeight = hCell + 7*hCell;
+        }else{
+            popupHeight = hCell + ([(NSArray *)data count] + 1) * hCell;
+        }
+        
+        ChooseDIDPopupView *popupDID = [[ChooseDIDPopupView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-wPopup)/2, (SCREEN_HEIGHT-popupHeight)/2, wPopup, popupHeight)];
         popupDID.delegate = self;
         [popupDID.listDID addObjectsFromArray: data];
         [popupDID.tbDIDList reloadData];
@@ -2596,6 +2586,43 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     if (![AppUtils isNullOrEmpty: phoneForCall]) {
         NSString *strToCall = [NSString stringWithFormat:@"%@%@", prefix, phoneForCall];
         [SipUtils makeCallWithPhoneNumber: strToCall];
+    }
+}
+
+- (void)setupValueForDevice {
+    float wMenu = SCREEN_WIDTH/4;
+    CGSize bgMenu = [UIImage imageNamed:@"menu_dialer_def.png"].size;
+    _hTabbar = wMenu * bgMenu.height/bgMenu.width;
+    
+    _hStatus = [UIApplication sharedApplication].statusBarFrame.size.height;
+    NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
+    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE])
+    {
+        //  Screen width: 320.000000 - Screen height: 667.000000
+        
+        
+    }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
+    {
+        //  Screen width: 375.000000 - Screen height: 667.000000
+        _hRegistrationState = 44.0 + _hStatus;
+        _wSubMenu = 60.0;
+        _hHeader = 50.0;
+        
+    }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2] || [deviceMode isEqualToString: simulator])
+    {
+        //  Screen width: 414.000000 - Screen height: 736.000000
+        _hRegistrationState = 55.0 + _hStatus;
+        _wSubMenu = 100.0;
+        _hHeader = 50.0;
+        
+    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS]){
+        //  Screen width: 375.000000 - Screen height: 812.000000
+        
+    }else if ([deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2]){
+        //  Screen width: 375.000000 - Screen height: 812.000000
+        
+    }else{
+        
     }
 }
 

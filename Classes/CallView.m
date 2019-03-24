@@ -87,6 +87,8 @@ const NSInteger SECURE_BUTTON_TAG = 5;
     
     UIView *viewOffCam;
     UIImageView *imgOffCam;
+    float marginQuality;
+    float marginPhone;
 }
 
 @end
@@ -342,13 +344,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     if (isAudioCall) {
         NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationPortrait];
         [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
-    }else{
-        UIButton *testBtn = [[UIButton alloc] initWithFrame:CGRectMake(20, 40, 100, 40)];
-        testBtn.backgroundColor = UIColor.redColor;
-        [testBtn addTarget:self
-                    action:@selector(changeRotationOfDevice)
-          forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview: testBtn];
     }
 
 	[PhoneMainView.instance setVolumeHidden:TRUE];
@@ -358,38 +353,10 @@ static UICompositeViewDescription *compositeDescription = nil;
 	LinphoneCall *call = linphone_core_get_current_call(LC);
 	LinphoneCallState state = (call != NULL) ? linphone_call_get_state(call) : 0;
 	[self callUpdate:call state:state animated:FALSE];
-    
-    /*
-    UIButton *normal = [[UIButton alloc] initWithFrame:CGRectMake(180, 50, 100, 50)];
-    normal.backgroundColor = UIColor.redColor;
-    [normal setTitle:@"VIDEO" forState:UIControlStateNormal];
-    [normal addTarget:self
-               action:@selector(testtest2)
-     forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview: normal];
-    
-    UIButton *normal2 = [[UIButton alloc] initWithFrame:CGRectMake(normal.frame.origin.x+normal.frame.size.width, 50, 100, 50)];
-    normal2.backgroundColor = UIColor.redColor;
-    [normal2 setTitle:@"END" forState:UIControlStateNormal];
-    [normal2 addTarget:self
-               action:@selector(testtest3)
-     forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview: normal2];    */
 }
 
 - (void)CallConnectedSuccessful {
     [self enableVideoForCurrentCall];
-}
-
-- (void)testtest3 {
-    linphone_core_terminate_all_calls(LC);
-}
-
-- (void)testtest2 {
-    //    UInt32 sessionCategory = kAudioSessionCategory_PlayAndRecord;
-    //    AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(sessionCategory), &sessionCategory);
-    //    UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_None;
-    //    AudioSessionSetProperty (kAudioSessionProperty_OverrideAudioRoute,sizeof (audioRouteOverride),&audioRouteOverride);
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -865,6 +832,7 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 			}
 			break;
         case LinphoneCallEnd:{
+            [self hideMiniKeypad];
             
             if (durationTimer != nil) {
                 [durationTimer invalidate];
@@ -873,6 +841,8 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
             break;
         }
         case LinphoneCallError:{
+            [self hideMiniKeypad];
+            
             break;
         }
 		default:
@@ -996,16 +966,31 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 
 //  Hide keypad mini
 - (void)hideMiniKeypad{
-    for (UIView *subView in callView.subviews) {
-        if (subView.tag == 10) {
-            [UIView animateWithDuration:.35 animations:^{
-                subView.transform = CGAffineTransformMakeScale(1.3, 1.3);
-                subView.alpha = 0.0;
-            } completion:^(BOOL finished) {
-                if (finished) {
-                    [subView removeFromSuperview];
-                }
-            }];
+    if (isAudioCall) {
+        for (UIView *subView in callView.subviews) {
+            if (subView.tag == 10) {
+                [UIView animateWithDuration:.35 animations:^{
+                    subView.transform = CGAffineTransformMakeScale(1.3, 1.3);
+                    subView.alpha = 0.0;
+                } completion:^(BOOL finished) {
+                    if (finished) {
+                        [subView removeFromSuperview];
+                    }
+                }];
+            }
+        }
+    }else{
+        for (UIView *subView in viewVideoCall.subviews) {
+            if (subView.tag == 10) {
+                [UIView animateWithDuration:.35 animations:^{
+                    subView.transform = CGAffineTransformMakeScale(1.3, 1.3);
+                    subView.alpha = 0.0;
+                } completion:^(BOOL finished) {
+                    if (finished) {
+                        [subView removeFromSuperview];
+                    }
+                }];
+            }
         }
     }
 }
@@ -1248,7 +1233,7 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     [_lbQuality setTextColor: [UIColor whiteColor]];
     [_lbQuality mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(callView.mas_centerX);
-        make.bottom.equalTo(avatarImage.mas_top).offset(-50.0);
+        make.bottom.equalTo(avatarImage.mas_top).offset(-marginQuality);
         make.width.mas_equalTo(200.0);
         make.height.mas_equalTo(30);
     }];
@@ -1264,7 +1249,7 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     lbPhoneNumber.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightRegular];
     [lbPhoneNumber mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(callView.mas_centerX);
-        make.bottom.equalTo(durationLabel.mas_top).offset(-30);
+        make.bottom.equalTo(durationLabel.mas_top).offset(-marginPhone);
         make.width.mas_equalTo(200.0);
         make.height.mas_equalTo(30);
     }];
@@ -1562,11 +1547,19 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 }
 
 - (void)setupSizeWithDevice {
+    marginQuality = 50.0;
+    marginPhone = 30.0;
+    
     NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
     if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE] || [deviceMode isEqualToString: simulator])
     {
         //  Screen width: 320.000000 - Screen height: 667.000000
-        wAvatar = 120.0;
+        wAvatar = 110.0;
+        wEndIcon = 60.0;
+        wSmallIcon = 45.0;
+        marginQuality = 30.0;
+        marginIcon = 10.0;
+        marginPhone = 20.0;
         
     }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
     {

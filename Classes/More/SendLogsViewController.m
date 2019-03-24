@@ -131,8 +131,10 @@ static UICompositeViewDescription *compositeDescription = nil;
 {
     if (SCREEN_WIDTH > 320) {
         lbHeader.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:20.0];
+        icBack.imageEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     }else{
         lbHeader.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
+        icBack.imageEdgeInsets = UIEdgeInsetsMake(7, 7, 7, 7);
     }
     
     //  header view
@@ -141,7 +143,6 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.height.mas_equalTo([LinphoneAppDelegate sharedInstance]._hRegistrationState);
     }];
     
-    icBack.imageEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     [icBack mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(viewHeader);
         make.centerY.equalTo(lbHeader.mas_centerY);
@@ -162,7 +163,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     [icSend setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     [icSend setTitleColor:UIColor.grayColor forState:UIControlStateDisabled];
     [icSend mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(viewHeader).offset(-5.0);
+        make.right.equalTo(viewHeader).offset(-10.0);
         make.centerY.equalTo(lbHeader.mas_centerY);
         make.width.mas_equalTo(80.0);
         make.height.mas_equalTo(HEADER_ICON_WIDTH);

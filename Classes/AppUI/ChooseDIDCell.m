@@ -13,7 +13,12 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
-    lbTitle.font = lbDIDNumber.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightRegular];
+    if (SCREEN_WIDTH > 320) {
+        lbTitle.font = lbDIDNumber.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
+    }else{
+        lbTitle.font = lbDIDNumber.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
+    }
+    
     lbTitle.textColor = lbDIDNumber.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     
     lbTitle.text = @"Gọi ra prefix";
@@ -34,6 +39,15 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
+    if (highlighted) {
+        self.backgroundColor = [UIColor colorWithRed:(245/255.0) green:(245/255.0)
+                                                blue:(245/255.0) alpha:0.3];
+    }else{
+        self.backgroundColor = UIColor.whiteColor;
+    }
 }
 
 @end

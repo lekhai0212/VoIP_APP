@@ -14,18 +14,18 @@
     [super awakeFromNib];
     // Initialization code
     
+    float hICon = 28.0;
+    lbName.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
+    if (SCREEN_WIDTH == 320) {
+        hICon = 24.0;
+        lbName.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
+    }
     
     [imgSelect mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.mas_centerY);
         make.right.equalTo(self).offset(-10.0);
-        make.width.height.mas_equalTo(28.0);
+        make.width.height.mas_equalTo(hICon);
     }];
-    
-    if (IS_IPHONE || IS_IPOD) {
-        lbName.font = [UIFont fontWithName:HelveticaNeue size:16.0];
-    }else{
-        lbName.font = [UIFont systemFontOfSize: 18.0 weight: UIFontWeightThin];
-    }
     
     lbName.textColor = [UIColor colorWithRed:(80/255.0) green:(80/255.0)
                                         blue:(80/255.0) alpha:1.0];

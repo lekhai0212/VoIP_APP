@@ -100,9 +100,9 @@
     return nil;
 }
 
-+ (PBXContact *)getPBXContactWithId: (int)idContact {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"_id_contact = %d", idContact];
-    NSArray *filter = [[LinphoneAppDelegate sharedInstance].listContacts filteredArrayUsingPredicate: predicate];
++ (PBXContact *)getPBXContactWithExtension: (NSString *)ext {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"_number = %@", ext];
+    NSArray *filter = [[LinphoneAppDelegate sharedInstance].pbxContacts filteredArrayUsingPredicate: predicate];
     if (filter.count > 0) {
         return [filter objectAtIndex: 0];
     }

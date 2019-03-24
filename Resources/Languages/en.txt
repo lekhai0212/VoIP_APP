@@ -102,7 +102,7 @@
 "Do you want to delete call history?" = "Do you want to delete call history?"
 "Calls detail" = "Calls detail"
 "Hide" = "Hide"
-
+"Silent" = "Silent"
 
 
 

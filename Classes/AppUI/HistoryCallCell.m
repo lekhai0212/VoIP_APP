@@ -15,13 +15,25 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     
-    UIColor *textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
+    NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
+    float wAvatar = 50.0;
+    float wIconCall = 42.0;
+    UIEdgeInsets edge = UIEdgeInsetsMake(7, 7, 7, 7);
+    float marginRight = 10.0;
+    float wNotif = 18.0;
     
-    if (self.frame.size.width > 320) {
-        _lbName.font = [UIFont systemFontOfSize:17.0 weight:UIFontWeightBold];
-        _lbPhone.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
-        _lbTime.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
-        lbDate.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
+    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE])
+    {
+        _lbName.font = [UIFont fontWithName:MYRIADPRO_BOLD size:15.0];
+        _lbPhone.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:15.0];
+        _lbTime.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:15.0];
+        lbDate.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:15.0];
+        wAvatar = 40.0;
+        wIconCall = 38.0;
+        edge = UIEdgeInsetsMake(7, 7, 7, 7);
+        marginRight = 2.0;
+        wNotif = 15.0;
+        
     }else{
         _lbName.font = [UIFont systemFontOfSize:17.0 weight:UIFontWeightBold];
         _lbPhone.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
@@ -29,34 +41,36 @@
         lbDate.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
     }
     
+    UIColor *textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
+    
     _imgAvatar.clipsToBounds = YES;
     _imgAvatar.layer.borderColor = [UIColor colorWithRed:(101/255.0) green:(205/255.0)
                                                     blue:(70/255.0) alpha:1.0].CGColor;
     _imgAvatar.layer.borderWidth = 1.0;
-    _imgAvatar.layer.cornerRadius = 50.0/2;
+    _imgAvatar.layer.cornerRadius = wAvatar/2;
     [_imgAvatar mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self).offset(10.0);
         make.centerY.equalTo(self.mas_centerY);
-        make.width.height.mas_equalTo(50.0);
+        make.width.height.mas_equalTo(wAvatar);
     }];
     
     lbMissed.backgroundColor = UIColor.redColor;
     lbMissed.clipsToBounds = YES;
-    lbMissed.layer.cornerRadius = 18.0/2;
+    lbMissed.layer.cornerRadius = wNotif/2;
     [lbMissed mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_imgAvatar.mas_right).offset(-18.0);
+        make.left.equalTo(_imgAvatar.mas_right).offset(-wNotif);
         make.top.equalTo(_imgAvatar).offset(0);
-        make.width.height.mas_equalTo(18.0);
+        make.width.height.mas_equalTo(wNotif);
     }];
     lbMissed.font = [UIFont systemFontOfSize: 12.0];
     lbMissed.textColor = UIColor.whiteColor;
     lbMissed.textAlignment = NSTextAlignmentCenter;
     
-    _btnCall.imageEdgeInsets = UIEdgeInsetsMake(7, 7, 7, 7);
+    _btnCall.imageEdgeInsets = edge;
     [_btnCall mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self).offset(-10);
+        make.right.equalTo(self).offset(-marginRight);
         make.centerY.equalTo(self.mas_centerY);
-        make.width.height.mas_equalTo(42.0);
+        make.width.height.mas_equalTo(wIconCall);
     }];
     
     lbDate.textColor = textColor;
@@ -83,14 +97,14 @@
     }];
     
     _imgStatus.clipsToBounds = YES;
-    _imgStatus.layer.cornerRadius = 17.0/2;
+    _imgStatus.layer.cornerRadius = wNotif/2;
     _imgStatus.layer.borderColor = UIColor.whiteColor.CGColor;
     _imgStatus.layer.borderWidth = 1.0;
     
     [_imgStatus mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(_lbTime.mas_centerY);
         make.left.equalTo(_lbName);
-        make.width.height.mas_equalTo(17.0);
+        make.width.height.mas_equalTo(wNotif);
     }];
 
     
@@ -105,8 +119,7 @@
     _lbSepa.backgroundColor = [UIColor colorWithRed:(235/255.0) green:(235/255.0)
                                                blue:(235/255.0) alpha:1.0];
     [_lbSepa mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_imgAvatar);
-        make.bottom.right.equalTo(self);
+        make.left.bottom.right.equalTo(self);
         make.height.mas_equalTo(1.0);
     }];
     

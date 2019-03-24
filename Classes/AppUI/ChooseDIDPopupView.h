@@ -19,6 +19,7 @@
 @property (nonatomic, strong) UILabel *lbSepa;
 @property (nonatomic, strong) UITableView *tbDIDList;
 @property (nonatomic, retain) UITapGestureRecognizer *tapGesture;
+@property (nonatomic, assign) float hCell;
 
 - (void)showInView:(UIView *)aView animated:(BOOL)animated;
 - (void)fadeOut;

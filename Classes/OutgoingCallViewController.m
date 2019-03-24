@@ -18,6 +18,7 @@
     float wSmallIcon;
     float wAvatar;
     float hStateLabel;
+    float marginQuality;
     
     UIFont *textFontBold;
     UIFont *textFont;
@@ -172,14 +173,17 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)setupUIForView {
     float margin = 25.0;
     wIconEndCall = 80.0;
+    marginQuality = 50.0;
     
     NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
     if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE] || [deviceMode isEqualToString: simulator])
     {
         //  Screen width: 320.000000 - Screen height: 667.000000
-        wAvatar = 90.0;
+        wAvatar = 110.0;
         wIconEndCall = 60.0;
         wSmallIcon = 45.0;
+        marginQuality = 30.0;
+        
     }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
     {
         //  Screen width: 375.000000 - Screen height: 667.000000
@@ -231,7 +235,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     _lbCallState.font = textFont;
     [_lbCallState mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view.mas_centerX);
-        make.bottom.equalTo(_imgAvatar.mas_top).offset(-50.0);
+        make.bottom.equalTo(_imgAvatar.mas_top).offset(-marginQuality);
         make.width.mas_equalTo(300.0);
         make.height.mas_equalTo(30.0);
     }];

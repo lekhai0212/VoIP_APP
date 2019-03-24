@@ -37,11 +37,9 @@
     self.backgroundColor = UIColor.whiteColor;
     
     //  Number keypad
-    NSString *modelName = [DeviceUtils getModelsOfCurrentDevice];
-    
-    float wIcon = [DeviceUtils getSizeOfKeypadButtonForDevice: modelName];
-    float spaceMarginY = [DeviceUtils getSpaceYBetweenKeypadButtonsForDevice: modelName];
-    float spaceMarginX = [DeviceUtils getSpaceXBetweenKeypadButtonsForDevice: modelName];
+    float wIcon = [DeviceUtils getSizeOfKeypadButtonForDevice];
+    float spaceMarginY = [DeviceUtils getSpaceYBetweenKeypadButtonsForDevice];
+    float spaceMarginX = [DeviceUtils getSpaceXBetweenKeypadButtonsForDevice];
     
     iconBack.imageEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     [iconBack mas_makeConstraints:^(MASConstraintMaker *make) {

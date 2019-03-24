@@ -76,7 +76,11 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.top.left.bottom.right.equalTo(viewHeader);
     }];
     
-    iconBack.imageEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
+    if (SCREEN_WIDTH > 320) {
+        iconBack.imageEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
+    }else{
+        iconBack.imageEdgeInsets = UIEdgeInsetsMake(7, 7, 7, 7);
+    }
     [iconBack mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(viewHeader).offset([LinphoneAppDelegate sharedInstance]._hStatus);
         make.left.equalTo(viewHeader);
@@ -126,7 +130,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return ringtones.count;
+    return ringtones.count + 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -138,29 +142,38 @@ static UICompositeViewDescription *compositeDescription = nil;
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    NSDictionary *ringtone = [ringtones objectAtIndex: indexPath.row];
-    NSString *name = [ringtone objectForKey:@"name"];
-    cell.lbName.text = name;
-    
-    NSString *file = [ringtone objectForKey:@"file"];
-    if ([file isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:DEFAULT_RINGTONE]]) {
-        cell.imgSelected.hidden = NO;
+    if (indexPath.row == 0) {
+        cell.lbName.text = [[LanguageUtil sharedInstance] getContent:@"Silent"];
+        cell.imgRingTone.image = [UIImage imageNamed:@"no_sound"];
     }else{
-        cell.imgSelected.hidden = YES;
+        NSDictionary *ringtone = [ringtones objectAtIndex: (indexPath.row-1)];
+        NSString *name = [ringtone objectForKey:@"name"];
+        cell.lbName.text = name;
+        cell.imgRingTone.image = [UIImage imageNamed:@"more_ringtone"];
+        
+        NSString *file = [ringtone objectForKey:@"file"];
+        if ([file isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:DEFAULT_RINGTONE]]) {
+            cell.imgSelected.hidden = NO;
+        }else{
+            cell.imgSelected.hidden = YES;
+        }
     }
-    
     return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    float hPopup = 15 + 40.0 + 15.0 + 50.0;
-    PlayRingTonePopupView *popupRingTone = [[PlayRingTonePopupView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-300.0)/2, (SCREEN_HEIGHT-hPopup)/2, 300.0, hPopup)];
-    popupRingTone.delegate = self;
-    [popupRingTone showInView:self.view animated:YES];
-    
-    NSDictionary *ringtone = [ringtones objectAtIndex: indexPath.row];
-    [popupRingTone setRingtoneInfoContent: ringtone];
+    if (indexPath.row == 0) {
+        
+    }else{
+        float hPopup = 15 + 40.0 + 15.0 + 50.0;
+        PlayRingTonePopupView *popupRingTone = [[PlayRingTonePopupView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-300.0)/2, (SCREEN_HEIGHT-hPopup)/2, 300.0, hPopup)];
+        popupRingTone.delegate = self;
+        [popupRingTone showInView:self.view animated:YES];
+        
+        NSDictionary *ringtone = [ringtones objectAtIndex: indexPath.row];
+        [popupRingTone setRingtoneInfoContent: ringtone];
+    }
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

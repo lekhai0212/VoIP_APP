@@ -563,7 +563,32 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 
 - (void)newAutoLayoutForView {
-    NSString *modelName = [DeviceUtils getModelsOfCurrentDevice];
+    float hLogo = 22.0;
+    UIFont *fontAccount = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
+    UIFont *fontStatus = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
+    hAddressField = 60.0;
+    UIEdgeInsets callEdgeInsets = UIEdgeInsetsZero;
+    UIEdgeInsets clearEdgeInsets = UIEdgeInsetsMake(12, 12, 12, 12);
+    
+    NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
+    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE])
+    {
+        hLogo = 18.0;
+        fontAccount = [UIFont fontWithName:MYRIADPRO_BOLD size:16.0];
+        fontStatus = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
+        callEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
+        clearEdgeInsets = UIEdgeInsetsMake(16, 16, 16, 16);
+        
+    }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2]) {
+        
+    }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2] || [deviceMode isEqualToString: simulator])
+    {
+        
+    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2]) {
+        
+        hAddressField = 80.0;
+    }
+    
     
     self.view.backgroundColor = UIColor.whiteColor;
     //  view status
@@ -574,17 +599,17 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
     
     UIImage *logoImg = [UIImage imageNamed:@"logo_white"];
-    float wLogo = 23.0 * logoImg.size.width / logoImg.size.height;
+    float wLogo = hLogo * logoImg.size.width / logoImg.size.height;
     _imgLogoSmall.image = logoImg;
     [_imgLogoSmall mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_viewStatus).offset(appDelegate._hRegistrationState/4);
         make.centerY.equalTo(_viewStatus.mas_centerY).offset(appDelegate._hStatus/2-5.0);
-        make.height.mas_equalTo(22.0);
+        make.height.mas_equalTo(hLogo);
         make.width.mas_equalTo(wLogo);
     }];
     
     //  account label
-    _lbAccount.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightBold];
+    _lbAccount.font = fontAccount;
     _lbAccount.textAlignment = NSTextAlignmentCenter;
     [_lbAccount mas_makeConstraints:^(MASConstraintMaker *make) {
         //  make.top.bottom.equalTo(_imgLogoSmall);
@@ -595,7 +620,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
     
     //  status label
-    _lbStatus.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
+    _lbStatus.font = fontStatus;
     _lbStatus.numberOfLines = 0;
     [_lbStatus mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_lbAccount.mas_right);
@@ -607,9 +632,9 @@ static UICompositeViewDescription *compositeDescription = nil;
     [_lbStatus addGestureRecognizer: tapOnStatus];
     
     //  pad view
-    float wIcon = [DeviceUtils getSizeOfKeypadButtonForDevice: modelName];
-    float spaceMarginY = [DeviceUtils getSpaceYBetweenKeypadButtonsForDevice: modelName];
-    float spaceMarginX = [DeviceUtils getSpaceXBetweenKeypadButtonsForDevice: modelName];
+    float wIcon = [DeviceUtils getSizeOfKeypadButtonForDevice];
+    float spaceMarginY = [DeviceUtils getSpaceYBetweenKeypadButtonsForDevice];
+    float spaceMarginX = [DeviceUtils getSpaceXBetweenKeypadButtonsForDevice];
     
     float hPadView = 5*wIcon + 6*spaceMarginY;
     _padView.backgroundColor = UIColor.clearColor;
@@ -722,6 +747,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     _callButton.tag = TAG_AUDIO_CALL;
     _callButton.layer.cornerRadius = wIcon/2;
     _callButton.clipsToBounds = YES;
+    _callButton.imageEdgeInsets = callEdgeInsets;
     [_callButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_zeroButton.mas_bottom).offset(spaceMarginY);
         make.centerX.equalTo(_padView.mas_centerX);
@@ -749,12 +775,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     
     //  Number view
-    hAddressField = 60.0;
-    if ([modelName isEqualToString: IphoneX_1] || [modelName isEqualToString: IphoneX_2] || [modelName isEqualToString: IphoneXR] || [modelName isEqualToString: IphoneXS] || [modelName isEqualToString: IphoneXS_Max1] || [modelName isEqualToString: IphoneXS_Max2])
-    {
-        hAddressField = 80.0;
-    }
-    
     [_viewNumber mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.view);
         make.top.equalTo(_viewStatus.mas_bottom);
@@ -778,7 +798,7 @@ static UICompositeViewDescription *compositeDescription = nil;
             forControlEvents:UIControlEventEditingChanged];
     
     icClear.hidden = YES;
-    icClear.imageEdgeInsets = UIEdgeInsetsMake(12, 12, 12, 12);
+    icClear.imageEdgeInsets = clearEdgeInsets;
     [icClear mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(_addressField.mas_centerY);
         make.left.equalTo(_addressField.mas_right);
@@ -888,9 +908,9 @@ static UICompositeViewDescription *compositeDescription = nil;
             forControlEvents:UIControlEventEditingChanged];
     
     //  Number keypad
-    float wIcon = [DeviceUtils getSizeOfKeypadButtonForDevice: modelName];
-    float spaceMarginY = [DeviceUtils getSpaceYBetweenKeypadButtonsForDevice: modelName];
-    float spaceMarginX = [DeviceUtils getSpaceXBetweenKeypadButtonsForDevice: modelName];
+    float wIcon = [DeviceUtils getSizeOfKeypadButtonForDevice];
+    float spaceMarginY = [DeviceUtils getSpaceYBetweenKeypadButtonsForDevice];
+    float spaceMarginX = [DeviceUtils getSpaceXBetweenKeypadButtonsForDevice];
     
     _padView.backgroundColor = UIColor.clearColor;
     [_padView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -1289,6 +1309,8 @@ static UICompositeViewDescription *compositeDescription = nil;
         [_viewNumber addSubview: resultView];
         
         float hSearch = [DeviceUtils getHeightSearchViewContactForDevice];
+        float hAvatar = [DeviceUtils getHeightAvatarSearchViewForDevice];
+        
         [resultView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(_viewNumber.mas_centerX);
             make.bottom.equalTo(_viewNumber);
@@ -1298,13 +1320,13 @@ static UICompositeViewDescription *compositeDescription = nil;
         
         imgAvatar = [[UIImageView alloc] init];
         imgAvatar.image = [UIImage imageNamed:@"no_avatar"];
-        imgAvatar.layer.cornerRadius = 40.0/2;
+        imgAvatar.layer.cornerRadius = hAvatar/2;
         imgAvatar.clipsToBounds = YES;
         [resultView addSubview: imgAvatar];
         [imgAvatar mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(resultView.mas_centerY);
-            make.left.equalTo(resultView).offset(10.0);
-            make.width.height.mas_equalTo(40.0);
+            make.left.equalTo(resultView).offset((hSearch-hAvatar)/2);
+            make.width.height.mas_equalTo(hAvatar);
         }];
         
         btnSearchNum = [[UIButton alloc] init];
@@ -1326,7 +1348,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         lbName.text = @"Le Quang Khai";
         [resultView addSubview: lbName];
         [lbName mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(resultView).offset(8.0);
+            make.top.equalTo(resultView).offset(4.0);
             make.left.equalTo(imgAvatar.mas_right).offset(8.0);
             make.bottom.equalTo(imgAvatar.mas_centerY);
             make.right.equalTo(btnSearchNum.mas_left).offset(-8.0);
@@ -1340,7 +1362,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         [lbPhone mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(imgAvatar.mas_centerY);
             make.left.right.equalTo(lbName);
-            make.bottom.equalTo(resultView).offset(-8.0);
+            make.bottom.equalTo(resultView).offset(-4.0);
         }];
         
         btnChooseContact = [[UIButton alloc] init];
@@ -1375,11 +1397,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     if (totalHeight > SCREEN_HEIGHT - 70.0*2) {
         totalHeight = SCREEN_HEIGHT - 70.0*2;
     }
-    if (popupSearchContacts == nil) {
-        popupSearchContacts = [[SearchContactPopupView alloc] initWithFrame:CGRectMake(30.0, (SCREEN_HEIGHT-totalHeight)/2, SCREEN_WIDTH-60.0, totalHeight)];
-    }else{
-        popupSearchContacts.frame = CGRectMake(30.0, (SCREEN_HEIGHT-totalHeight)/2, SCREEN_WIDTH-60.0, totalHeight);
-    }
+    popupSearchContacts = [[SearchContactPopupView alloc] initWithFrame:CGRectMake(30.0, (SCREEN_HEIGHT-totalHeight)/2, SCREEN_WIDTH-60.0, totalHeight)];
     popupSearchContacts.contacts = listPhoneSearched;
     [popupSearchContacts.tbContacts reloadData];
     popupSearchContacts.delegate = self;
@@ -1402,7 +1420,5 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 -(void)receivedResponeCode:(NSString *)link withCode:(int)responeCode {
 }
-
-
 
 @end

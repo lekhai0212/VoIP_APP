@@ -14,8 +14,17 @@
     [super awakeFromNib];
     // Initialization code
     float padding = 8.0;
+    float wDate = 90.0;
     
-    lbCallState.font = [UIFont systemFontOfSize:16.0 weight:UIFontWeightBold];
+    if (SCREEN_WIDTH > 320) {
+        lbCallState.font = [UIFont fontWithName:MYRIADPRO_BOLD size:16.0];
+        lbDate.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:14.0];
+    }else{
+        lbCallState.font = [UIFont fontWithName:MYRIADPRO_BOLD size:14.0];
+        lbDate.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:14.0];
+        wDate = 75.0;
+    }
+    
     lbCallState.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     [lbCallState mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(self.mas_centerY).offset(-2.5);
@@ -30,12 +39,12 @@
         make.width.height.mas_equalTo(20.0);
     }];
     
-    lbDate.font = [UIFont systemFontOfSize:14.0 weight:UIFontWeightRegular];
+    
     lbDate.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     [lbDate mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.mas_centerY).offset(2.5);
         make.left.equalTo(lbCallState);
-        make.width.mas_equalTo(90);
+        make.width.mas_equalTo(wDate);
         make.height.mas_equalTo(25.0);
     }];
     

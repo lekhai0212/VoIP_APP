@@ -177,26 +177,8 @@
         cell._lbName.text = aCall._phoneName;
     }
     
-    if ([AppUtils isNullOrEmpty: aCall._phoneAvatar])
-    {
-        if (aCall._phoneNumber.length < 10) {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-                NSString *pbxServer = [[NSUserDefaults standardUserDefaults] objectForKey:PBX_SERVER];
-                NSString *avatarName = [NSString stringWithFormat:@"%@_%@.png", pbxServer, aCall._phoneNumber];
-                NSString *localFile = [NSString stringWithFormat:@"/avatars/%@", avatarName];
-                NSData *avatarData = [AppUtils getFileDataFromDirectoryWithFileName:localFile];
-                
-                dispatch_async(dispatch_get_main_queue(), ^(void){
-                    if (avatarData != nil) {
-                        cell._imgAvatar.image = [UIImage imageWithData: avatarData];
-                    }else{
-                        cell._imgAvatar.image = [UIImage imageNamed:@"no_avatar_blue.png"];
-                    }
-                });
-            });
-        }else{
-            cell._imgAvatar.image = [UIImage imageNamed:@"no_avatar_blue.png"];
-        }
+    if ([AppUtils isNullOrEmpty: aCall._phoneAvatar]){
+        cell._imgAvatar.image = [UIImage imageNamed:@"no_avatar"];
     }else{
         NSData *imgData = [[NSData alloc] initWithData:[NSData dataFromBase64String: aCall._phoneAvatar]];
         cell._imgAvatar.image = [UIImage imageWithData: imgData];
@@ -335,7 +317,7 @@
     
     UILabel *descLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 150, hSection)];
     descLabel.textColor = UIColor.darkGrayColor;
-    descLabel.font = [UIFont systemFontOfSize:16.0 weight:UIFontWeightSemibold];
+    descLabel.font = [UIFont fontWithName:MYRIADPRO_BOLD size:16.0];
     descLabel.text = titleHeader;
     [headerView addSubview: descLabel];
     return headerView;

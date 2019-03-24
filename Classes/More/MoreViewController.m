@@ -29,6 +29,7 @@
     WebServices *webService;
     
     UIActivityIndicatorView *icWaiting;
+    float hCell;
 }
 
 @end
@@ -128,12 +129,36 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)autoLayoutForMainView {
     self.view.backgroundColor = [UIColor colorWithRed:(243/255.0) green:(244/255.0)
                                                  blue:(248/255.0) alpha:1.0];
-    if ([SipUtils getStateOfDefaultProxyConfig] == eAccountNone) {
-        hInfo = [LinphoneAppDelegate sharedInstance]._hRegistrationState + 100;
-    }else{
-        hInfo = [LinphoneAppDelegate sharedInstance]._hRegistrationState + 50;
-    }
     
+    NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
+    hInfo = [LinphoneAppDelegate sharedInstance]._hRegistrationState + 50;
+    float wAvatar = 65.0;
+    hCell = 60.0;
+    
+    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE] || [deviceMode isEqualToString: simulator])
+    {
+        hInfo = [LinphoneAppDelegate sharedInstance]._hRegistrationState + 40;
+        wAvatar = 55.0;
+        _lbName.font = [UIFont fontWithName:MYRIADPRO_BOLD size: 16.0];
+        lbPBXAccount.font = [UIFont fontWithName:MYRIADPRO_REGULAR size: 15.0];
+        hCell = 55.0;
+        
+    }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
+    {
+        _lbName.font = [UIFont fontWithName:MYRIADPRO_BOLD size: 16.0];
+        lbPBXAccount.font = [UIFont fontWithName:MYRIADPRO_REGULAR size: 15.0];
+        
+    }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
+    {
+        _lbName.font = [UIFont fontWithName:MYRIADPRO_BOLD size: 17.0];
+        lbPBXAccount.font = [UIFont fontWithName:MYRIADPRO_REGULAR size: 16.0];
+        
+    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2])
+    {
+        _lbName.font = [UIFont fontWithName:MYRIADPRO_BOLD size: 17.0];
+        lbPBXAccount.font = [UIFont fontWithName:MYRIADPRO_REGULAR size: 16.0];
+        
+    }
     //  Header view
     [_viewHeader mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self.view);
@@ -147,15 +172,14 @@ static UICompositeViewDescription *compositeDescription = nil;
     [_imgAvatar mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_viewHeader).offset(10);
         make.centerY.equalTo(_viewHeader.mas_centerY).offset([LinphoneAppDelegate sharedInstance]._hStatus/2);
-        make.width.height.mas_equalTo(55.0);
+        make.width.height.mas_equalTo(wAvatar);
     }];
     _imgAvatar.clipsToBounds = YES;
-    _imgAvatar.layer.cornerRadius = 55.0/2;
+    _imgAvatar.layer.cornerRadius = wAvatar/2;
     _imgAvatar.layer.borderColor = [UIColor colorWithRed:(96/255.0) green:(195/255.0)
                                                     blue:(66/255.0) alpha:1.0].CGColor;
     _imgAvatar.layer.borderWidth = 2.0;
     
-    _lbName.font = [UIFont systemFontOfSize:16.0 weight:UIFontWeightBold];
     _lbName.textColor = UIColor.whiteColor;
     [_lbName mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_imgAvatar);
@@ -284,7 +308,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 60.0;
+    return hCell;
 }
 
 - (void)startLogout {

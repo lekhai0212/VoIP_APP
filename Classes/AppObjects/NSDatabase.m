@@ -163,7 +163,16 @@ HMLocalization *localization;
             int callType            = [[rsDict objectForKey:@"call_type"] intValue];
             
             PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: phoneNumber];
-            
+            if (contact != nil) {
+                aCall._phoneName = contact.name;
+                aCall._phoneAvatar = contact.avatar;
+            }else{
+                PBXContact *contact = [ContactUtils getPBXContactWithExtension: phoneNumber];
+                if (contact != nil) {
+                    aCall._phoneName = contact._name;
+                    aCall._phoneAvatar = contact._avatar;
+                }
+            }
             aCall._callId = callId;
             aCall._status = status;
             aCall._prefixPhone = @"";
@@ -172,8 +181,7 @@ HMLocalization *localization;
             aCall._callTime = callTime;
             aCall._callDate = callDate;
             aCall.timeInt = time_int;
-            aCall._phoneName = contact.name;
-            aCall._phoneAvatar = contact.avatar;
+            
             aCall.callType = callType;
             aCall.newMissedCall = [self getMissedCallUnreadWithRemote:phoneNumber onDate:dateStr ofAccount:account];
             
@@ -247,13 +255,22 @@ HMLocalization *localization;
              
              //  [Khai le - 03/11/2018]
              PhoneObject *aPhone = [ContactUtils getContactPhoneObjectWithNumber: phoneNumber];
+             if (aPhone != nil) {
+                 aCall._phoneName = aPhone.name;
+                 aCall._phoneAvatar = aPhone.avatar;
+             }else{
+                 PBXContact *contact = [ContactUtils getPBXContactWithExtension:phoneNumber];
+                 if (contact != nil) {
+                     aCall._phoneName = contact._name;
+                     aCall._phoneAvatar = contact._avatar;
+                 }
+             }
              aCall._callId = callId;
              aCall._status = status;
              aCall._callDirection = callDirection;
              aCall._callTime = callTime;
              aCall._callDate = callDate;
-             aCall._phoneName = aPhone.name;
-             aCall._phoneAvatar = aPhone.avatar;
+             
              aCall.duration = [[rsDict objectForKey:@"duration"] intValue];
              aCall.timeInt = timeInt;
              aCall.newMissedCall = [self getMissedCallUnreadWithRemote:phoneNumber onDate:dateStr ofAccount:account];

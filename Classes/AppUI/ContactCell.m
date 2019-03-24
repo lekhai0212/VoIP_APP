@@ -29,7 +29,7 @@
     image.layer.cornerRadius = 45.0/2;
     [image mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.mas_centerY);
-        make.left.equalTo(self).offset(20.0);
+        make.left.equalTo(self).offset(15.0);
         make.width.height.mas_equalTo(45.0);
     }];
     
@@ -72,13 +72,27 @@
     _lbSepa.backgroundColor = [UIColor colorWithRed:(235/255.0) green:(235/255.0)
                                                blue:(235/255.0) alpha:1.0];
     [_lbSepa mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self).offset(marginLeft);
-        make.right.bottom.equalTo(self);
+        make.left.right.bottom.equalTo(self);
         make.height.mas_equalTo(1.0);
     }];
     
-    name.font = [UIFont fontWithName:MYRIADPRO_BOLD size:17.0];
-    phone.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:15.0];
+    NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
+    
+    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE])
+    {
+        name.font = [UIFont fontWithName:MYRIADPRO_BOLD size:16.0];
+        phone.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:14.0];
+        
+    }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2]) {
+        name.font = [UIFont fontWithName:MYRIADPRO_BOLD size:17.0];
+        phone.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:15.0];
+        
+    }else
+    {
+        name.font = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
+        phone.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
+        
+    }
     
     if (IS_IPHONE || IS_IPOD) {
         icCall.imageEdgeInsets = UIEdgeInsetsMake(8, 8, 8, 8);
@@ -103,8 +117,8 @@
 
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
     if (highlighted) {
-        self.backgroundColor = [UIColor colorWithRed:(230/255.0) green:(230/255.0)
-                                                blue:(230/255.0) alpha:1.0];
+        self.backgroundColor = [UIColor colorWithRed:(245/255.0) green:(245/255.0)
+                                                blue:(245/255.0) alpha:1.0];
     }else{
         if (IS_IPHONE || IS_IPOD) {
             self.backgroundColor = UIColor.clearColor;

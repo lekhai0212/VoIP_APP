@@ -55,6 +55,12 @@
     [UIView animateWithDuration:.35 animations:^{
         self.alpha = 1;
         self.transform = CGAffineTransformMakeScale(1, 1);
+    }completion:^(BOOL finished) {
+        if (tbContacts.frame.size.height < tbContacts.contentSize.height) {
+            tbContacts.scrollEnabled  = YES;
+        }else{
+            tbContacts.scrollEnabled  = NO;
+        }
     }];
 }
 

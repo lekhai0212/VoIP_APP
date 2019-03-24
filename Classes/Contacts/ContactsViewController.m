@@ -171,14 +171,41 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 //  setup trạng thái cho các button
 - (void)autoLayoutForMainView {
+    NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
+    
+    UIFont *textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
+    UIFont *searchFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
+    
     float hTextfield = 40.0;
+    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE])
+    {
+        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:16.0];
+        searchFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
+        
+        hTextfield = 33.0;
+        
+    }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2]) {
+        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
+        
+    }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2] || [deviceMode isEqualToString: simulator])
+    {
+        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:19.0];
+        
+    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2])
+    {
+        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:20.0];
+        
+    }
+    
+    
+    
     float hButton = 40.0;
     paddingContent = 30.0;
     
     hIcon = [LinphoneAppDelegate sharedInstance]._hRegistrationState - [LinphoneAppDelegate sharedInstance]._hStatus;
     _viewHeader.backgroundColor = [UIColor colorWithRed:(240/255.0) green:(240/255.0)
                                                    blue:(240/255.0) alpha:1.0];
-    float hHeader = [LinphoneAppDelegate sharedInstance]._hRegistrationState + 60.0;
+    float hHeader = [LinphoneAppDelegate sharedInstance]._hRegistrationState + 40.0;
     [_viewHeader mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self.view);
         make.height.mas_equalTo(hHeader);
@@ -205,11 +232,11 @@ static UICompositeViewDescription *compositeDescription = nil;
     _iconAll.backgroundColor = UIColor.clearColor;
     [_iconAll setTitle:[[LanguageUtil sharedInstance] getContent:@"All contacts"] forState:UIControlStateNormal];
     [_iconAll setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
-    _iconAll.titleLabel.font = [UIFont systemFontOfSize:16.0 weight:UIFontWeightBold];
+    _iconAll.titleLabel.font = textFont;
     [_iconAll mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(lbSepa.mas_left).offset(-padding);
         make.top.equalTo(_viewHeader).offset(marginTop);
-        make.width.mas_equalTo(120);
+        make.left.equalTo(_viewHeader).offset(5.0);
         make.height.mas_equalTo(hButton);
     }];
     
@@ -218,15 +245,15 @@ static UICompositeViewDescription *compositeDescription = nil;
     [_iconPBX setTitleColor:[UIColor colorWithRed:(220/255.0) green:(220/255.0)
                                              blue:(220/255.0) alpha:1.0]
                    forState:UIControlStateNormal];
-    _iconPBX.titleLabel.font = _iconAll.titleLabel.font;
+    _iconPBX.titleLabel.font = textFont;
     [_iconPBX mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(_iconAll);
         make.left.equalTo(lbSepa.mas_right).offset(padding);
-        make.width.equalTo(_iconAll.mas_width);
+        make.right.equalTo(_viewHeader).offset(-5.0);
     }];
     
     _tfSearch.backgroundColor = UIColor.whiteColor;
-    _tfSearch.font = [UIFont systemFontOfSize: 16.0];
+    _tfSearch.font = searchFont;
     _tfSearch.placeholder = [[LanguageUtil sharedInstance] getContent:@"Search name or phone number"];
     _tfSearch.textColor = UIColor.darkGrayColor;
 

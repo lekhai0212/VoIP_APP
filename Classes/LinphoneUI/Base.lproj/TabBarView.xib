@@ -104,7 +104,7 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="-445" y="-272"/>
+            <point key="canvasLocation" x="-770" y="-311"/>
         </view>
         <view contentMode="scaleToFill" id="ni3-kk-RmM">
             <rect key="frame" x="0.0" y="0.0" width="90" height="333"/>

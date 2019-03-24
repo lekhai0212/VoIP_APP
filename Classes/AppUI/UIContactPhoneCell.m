@@ -14,12 +14,17 @@
     [super awakeFromNib];
     // Initialization code
     self.contentView.backgroundColor = UIColor.whiteColor;
+    float wIcon;
     if (SCREEN_WIDTH > 320) {
         lbTitle.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:17.0];
         lbPhone.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:19.0];
+        wIcon = 42.0;
+        
     }else{
         lbTitle.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:15.0];
         lbPhone.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:17.0];
+        
+        wIcon = 38.0;
     }
     
     [icCall setTitleColor:UIColor.clearColor forState:UIControlStateNormal];
@@ -27,7 +32,7 @@
     [icCall mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self).offset(-10.0);
         make.centerY.equalTo(self.mas_centerY);
-        make.width.height.mas_equalTo(42.0);
+        make.width.height.mas_equalTo(wIcon);
     }];
     
     [icVideoCall setTitleColor:UIColor.clearColor forState:UIControlStateNormal];
@@ -55,22 +60,12 @@
     }];
     lbPhone.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     
-    if (IS_IPOD || IS_IPHONE) {
-        [lbSepa mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(lbTitle);
-            make.right.bottom.equalTo(self);
-            make.height.mas_equalTo(1.0);
-        }];
-    }else{
-        [lbSepa mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.right.bottom.equalTo(self);
-            make.height.mas_equalTo(1.0);
-        }];
-    }
-    
     lbSepa.backgroundColor = [UIColor colorWithRed:(235/255.0) green:(235/255.0)
-                                               blue:(235/255.0) alpha:1.0];
-    
+                                              blue:(235/255.0) alpha:1.0];
+    [lbSepa mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.bottom.equalTo(self);
+        make.height.mas_equalTo(1.0);
+    }];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

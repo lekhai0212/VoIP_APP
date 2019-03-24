@@ -9,7 +9,7 @@
 #import "ChooseDIDCell.h"
 
 @implementation ChooseDIDPopupView
-@synthesize tbDIDList, lbHeader, tapGesture, delegate, listDID, lbSepa;
+@synthesize tbDIDList, lbHeader, tapGesture, delegate, listDID, lbSepa, hCell;
 
 -(void)layoutSubviews {
     NSLog(@"layoutSubviews");
@@ -19,6 +19,12 @@
     self = [super initWithFrame: frame];
     if (self) {
         // Initialization code
+        if (SCREEN_WIDTH > 320) {
+            hCell = 60.0;
+        }else{
+            hCell = 50.0;
+        }
+        
         self.backgroundColor =  UIColor.whiteColor;
         listDID = [[NSMutableArray alloc] init];
         self.clipsToBounds = YES;
@@ -27,12 +33,11 @@
         lbHeader = [[UILabel alloc] init];
         lbHeader.textAlignment = NSTextAlignmentCenter;
         lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"Choose DID"];
-        lbHeader.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:22.0];
         lbHeader.textColor = [UIColor colorWithRed:(80/255.0) green:(208/255.0) blue:(135/255.0) alpha:1.0];
         [self addSubview: lbHeader];
         [lbHeader mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.left.right.equalTo(self);
-            make.height.mas_equalTo(60.0);
+            make.height.mas_equalTo(hCell);
         }];
         
         tbDIDList = [[UITableView alloc] init];
@@ -54,6 +59,12 @@
             make.top.equalTo(lbHeader.mas_bottom);
             make.height.mas_equalTo(1.0);
         }];
+        
+        if (SCREEN_WIDTH > 320) {
+            lbHeader.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:22.0];
+        }else{
+            lbHeader.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:20.0];
+        }
     }
     return self;
 }
@@ -165,7 +176,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 60.0;
+    return hCell;
 }
 
 /*

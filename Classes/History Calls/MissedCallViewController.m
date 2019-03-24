@@ -17,12 +17,9 @@
 {
     float hCell;
     float hSection;
-    
     NSMutableArray *listCalls;
-    
     NSMutableArray *listDelete;
     BOOL isDeleted;
-    UIFont *textFont;
 }
 
 @end
@@ -36,11 +33,9 @@
     if (SCREEN_WIDTH > 320) {
         hCell = 70.0;
         hSection = 35.0;
-        textFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
     }else{
         hCell = 60.0;
         hSection = 35.0;
-        textFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
     }
     
     _lbNoCalls.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:20.0];
@@ -184,31 +179,14 @@
     [cell updateFrameForHotline: NO];
     cell._lbPhone.hidden = NO;
     
-    if ([aCall._phoneName isEqualToString: @""]) {
-        cell._lbName.text = aCall._phoneNumber;
+    if ([AppUtils isNullOrEmpty: aCall._phoneName]) {
+        cell._lbName.text = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
     }else{
         cell._lbName.text = aCall._phoneName;
     }
     
     if ([AppUtils isNullOrEmpty: aCall._phoneAvatar]) {
-        if (aCall._phoneNumber.length < 10) {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-                NSString *pbxServer = [[NSUserDefaults standardUserDefaults] objectForKey:PBX_SERVER];
-                NSString *avatarName = [NSString stringWithFormat:@"%@_%@.png", pbxServer, aCall._phoneNumber];
-                NSString *localFile = [NSString stringWithFormat:@"/avatars/%@", avatarName];
-                NSData *avatarData = [AppUtils getFileDataFromDirectoryWithFileName:localFile];
-                
-                dispatch_async(dispatch_get_main_queue(), ^(void){
-                    if (avatarData != nil) {
-                        cell._imgAvatar.image = [UIImage imageWithData: avatarData];
-                    }else{
-                        cell._imgAvatar.image = [UIImage imageNamed:@"no_avatar_blue.png"];
-                    }
-                });
-            });
-        }else{
-            cell._imgAvatar.image = [UIImage imageNamed:@"no_avatar_blue.png"];
-        }
+        cell._imgAvatar.image = [UIImage imageNamed:@"no_avatar"];
     }else{
         NSData *imgData = [[NSData alloc] initWithData:[NSData dataFromBase64String: aCall._phoneAvatar]];
         cell._imgAvatar.image = [UIImage imageWithData: imgData];
@@ -355,7 +333,7 @@
     UILabel *descLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 150, hSection)];
     descLabel.backgroundColor = UIColor.clearColor;
     descLabel.textColor = UIColor.darkGrayColor;
-    descLabel.font = textFont;
+    descLabel.font = [UIFont fontWithName:MYRIADPRO_BOLD size:16.0];
     descLabel.text = titleHeader;
     [headerView addSubview: descLabel];
     return headerView;
