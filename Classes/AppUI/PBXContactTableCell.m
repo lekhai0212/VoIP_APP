@@ -14,37 +14,16 @@
     [super awakeFromNib];
     // Initialization code
     
-    float marginLeft = 20.0;
-    float marginRight = 15.0;
-    UIEdgeInsets buttonEdge = UIEdgeInsetsMake(7, 7, 7, 7);
-    
-    
-    NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
-    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE])
-    {
-        _lbName.font = [UIFont fontWithName:MYRIADPRO_BOLD size:16.0];
-        _lbPhone.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:14.0];
-        
-        marginLeft = 10.0;
+    float marginLeft;
+    float marginRight;
+    if (IS_IPHONE || IS_IPOD) {
+        marginRight = 15.0;
+        marginLeft = 15.0;
+    }else{
         marginRight = 5.0;
-        buttonEdge = UIEdgeInsetsMake(8, 8, 8, 8);
-        
-    }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2]) {
-        _lbName.font = [UIFont fontWithName:MYRIADPRO_BOLD size:17.0];
-        _lbPhone.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:15.0];
-        
-        marginLeft = 20.0;
-        marginRight = 15.0;
-    }else
-    {
-        _lbName.font = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
-        _lbPhone.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
-        
-        marginLeft = 20.0;
-        marginRight = 15.0;
+        marginLeft = 0.0;
     }
-    
-    
+
     _imgAvatar.clipsToBounds = YES;
     _imgAvatar.layer.cornerRadius = 45.0/2;
     [_imgAvatar mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -54,7 +33,7 @@
     }];
     
     [icCall setTitleColor:UIColor.clearColor forState:UIControlStateNormal];
-    icCall.imageEdgeInsets = buttonEdge;
+    icCall.imageEdgeInsets = UIEdgeInsetsMake(7, 7, 7, 7);
     [icCall mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.mas_centerY);
         make.right.equalTo(self).offset(-marginRight);
@@ -70,6 +49,7 @@
         make.height.equalTo(icCall.mas_height);
     }];
     
+    _lbName.font = [LinphoneAppDelegate sharedInstance].contentFontBold;
     _lbName.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     [_lbName mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_imgAvatar);
@@ -78,6 +58,7 @@
         make.bottom.equalTo(_imgAvatar.mas_centerY);
     }];
     
+    _lbPhone.font = [LinphoneAppDelegate sharedInstance].contentFontNormal;
     [_lbPhone mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_lbName.mas_bottom);
         make.left.right.equalTo(_lbName);

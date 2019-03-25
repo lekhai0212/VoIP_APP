@@ -15,31 +15,26 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     
-    NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
     float wAvatar = 50.0;
     float wIconCall = 42.0;
     UIEdgeInsets edge = UIEdgeInsetsMake(7, 7, 7, 7);
     float marginRight = 10.0;
     float wNotif = 18.0;
     
+    NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
     if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE])
     {
-        _lbName.font = [UIFont fontWithName:MYRIADPRO_BOLD size:15.0];
-        _lbPhone.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:15.0];
-        _lbTime.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:15.0];
-        lbDate.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:15.0];
         wAvatar = 40.0;
         wIconCall = 38.0;
         edge = UIEdgeInsetsMake(7, 7, 7, 7);
         marginRight = 2.0;
         wNotif = 15.0;
-        
-    }else{
-        _lbName.font = [UIFont systemFontOfSize:17.0 weight:UIFontWeightBold];
-        _lbPhone.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
-        _lbTime.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
-        lbDate.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
     }
+    
+    _lbName.font = [LinphoneAppDelegate sharedInstance].contentFontBold;
+    _lbPhone.font = [LinphoneAppDelegate sharedInstance].contentFontNormal;
+    _lbTime.font = [LinphoneAppDelegate sharedInstance].contentFontNormal;
+    lbDate.font = [LinphoneAppDelegate sharedInstance].contentFontNormal;
     
     UIColor *textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     

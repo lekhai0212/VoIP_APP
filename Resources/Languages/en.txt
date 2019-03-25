@@ -24,6 +24,7 @@
 
 "All history" = "All"
 "Missed history" = "Missed"
+"Records call" = "Missed history"
 "No call in your history" = "No call in your history"
 "No missed call in your history" = "No missed call in your history"
 
@@ -103,6 +104,8 @@
 "Calls detail" = "Calls detail"
 "Hide" = "Hide"
 "Silent" = "Silent"
+"Can not make call with yourself!" = "Can not make call with yourself!"
+"Introduction" = "Introduction"
 
 
 
@@ -130,7 +133,7 @@
 "Settings" = "Settings"
 "Feedback" = "Feedback"
 
-"Introduction" = "Introduction"
+
 "Send logs" = "Send logs"
 
 
@@ -272,7 +275,7 @@
 "This account is being registered" = "This account is being registered"
 
 "Can not make call now. Perhaps you have not signed your account yet!" = "Can not make call now. Perhaps you have not signed your account yet!"
-"Can not make call with yourself!" = "Can not make call with yourself!"
+
 "You have not signed your account yet" = "You have not signed your account yet"
 
 "Please input phone number to transfer" = "Please input phone number to transfer"

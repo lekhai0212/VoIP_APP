@@ -55,8 +55,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 //    tfAccountID.text = @"nhcla150";
 //    tfPassword.text = @"f7NnFKI1Kv";
     
-    tfAccountID.text = @"nhcla151";
-    tfPassword.text = @"5obr8jHH2q";
+//    tfAccountID.text = @"nhcla151";
+//    tfPassword.text = @"5obr8jHH2q";
     
     icWaiting = [[UIActivityIndicatorView alloc] init];
     icWaiting.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
@@ -259,7 +259,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         marginSlogan = 30.0;
         wButtonStart = 170.0;
         hButtonStart = 50.0;
-        sloganFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
+        sloganFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:19.0];
         
         padding = 25.0;
         topPadding = 15.0;

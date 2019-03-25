@@ -414,7 +414,7 @@ void onUncaughtException(NSException* exception)
     
     NSString *messageSend = [NSString stringWithFormat:@"------------------------------\nDevice: %@\nOS Version: %@\nApp version: %@\nApp bundle ID: %@\n------------------------------\nAccount ID: %@\n------------------------------\nReason: %@\n------------------------------\n%@", device, osVersion, appVersion, bundleIdentifier, USERNAME, reason, crashContent];
     
-    NSString *totalEmail = [NSString stringWithFormat:@"mailto:%@?subject=%@&body=%@", @"lekhai0212@gmail.com,cfreport@cloudfone.vn", [NSString stringWithFormat:@"Report crash from %@", USERNAME], messageSend];
+    NSString *totalEmail = [NSString stringWithFormat:@"mailto:%@?subject=%@&body=%@", @"lekhai0212@gmail.com", [NSString stringWithFormat:@"Report crash from %@", USERNAME], messageSend];
     NSString *url = [totalEmail stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [[UIApplication sharedApplication]  openURL: [NSURL URLWithString: url]];
 }
@@ -453,6 +453,7 @@ void onUncaughtException(NSException* exception)
     
     //  [Khai le - 25/10/2018]: Add write logs for app
     [self setupForWriteLogFileForApp];
+    [DeviceUtils setupFontSizeForDevice];
     
     //  Khoi tao
     webService = [[WebServices alloc] init];
@@ -722,7 +723,7 @@ void onUncaughtException(NSException* exception)
     "content-available" = 1;
     "loc-key" = "Incoming call from 14953";
     sound = default;
-    title = Cloudfone;
+    title = CloudCall;
     */
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] userInfo = %@", __FUNCTION__, @[userInfo]] toFilePath:logFilePath];
     
@@ -733,7 +734,7 @@ void onUncaughtException(NSException* exception)
         [[LinphoneManager instance] refreshRegisters];
         
         NSString *loc_key = [aps objectForKey:@"loc-key"];
-        NSString *callId = [aps objectForKey:@"call-id"];
+        NSString *callId = [aps objectForKey:@"callerid"];
         
         NSString *caller = callId;
         PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: callId];
@@ -742,7 +743,7 @@ void onUncaughtException(NSException* exception)
         }
         
         NSString *content = [NSString stringWithFormat:@"Bạn có cuộc gọi từ %@", caller];
-        
+
         UILocalNotification *messageNotif = [[UILocalNotification alloc] init];
         messageNotif.fireDate = [NSDate dateWithTimeIntervalSinceNow: 0.1];
         messageNotif.timeZone = [NSTimeZone defaultTimeZone];
@@ -1987,45 +1988,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
 }
 
-//- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
-//{
-//    INInteraction *interaction = userActivity.interaction;
-//    if (interaction != nil) {
-//        INStartAudioCallIntent *startAudioCallIntent = (INStartAudioCallIntent *)interaction.intent;
-//        if (startAudioCallIntent != nil && startAudioCallIntent.contacts.count > 0) {
-//            INPerson *contact = startAudioCallIntent.contacts[0];
-//            if (contact != nil) {
-//                INPersonHandle *personHandle = contact.personHandle;
-//                NSString *phoneNumber = personHandle.value;
-//                if (![AppUtils isNullOrEmpty: phoneNumber])
-//                {
-//                    phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
-//                    if ([AppUtils isNullOrEmpty: phoneNumber]) {
-//                        [self showSplashScreenOnView: NO];
-//                    }else{
-//                        [self showSplashScreenOnView: YES];
-//
-//                        [[NSUserDefaults standardUserDefaults] setObject:phoneNumber forKey:UserActivity];
-//                        [[NSUserDefaults standardUserDefaults] synchronize];
-//                    }
-//                }
-//            }
-//        }
-//    }
-//    return YES;
-//}
-
-- (void)showSplashScreenOnView: (BOOL)show {
-    if (splashScreen == nil) {
-        UINib *nib = [UINib nibWithNibName:@"LaunchScreen" bundle:nil];
-        splashScreen = [[nib instantiateWithOwner:self options:nil] objectAtIndex:0];
-        [self.window addSubview:splashScreen];
-    }
-    splashScreen.frame = [UIScreen mainScreen].bounds;
-    splashScreen.hidden = !show;
-}
-
--(BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
 {
     INInteraction *interaction = userActivity.interaction;
     if (interaction != nil) {
@@ -2052,6 +2015,44 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
     return YES;
 }
+
+- (void)showSplashScreenOnView: (BOOL)show {
+    if (splashScreen == nil) {
+        UINib *nib = [UINib nibWithNibName:@"LaunchScreen" bundle:nil];
+        splashScreen = [[nib instantiateWithOwner:self options:nil] objectAtIndex:0];
+        [self.window addSubview:splashScreen];
+    }
+    splashScreen.frame = [UIScreen mainScreen].bounds;
+    splashScreen.hidden = !show;
+}
+
+//-(BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+//{
+//    INInteraction *interaction = userActivity.interaction;
+//    if (interaction != nil) {
+//        INStartAudioCallIntent *startAudioCallIntent = (INStartAudioCallIntent *)interaction.intent;
+//        if (startAudioCallIntent != nil && startAudioCallIntent.contacts.count > 0) {
+//            INPerson *contact = startAudioCallIntent.contacts[0];
+//            if (contact != nil) {
+//                INPersonHandle *personHandle = contact.personHandle;
+//                NSString *phoneNumber = personHandle.value;
+//                if (![AppUtils isNullOrEmpty: phoneNumber])
+//                {
+//                    phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
+//                    if ([AppUtils isNullOrEmpty: phoneNumber]) {
+//                        [self showSplashScreenOnView: NO];
+//                    }else{
+//                        [self showSplashScreenOnView: YES];
+//
+//                        [[NSUserDefaults standardUserDefaults] setObject:phoneNumber forKey:UserActivity];
+//                        [[NSUserDefaults standardUserDefaults] synchronize];
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    return YES;
+//}
 
 #pragma mark - sync contact xmpp
 
@@ -2583,6 +2584,12 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 -(void)selectDIDForCallWithPrefix:(NSString *)prefix {
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] prefix = %@, phoneForCall = %@", __FUNCTION__, prefix, phoneForCall] toFilePath:logFilePath];
     
+    NSString *myExt = [SipUtils getAccountIdOfDefaultProxyConfig];
+    if (![AppUtils isNullOrEmpty: myExt] && [myExt isEqualToString: phoneForCall]) {
+        [self.window makeToast:[[LanguageUtil sharedInstance] getContent:@"Can not make call with yourself!"] duration:2.0 position:CSToastPositionCenter];
+        return;
+    }
+    
     if (![AppUtils isNullOrEmpty: phoneForCall]) {
         NSString *strToCall = [NSString stringWithFormat:@"%@%@", prefix, phoneForCall];
         [SipUtils makeCallWithPhoneNumber: strToCall];
@@ -2607,6 +2614,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         _hRegistrationState = 44.0 + _hStatus;
         _wSubMenu = 60.0;
         _hHeader = 50.0;
+        
         
     }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2] || [deviceMode isEqualToString: simulator])
     {

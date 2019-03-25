@@ -53,7 +53,7 @@
 		</dict>
 		<dict>
 			<key>CFBundleURLName</key>
-			<string>com.ods.cloudfonevn</string>
+			<string>com.nhanhoa.cloudcall</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>tel</string>
@@ -137,7 +137,7 @@
 	<string>UIStatusBarStyleLightContent</string>
 	<key>UISupportedExternalAccessoryProtocols</key>
 	<array>
-		<string>com.ods.cloudfonevn</string>
+		<string>com.nhanhoa.cloudcall</string>
 	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>

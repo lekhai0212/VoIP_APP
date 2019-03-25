@@ -25,24 +25,26 @@
 {
     [super awakeFromNib];
     // Initialization code
-    image.clipsToBounds = YES;
-    image.layer.cornerRadius = 45.0/2;
-    [image mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(self.mas_centerY);
-        make.left.equalTo(self).offset(15.0);
-        make.width.height.mas_equalTo(45.0);
-    }];
-    
     float marginLeft;
     float marginRight;
     
     if (IS_IPHONE || IS_IPOD) {
-        marginRight = 25.0;
-        marginLeft = 20.0;
+        marginRight = 15.0;
+        marginLeft = 15.0;
+        icCall.imageEdgeInsets = UIEdgeInsetsMake(8, 8, 8, 8);
     }else{
         marginRight = 5.0;
         marginLeft = 0.0;
+        icCall.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
     }
+    
+    image.clipsToBounds = YES;
+    image.layer.cornerRadius = 45.0/2;
+    [image mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.mas_centerY);
+        make.left.equalTo(self).offset(marginLeft);
+        make.width.height.mas_equalTo(45.0);
+    }];
     
     icCall.backgroundColor = UIColor.clearColor;
     [icCall setTitleColor:UIColor.clearColor forState:UIControlStateNormal];
@@ -53,6 +55,7 @@
     }];
     
     name.backgroundColor = UIColor.clearColor;
+    name.font = [LinphoneAppDelegate sharedInstance].contentFontBold;
     name.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     [name mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(image);
@@ -62,6 +65,7 @@
     }];
     
     phone.backgroundColor = UIColor.clearColor;
+    phone.font = [LinphoneAppDelegate sharedInstance].contentFontNormal;
     phone.textColor = UIColor.darkGrayColor;
     [phone mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(name.mas_bottom);
@@ -75,30 +79,6 @@
         make.left.right.bottom.equalTo(self);
         make.height.mas_equalTo(1.0);
     }];
-    
-    NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
-    
-    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE])
-    {
-        name.font = [UIFont fontWithName:MYRIADPRO_BOLD size:16.0];
-        phone.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:14.0];
-        
-    }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2]) {
-        name.font = [UIFont fontWithName:MYRIADPRO_BOLD size:17.0];
-        phone.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:15.0];
-        
-    }else
-    {
-        name.font = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
-        phone.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
-        
-    }
-    
-    if (IS_IPHONE || IS_IPOD) {
-        icCall.imageEdgeInsets = UIEdgeInsetsMake(8, 8, 8, 8);
-    }else{
-        icCall.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
-    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

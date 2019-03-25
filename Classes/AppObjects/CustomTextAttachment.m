@@ -12,7 +12,7 @@
 
 - (CGRect)attachmentBoundsForTextContainer:(NSTextContainer *)textContainer proposedLineFragment:(CGRect)lineFrag glyphPosition:(CGPoint)position characterIndex:(NSUInteger)charIndex {
     CGRect bounds;
-    bounds.origin = CGPointMake(0, -5);
+    bounds.origin = CGPointMake(0, -4.5);
     bounds.size = CGSizeMake(imgHeight, imgHeight);
     return bounds;
 }

@@ -168,5 +168,14 @@ typedef enum{
 @property (nonatomic, strong) NSString *phoneForCall;
 @property (nonatomic, assign) BOOL configPushToken;
 
+@property (nonatomic, strong) UIFont *headerFontBold;
+@property (nonatomic, strong) UIFont *headerFontNormal;
+
+@property (nonatomic, strong) UIFont *contentFontBold;
+@property (nonatomic, strong) UIFont *contentFontNormal;
+
+@property (nonatomic, strong) UIFont *descFontBold;
+@property (nonatomic, strong) UIFont *descFontNormal;
+
 @end
 

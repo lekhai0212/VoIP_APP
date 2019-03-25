@@ -158,7 +158,19 @@
     }else{
         NSDictionary *info = [listDID objectAtIndex: indexPath.row-1];
         NSString *did = [info objectForKey:@"did"];
-        cell.lbDIDNumber.text = did;
+        NSString *name = [info objectForKey:@"name"];
+        
+        if (![AppUtils isNullOrEmpty: did]) {
+            cell.lbDIDNumber.text = did;
+        }else{
+            cell.lbDIDNumber.text = @"";
+        }
+        
+        if (![AppUtils isNullOrEmpty: name]) {
+            cell.lbDIDNumber.text = name;
+        }else{
+            cell.lbDIDNumber.text = @"";
+        }
     }
     
     return cell;

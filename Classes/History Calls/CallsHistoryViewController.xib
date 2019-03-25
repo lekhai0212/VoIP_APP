@@ -14,9 +14,11 @@
                 <outlet property="_btnEdit" destination="cAI-EV-ef3" id="Oxv-cc-xtL"/>
                 <outlet property="_iconAll" destination="7zp-6y-STo" id="H8A-vq-CRL"/>
                 <outlet property="_iconMissed" destination="tZU-Xr-NxF" id="RRQ-TC-mKP"/>
+                <outlet property="_iconRecord" destination="Bwk-qj-KWk" id="oeu-np-KOA"/>
                 <outlet property="_viewHeader" destination="SwC-Fv-tAA" id="qGz-av-UQv"/>
                 <outlet property="bgHeader" destination="Tlv-NH-843" id="BkJ-vL-9kC"/>
                 <outlet property="lbSepa" destination="h1D-WD-tIG" id="cE4-dw-iCk"/>
+                <outlet property="lbSepa2" destination="GAH-V4-Qcw" id="cN4-38-Llh"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -33,28 +35,50 @@
                             <rect key="frame" x="0.0" y="0.0" width="320" height="42"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="7zp-6y-STo">
-                            <rect key="frame" x="122" y="0.0" width="40" height="40"/>
+                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="7zp-6y-STo">
+                            <rect key="frame" x="34" y="1" width="40" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" title="All"/>
                             <connections>
                                 <action selector="_iconAllClicked:" destination="-1" eventType="touchUpInside" id="gi4-6E-LKo"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="tZU-Xr-NxF">
-                            <rect key="frame" x="159" y="0.0" width="40" height="40"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="h1D-WD-tIG">
+                            <rect key="frame" x="86" y="6" width="1" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="tZU-Xr-NxF">
+                            <rect key="frame" x="88" y="0.0" width="55" height="40"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                            <state key="normal" title="Missed"/>
                             <state key="selected" backgroundImage="missed_act"/>
                             <connections>
                                 <action selector="_iconMissedClicked:" destination="-1" eventType="touchUpInside" id="JWm-Lz-LpG"/>
                             </connections>
                         </button>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="h1D-WD-tIG">
-                            <rect key="frame" x="139" y="13" width="1" height="30"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="GAH-V4-Qcw">
+                            <rect key="frame" x="159" y="6" width="1" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Bwk-qj-KWk">
+                            <rect key="frame" x="132" y="1" width="55" height="40"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                            <state key="normal" title="Record"/>
+                            <state key="selected" backgroundImage="missed_act"/>
+                            <connections>
+                                <action selector="_iconRecordClicked:" destination="-1" eventType="touchUpInside" id="tNU-0m-W76"/>
+                            </connections>
+                        </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="cAI-EV-ef3">
                             <rect key="frame" x="272" y="3" width="34" height="34"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -75,7 +99,7 @@
     </objects>
     <resources>
         <image name="background_header.jpg" width="1028" height="180"/>
-        <image name="ic_trash.png" width="168" height="201"/>
+        <image name="ic_trash.png" width="201" height="201"/>
         <image name="missed_act" width="200" height="200"/>
     </resources>
 </document>

@@ -295,8 +295,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (IBAction)btnVideoCallPress:(UIButton *)sender {
     if (_addressField.text.length > 0) {
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] With _addressField.text = %@", __FUNCTION__, _addressField.text] toFilePath:appDelegate.logFilePath];
-        
-        resultView.hidden = YES;
+        [self setupFrameForSearchResultWithExistsData: NO];
+        icClear.hidden = NO;
         
         [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:IS_VIDEO_CALL_KEY];
         [[NSUserDefaults standardUserDefaults] synchronize];
@@ -386,7 +386,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (IBAction)_btnCallPressed:(UIButton *)sender {
     if (_addressField.text.length > 0) {
-        resultView.hidden = YES;
+        [self setupFrameForSearchResultWithExistsData: NO];
+        icClear.hidden = NO;
         
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] With _addressField.text = %@", __FUNCTION__, _addressField.text] toFilePath:appDelegate.logFilePath];
         
@@ -564,8 +565,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)newAutoLayoutForView {
     float hLogo = 22.0;
-    UIFont *fontAccount = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
-    UIFont *fontStatus = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
     hAddressField = 60.0;
     UIEdgeInsets callEdgeInsets = UIEdgeInsetsZero;
     UIEdgeInsets clearEdgeInsets = UIEdgeInsetsMake(12, 12, 12, 12);
@@ -574,8 +573,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE])
     {
         hLogo = 18.0;
-        fontAccount = [UIFont fontWithName:MYRIADPRO_BOLD size:16.0];
-        fontStatus = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
         callEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
         clearEdgeInsets = UIEdgeInsetsMake(16, 16, 16, 16);
         
@@ -609,7 +606,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
     
     //  account label
-    _lbAccount.font = fontAccount;
+    _lbAccount.font = [LinphoneAppDelegate sharedInstance].headerFontBold;
     _lbAccount.textAlignment = NSTextAlignmentCenter;
     [_lbAccount mas_makeConstraints:^(MASConstraintMaker *make) {
         //  make.top.bottom.equalTo(_imgLogoSmall);
@@ -620,7 +617,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
     
     //  status label
-    _lbStatus.font = fontStatus;
+    _lbStatus.font = [LinphoneAppDelegate sharedInstance].headerFontNormal;
     _lbStatus.numberOfLines = 0;
     [_lbStatus mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_lbAccount.mas_right);
@@ -1310,11 +1307,12 @@ static UICompositeViewDescription *compositeDescription = nil;
         
         float hSearch = [DeviceUtils getHeightSearchViewContactForDevice];
         float hAvatar = [DeviceUtils getHeightAvatarSearchViewForDevice];
+        float wPopup = [DeviceUtils getWidthPoupSearchViewForDevice];
         
         [resultView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(_viewNumber.mas_centerX);
             make.bottom.equalTo(_viewNumber);
-            make.width.mas_equalTo(260.0);
+            make.width.mas_equalTo(wPopup);
             make.height.mas_equalTo(hSearch);
         }];
         

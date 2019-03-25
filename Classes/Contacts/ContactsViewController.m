@@ -173,27 +173,19 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)autoLayoutForMainView {
     NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
     
-    UIFont *textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
-    UIFont *searchFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
-    
     float hTextfield = 40.0;
     if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE])
     {
-        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:16.0];
-        searchFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
-        
         hTextfield = 33.0;
         
     }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2]) {
-        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
+        
         
     }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2] || [deviceMode isEqualToString: simulator])
     {
-        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:19.0];
         
     }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2])
     {
-        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:20.0];
         
     }
     
@@ -232,7 +224,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     _iconAll.backgroundColor = UIColor.clearColor;
     [_iconAll setTitle:[[LanguageUtil sharedInstance] getContent:@"All contacts"] forState:UIControlStateNormal];
     [_iconAll setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
-    _iconAll.titleLabel.font = textFont;
+    _iconAll.titleLabel.font = [LinphoneAppDelegate sharedInstance].headerFontBold;
     [_iconAll mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(lbSepa.mas_left).offset(-padding);
         make.top.equalTo(_viewHeader).offset(marginTop);
@@ -245,15 +237,16 @@ static UICompositeViewDescription *compositeDescription = nil;
     [_iconPBX setTitleColor:[UIColor colorWithRed:(220/255.0) green:(220/255.0)
                                              blue:(220/255.0) alpha:1.0]
                    forState:UIControlStateNormal];
-    _iconPBX.titleLabel.font = textFont;
+    _iconPBX.titleLabel.font = [LinphoneAppDelegate sharedInstance].headerFontBold;
     [_iconPBX mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.bottom.equalTo(_iconAll);
+        make.top.equalTo(_viewHeader).offset(marginTop);
         make.left.equalTo(lbSepa.mas_right).offset(padding);
         make.right.equalTo(_viewHeader).offset(-5.0);
+        make.height.mas_equalTo(hButton);
     }];
     
     _tfSearch.backgroundColor = UIColor.whiteColor;
-    _tfSearch.font = searchFont;
+    _tfSearch.font = [LinphoneAppDelegate sharedInstance].contentFontNormal;
     _tfSearch.placeholder = [[LanguageUtil sharedInstance] getContent:@"Search name or phone number"];
     _tfSearch.textColor = UIColor.darkGrayColor;
 

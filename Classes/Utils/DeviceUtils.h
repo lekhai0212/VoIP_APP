@@ -30,6 +30,7 @@ typedef enum {
 + (UIEdgeInsets)getEdgeOfVideoCallDialerForDevice;
 + (float)getHeightSearchViewContactForDevice;
 + (float)getHeightAvatarSearchViewForDevice;
++ (float)getWidthPoupSearchViewForDevice;
 + (BOOL)isAvailableVideo;
 + (BOOL)isAvailablePhotos;
 + (void)enableProximityMonitoringEnabled: (BOOL)enabled;
@@ -40,4 +41,7 @@ typedef enum {
 
 //  check current route used bluetooth
 + (TypeOutputRoute)getCurrentRouteForCall;
+
++ (void)setupFontSizeForDevice;
+
 @end

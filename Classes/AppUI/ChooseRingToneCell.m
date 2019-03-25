@@ -16,10 +16,8 @@
     // Initialization code
     float margin = 20.0;
     if (SCREEN_WIDTH > 320) {
-        lbName.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
         margin = 20.0;
     }else{
-        lbName.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
         margin = 14.0;
     }
     [imgRingTone mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -34,7 +32,7 @@
         make.width.height.mas_equalTo(22.0);
     }];
     
-    
+    lbName.font = [LinphoneAppDelegate sharedInstance].headerFontNormal;
     lbName.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     [lbName mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(imgRingTone.mas_right).offset(20.0);

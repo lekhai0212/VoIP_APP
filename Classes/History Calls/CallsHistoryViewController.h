@@ -22,9 +22,12 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *_iconAll;
 @property (weak, nonatomic) IBOutlet UIButton *_iconMissed;
+@property (weak, nonatomic) IBOutlet UILabel *lbSepa2;
+@property (weak, nonatomic) IBOutlet UIButton *_iconRecord;
 
 - (IBAction)_btnEditPressed:(id)sender;
 - (IBAction)_iconAllClicked:(id)sender;
 - (IBAction)_iconMissedClicked:(id)sender;
+- (IBAction)_iconRecordClicked:(UIButton *)sender;
 
 @end

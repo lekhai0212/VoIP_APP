@@ -139,26 +139,9 @@ static UICompositeViewDescription *compositeDescription = nil;
     {
         hInfo = [LinphoneAppDelegate sharedInstance]._hRegistrationState + 40;
         wAvatar = 55.0;
-        _lbName.font = [UIFont fontWithName:MYRIADPRO_BOLD size: 16.0];
-        lbPBXAccount.font = [UIFont fontWithName:MYRIADPRO_REGULAR size: 15.0];
         hCell = 55.0;
-        
-    }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
-    {
-        _lbName.font = [UIFont fontWithName:MYRIADPRO_BOLD size: 16.0];
-        lbPBXAccount.font = [UIFont fontWithName:MYRIADPRO_REGULAR size: 15.0];
-        
-    }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
-    {
-        _lbName.font = [UIFont fontWithName:MYRIADPRO_BOLD size: 17.0];
-        lbPBXAccount.font = [UIFont fontWithName:MYRIADPRO_REGULAR size: 16.0];
-        
-    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2])
-    {
-        _lbName.font = [UIFont fontWithName:MYRIADPRO_BOLD size: 17.0];
-        lbPBXAccount.font = [UIFont fontWithName:MYRIADPRO_REGULAR size: 16.0];
-        
     }
+    
     //  Header view
     [_viewHeader mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self.view);
@@ -181,6 +164,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     _imgAvatar.layer.borderWidth = 2.0;
     
     _lbName.textColor = UIColor.whiteColor;
+    _lbName.font = [LinphoneAppDelegate sharedInstance].headerFontBold;
     [_lbName mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_imgAvatar);
         make.left.equalTo(_imgAvatar.mas_right).offset(5.0);
@@ -189,6 +173,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
     
     lbPBXAccount.textColor = UIColor.whiteColor;
+    lbPBXAccount.font = [LinphoneAppDelegate sharedInstance].contentFontNormal;
     [lbPBXAccount mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_lbName.mas_bottom);
         make.left.right.equalTo(_lbName);
@@ -224,7 +209,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 //  Khoi tao du lieu cho view
 - (void)createDataForMenuView {
-    listTitle = [[NSMutableArray alloc] initWithObjects: [[LanguageUtil sharedInstance] getContent:@"Choose ringtone"], [[LanguageUtil sharedInstance] getContent:@"Call settings"], [[LanguageUtil sharedInstance] getContent:@"App information"], [[LanguageUtil sharedInstance] getContent:@"Send reports"], [[LanguageUtil sharedInstance] getContent:@"Sign out"], [[LanguageUtil sharedInstance] getContent:@"Privacy & Policy"], [[LanguageUtil sharedInstance] getContent:@"Answer & Support"], nil];
+    listTitle = [[NSMutableArray alloc] initWithObjects: [[LanguageUtil sharedInstance] getContent:@"Choose ringtone"], [[LanguageUtil sharedInstance] getContent:@"Call settings"], [[LanguageUtil sharedInstance] getContent:@"App information"], [[LanguageUtil sharedInstance] getContent:@"Send reports"], [[LanguageUtil sharedInstance] getContent:@"Sign out"], [[LanguageUtil sharedInstance] getContent:@"Privacy & Policy"], [[LanguageUtil sharedInstance] getContent:@"Introduction"], nil];
     
     listIcon = [[NSMutableArray alloc] initWithObjects: @"more_ringtone", @"more_call_settings", @"more_app_info", @"more_send_reports", @"more_signout", @"more_policy", @"more_support", nil];
 }
@@ -295,11 +280,11 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case ePrivayPolicy:{
-            //  [[PhoneMainView instance] changeCurrentView:[AboutViewController compositeViewDescription] push:true];
+            [[PhoneMainView instance] changeCurrentView:[IntroduceViewController compositeViewDescription] push:true];
             break;
         }
-        case eAnswerSupport:{
-            //  [[PhoneMainView instance] changeCurrentView:[AboutViewController compositeViewDescription] push:true];
+        case eIntroduction:{
+            [[PhoneMainView instance] changeCurrentView:[IntroduceViewController compositeViewDescription] push:true];
             break;
         }
         default:

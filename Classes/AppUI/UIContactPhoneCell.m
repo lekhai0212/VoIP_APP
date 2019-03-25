@@ -16,14 +16,8 @@
     self.contentView.backgroundColor = UIColor.whiteColor;
     float wIcon;
     if (SCREEN_WIDTH > 320) {
-        lbTitle.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:17.0];
-        lbPhone.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:19.0];
         wIcon = 42.0;
-        
     }else{
-        lbTitle.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:15.0];
-        lbPhone.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:17.0];
-        
         wIcon = 38.0;
     }
     
@@ -44,6 +38,7 @@
         make.height.equalTo(icCall.mas_height);
     }];
     
+    lbTitle.font = [LinphoneAppDelegate sharedInstance].descFontNormal;
     [lbTitle mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self).offset(5.0);
         make.bottom.equalTo(self.mas_centerY);
@@ -53,6 +48,7 @@
     lbTitle.textColor = [UIColor colorWithRed:(120/255.0) green:(120/255.0)
                                          blue:(120/255.0) alpha:1.0];
     
+    lbPhone.font = [LinphoneAppDelegate sharedInstance].contentFontNormal;
     [lbPhone mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.mas_centerY);
         make.left.right.equalTo(lbTitle);

@@ -14,7 +14,6 @@
 
 @interface DetailHistoryCNViewController ()<UIAlertViewDelegate> {
     NSMutableArray *listHistoryCalls;
-    UIFont *textFont;
     BOOL newLayout;
 }
 @end
@@ -160,7 +159,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
     if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE] || [deviceMode isEqualToString: simulator])
     {
-        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
         fontName = [UIFont fontWithName:MYRIADPRO_BOLD size:16.0];
         fontPhone = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
         
@@ -171,15 +169,14 @@ static UICompositeViewDescription *compositeDescription = nil;
         hInfo = 65.0;
         
     }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2]) {
-        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
+        
         
     }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
     {
-        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:20.0];
-        
+        fontName = [UIFont fontWithName:MYRIADPRO_BOLD size:17.0];
+        fontPhone = [UIFont fontWithName:MYRIADPRO_REGULAR size:17.0];
     }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2])
     {
-        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:20.0];
         
     }
     
@@ -207,7 +204,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.height.equalTo(_iconBack.mas_height);
     }];
     
-    _lbHeader.font = textFont;
+    _lbHeader.font = [LinphoneAppDelegate sharedInstance].headerFontBold;
     [_lbHeader mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(_iconBack);
         make.left.equalTo(_iconBack.mas_right).offset(5);
@@ -224,7 +221,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.width.height.mas_equalTo(hAvatar);
     }];
     
-    _lbName.font = fontName;
+    _lbName.font = [LinphoneAppDelegate sharedInstance].contentFontBold;
     _lbName.textColor = UIColor.whiteColor;
     [_lbName mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_imgAvatar.mas_bottom);
@@ -232,7 +229,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.height.mas_equalTo(30.0);
     }];
     
-    lbPhone.font = fontPhone;
+    lbPhone.font = [LinphoneAppDelegate sharedInstance].contentFontNormal;
     lbPhone.textColor = UIColor.whiteColor;
     [lbPhone mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_lbName.mas_bottom);

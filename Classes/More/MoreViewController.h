@@ -16,7 +16,7 @@ enum moreValue{
     eSendLogs,
     eSignOut,
     ePrivayPolicy,
-    eAnswerSupport,
+    eIntroduction,
 };
 
 enum stateLogout {

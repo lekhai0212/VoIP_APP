@@ -64,12 +64,12 @@
                 <outlet property="icCall" destination="NeT-uc-lyx" id="wiL-mr-jp5"/>
                 <outlet property="icVideoCall" destination="aOz-kB-rJL" id="Wc3-V6-yFX"/>
             </connections>
-            <point key="canvasLocation" x="89" y="-80"/>
+            <point key="canvasLocation" x="-138" y="-78"/>
         </tableViewCell>
     </objects>
     <resources>
         <image name="contact_audio_call.png" width="201" height="201"/>
         <image name="contact_video_call.png" width="201" height="201"/>
-        <image name="no_avatar.png" width="256" height="256"/>
+        <image name="no_avatar.png" width="201" height="201"/>
     </resources>
 </document>

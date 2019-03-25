@@ -25,6 +25,7 @@
 
 "All history" = "Tất cả"
 "Missed history" = "Gọi nhỡ"
+"Records call" = "Ghi âm"
 "No call in your history" = "Không có cuộc gọi"
 "No missed call in your history" = "Không có cuộc gọi nhỡ"
 
@@ -104,6 +105,10 @@
 "Calls detail" = "Chi tiết cuộc gọi"
 "Hide" = "Ẩn"
 "Silent" = "Im lặng"
+"Can not make call with yourself!" = "Không thể gọi cho chính bạn!"
+"Introduction" = "Giới thiệu"
+
+
 
 
 
@@ -133,7 +138,7 @@
 "Settings" = "Thiết lập chung"
 "Feedback" = "Phản hồi"
 
-"Introduction" = "Giới thiệu"
+
 
 
 "PBX account" = "Tài khoản PBX"
@@ -262,7 +267,7 @@
 "This account is being registered" = "Tài khoản này đang được đăng nhập"
 
 "Can not make call now. Perhaps you have not signed your account yet!" = "Không thể gọi lúc này. Có lẽ bạn chưa đăng nhập tài khoản!"
-"Can not make call with yourself!" = "Không thể gọi cho chính bạn!"
+
 "You have not signed your account yet" = "Bạn chưa đăng nhập tài khoản"
 
 "Please input phone number to transfer" = "Vui lòng nhập số điện thoại để chuyển"

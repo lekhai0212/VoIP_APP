@@ -87,7 +87,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.width.height.mas_equalTo(HEADER_ICON_WIDTH);
     }];
     
-    lbTitle.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
+    lbTitle.font = [LinphoneAppDelegate sharedInstance].headerFontNormal;
     [lbTitle mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(viewHeader).offset([LinphoneAppDelegate sharedInstance]._hStatus);
         make.bottom.equalTo(viewHeader);
@@ -142,9 +142,17 @@ static UICompositeViewDescription *compositeDescription = nil;
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
+    NSString *curRingTone = [[NSUserDefaults standardUserDefaults] objectForKey:DEFAULT_RINGTONE];
+    
     if (indexPath.row == 0) {
         cell.lbName.text = [[LanguageUtil sharedInstance] getContent:@"Silent"];
         cell.imgRingTone.image = [UIImage imageNamed:@"no_sound"];
+        
+        if ([curRingTone isEqualToString:@"silence.mp3"]) {
+            cell.imgSelected.hidden = NO;
+        }else{
+            cell.imgSelected.hidden = YES;
+        }
     }else{
         NSDictionary *ringtone = [ringtones objectAtIndex: (indexPath.row-1)];
         NSString *name = [ringtone objectForKey:@"name"];
@@ -152,7 +160,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         cell.imgRingTone.image = [UIImage imageNamed:@"more_ringtone"];
         
         NSString *file = [ringtone objectForKey:@"file"];
-        if ([file isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:DEFAULT_RINGTONE]]) {
+        if ([file isEqualToString: curRingTone]) {
             cell.imgSelected.hidden = NO;
         }else{
             cell.imgSelected.hidden = YES;
@@ -164,7 +172,10 @@ static UICompositeViewDescription *compositeDescription = nil;
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
+        [[NSUserDefaults standardUserDefaults] setObject:SILENCE_RINGTONE forKey:DEFAULT_RINGTONE];
+        [[NSUserDefaults standardUserDefaults] synchronize];
         
+        [self finishedSetRingTone: SILENCE_RINGTONE];
     }else{
         float hPopup = 15 + 40.0 + 15.0 + 50.0;
         PlayRingTonePopupView *popupRingTone = [[PlayRingTonePopupView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-300.0)/2, (SCREEN_HEIGHT-hPopup)/2, 300.0, hPopup)];

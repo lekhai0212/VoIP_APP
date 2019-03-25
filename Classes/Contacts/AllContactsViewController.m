@@ -25,14 +25,11 @@
     float hSection;
     
     NSArray *listCharacter;
-    
-    UIFont *textFont;
-    UIFont *headerFont;
-    
     NSTimer *refreshTimer;
     
     NSMutableArray *tbDatas;
     UILabel *lbAllContacts;
+    float marginLeft;
 }
 
 @end
@@ -50,7 +47,6 @@
     _contactSections = [[NSMutableDictionary alloc] init];
     
     [self autoLayoutForView];
-    
     [self addHeaderForTableContactsView];
 }
 
@@ -121,9 +117,8 @@
     headerView.backgroundColor = [UIColor colorWithRed:(240/255.0) green:(240/255.0)
                                                   blue:(240/255.0) alpha:1.0];
     
-    float marginLeft = 20.0;
     lbAllContacts = [[UILabel alloc] initWithFrame:CGRectMake(marginLeft, 0, SCREEN_WIDTH-2*marginLeft, headerView.frame.size.height)];
-    lbAllContacts.font = headerFont;
+    lbAllContacts.font = [LinphoneAppDelegate sharedInstance].contentFontBold;
     lbAllContacts.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     [headerView addSubview: lbAllContacts];
     
@@ -150,28 +145,8 @@
 }
 
 - (void)autoLayoutForView {
-    NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
     hSection = 30.0;
-    
-    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE] || [deviceMode isEqualToString: simulator])
-    {
-        textFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
-        headerFont = [UIFont fontWithName:MYRIADPRO_BOLD size:16.0];
-        hSection = 20.0;
-        
-    }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2]) {
-        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
-        
-    }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
-    {
-        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:20.0];
-        headerFont = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
-        
-    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2])
-    {
-        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:20.0];
-        
-    }
+    marginLeft = 15.0;
     
     [_tbContacts mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self.view);
@@ -182,7 +157,7 @@
     _tbContacts.separatorStyle = UITableViewCellSeparatorStyleNone;
 
     //  khong co lien he
-    _lbNoContacts.font = textFont;
+    _lbNoContacts.font = [LinphoneAppDelegate sharedInstance].contentFontNormal;
     _lbNoContacts.textColor = UIColor.grayColor;
     _lbNoContacts.text = [[LanguageUtil sharedInstance] getContent:@"No contacts"];
 }
@@ -332,18 +307,17 @@
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     NSString *titleHeader = [[[_contactSections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] objectAtIndex:section];;
     
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, hSection)];
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, hSection)];
     headerView.backgroundColor = [UIColor colorWithRed:(240/255.0) green:(240/255.0)
                                                   blue:(240/255.0) alpha:1.0];
     
-    UILabel *descLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 150, hSection)];
+    UILabel *descLabel = [[UILabel alloc] initWithFrame:CGRectMake(marginLeft, 0, 150, hSection)];
     descLabel.textColor = [UIColor colorWithRed:(50/255.0) green:(50/255.0)
                                            blue:(50/255.0) alpha:1.0];
+    descLabel.font = [LinphoneAppDelegate sharedInstance].contentFontBold;
     if ([titleHeader isEqualToString:@"z#"]) {
-        descLabel.font = [UIFont fontWithName:HelveticaNeue size:20.0];
         descLabel.text = @"#";
     }else{
-        descLabel.font = textFont;
         descLabel.text = titleHeader;
     }
     descLabel.backgroundColor = UIColor.clearColor;

@@ -317,7 +317,7 @@
     
     UILabel *descLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 150, hSection)];
     descLabel.textColor = UIColor.darkGrayColor;
-    descLabel.font = [UIFont fontWithName:MYRIADPRO_BOLD size:16.0];
+    descLabel.font = [LinphoneAppDelegate sharedInstance].contentFontBold;
     descLabel.text = titleHeader;
     [headerView addSubview: descLabel];
     return headerView;

@@ -17,9 +17,6 @@
 @interface PBXContactsViewController (){
     BOOL isSearching;
     
-    UIFont *textFont;
-    UIFont *headerFont;
-    
     NSMutableArray *listSearch;
     NSMutableDictionary *contactSections;
     NSArray *listCharacter;
@@ -34,6 +31,7 @@
     WebServices *webService;
     
     UIActivityIndicatorView *waitingView;
+    float marginLeft;
 }
 
 @end
@@ -149,20 +147,19 @@
     headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 40.0);
     headerView.backgroundColor = [UIColor colorWithRed:(240/255.0) green:(240/255.0)
                                                   blue:(240/255.0) alpha:1.0];
-    float marginLeft = 20.0;
-    
     //  getSyncTitleContentWithFont
-    btnSyncContacts = [[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-10-100, 0, 100, headerView.frame.size.height)];
+    btnSyncContacts = [[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-10-140, 0, 140, headerView.frame.size.height)];
+    btnSyncContacts.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     btnSyncContacts.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     
-    [btnSyncContacts setAttributedTitle:[self getSyncTitleContentWithFont:headerFont andSizeIcon:wIconSync] forState:UIControlStateNormal];
+    [btnSyncContacts setAttributedTitle:[self getSyncTitleContentWithFont:[LinphoneAppDelegate sharedInstance].contentFontBold andSizeIcon:wIconSync] forState:UIControlStateNormal];
     [headerView addSubview: btnSyncContacts];
     [btnSyncContacts addTarget:self
                         action:@selector(btnSyncContactsPress:)
               forControlEvents:UIControlEventTouchUpInside];
     
-    lbAllContacts = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-2*marginLeft-btnSyncContacts.frame.size.width-10.0, headerView.frame.size.height)];
-    lbAllContacts.font = headerFont;
+    lbAllContacts = [[UILabel alloc] initWithFrame:CGRectMake(marginLeft, 0, SCREEN_WIDTH-2*marginLeft-btnSyncContacts.frame.size.width-10.0, headerView.frame.size.height)];
+    lbAllContacts.font = [LinphoneAppDelegate sharedInstance].contentFontBold;
     lbAllContacts.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     [headerView addSubview: lbAllContacts];
     
@@ -173,30 +170,24 @@
 //  setup thông tin cho tableview
 - (void)autoLayoutForView {
     NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
-    wIconSync = 28.0;
+    wIconSync = 20.0;
     hSection = 30.0;
-    
-    textFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
-    headerFont = [UIFont fontWithName:MYRIADPRO_BOLD size:16.0];
+    marginLeft = 15.0;
     
     if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE])
     {
-        textFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
-        headerFont = [UIFont fontWithName:MYRIADPRO_BOLD size:16.0];
-        hSection = 20.0;
         wIconSync = 17.0;
         
     }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2]) {
-        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
+        
+        wIconSync = 18.0;
         
     }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2] || [deviceMode isEqualToString: simulator])
     {
-        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:20.0];
-        headerFont = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
+        wIconSync = 17.0;
         
     }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2])
     {
-        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:20.0];
         
     }
     
@@ -306,14 +297,13 @@
     headerView.backgroundColor = [UIColor colorWithRed:(240/255.0) green:(240/255.0)
                                                   blue:(240/255.0) alpha:1.0];
     
-    UILabel *descLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 150, hSection)];
+    UILabel *descLabel = [[UILabel alloc] initWithFrame:CGRectMake(marginLeft, 0, 150, hSection)];
     descLabel.textColor = [UIColor colorWithRed:(50/255.0) green:(50/255.0)
                                            blue:(50/255.0) alpha:1.0];
+    descLabel.font = [LinphoneAppDelegate sharedInstance].contentFontBold;
     if ([titleHeader isEqualToString:@"z#"]) {
-        descLabel.font = [UIFont fontWithName:HelveticaNeue size:20.0];
         descLabel.text = @"#";
     }else{
-        descLabel.font = textFont;
         descLabel.text = titleHeader;
     }
     descLabel.backgroundColor = UIColor.clearColor;
@@ -494,7 +484,7 @@
     
     NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:attachment];
     
-    NSString *content = [NSString stringWithFormat:@" %@", [[LanguageUtil sharedInstance] getContent:@"Sync contacts"]];
+    NSString *content = [NSString stringWithFormat:@"  %@", [[LanguageUtil sharedInstance] getContent:@"Sync contacts"]];
     NSMutableAttributedString *contentString = [[NSMutableAttributedString alloc] initWithString:content];
     [contentString addAttribute:NSFontAttributeName value:textFont range:NSMakeRange(0, contentString.length)];
     [contentString addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0] range:NSMakeRange(0, contentString.length)];

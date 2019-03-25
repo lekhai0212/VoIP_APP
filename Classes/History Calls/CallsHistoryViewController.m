@@ -15,14 +15,13 @@
     int currentView;
     AllCallsViewController *allCallsVC;
     MissedCallViewController *missedCallsVC;
-    UIFont *textFont;
     float hIcon;
 }
 
 @end
 
 @implementation CallsHistoryViewController
-@synthesize _viewHeader, _btnEdit, _iconAll, _iconMissed, bgHeader, lbSepa;
+@synthesize _viewHeader, _btnEdit, _iconAll, _iconMissed, bgHeader, lbSepa, lbSepa2, _iconRecord;
 @synthesize _pageViewController, _vcIndex;
 
 #pragma mark - UICompositeViewDelegate Functions
@@ -149,6 +148,9 @@ static UICompositeViewDescription *compositeDescription = nil;
                                    animated: false completion: nil];
 }
 
+- (IBAction)_iconRecordClicked:(UIButton *)sender {
+}
+
 - (IBAction)_btnEditPressed:(id)sender {
     if (_btnEdit.tag == 0) {
         _btnEdit.tag = 1;
@@ -233,28 +235,9 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 //  setup trạng thái cho các button
 - (void)autoLayoutForView {
-    NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
-    
-    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE])
-    {
-        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:16.0];
-        
-    }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2]) {
-        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
-        
-    }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2] || [deviceMode isEqualToString: simulator])
-    {
-        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:20.0];
-        
-    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2])
-    {
-        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:20.0];
-        
-    }
-    
     float hHeader = [LinphoneAppDelegate sharedInstance]._hRegistrationState;
     float hButton = 40.0;
-    float padding = 30.0;
+    float padding = 15.0;
     
     hIcon = [LinphoneAppDelegate sharedInstance]._hRegistrationState - [LinphoneAppDelegate sharedInstance]._hStatus;
     
@@ -269,11 +252,27 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     float marginTop = [LinphoneAppDelegate sharedInstance]._hStatus + (hHeader - [LinphoneAppDelegate sharedInstance]._hStatus - hButton)/ 2;
     
+    CGSize sizeButton = [AppUtils getSizeWithText:[[LanguageUtil sharedInstance] getContent:@"Missed history"] withFont:[LinphoneAppDelegate sharedInstance].headerFontBold andMaxWidth:SCREEN_WIDTH];
+    
+    _iconMissed.backgroundColor = UIColor.clearColor;
+    _iconMissed.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [_iconMissed setTitle:[[LanguageUtil sharedInstance] getContent:@"Missed history"] forState:UIControlStateNormal];
+    [_iconMissed setTitleColor:[UIColor colorWithRed:(220/255.0) green:(220/255.0)
+                                                blue:(220/255.0) alpha:1.0]
+                      forState:UIControlStateNormal];
+    _iconMissed.titleLabel.font = [LinphoneAppDelegate sharedInstance].headerFontBold;
+    [_iconMissed mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_viewHeader).offset(marginTop);
+        make.centerX.equalTo(_viewHeader.mas_centerX);
+        make.width.mas_equalTo(sizeButton.width);
+        make.height.mas_equalTo(hButton);
+    }];
+    
     lbSepa.backgroundColor = [UIColor colorWithRed:(220/255.0) green:(220/255.0)
                                               blue:(220/255.0) alpha:1.0];
     [lbSepa mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_viewHeader).offset(marginTop + 10);
-        make.centerX.equalTo(_viewHeader.mas_centerX);
+        make.right.equalTo(_iconMissed.mas_left).offset(-padding);
         make.width.mas_equalTo(1.0);
         make.height.mas_equalTo(hButton - 20);
     }];
@@ -282,7 +281,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     _iconAll.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     [_iconAll setTitle:[[LanguageUtil sharedInstance] getContent:@"All history"] forState:UIControlStateNormal];
     [_iconAll setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
-    _iconAll.titleLabel.font = textFont;
+    _iconAll.titleLabel.font = [LinphoneAppDelegate sharedInstance].headerFontBold;
     [_iconAll mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(lbSepa.mas_left).offset(-padding);
         make.top.equalTo(_viewHeader).offset(marginTop);
@@ -290,22 +289,27 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.height.mas_equalTo(hButton);
     }];
     
-    _iconMissed.backgroundColor = UIColor.clearColor;
-    _iconMissed.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [_iconMissed setTitle:[[LanguageUtil sharedInstance] getContent:@"Missed history"] forState:UIControlStateNormal];
-    [_iconMissed setTitleColor:[UIColor colorWithRed:(220/255.0) green:(220/255.0)
-                                                blue:(220/255.0) alpha:1.0]
-                      forState:UIControlStateNormal];
-    _iconMissed.titleLabel.font = textFont;
-    [_iconMissed mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.bottom.equalTo(_iconAll);
-        make.left.equalTo(lbSepa.mas_right).offset(padding);
-        make.width.equalTo(_iconAll.mas_width);
+    lbSepa2.backgroundColor = lbSepa.backgroundColor;
+    [lbSepa2 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.bottom.equalTo(lbSepa);
+        make.left.equalTo(_iconMissed.mas_right).offset(padding);
+        make.width.mas_equalTo(1.0);
+    }];
+    
+    _iconRecord.backgroundColor = UIColor.clearColor;
+    [_iconRecord setTitle:[[LanguageUtil sharedInstance] getContent:@"Records call"] forState:UIControlStateNormal];
+    [_iconRecord setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+    _iconRecord.titleLabel.font = [LinphoneAppDelegate sharedInstance].headerFontBold;
+    [_iconRecord mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(lbSepa2.mas_right).offset(padding);
+        make.top.equalTo(_viewHeader).offset(marginTop);
+        make.width.mas_equalTo(100);
+        make.height.mas_equalTo(hButton);
     }];
     
     _btnEdit.imageEdgeInsets = UIEdgeInsetsMake(8, 8, 8, 8);
     [_btnEdit mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(_viewHeader.mas_right).offset(-5);
+        make.right.equalTo(_viewHeader.mas_right).offset(-2.0);
         make.centerY.equalTo(_iconAll.mas_centerY);
         make.width.height.equalTo(_iconAll.mas_height);
     }];

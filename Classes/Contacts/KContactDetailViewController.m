@@ -119,7 +119,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     float wAvatar = 100.0;
     float hHeader = 180+[LinphoneAppDelegate sharedInstance]._hStatus;
     hCell = 70.0;
-    UIFont *textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:20.0];
     
     NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
     if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE] || [deviceMode isEqualToString: simulator])
@@ -128,20 +127,6 @@ static UICompositeViewDescription *compositeDescription = nil;
         wAvatar = 80.0;
         hHeader = 170+[LinphoneAppDelegate sharedInstance]._hStatus;
         hCell = 60.0;
-        
-        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
-        
-    }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2]) {
-        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:18.0];
-        
-    }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
-    {
-        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:20.0];
-        
-    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2])
-    {
-        textFont = [UIFont fontWithName:MYRIADPRO_BOLD size:20.0];
-        
     }
     
     //  header
@@ -178,7 +163,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     _lbContactName.animationCurve = UIViewAnimationOptionCurveEaseInOut;
     _lbContactName.fadeLength = 10.0;
     _lbContactName.continuousMarqueeExtraBuffer = 10.0f;
-    _lbContactName.font = textFont;
+    _lbContactName.font = [LinphoneAppDelegate sharedInstance].contentFontBold;
     _lbContactName.textColor = UIColor.whiteColor;
     
     

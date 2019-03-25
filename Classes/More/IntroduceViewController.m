@@ -75,9 +75,9 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)autoLayoutForView
 {
     if (SCREEN_WIDTH > 320) {
-        _lbIntroduce.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:20.0];
+        _iconBack.imageEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     }else{
-        _lbIntroduce.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
+        _iconBack.imageEdgeInsets = UIEdgeInsetsMake(7, 7, 7, 7);
     }
     
     //  header view
@@ -90,6 +90,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.top.left.bottom.right.equalTo(_viewHeader);
     }];
     
+    _lbIntroduce.font = [LinphoneAppDelegate sharedInstance].headerFontNormal;
     [_lbIntroduce mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_viewHeader).offset([LinphoneAppDelegate sharedInstance]._hStatus);
         make.bottom.equalTo(_viewHeader);

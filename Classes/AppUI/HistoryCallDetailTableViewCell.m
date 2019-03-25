@@ -16,13 +16,21 @@
     float padding = 8.0;
     float wDate = 90.0;
     
-    if (SCREEN_WIDTH > 320) {
-        lbCallState.font = [UIFont fontWithName:MYRIADPRO_BOLD size:16.0];
-        lbDate.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:14.0];
-    }else{
+    NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
+    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE])
+    {
         lbCallState.font = [UIFont fontWithName:MYRIADPRO_BOLD size:14.0];
         lbDate.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:14.0];
         wDate = 75.0;
+        
+    }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
+    {
+        lbCallState.font = [UIFont fontWithName:MYRIADPRO_BOLD size:15.0];
+        lbDate.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:15.0];
+        
+    }else {
+        lbCallState.font = [UIFont fontWithName:MYRIADPRO_BOLD size:16.0];
+        lbDate.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:15.0];
     }
     
     lbCallState.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];

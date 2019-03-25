@@ -14,19 +14,13 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
-    NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
-    float margin = 20.0;
-    
-    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE])
-    {
-        _lbTitle.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
-        margin = 14.0;
-        
-    }else {
-        _lbTitle.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
-        
-    }
     self.contentView.backgroundColor = UIColor.whiteColor;
+    
+    float margin = 20.0;
+    NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
+    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE]) {
+        margin = 14.0;
+    }
     
     [_iconImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self).offset(margin);
@@ -40,7 +34,7 @@
         make.width.height.mas_equalTo(17.0);
     }];
     
-    
+    _lbTitle.font = [LinphoneAppDelegate sharedInstance].headerFontNormal;
     _lbTitle.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     _lbTitle.numberOfLines = 10;
     [_lbTitle mas_makeConstraints:^(MASConstraintMaker *make) {
