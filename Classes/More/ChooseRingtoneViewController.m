@@ -182,7 +182,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         popupRingTone.delegate = self;
         [popupRingTone showInView:self.view animated:YES];
         
-        NSDictionary *ringtone = [ringtones objectAtIndex: indexPath.row];
+        NSDictionary *ringtone = [ringtones objectAtIndex: (indexPath.row-1)];
         [popupRingTone setRingtoneInfoContent: ringtone];
     }
 }

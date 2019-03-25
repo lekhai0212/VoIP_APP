@@ -107,8 +107,9 @@
 "Silent" = "Im lặng"
 "Can not make call with yourself!" = "Không thể gọi cho chính bạn!"
 "Introduction" = "Giới thiệu"
-
-
+"Search" = "Tìm kiếm"
+"Start date" = "Ngày bắt đầu"
+"End date" = "Ngày kết thúc"
 
 
 

@@ -11,6 +11,8 @@
 - (void)failedToCallWebService:(NSString *)link andError:(id)error;
 - (void)successfulToCallWebService: (NSString *)link withData: (NSDictionary *)data;
 - (void)receivedResponeCode: (NSString *)link withCode: (int)responeCode;
+@optional
+- (void)receivedRecordAudioData: (NSData *)audioData;
 @end
 
 @interface WebServices : NSObject

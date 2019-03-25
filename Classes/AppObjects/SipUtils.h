@@ -19,6 +19,7 @@
 
 + (AccountState)getStateOfDefaultProxyConfig;
 + (NSString *)getAccountIdOfDefaultProxyConfig;
++ (NSString *)getExtensionOfDefaultProxyConfig;
 + (void)enableProxyConfig: (LinphoneProxyConfig *)proxy withValue: (BOOL)enable withRefresh: (BOOL)refresh;
 + (LinphoneRegistrationState)getRegistrationStateOfDefaultProxyConfig;
 + (NSString *)getPhoneNumberOfCall: (LinphoneCall *)call orLinphoneAddress: (LinphoneAddress *)address;

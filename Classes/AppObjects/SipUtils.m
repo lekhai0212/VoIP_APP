@@ -325,6 +325,20 @@
     return @"";
 }
 
++ (NSString *)getExtensionOfDefaultProxyConfig {
+    LinphoneProxyConfig *defaultConfig = linphone_core_get_default_proxy_config(LC);
+    if (defaultConfig != NULL) {
+        const char *proxyUsername = linphone_address_get_username(linphone_proxy_config_get_identity_address(defaultConfig));
+        NSString* defaultUsername = [NSString stringWithFormat:@"%s" , proxyUsername];
+        if (![AppUtils isNullOrEmpty: defaultUsername]) {
+            if (defaultUsername.length > 5) {
+                return [defaultUsername substringFromIndex: 5];
+            }
+        }
+    }
+    return @"";
+}
+
 + (LinphoneRegistrationState)getRegistrationStateOfDefaultProxyConfig {
     LinphoneProxyConfig *defaultConfig = linphone_core_get_default_proxy_config(LC);
     if (defaultConfig != NULL) {

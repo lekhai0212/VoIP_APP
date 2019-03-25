@@ -65,6 +65,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
     
+    _btnEndCall.enabled = NO;
     _btnMute.delegate = self;
     
     PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: _phoneNumber];
@@ -326,6 +327,7 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case LinphoneCallOutgoingProgress:{
+            _btnEndCall.enabled = YES;
             [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] call state is LinphoneCallOutgoingProgress", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
             
             _lbCallState.text = [[LanguageUtil sharedInstance] getContent:@"Calling"];

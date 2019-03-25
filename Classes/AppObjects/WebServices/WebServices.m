@@ -146,6 +146,17 @@
 
 // This method is used to process the data after connection has made successfully.
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    NSURL *requestURL = [[connection currentRequest] URL];
+    NSString *urlPath = requestURL.path;
+    if (![AppUtils isNullOrEmpty: urlPath]) {
+        NSString *function = [urlPath stringByReplacingOccurrencesOfString:@"/" withString:@""];
+        if ([function isEqualToString: get_file_record]) {
+            [delegate receivedRecordAudioData: receivedData];
+            receivedData = nil;
+            return;
+        }
+    }
+    
     NSString *value = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
     receivedData = nil;
     id object = [value objectFromJSONString];

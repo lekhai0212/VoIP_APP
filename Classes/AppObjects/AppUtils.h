@@ -40,6 +40,7 @@
 + (NSString *)getCurrentTimeStamp;
 
 + (NSString *)getCurrentTimeStampNotSeconds;
++ (NSDate *)convertStringToDate: (NSString *)dateStr;
 
 /* Get UDID of device */
 + (NSString*)uniqueIDForDevice;
@@ -122,5 +123,7 @@
 + (NSString *)getTypeOfPhone: (NSString *)typePhone;
 + (UIImage *)imageWithImage:(UIImage *)sourceImage scaledToSize:(CGSize)targetSize;
 + (void)addBoxShadowForView: (UIView *)view withColor: (UIColor *)color;
+
++ (BOOL)checkRecordsFileExistsInLocal: (NSString *)recordFile;
 
 @end

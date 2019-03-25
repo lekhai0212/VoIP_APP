@@ -92,7 +92,7 @@
 @synthesize webService, keepAwakeTimer, listNumber, listInfoPhoneNumber, supportLoginWithPhoneNumber, logFilePath, dbQueue, splashScreen;
 @synthesize supportVoice;
 @synthesize homeSplitVC, contactType, historyType, callTransfered, hNavigation, hasBluetoothEar, ipadWaiting;
-@synthesize audioCallView, videoCallView, phoneForCall, configPushToken;
+@synthesize phoneForCall, configPushToken;
 
 #pragma mark - Lifecycle Functions
 
@@ -151,6 +151,8 @@
 	LinphoneCall *call = linphone_core_get_current_call(LC);
 
 	if (call) {
+        [self showSplashScreenOnView: NO];
+        
 		if (call == instance->currentCallContextBeforeGoingBackground.call) {
 			const LinphoneCallParams *params = linphone_call_get_current_params(call);
 			if (linphone_call_params_video_enabled(params)) {
@@ -222,6 +224,10 @@
                     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"Call with UserActivity phone number = %@", phoneNumber] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
                     
                     splashScreen.hidden = YES;
+                    
+                    [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:IS_VIDEO_CALL_KEY];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                    
                     [SipUtils makeCallWithPhoneNumber: phoneNumber];
                     
                     //  reset value
@@ -1988,45 +1994,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
 }
 
-- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
-{
-    INInteraction *interaction = userActivity.interaction;
-    if (interaction != nil) {
-        INStartAudioCallIntent *startAudioCallIntent = (INStartAudioCallIntent *)interaction.intent;
-        if (startAudioCallIntent != nil && startAudioCallIntent.contacts.count > 0) {
-            INPerson *contact = startAudioCallIntent.contacts[0];
-            if (contact != nil) {
-                INPersonHandle *personHandle = contact.personHandle;
-                NSString *phoneNumber = personHandle.value;
-                if (![AppUtils isNullOrEmpty: phoneNumber])
-                {
-                    phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
-                    if ([AppUtils isNullOrEmpty: phoneNumber]) {
-                        [self showSplashScreenOnView: NO];
-                    }else{
-                        [self showSplashScreenOnView: YES];
-
-                        [[NSUserDefaults standardUserDefaults] setObject:phoneNumber forKey:UserActivity];
-                        [[NSUserDefaults standardUserDefaults] synchronize];
-                    }
-                }
-            }
-        }
-    }
-    return YES;
-}
-
-- (void)showSplashScreenOnView: (BOOL)show {
-    if (splashScreen == nil) {
-        UINib *nib = [UINib nibWithNibName:@"LaunchScreen" bundle:nil];
-        splashScreen = [[nib instantiateWithOwner:self options:nil] objectAtIndex:0];
-        [self.window addSubview:splashScreen];
-    }
-    splashScreen.frame = [UIScreen mainScreen].bounds;
-    splashScreen.hidden = !show;
-}
-
-//-(BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+//- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
 //{
 //    INInteraction *interaction = userActivity.interaction;
 //    if (interaction != nil) {
@@ -2053,6 +2021,47 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 //    }
 //    return YES;
 //}
+
+- (void)showSplashScreenOnView: (BOOL)show {
+    if (splashScreen == nil) {
+        UINib *nib = [UINib nibWithNibName:@"LaunchScreen" bundle:nil];
+        splashScreen = [[nib instantiateWithOwner:self options:nil] objectAtIndex:0];
+        [self.window addSubview:splashScreen];
+    }
+    splashScreen.frame = [UIScreen mainScreen].bounds;
+    splashScreen.hidden = !show;
+}
+
+-(BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+{
+    //  userActivity.activityType
+    
+    INInteraction *interaction = userActivity.interaction;
+    if (interaction != nil) {
+        INStartAudioCallIntent *startAudioCallIntent = (INStartAudioCallIntent *)interaction.intent;
+        if (startAudioCallIntent != nil && startAudioCallIntent.contacts.count > 0) {
+            INPerson *contact = startAudioCallIntent.contacts[0];
+            if (contact != nil) {
+                INPersonHandle *personHandle = contact.personHandle;
+                NSString *phoneNumber = personHandle.value;
+                if (![AppUtils isNullOrEmpty: phoneNumber])
+                {
+                    phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
+                    
+                    if ([AppUtils isNullOrEmpty: phoneNumber]) {
+                        [self showSplashScreenOnView: NO];
+                    }else{
+                        [self showSplashScreenOnView: YES];
+
+                        [[NSUserDefaults standardUserDefaults] setObject:phoneNumber forKey:UserActivity];
+                        [[NSUserDefaults standardUserDefaults] synchronize];
+                    }
+                }
+            }
+        }
+    }
+    return YES;
+}
 
 #pragma mark - sync contact xmpp
 
@@ -2169,6 +2178,9 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     
     //  create folder to contain log files
     [NgnFileUtils createDirectoryAndSubDirectory: logsFolderName];
+    
+    //  create folder to contain log files
+    [NgnFileUtils createDirectoryAndSubDirectory: recordsFolderName];
     
     return;
     

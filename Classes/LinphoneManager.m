@@ -748,7 +748,7 @@ static void linphone_iphone_display_status(struct _LinphoneCore *lc, const char 
             //  [Khai Le - 04/03/2019] Update to check video
 			//  video = (([UIApplication sharedApplication].applicationState != UIApplicationStateBackground) && linphone_core_get_video_policy(LC)->automatically_accept && videoEnabled);
             
-            video = (([UIApplication sharedApplication].applicationState != UIApplicationStateBackground) && videoEnabled);
+            video = videoEnabled;
             
             //  [Khai Le - 14/03/2019] save to know is video call or audio call
             if (video) {
@@ -979,47 +979,49 @@ static void linphone_iphone_display_status(struct _LinphoneCore *lc, const char 
 				LinphoneManager.instance.connectivity = none;
 			}
 			LinphoneCallLog *callLog2 = linphone_call_get_call_log(call);
-			NSString *callId2 = [NSString stringWithUTF8String:linphone_call_log_get_call_id(callLog2)];
-			NSUUID *uuid = (NSUUID *)[self.providerDelegate.uuids objectForKey:callId2];
-			if (uuid) {
-				// For security reasons do not display name
-				// CXCallUpdate *update = [[CXCallUpdate alloc] init];
-				// update.remoteHandle = [[CXHandle alloc] initWithType:CXHandleTypeGeneric value:@"Unknown"];
-				//[LinphoneManager.instance.providerDelegate.provider reportCallWithUUID:uuid updated:update];
-
-				if (linphone_core_get_calls_nb(LC) > 0 && !_conf) {
-					// Create a CallKit call because there's not !
-					_conf = FALSE;
-					LinphoneCall *callKit_call = (LinphoneCall *)linphone_core_get_calls(LC)->data;
-					NSString *callKit_callId = [NSString
-						stringWithUTF8String:linphone_call_log_get_call_id(linphone_call_get_call_log(callKit_call))];
-					NSUUID *callKit_uuid = [NSUUID UUID];
-					[LinphoneManager.instance.providerDelegate.uuids setObject:callKit_uuid forKey:callKit_callId];
-					[LinphoneManager.instance.providerDelegate.calls setObject:callKit_callId forKey:callKit_uuid];
-					
-                    NSString *phoneNumber = [SipUtils getPhoneNumberOfCall: callKit_call orLinphoneAddress: nil];
-					CXHandle *handle = [[CXHandle alloc] initWithType:CXHandleTypePhoneNumber value:phoneNumber];
+            if (linphone_call_log_get_call_id(callLog2) != NULL) {
+                NSString *callId2 = [NSString stringWithUTF8String:linphone_call_log_get_call_id(callLog2)];
+                NSUUID *uuid = (NSUUID *)[self.providerDelegate.uuids objectForKey:callId2];
+                if (uuid) {
+                    // For security reasons do not display name
+                    // CXCallUpdate *update = [[CXCallUpdate alloc] init];
+                    // update.remoteHandle = [[CXHandle alloc] initWithType:CXHandleTypeGeneric value:@"Unknown"];
+                    //[LinphoneManager.instance.providerDelegate.provider reportCallWithUUID:uuid updated:update];
                     
+                    if (linphone_core_get_calls_nb(LC) > 0 && !_conf) {
+                        // Create a CallKit call because there's not !
+                        _conf = FALSE;
+                        LinphoneCall *callKit_call = (LinphoneCall *)linphone_core_get_calls(LC)->data;
+                        NSString *callKit_callId = [NSString
+                                                    stringWithUTF8String:linphone_call_log_get_call_id(linphone_call_get_call_log(callKit_call))];
+                        NSUUID *callKit_uuid = [NSUUID UUID];
+                        [LinphoneManager.instance.providerDelegate.uuids setObject:callKit_uuid forKey:callKit_callId];
+                        [LinphoneManager.instance.providerDelegate.calls setObject:callKit_callId forKey:callKit_uuid];
+                        
+                        NSString *phoneNumber = [SipUtils getPhoneNumberOfCall: callKit_call orLinphoneAddress: nil];
+                        CXHandle *handle = [[CXHandle alloc] initWithType:CXHandleTypePhoneNumber value:phoneNumber];
+                        
+                        
+                        CXStartCallAction *act = [[CXStartCallAction alloc] initWithCallUUID:callKit_uuid handle:handle];
+                        CXTransaction *tr = [[CXTransaction alloc] initWithAction:act];
+                        [LinphoneManager.instance.providerDelegate.controller requestTransaction:tr
+                                                                                      completion:^(NSError *err){
+                                                                                      }];
+                        [LinphoneManager.instance.providerDelegate.provider reportOutgoingCallWithUUID:callKit_uuid
+                                                                               startedConnectingAtDate:nil];
+                        [LinphoneManager.instance.providerDelegate.provider reportOutgoingCallWithUUID:callKit_uuid
+                                                                                       connectedAtDate:nil];
+                    }
                     
-					CXStartCallAction *act = [[CXStartCallAction alloc] initWithCallUUID:callKit_uuid handle:handle];
-					CXTransaction *tr = [[CXTransaction alloc] initWithAction:act];
-					[LinphoneManager.instance.providerDelegate.controller requestTransaction:tr
-																				  completion:^(NSError *err){
-																				  }];
-					[LinphoneManager.instance.providerDelegate.provider reportOutgoingCallWithUUID:callKit_uuid
-																		   startedConnectingAtDate:nil];
-					[LinphoneManager.instance.providerDelegate.provider reportOutgoingCallWithUUID:callKit_uuid
-																				   connectedAtDate:nil];
-				}
-
-				[self.providerDelegate.uuids removeObjectForKey:callId2];
-				[self.providerDelegate.calls removeObjectForKey:uuid];
-				CXEndCallAction *act = [[CXEndCallAction alloc] initWithCallUUID:uuid];
-				CXTransaction *tr = [[CXTransaction alloc] initWithAction:act];
-				[LinphoneManager.instance.providerDelegate.controller requestTransaction:tr
-																			  completion:^(NSError *err){
-																			  }];
-			}
+                    [self.providerDelegate.uuids removeObjectForKey:callId2];
+                    [self.providerDelegate.calls removeObjectForKey:uuid];
+                    CXEndCallAction *act = [[CXEndCallAction alloc] initWithCallUUID:uuid];
+                    CXTransaction *tr = [[CXTransaction alloc] initWithAction:act];
+                    [LinphoneManager.instance.providerDelegate.controller requestTransaction:tr
+                                                                                  completion:^(NSError *err){
+                                                                                  }];
+                }
+            }
 		} else {
 			if (data != nil && data->notification != nil) {
 				LinphoneCallLog *log = linphone_call_get_call_log(call);

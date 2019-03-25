@@ -31,14 +31,15 @@
 
 #pragma mark - API
 
-#define link_api            @"https://api.cloudcall.vn"
-#define login_func          @"Login"
-#define update_token_func   @"UpdatePushToken"
-#define get_contacts_func   @"GetServerContacts"
-#define get_didlist_func    @"GetDIDList"
-#define get_missedcall_func @"GetInfoMissCall"
-#define decryptRSA_func     @"DecryptRSA"
-
+#define link_api                @"https://api.cloudcall.vn"
+#define login_func              @"Login"
+#define update_token_func       @"UpdatePushToken"
+#define get_contacts_func       @"GetServerContacts"
+#define get_didlist_func        @"GetDIDList"
+#define get_missedcall_func     @"GetInfoMissCall"
+#define decryptRSA_func         @"DecryptRSA"
+#define get_list_record_file    @"GetListRecordFile"
+#define get_file_record         @"GetFileRecord"
 
 
 
@@ -112,7 +113,8 @@
 #define IphoneXS_Max2   @"iPhone11,4"
 
 //  [Khai le - 25/10/2018]
-#define logsFolderName  @"LogFiles"
+#define logsFolderName      @"LogFiles"
+#define recordsFolderName   @"RecordsFiles"
 #define DAY_FOR_LOGS    7
 #define PBX_ID_CONTACT  @"PBX_ID_CONTACT"
 #define VOICE_CONTROL   @"VOICE_CONTROL"

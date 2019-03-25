@@ -59,6 +59,13 @@
     return [dateFormatter stringFromDate:[NSDate date]];
 }
 
++ (NSDate *)convertStringToDate: (NSString *)dateStr {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"dd-MM-yyyy HH:mm"];
+    NSDate *dateFromString = [dateFormatter dateFromString: dateStr];
+    return dateFromString;
+}
+
 + (UIFont *)fontRegularWithSize: (float)fontSize{
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
         return [UIFont fontWithName:@"MYRIADPRO-REGULAR" size:fontSize];
@@ -1074,6 +1081,15 @@
     UIEdgeInsets shadowInsets     = UIEdgeInsetsMake(0, 0, 5.0f, 0);
     UIBezierPath *shadowPath      = [UIBezierPath bezierPathWithRect:UIEdgeInsetsInsetRect(view.bounds, shadowInsets)];
     view.layer.shadowPath    = shadowPath.CGPath;
+}
+
++ (BOOL)checkRecordsFileExistsInLocal: (NSString *)recordFile {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *url = [paths objectAtIndex:0];
+    NSString *filePath = [NSString stringWithFormat:@"%@/%@/%@", url, recordsFolderName, recordFile];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    return [fileManager fileExistsAtPath: filePath];
 }
 
 @end

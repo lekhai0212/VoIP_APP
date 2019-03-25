@@ -38,8 +38,6 @@
 #import "Constant.h"
 #import "HomeSplitViewController.h"
 #import <CoreBluetooth/CoreBluetooth.h>
-#import "AudioCallView.h"
-#import "VideoCallView.h"
 #import "ChooseDIDPopupView.h"
 
 #define MINI_KEYPAD_TAG 101
@@ -59,6 +57,7 @@ typedef enum typePhoneNumber{
 typedef enum eTypeHistory{
     eAllCalls,
     eMissedCalls,
+    eRecordCalls,
 }eTypeHistory;
 
 typedef enum eContact{
@@ -161,9 +160,6 @@ typedef enum{
 @property (nonatomic, strong) CBCentralManager *bluetoothManager;
 @property (nonatomic, strong) UIActivityIndicatorView *ipadWaiting;
 - (void)showWaiting: (BOOL)show;
-
-@property (nonatomic, strong) AudioCallView *audioCallView;
-@property (nonatomic, strong) VideoCallView *videoCallView;
 
 @property (nonatomic, strong) NSString *phoneForCall;
 @property (nonatomic, assign) BOOL configPushToken;

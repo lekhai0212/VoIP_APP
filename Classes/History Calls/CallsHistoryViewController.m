@@ -9,12 +9,15 @@
 #import "CallsHistoryViewController.h"
 #import "AllCallsViewController.h"
 #import "MissedCallViewController.h"
+#import "RecordsCallViewController.h"
 #import "TabBarView.h"
 
 @interface CallsHistoryViewController () {
     int currentView;
     AllCallsViewController *allCallsVC;
     MissedCallViewController *missedCallsVC;
+    RecordsCallViewController *recordCallsVC;
+    UIColor *noActiveColor;
     float hIcon;
 }
 
@@ -56,7 +59,7 @@ static UICompositeViewDescription *compositeDescription = nil;
                                                  name:k11ReloadAfterDeleteAllCall object:nil];
     
     self.view.backgroundColor = UIColor.whiteColor;
-    
+    noActiveColor = [UIColor colorWithRed:(220/255.0) green:(220/255.0) blue:(220/255.0) alpha:1.0];
     [self autoLayoutForView];
     currentView = eAllCalls;
     [self updateStateIconWithView: currentView];
@@ -71,6 +74,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     allCallsVC = [[AllCallsViewController alloc] init];
     missedCallsVC = [[MissedCallViewController alloc] init];
+    recordCallsVC = [[RecordsCallViewController alloc] init];
     
     NSArray *viewControllers = [NSArray arrayWithObject:allCallsVC];
     [_pageViewController setViewControllers:viewControllers
@@ -149,6 +153,17 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (IBAction)_iconRecordClicked:(UIButton *)sender {
+    _btnEdit.hidden = YES;
+    
+    if (currentView == eRecordCalls) {
+        return;
+    }
+    
+    currentView = eRecordCalls;
+    [self updateStateIconWithView:currentView];
+    [_pageViewController setViewControllers: @[recordCallsVC]
+                                  direction: UIPageViewControllerNavigationDirectionReverse
+                                   animated: false completion: nil];
 }
 
 - (IBAction)_btnEditPressed:(id)sender {
@@ -183,10 +198,14 @@ static UICompositeViewDescription *compositeDescription = nil;
         currentView = eAllCalls;
         [self updateStateIconWithView: currentView];
         return nil;
-    }else{
+    }else if (viewController == missedCallsVC){
         currentView = eMissedCalls;
         [self updateStateIconWithView: currentView];
         return allCallsVC;
+    }else{
+        currentView = eRecordCalls;
+        [self updateStateIconWithView: currentView];
+        return missedCallsVC;
     }
 }
 
@@ -195,8 +214,12 @@ static UICompositeViewDescription *compositeDescription = nil;
         currentView = eAllCalls;
         [self updateStateIconWithView: currentView];
         return missedCallsVC;
-    }else{
+    }else if (viewController == missedCallsVC) {
         currentView = eMissedCalls;
+        [self updateStateIconWithView: currentView];
+        return recordCallsVC;
+    }else {
+        currentView = eRecordCalls;
         [self updateStateIconWithView: currentView];
         return nil;
     }
@@ -221,14 +244,16 @@ static UICompositeViewDescription *compositeDescription = nil;
 {
     if (view == eAllCalls){
         [_iconAll setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
-        [_iconMissed setTitleColor:[UIColor colorWithRed:(220/255.0) green:(220/255.0)
-                                                    blue:(220/255.0) alpha:1.0]
-                          forState:UIControlStateNormal];
-    }else{
-        [_iconAll setTitleColor:[UIColor colorWithRed:(220/255.0) green:(220/255.0)
-                                                 blue:(220/255.0) alpha:1.0]
-                       forState:UIControlStateNormal];
+        [_iconMissed setTitleColor:noActiveColor forState:UIControlStateNormal];
+        [_iconRecord setTitleColor:noActiveColor forState:UIControlStateNormal];
+    }else if (view == eMissedCalls){
+        [_iconAll setTitleColor:noActiveColor forState:UIControlStateNormal];
         [_iconMissed setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+        [_iconRecord setTitleColor:noActiveColor forState:UIControlStateNormal];
+    }else{
+        [_iconAll setTitleColor:noActiveColor forState:UIControlStateNormal];
+        [_iconMissed setTitleColor:noActiveColor forState:UIControlStateNormal];
+        [_iconRecord setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     }
 }
 
@@ -257,9 +282,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     _iconMissed.backgroundColor = UIColor.clearColor;
     _iconMissed.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [_iconMissed setTitle:[[LanguageUtil sharedInstance] getContent:@"Missed history"] forState:UIControlStateNormal];
-    [_iconMissed setTitleColor:[UIColor colorWithRed:(220/255.0) green:(220/255.0)
-                                                blue:(220/255.0) alpha:1.0]
-                      forState:UIControlStateNormal];
+    [_iconMissed setTitleColor:noActiveColor forState:UIControlStateNormal];
     _iconMissed.titleLabel.font = [LinphoneAppDelegate sharedInstance].headerFontBold;
     [_iconMissed mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_viewHeader).offset(marginTop);
@@ -298,7 +321,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     _iconRecord.backgroundColor = UIColor.clearColor;
     [_iconRecord setTitle:[[LanguageUtil sharedInstance] getContent:@"Records call"] forState:UIControlStateNormal];
-    [_iconRecord setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+    [_iconRecord setTitleColor:noActiveColor forState:UIControlStateNormal];
     _iconRecord.titleLabel.font = [LinphoneAppDelegate sharedInstance].headerFontBold;
     [_iconRecord mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(lbSepa2.mas_right).offset(padding);

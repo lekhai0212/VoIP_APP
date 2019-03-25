@@ -105,7 +105,7 @@
 	if (call != NULL) {
         //  [Khai Le - 04/03/2019]
 		//  BOOL video = (!([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) && linphone_core_get_video_policy(LC)->automatically_accept && linphone_call_params_video_enabled(linphone_call_get_remote_params((LinphoneCall *)call)));
-        BOOL video = (!([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) && linphone_call_params_video_enabled(linphone_call_get_remote_params((LinphoneCall *)call)));
+        BOOL video = linphone_call_params_video_enabled(linphone_call_get_remote_params((LinphoneCall *)call));
         
 		self.pendingCall = call;
 		self.pendingCallVideo = video;

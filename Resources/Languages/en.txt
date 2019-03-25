@@ -106,8 +106,9 @@
 "Silent" = "Silent"
 "Can not make call with yourself!" = "Can not make call with yourself!"
 "Introduction" = "Introduction"
-
-
+"Search" = "Search"
+"Start date" = "Start date"
+"End date" = "End date"
 
 
 
