@@ -11,8 +11,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *lbStartTime;
 @property (weak, nonatomic) IBOutlet UITextField *tfStartTime;
 @property (weak, nonatomic) IBOutlet UIButton *btnStartTime;
+@property (weak, nonatomic) IBOutlet UIImageView *imgArrowStart;
+
 @property (weak, nonatomic) IBOutlet UILabel *lbEndTime;
 @property (weak, nonatomic) IBOutlet UITextField *tfEndTime;
+@property (weak, nonatomic) IBOutlet UIImageView *imgArrowEnd;
 @property (weak, nonatomic) IBOutlet UIButton *btnEndTime;
 @property (weak, nonatomic) IBOutlet UIButton *btnSearch;
 @property (weak, nonatomic) IBOutlet UITableView *tbListCall;

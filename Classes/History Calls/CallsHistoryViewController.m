@@ -181,6 +181,11 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (void)showDeleteCallHistory: (NSNotification *)notif {
+    if (currentView == eRecordCalls) {
+        _btnEdit.hidden = YES;
+        return;
+    }
+    
     if ([notif.object isKindOfClass:[NSString class]]) {
         NSString *value = [notif object];
         if ([value isEqualToString:@"1"]) {

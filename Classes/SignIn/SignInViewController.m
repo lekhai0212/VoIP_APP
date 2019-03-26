@@ -227,8 +227,8 @@ static UICompositeViewDescription *compositeDescription = nil;
         marginTop = 10.0;
         marginSlogan = 20.0;
         wButtonStart = 150.0;
-        hButtonStart = 38.0;
-        sloganFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
+        hButtonStart = 40.0;
+        sloganFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
         
         padding = 30.0;
         hLogoColor = 30.0;

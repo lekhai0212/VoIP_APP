@@ -32,6 +32,7 @@
 		156E176021E85BAE00C15E79 /* HomeSplitViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 156E175E21E85BAE00C15E79 /* HomeSplitViewController.xib */; };
 		1575279821661D1A007D789A /* ic_search.png in Resources */ = {isa = PBXBuildFile; fileRef = 1575279721661D1A007D789A /* ic_search.png */; };
 		1575279A21661D44007D789A /* tf_close_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 1575279921661D43007D789A /* tf_close_bg.png */; };
+		1576783C2249C5220037697C /* ic_drop_down.png in Resources */ = {isa = PBXBuildFile; fileRef = 157678352249C5200037697C /* ic_drop_down.png */; };
 		1578D06C21ACEB6100E8BA5F /* SendLogsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1578D06A21ACEB6000E8BA5F /* SendLogsViewController.m */; };
 		1578D06D21ACEB6100E8BA5F /* SendLogsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1578D06B21ACEB6000E8BA5F /* SendLogsViewController.xib */; };
 		1578D07121AD3DDF00E8BA5F /* SendLogFileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1578D06F21AD3DDE00E8BA5F /* SendLogFileCell.m */; };
@@ -996,6 +997,7 @@
 		156E175E21E85BAE00C15E79 /* HomeSplitViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = HomeSplitViewController.xib; path = iPad/HomeSplitViewController.xib; sourceTree = "<group>"; };
 		1575279721661D1A007D789A /* ic_search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_search.png; sourceTree = "<group>"; };
 		1575279921661D43007D789A /* tf_close_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tf_close_bg.png; sourceTree = "<group>"; };
+		157678352249C5200037697C /* ic_drop_down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_drop_down.png; sourceTree = "<group>"; };
 		1578D06921ACEB6000E8BA5F /* SendLogsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SendLogsViewController.h; path = More/SendLogsViewController.h; sourceTree = "<group>"; };
 		1578D06A21ACEB6000E8BA5F /* SendLogsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = SendLogsViewController.m; path = More/SendLogsViewController.m; sourceTree = "<group>"; };
 		1578D06B21ACEB6000E8BA5F /* SendLogsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SendLogsViewController.xib; path = More/SendLogsViewController.xib; sourceTree = "<group>"; };
@@ -3049,6 +3051,7 @@
 		633FEBE11D3CD5570014B822 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				157678352249C5200037697C /* ic_drop_down.png */,
 				846C56A022494452006BF2FA /* ic_record.png */,
 				841225DC22476A67003DFC6F /* ic_hide_pass.png */,
 				841225E322476A67003DFC6F /* ic_show_pass.png */,
@@ -4705,6 +4708,7 @@
 				842814E5223ABEDF00E8EAC0 /* cam_enable.png in Resources */,
 				639CEB031A1DF4EB004DE38F /* UICompositeView.xib in Resources */,
 				15A64D92216C5A3D00D194BD /* ic_call_contact.png in Resources */,
+				1576783C2249C5220037697C /* ic_drop_down.png in Resources */,
 				15857C00216DED4800DB5237 /* call_default_mini.png in Resources */,
 				15D21BE52176E70000FEBED2 /* EditProfileViewController.xib in Resources */,
 				63AADBF81B6A0FF200AA16FD /* linphonerc~ipad in Resources */,

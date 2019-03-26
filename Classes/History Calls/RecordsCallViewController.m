@@ -24,22 +24,38 @@
     NSString *recordFile;
     
     UIActivityIndicatorView *icWaiting;
+    float padding;
+    float hTextfield;
+    
+    NSDate *startDate;
+    NSDate *endDate;
 }
 
 @end
 
 @implementation RecordsCallViewController
-@synthesize lbStartTime, tfStartTime, btnStartTime, lbEndTime, tfEndTime, btnEndTime, btnSearch, lbNoData, tbListCall;
+@synthesize lbStartTime, tfStartTime, btnStartTime, lbEndTime, tfEndTime, btnEndTime, btnSearch, lbNoData, tbListCall, imgArrowEnd, imgArrowStart;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    if (SCREEN_WIDTH > 320) {
+        padding = 15.0;
+        hCell = 70.0;
+        hTextfield = 40.0;
+    }else{
+        hCell = 60.0;
+        padding = 9.0;
+        hTextfield = 35.0;
+    }
     [self autoLayoutForView];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
     
+    startDate = nil;
+    endDate = nil;
     indexSelected = 0;
     tbListCall.hidden = YES;
     lbNoData.hidden = NO;
@@ -58,10 +74,8 @@
     }
     
     myExt = [SipUtils getExtensionOfDefaultProxyConfig];
-    if (SCREEN_WIDTH > 320) {
-        hCell = 70.0;
-    }else{
-        hCell = 60.0;
+    if (datePicker.frame.size.height > 0) {
+        [self closeDatePicker];
     }
 }
 
@@ -100,16 +114,12 @@
     [self closeDatePicker];
     [listData removeAllObjects];
     
-    if (tfStartTime.text.length > 0 && tfEndTime.text.length > 0) {
+    if (startDate != nil && endDate != nil) {
         [icWaiting startAnimating];
         icWaiting.hidden = NO;
         
-        NSDate *dateFrom = [AppUtils convertStringToDate: tfStartTime.text];
-        NSDate *dateTo = [AppUtils convertStringToDate: tfEndTime.text];
-        
-        long dateFromInterval = [dateFrom timeIntervalSince1970];
-        long dateToInterval = [dateTo timeIntervalSince1970];
-        
+        long dateFromInterval = [startDate timeIntervalSince1970];
+        long dateToInterval = [endDate timeIntervalSince1970];
         
         NSString *params = [NSString stringWithFormat:@"userName=%@&dateFrom=%ld&dateTo=%ld&as=%d", USERNAME, dateFromInterval, dateToInterval, 1];
         [webService callGETWebServiceWithFunction:get_list_record_file andParams:params];
@@ -163,11 +173,10 @@
     dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"dd-MM-YYYY HH:mm"];
     
-    float padding = 15.0;
-    float hTextfield = 40.0;
+    
     hPicker = 200.0;
     
-    lbStartTime.text = @"Thời gian bắt đầu";
+    lbStartTime.text = @"Ngày bắt đầu";
     lbStartTime.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     lbStartTime.font = [LinphoneAppDelegate sharedInstance].headerFontNormal;
     [lbStartTime mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -177,13 +186,19 @@
         make.height.mas_equalTo(hTextfield);
     }];
     
-    tfStartTime.placeholder = @"Chọn thời gian";
+    tfStartTime.placeholder = @"--Chọn thời gian--";
     tfStartTime.textColor = lbStartTime.textColor;
     tfStartTime.font = [LinphoneAppDelegate sharedInstance].headerFontNormal;
     [tfStartTime mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(lbStartTime.mas_right).offset(padding);
         make.top.bottom.equalTo(lbStartTime);
         make.right.equalTo(self.view).offset(-padding);
+    }];
+    
+    [imgArrowStart mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(tfStartTime).offset(-5.0);
+        make.centerY.equalTo(tfStartTime.mas_centerY);
+        make.width.height.mas_equalTo(16.0);
     }];
     
     datePicker = [[UIDatePicker alloc] initWithFrame:CGRectZero];
@@ -206,6 +221,7 @@
                                             blue:(70/255.0) alpha:1.0];
     toolBar.tintColor = UIColor.whiteColor;
     toolBar.translucent = NO;
+    toolBar.clipsToBounds = YES;
     [self.view addSubview: toolBar];
     [toolBar mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.view);
@@ -227,7 +243,7 @@
         make.top.left.bottom.right.equalTo(tfStartTime);
     }];
     
-    lbEndTime.text = @"Thời gian kết thúc";
+    lbEndTime.text = @"Ngày kết thúc";
     lbEndTime.textColor = lbStartTime.textColor;
     lbEndTime.font = lbStartTime.font;
     [lbEndTime mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -236,12 +252,18 @@
         make.height.mas_equalTo(hTextfield);
     }];
     
-    tfEndTime.placeholder = @"Chọn thời gian";
+    tfEndTime.placeholder = @"--Chọn thời gian--";
     tfEndTime.textColor = tfStartTime.textColor;
     tfEndTime.font = tfStartTime.font;
     [tfEndTime mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(tfStartTime);
         make.top.bottom.equalTo(lbEndTime);
+    }];
+    
+    [imgArrowEnd mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(tfEndTime).offset(-5.0);
+        make.centerY.equalTo(tfEndTime.mas_centerY);
+        make.width.height.mas_equalTo(16.0);
     }];
     
     [btnEndTime mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -260,16 +282,24 @@
         make.height.mas_equalTo(hTextfield);
     }];
     
+    
+    lbNoData.backgroundColor = [UIColor colorWithRed:(235/255.0) green:(235/255.0)
+                                                blue:(235/255.0) alpha:1.0];
     lbNoData.textColor = UIColor.darkGrayColor;
     lbNoData.font = [LinphoneAppDelegate sharedInstance].headerFontNormal;
     lbNoData.text = @"Chưa có dữ liệu";
     [lbNoData mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.bottom.equalTo(self.view);
+        make.left.equalTo(self.view).offset(padding);
+        make.right.equalTo(self.view).offset(-padding);
+        make.bottom.equalTo(self.view).offset(-padding);
+        //  make.left.right.bottom.equalTo(self.view);
         make.top.equalTo(btnSearch.mas_bottom).offset(padding);
     }];
     
     tbListCall.delegate = self;
     tbListCall.dataSource = self;
+    tbListCall.backgroundColor = [UIColor colorWithRed:(235/255.0) green:(235/255.0)
+                                                  blue:(235/255.0) alpha:1.0];
     tbListCall.separatorStyle = UITableViewCellSeparatorStyleNone;
     [tbListCall mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.bottom.equalTo(lbNoData);
@@ -290,17 +320,20 @@
     [self closeDatePicker];
     if (indexSelected == 1) {
         tfStartTime.text = [dateFormatter stringFromDate:datePicker.date];
+        startDate = datePicker.date;
+        
     }else if (indexSelected == 2) {
         tfEndTime.text = [dateFormatter stringFromDate:datePicker.date];
+        endDate = datePicker.date;
     }
 }
 
 - (void)addActionForToolbarView {
-    UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithTitle:@"Xong" style:UIBarButtonItemStyleBordered target:self action:@selector(showSelectedDate)];
+    UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithTitle:@"Chọn" style:UIBarButtonItemStyleBordered target:self action:@selector(showSelectedDate)];
     
     UIBarButtonItem *space = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
-    UIBarButtonItem *todayBtn = [[UIBarButtonItem alloc]initWithTitle:@"Hôm nay" style:UIBarButtonItemStyleBordered target:self action:@selector(showTodayDate)];
+    UIBarButtonItem *todayBtn = [[UIBarButtonItem alloc]initWithTitle:@"HÔM NAY" style:UIBarButtonItemStyleBordered target:self action:@selector(showTodayDate)];
     
     UIBarButtonItem *space1 = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
@@ -350,6 +383,9 @@
             
             BOOL exists = [AppUtils checkRecordsFileExistsInLocal: recordFile];
             if (!exists) {
+                [icWaiting startAnimating];
+                icWaiting.hidden = NO;
+                
                 NSString *params = [NSString stringWithFormat:@"userName=%@&userfield=%@", USERNAME, userfield];
                 [webService callGETWebServiceWithFunction:get_file_record andParams:params];
                 
@@ -415,6 +451,9 @@
 
 - (void)receivedRecordAudioData:(NSData *)audioData
 {
+    [icWaiting stopAnimating];
+    icWaiting.hidden = YES;
+    
     if (![AppUtils isNullOrEmpty: recordFile]) {
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *url = [paths objectAtIndex:0];
@@ -480,7 +519,11 @@
     
     NSString *name = [ContactUtils getContactNameWithNumber: cell._lbPhone.text];
     if (![AppUtils isNullOrEmpty: name]) {
-        cell._lbName.text = name;
+        if (![name isEqualToString: cell._lbPhone.text]) {
+            cell._lbName.text = name;
+        }else{
+            cell._lbName.text = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
+        }
     }else{
         cell._lbName.text = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
     }
@@ -501,6 +544,9 @@
 //        src = 151;
 //        userfield = "nhcla/2019/03/25/151-150-25032019-232004-1553530801.450.wav";
 //    }
+    
+    cell._lbSepa.backgroundColor = [UIColor colorWithRed:(250/255.0) green:(250/255.0)
+                                                    blue:(225035/255.0) alpha:1.0];
 
     return cell;
 }

@@ -1994,47 +1994,12 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
 }
 
-//- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
-//{
-//    INInteraction *interaction = userActivity.interaction;
-//    if (interaction != nil) {
-//        INStartAudioCallIntent *startAudioCallIntent = (INStartAudioCallIntent *)interaction.intent;
-//        if (startAudioCallIntent != nil && startAudioCallIntent.contacts.count > 0) {
-//            INPerson *contact = startAudioCallIntent.contacts[0];
-//            if (contact != nil) {
-//                INPersonHandle *personHandle = contact.personHandle;
-//                NSString *phoneNumber = personHandle.value;
-//                if (![AppUtils isNullOrEmpty: phoneNumber])
-//                {
-//                    phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
-//                    if ([AppUtils isNullOrEmpty: phoneNumber]) {
-//                        [self showSplashScreenOnView: NO];
-//                    }else{
-//                        [self showSplashScreenOnView: YES];
-//
-//                        [[NSUserDefaults standardUserDefaults] setObject:phoneNumber forKey:UserActivity];
-//                        [[NSUserDefaults standardUserDefaults] synchronize];
-//                    }
-//                }
-//            }
-//        }
-//    }
-//    return YES;
-//}
-
-- (void)showSplashScreenOnView: (BOOL)show {
-    if (splashScreen == nil) {
-        UINib *nib = [UINib nibWithNibName:@"LaunchScreen" bundle:nil];
-        splashScreen = [[nib instantiateWithOwner:self options:nil] objectAtIndex:0];
-        [self.window addSubview:splashScreen];
-    }
-    splashScreen.frame = [UIScreen mainScreen].bounds;
-    splashScreen.hidden = !show;
-}
-
--(BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
 {
-    //  userActivity.activityType
+    //  when user click facetime video
+    if ([userActivity.activityType isEqualToString:@"INStartVideoCallIntent"]) {
+        return YES;
+    }
     
     INInteraction *interaction = userActivity.interaction;
     if (interaction != nil) {
@@ -2047,7 +2012,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 if (![AppUtils isNullOrEmpty: phoneNumber])
                 {
                     phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
-                    
                     if ([AppUtils isNullOrEmpty: phoneNumber]) {
                         [self showSplashScreenOnView: NO];
                     }else{
@@ -2062,6 +2026,50 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
     return YES;
 }
+
+- (void)showSplashScreenOnView: (BOOL)show {
+    if (splashScreen == nil) {
+        UINib *nib = [UINib nibWithNibName:@"LaunchScreen" bundle:nil];
+        splashScreen = [[nib instantiateWithOwner:self options:nil] objectAtIndex:0];
+        [self.window addSubview:splashScreen];
+    }
+    splashScreen.frame = [UIScreen mainScreen].bounds;
+    splashScreen.hidden = !show;
+}
+
+//-(BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+//{
+//    //  when user click facetime video
+//    if ([userActivity.activityType isEqualToString:@"INStartVideoCallIntent"]) {
+//        return YES;
+//    }
+//
+//    INInteraction *interaction = userActivity.interaction;
+//    if (interaction != nil) {
+//        INStartAudioCallIntent *startAudioCallIntent = (INStartAudioCallIntent *)interaction.intent;
+//        if (startAudioCallIntent != nil && startAudioCallIntent.contacts.count > 0) {
+//            INPerson *contact = startAudioCallIntent.contacts[0];
+//            if (contact != nil) {
+//                INPersonHandle *personHandle = contact.personHandle;
+//                NSString *phoneNumber = personHandle.value;
+//                if (![AppUtils isNullOrEmpty: phoneNumber])
+//                {
+//                    phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
+//
+//                    if ([AppUtils isNullOrEmpty: phoneNumber]) {
+//                        [self showSplashScreenOnView: NO];
+//                    }else{
+//                        [self showSplashScreenOnView: YES];
+//
+//                        [[NSUserDefaults standardUserDefaults] setObject:phoneNumber forKey:UserActivity];
+//                        [[NSUserDefaults standardUserDefaults] synchronize];
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    return YES;
+//}
 
 #pragma mark - sync contact xmpp
 
@@ -2618,7 +2626,9 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE])
     {
         //  Screen width: 320.000000 - Screen height: 667.000000
-        
+        _hRegistrationState = 44.0 + _hStatus;
+        _wSubMenu = 60.0;
+        _hHeader = 50.0;
         
     }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
     {
@@ -2635,14 +2645,15 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         _wSubMenu = 100.0;
         _hHeader = 50.0;
         
-    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS]){
+    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2]){
         //  Screen width: 375.000000 - Screen height: 812.000000
-        
-    }else if ([deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2]){
-        //  Screen width: 375.000000 - Screen height: 812.000000
-        
+        _hRegistrationState = 44.0 + _hStatus;
+        _wSubMenu = 60.0;
+        _hHeader = 50.0;
     }else{
-        
+        _hRegistrationState = 44.0 + _hStatus;
+        _wSubMenu = 60.0;
+        _hHeader = 50.0;
     }
 }
 

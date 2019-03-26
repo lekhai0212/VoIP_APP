@@ -572,7 +572,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
     if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE])
     {
-        hLogo = 18.0;
+        hLogo = 19.0;
         callEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
         clearEdgeInsets = UIEdgeInsetsMake(16, 16, 16, 16);
         
