@@ -466,8 +466,10 @@ void onUncaughtException(NSException* exception)
     webService.delegate = self;
     
     // Copy database and connect
-    [self copyFileDataToDocument:@"callnex.sqlite"];
+    [self copyFileDataToDocument:@"cloudcall.sqlite"];
+    [self renameFilesToHidden];
     [NSDatabase connectToDatabase];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:k11UpdateBarNotifications object:nil];
     
     //  Ghi âm cuộc gọi
@@ -626,6 +628,11 @@ void onUncaughtException(NSException* exception)
     //  get missed callfrom server
     if (USERNAME != nil && ![USERNAME isEqualToString: @""]) {
         //  [self getMissedCallFromServer];
+    }
+    
+    double currentIOS = [[[UIDevice currentDevice] systemVersion] doubleValue];
+    if (currentIOS <= 10) {
+        //  [self removeAllRecordsAudioFile];    //  T_T
     }
     
 	return YES;
@@ -2000,7 +2007,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     if ([userActivity.activityType isEqualToString:@"INStartVideoCallIntent"]) {
         return YES;
     }
-    
+
     INInteraction *interaction = userActivity.interaction;
     if (interaction != nil) {
         INStartAudioCallIntent *startAudioCallIntent = (INStartAudioCallIntent *)interaction.intent;
@@ -2181,8 +2188,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 //  [Khai le - 25/10/2018]: Add write logs for app
 - (void)setupForWriteLogFileForApp
 {
-    [NgnFileUtils createDirectoryAndSubDirectory:@"chats/records"];
-    [NgnFileUtils createDirectory:@"avatars"];
+    //  [NgnFileUtils createDirectoryAndSubDirectory:@"chats/records"];
+    [NgnFileUtils createDirectory:recordsFolderName];
     
     //  create folder to contain log files
     [NgnFileUtils createDirectoryAndSubDirectory: logsFolderName];
@@ -2656,5 +2663,61 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         _hHeader = 50.0;
     }
 }
+
+- (NSArray *)listFileAtPath:(NSString *)path {
+    NSArray *directoryContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:NULL];
+    return directoryContent;
+}
+
+- (void)renameFilesToHidden
+{
+    NSString *documentDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSArray *files = [self listFileAtPath: documentDir];
+    for (int icount=0; icount<(int)files.count; icount++) {
+        NSString *fileName = [files objectAtIndex: icount];
+        if (![AppUtils isNullOrEmpty: fileName])
+        {
+            if ([fileName hasPrefix:@"cloudcall"])
+            {
+                NSString *documentDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+                
+                NSString *newName = [NSString stringWithFormat:@".%@", fileName];
+                BOOL exists = [AppUtils checkFileExistsInDocuments: newName];
+                if (exists){
+                    //  save path to database file
+                    NSString *newPath = [documentDir stringByAppendingPathComponent:newName];
+                     _databasePath = [[NSString alloc] initWithString: newPath];
+                    //  ----
+                    
+                    NSString *fileRemovePath = [documentDir stringByAppendingPathComponent:fileName];
+                    BOOL removedSuccess = [AppUtils deleteFileWithPath:fileRemovePath];
+                    if (removedSuccess) {
+                        NSLog(@"Removed file with name %@", fileName);
+                    }
+                }else{
+                    NSString *oldPath = [documentDir stringByAppendingPathComponent:fileName];
+                    NSString *newPath = [documentDir stringByAppendingPathComponent:newName];
+                    
+                    BOOL movedSuccess = [AppUtils moveFileFromSoure:oldPath toDestination:newPath];
+                    if (movedSuccess){
+                        //  save path to database file
+                        _databasePath = [[NSString alloc] initWithString: newPath];
+                        //  ----
+                        
+                        BOOL removed = [AppUtils deleteFileWithPath:oldPath];
+                        if (removed) {
+                            NSLog(@"Removed file with name %@", fileName);
+                        }else{
+                            NSLog(@"Fail to remove file with name %@", fileName);
+                        }
+                        NSLog(@"The file name has been changed.");
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 
 @end

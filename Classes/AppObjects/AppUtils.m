@@ -1092,4 +1092,55 @@
     return [fileManager fileExistsAtPath: filePath];
 }
 
++ (BOOL)checkFileExistsInDocuments : (NSString *)filename {
+    NSArray *arrPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentPath = [arrPath objectAtIndex:0];
+    NSString *pathString = [documentPath stringByAppendingPathComponent:filename];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    [fileManager setAttributes:[NSDictionary dictionaryWithObject:NSFileProtectionNone forKey:NSFileProtectionKey] ofItemAtPath:[NSHomeDirectory() stringByAppendingFormat:@"/Documents"] error:NULL];
+    
+    if ([fileManager fileExistsAtPath:pathString]) {
+        return YES;
+    }else{
+        return NO;
+    }
+}
+
++ (BOOL) moveFileFromSoure:(NSString *)source toDestination:(NSString *)destination
+{
+    NSFileManager *filemgr = [NSFileManager defaultManager];
+    NSError *error = nil;
+    if ([filemgr moveItemAtPath:source toPath:destination error:&error] != YES) {
+        NSLog(@"Unable to move file: %@", [error description]);
+        return false;
+    } else {
+        NSLog(@"Move File successfully");
+        return true;
+    }
+}
+
++ (BOOL)deleteFileWithPath:(NSString *)filePath
+{
+    if( ![self isFileExist: filePath] ) return TRUE;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSLog(@"deleteFileWithPath %@",filePath);
+    BOOL sussess = [fileManager removeItemAtPath:filePath error:NULL];
+    NSLog(@"deleteFileWithPath %i",sussess);
+    return sussess;
+}
+
++ (BOOL) isFileExist: (NSString*) file
+{
+    return [[NSFileManager defaultManager] fileExistsAtPath: file];
+}
+
++ (NSArray *)getAllFilesInDirectory: (NSString *)subPath {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *path = [[paths objectAtIndex:0] stringByAppendingPathComponent: subPath];
+    NSArray *directoryContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:NULL];
+    return directoryContent;
+}
+
 @end

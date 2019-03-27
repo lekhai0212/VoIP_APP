@@ -92,7 +92,7 @@ extern void libmswebrtc_init(MSFactory *factory);
 	"AV Capture: com.apple.avfoundation.avcapturedevice.built-in_video:0" /*"AV Capture: Back Camera"*/
 
 NSString *const kLinphoneOldChatDBFilename = @"chat_database.sqlite";
-NSString *const kLinphoneInternalChatDBFilename = @"linphone_chats.db";
+NSString *const kLinphoneInternalChatDBFilename = @".linphone_chats.db";
 
 @implementation LinphoneCallAppData
 - (id)init {
@@ -332,6 +332,9 @@ static int check_should_migrate_images(void *data, int argc, char **argv, char *
 }
 
 - (BOOL)migrateChatDBIfNeeded:(LinphoneCore *)lc {
+    //  [Khai Le - 26/03/2019]
+    return YES;
+    
 	sqlite3 *newDb;
 	char *errMsg;
 	NSError *error;

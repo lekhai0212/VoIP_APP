@@ -70,7 +70,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     _pageViewController.view.backgroundColor = UIColor.clearColor;
     _pageViewController.delegate = self;
-    _pageViewController.dataSource = self;
+    //_pageViewController.dataSource = self;
     
     allCallsVC = [[AllCallsViewController alloc] init];
     missedCallsVC = [[MissedCallViewController alloc] init];

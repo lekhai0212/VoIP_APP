@@ -312,9 +312,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         webService.delegate = self;
     }
     [LinphoneAppDelegate sharedInstance]._updateTokenSuccess = NO;
-    
-    NSString *destToken = [NSString stringWithFormat:@"ios%@",  [LinphoneAppDelegate sharedInstance]._deviceToken];
-    NSString *params = [NSString stringWithFormat:@"pushToken=%@&userName=%@&del=1", destToken, USERNAME];
+    NSString *params = [NSString stringWithFormat:@"pushToken=%@&userName=%@&del=1", @"", USERNAME];
     [webService callGETWebServiceWithFunction:update_token_func andParams:params];
     
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, params] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];

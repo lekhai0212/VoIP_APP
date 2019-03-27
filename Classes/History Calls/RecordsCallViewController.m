@@ -6,6 +6,7 @@
 //
 
 #import "RecordsCallViewController.h"
+#import "RecordsListViewController.h"
 #import "HistoryCallCell.h"
 #import <AVFoundation/AVAudioPlayer.h>
 #import <AVKit/AVKit.h>
@@ -34,7 +35,7 @@
 @end
 
 @implementation RecordsCallViewController
-@synthesize lbStartTime, tfStartTime, btnStartTime, lbEndTime, tfEndTime, btnEndTime, btnSearch, lbNoData, tbListCall, imgArrowEnd, imgArrowStart;
+@synthesize lbStartTime, tfStartTime, btnStartTime, lbEndTime, tfEndTime, btnEndTime, btnSearch, lbNoData, tbListCall, imgArrowEnd, imgArrowStart, btnListFiles;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -126,6 +127,10 @@
         
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, params] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     }
+}
+
+- (IBAction)btnListFilesPress:(UIButton *)sender {
+    [[PhoneMainView instance] changeCurrentView:[RecordsListViewController compositeViewDescription] push:YES];
 }
 
 - (void)resetBackgroundSender: (UITextField *)sender {
@@ -282,6 +287,17 @@
         make.height.mas_equalTo(hTextfield);
     }];
     
+    [btnListFiles setTitle:@"Danh sách tải" forState:UIControlStateNormal];
+    btnListFiles.titleLabel.font = [LinphoneAppDelegate sharedInstance].headerFontNormal;
+    [btnListFiles setTitleColor:UIColor.blackColor forState:UIControlStateNormal];
+    btnListFiles.backgroundColor = [UIColor colorWithRed:(220/255.0) green:(220/255.0)
+                                                    blue:(220/255.0) alpha:1.0];
+    btnListFiles.layer.cornerRadius = btnSearch.layer.cornerRadius;
+    [btnListFiles mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(lbEndTime);
+        make.top.bottom.equalTo(btnSearch);
+    }];
+    
     
     lbNoData.backgroundColor = [UIColor colorWithRed:(235/255.0) green:(235/255.0)
                                                 blue:(235/255.0) alpha:1.0];
@@ -411,9 +427,7 @@
     [player play];
     
     [self.view.window.rootViewController presentViewController:playerViewController animated:YES completion:nil];
-    
 }
-
 
 #pragma mark - webservice delegate
 - (void)failedToCallWebService:(NSString *)link andError:(NSString *)error

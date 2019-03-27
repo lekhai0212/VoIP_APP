@@ -20,9 +20,11 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnSearch;
 @property (weak, nonatomic) IBOutlet UITableView *tbListCall;
 @property (weak, nonatomic) IBOutlet UILabel *lbNoData;
+@property (weak, nonatomic) IBOutlet UIButton *btnListFiles;
 
 - (IBAction)btnStartTimePress:(UIButton *)sender;
 - (IBAction)btnEndTimePress:(UIButton *)sender;
 - (IBAction)btnSearchPress:(UIButton *)sender;
+- (IBAction)btnListFilesPress:(UIButton *)sender;
 
 @end

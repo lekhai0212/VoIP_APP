@@ -125,5 +125,10 @@
 + (void)addBoxShadowForView: (UIView *)view withColor: (UIColor *)color;
 
 + (BOOL)checkRecordsFileExistsInLocal: (NSString *)recordFile;
++ (BOOL)checkFileExistsInDocuments : (NSString *)filename;
++ (BOOL) moveFileFromSoure:(NSString *)source toDestination:(NSString *)destination;
++ (BOOL)deleteFileWithPath:(NSString *)filePath;
++ (BOOL) isFileExist: (NSString*) file;
++ (NSArray *)getAllFilesInDirectory: (NSString *)subPath;
 
 @end

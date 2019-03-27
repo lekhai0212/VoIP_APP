@@ -111,6 +111,12 @@
 		15A64DA1216C8BC700D194BD /* InfoForNewContactTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15A64D9F216C8BC700D194BD /* InfoForNewContactTableCell.xib */; };
 		15A64DA4216CACD900D194BD /* ic_delete_phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 15A64DA2216CACD500D194BD /* ic_delete_phone.png */; };
 		15A64DA5216CACD900D194BD /* ic_add_phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 15A64DA3216CACD700D194BD /* ic_add_phone.png */; };
+		15ABD96B224B60A7002902B6 /* RecordsFileListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15ABD96A224B60A7002902B6 /* RecordsFileListView.m */; };
+		15ABD973224B60D6002902B6 /* RecordsFileListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15ABD972224B60D6002902B6 /* RecordsFileListView.xib */; };
+		15ABD977224B64D9002902B6 /* RecordAudioCallCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15ABD975224B64D9002902B6 /* RecordAudioCallCell.m */; };
+		15ABD978224B64D9002902B6 /* RecordAudioCallCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15ABD976224B64D9002902B6 /* RecordAudioCallCell.xib */; };
+		15ABD97C224B792D002902B6 /* RecordsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15ABD97A224B792D002902B6 /* RecordsListViewController.m */; };
+		15ABD97D224B792D002902B6 /* RecordsListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15ABD97B224B792D002902B6 /* RecordsListViewController.xib */; };
 		15B4462F219FCA0400FB8DCB /* CustomSwitchButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B4462E219FCA0300FB8DCB /* CustomSwitchButton.m */; };
 		15BA5E1921FAF10F00B37F4D /* iPadEditContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BA5E1721FAF10F00B37F4D /* iPadEditContactViewController.m */; };
 		15BA5E1A21FAF10F00B37F4D /* iPadEditContactViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15BA5E1821FAF10F00B37F4D /* iPadEditContactViewController.xib */; };
@@ -119,6 +125,7 @@
 		15C5A5FD219AAF5600FDD6C5 /* NewHistoryDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C5A5FB219AAF5600FDD6C5 /* NewHistoryDetailCell.m */; };
 		15C5A5FE219AAF5600FDD6C5 /* NewHistoryDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15C5A5FC219AAF5600FDD6C5 /* NewHistoryDetailCell.xib */; };
 		15C5A600219ACC2000FDD6C5 /* ic_trash.png in Resources */ = {isa = PBXBuildFile; fileRef = 15C5A5FF219ACC1D00FDD6C5 /* ic_trash.png */; };
+		15C86DB6224B35CB00C8F393 /* cloudcall.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 15C86DB5224B35C800C8F393 /* cloudcall.sqlite */; };
 		15CA86D2221A7416002A8AE7 /* iPadAllContactsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15CA86D0221A7416002A8AE7 /* iPadAllContactsListViewController.m */; };
 		15CA86D3221A7416002A8AE7 /* iPadAllContactsListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15CA86D1221A7416002A8AE7 /* iPadAllContactsListViewController.xib */; };
 		15CA91042248EFB600E24FC0 /* RecordsCallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15CA91022248EFB600E24FC0 /* RecordsCallViewController.m */; };
@@ -602,7 +609,6 @@
 		84C47CF61FB628540015695E /* MissedCallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C47CF41FB628540015695E /* MissedCallViewController.m */; };
 		84C47CF71FB628540015695E /* MissedCallViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84C47CF51FB628540015695E /* MissedCallViewController.xib */; };
 		84C47D021FB62A750015695E /* NSDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C47D011FB62A750015695E /* NSDatabase.m */; };
-		84C47D051FB62C660015695E /* callnex.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 84C47D041FB62C660015695E /* callnex.sqlite */; };
 		84C47D091FB62CC10015695E /* HistoryCallCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C47D071FB62CC10015695E /* HistoryCallCell.m */; };
 		84C47D0A1FB62CC10015695E /* HistoryCallCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84C47D081FB62CC10015695E /* HistoryCallCell.xib */; };
 		84C47D0D1FB62CE00015695E /* KHistoryCallObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C47D0C1FB62CE00015695E /* KHistoryCallObject.m */; };
@@ -1097,6 +1103,15 @@
 		15A64D9F216C8BC700D194BD /* InfoForNewContactTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = InfoForNewContactTableCell.xib; path = AppUI/InfoForNewContactTableCell.xib; sourceTree = "<group>"; };
 		15A64DA2216CACD500D194BD /* ic_delete_phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_delete_phone.png; sourceTree = "<group>"; };
 		15A64DA3216CACD700D194BD /* ic_add_phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_add_phone.png; sourceTree = "<group>"; };
+		15ABD969224B60A7002902B6 /* RecordsFileListView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RecordsFileListView.h; path = AppUI/RecordsFileListView.h; sourceTree = "<group>"; };
+		15ABD96A224B60A7002902B6 /* RecordsFileListView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RecordsFileListView.m; path = AppUI/RecordsFileListView.m; sourceTree = "<group>"; };
+		15ABD972224B60D6002902B6 /* RecordsFileListView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = RecordsFileListView.xib; path = AppUI/RecordsFileListView.xib; sourceTree = "<group>"; };
+		15ABD974224B64D9002902B6 /* RecordAudioCallCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RecordAudioCallCell.h; path = AppUI/RecordAudioCallCell.h; sourceTree = "<group>"; };
+		15ABD975224B64D9002902B6 /* RecordAudioCallCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RecordAudioCallCell.m; path = AppUI/RecordAudioCallCell.m; sourceTree = "<group>"; };
+		15ABD976224B64D9002902B6 /* RecordAudioCallCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = RecordAudioCallCell.xib; path = AppUI/RecordAudioCallCell.xib; sourceTree = "<group>"; };
+		15ABD979224B792D002902B6 /* RecordsListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RecordsListViewController.h; path = "History Calls/RecordsListViewController.h"; sourceTree = "<group>"; };
+		15ABD97A224B792D002902B6 /* RecordsListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RecordsListViewController.m; path = "History Calls/RecordsListViewController.m"; sourceTree = "<group>"; };
+		15ABD97B224B792D002902B6 /* RecordsListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = RecordsListViewController.xib; path = "History Calls/RecordsListViewController.xib"; sourceTree = "<group>"; };
 		15B44627219FCA0300FB8DCB /* CustomSwitchButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CustomSwitchButton.h; path = AppUI/CustomSwitchButton.h; sourceTree = "<group>"; };
 		15B4462E219FCA0300FB8DCB /* CustomSwitchButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CustomSwitchButton.m; path = AppUI/CustomSwitchButton.m; sourceTree = "<group>"; };
 		15BA5E1621FAF10F00B37F4D /* iPadEditContactViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iPadEditContactViewController.h; path = iPad/Contacts/iPadEditContactViewController.h; sourceTree = "<group>"; };
@@ -1109,6 +1124,7 @@
 		15C5A5FB219AAF5600FDD6C5 /* NewHistoryDetailCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = NewHistoryDetailCell.m; path = AppUI/NewHistoryDetailCell.m; sourceTree = "<group>"; };
 		15C5A5FC219AAF5600FDD6C5 /* NewHistoryDetailCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = NewHistoryDetailCell.xib; path = AppUI/NewHistoryDetailCell.xib; sourceTree = "<group>"; };
 		15C5A5FF219ACC1D00FDD6C5 /* ic_trash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_trash.png; sourceTree = "<group>"; };
+		15C86DB5224B35C800C8F393 /* cloudcall.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; name = cloudcall.sqlite; path = database/cloudcall.sqlite; sourceTree = "<group>"; };
 		15CA86CF221A7416002A8AE7 /* iPadAllContactsListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iPadAllContactsListViewController.h; path = iPad/Contacts/iPadAllContactsListViewController.h; sourceTree = "<group>"; };
 		15CA86D0221A7416002A8AE7 /* iPadAllContactsListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = iPadAllContactsListViewController.m; path = iPad/Contacts/iPadAllContactsListViewController.m; sourceTree = "<group>"; };
 		15CA86D1221A7416002A8AE7 /* iPadAllContactsListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = iPadAllContactsListViewController.xib; path = iPad/Contacts/iPadAllContactsListViewController.xib; sourceTree = "<group>"; };
@@ -1786,7 +1802,6 @@
 		84C47CF51FB628540015695E /* MissedCallViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MissedCallViewController.xib; path = "History Calls/MissedCallViewController.xib"; sourceTree = "<group>"; };
 		84C47D001FB62A750015695E /* NSDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NSDatabase.h; path = AppObjects/NSDatabase.h; sourceTree = "<group>"; };
 		84C47D011FB62A750015695E /* NSDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSDatabase.m; path = AppObjects/NSDatabase.m; sourceTree = "<group>"; };
-		84C47D041FB62C660015695E /* callnex.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; name = callnex.sqlite; path = database/callnex.sqlite; sourceTree = "<group>"; };
 		84C47D061FB62CC10015695E /* HistoryCallCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HistoryCallCell.h; path = AppUI/HistoryCallCell.h; sourceTree = "<group>"; };
 		84C47D071FB62CC10015695E /* HistoryCallCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HistoryCallCell.m; path = AppUI/HistoryCallCell.m; sourceTree = "<group>"; };
 		84C47D081FB62CC10015695E /* HistoryCallCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = HistoryCallCell.xib; path = AppUI/HistoryCallCell.xib; sourceTree = "<group>"; };
@@ -3701,6 +3716,12 @@
 				845D98242243ECEF00D09A04 /* ChooseRouteOutputCell.h */,
 				845D98252243ECEF00D09A04 /* ChooseRouteOutputCell.m */,
 				845D98262243ECEF00D09A04 /* ChooseRouteOutputCell.xib */,
+				15ABD969224B60A7002902B6 /* RecordsFileListView.h */,
+				15ABD96A224B60A7002902B6 /* RecordsFileListView.m */,
+				15ABD972224B60D6002902B6 /* RecordsFileListView.xib */,
+				15ABD974224B64D9002902B6 /* RecordAudioCallCell.h */,
+				15ABD975224B64D9002902B6 /* RecordAudioCallCell.m */,
+				15ABD976224B64D9002902B6 /* RecordAudioCallCell.xib */,
 			);
 			name = AppUI;
 			sourceTree = "<group>";
@@ -3836,6 +3857,9 @@
 				15CA91012248EFB600E24FC0 /* RecordsCallViewController.h */,
 				15CA91022248EFB600E24FC0 /* RecordsCallViewController.m */,
 				15CA91032248EFB600E24FC0 /* RecordsCallViewController.xib */,
+				15ABD979224B792D002902B6 /* RecordsListViewController.h */,
+				15ABD97A224B792D002902B6 /* RecordsListViewController.m */,
+				15ABD97B224B792D002902B6 /* RecordsListViewController.xib */,
 				84C47D0E1FB631710015695E /* DetailHistoryCNViewController.h */,
 				84C47D0F1FB631710015695E /* DetailHistoryCNViewController.m */,
 				84C47D101FB631710015695E /* DetailHistoryCNViewController.xib */,
@@ -3846,7 +3870,7 @@
 		84C47D031FB62C530015695E /* database */ = {
 			isa = PBXGroup;
 			children = (
-				84C47D041FB62C660015695E /* callnex.sqlite */,
+				15C86DB5224B35C800C8F393 /* cloudcall.sqlite */,
 			);
 			name = database;
 			sourceTree = "<group>";
@@ -4516,6 +4540,7 @@
 				848ADD9E22473AC900915372 /* launch_bg.jpg in Resources */,
 				843ED6761FB66A36005FE1C1 /* SettingCell.xib in Resources */,
 				15E4B96821895271008677AA /* TabBarView~ipad.xib in Resources */,
+				15ABD973224B60D6002902B6 /* RecordsFileListView.xib in Resources */,
 				157C724D223B4B1B00EA607F /* cute_cat_song.mp3 in Resources */,
 				D38187F815FE355D00C3EDCA /* TabBarView.xib in Resources */,
 				1575279821661D1A007D789A /* ic_search.png in Resources */,
@@ -4567,6 +4592,7 @@
 				840F687D21B2645D00681F7F /* ic_tick.png in Resources */,
 				84F81BDE21EF8476009629C9 /* ic_pause_call_black.png in Resources */,
 				84B4F0EB21E8CDA500591C50 /* ic_phonebook_bottom_bar_act@2x.png in Resources */,
+				15ABD97D224B792D002902B6 /* RecordsListViewController.xib in Resources */,
 				639E9C931C0DB7BE00019A75 /* FirstLoginView.xib in Resources */,
 				840E965B223726490040CDCC /* speaker_dis.png in Resources */,
 				842814E4223ABEDF00E8EAC0 /* cam_dis.png in Resources */,
@@ -4772,6 +4798,7 @@
 				841B359C2191F26D0019BD45 /* ic-pause-active.png in Resources */,
 				84D2321422350A720015335B /* numpad_star_hover.png in Resources */,
 				15857BFE216DEC0000DB5237 /* UIContactPhoneCell.xib in Resources */,
+				15C86DB6224B35CB00C8F393 /* cloudcall.sqlite in Resources */,
 				8429870F21B29D4000150EB0 /* ic_history_bottom_bar_def.png in Resources */,
 				63EC8D391D7438660066547B /* AssistantLinkView.xib in Resources */,
 				D38187CD15FE346700C3EDCA /* HistoryDetailsView.xib in Resources */,
@@ -4787,8 +4814,8 @@
 				84D231DE2235034A0015335B /* menu_dialer_def.png in Resources */,
 				63AADC021B6A0FF200AA16FD /* assistant_remote.rc in Resources */,
 				157C726C223B8EFE00EA607F /* ringtone_stop.png in Resources */,
+				15ABD978224B64D9002902B6 /* RecordAudioCallCell.xib in Resources */,
 				840E964F22371CF90040CDCC /* more_send_reports.png in Resources */,
-				84C47D051FB62C660015695E /* callnex.sqlite in Resources */,
 				15A64DA5216CACD900D194BD /* ic_add_phone.png in Resources */,
 				842814DF223ABED000E8EAC0 /* switchcam_enable.png in Resources */,
 				84F81BE621EF85E8009629C9 /* ic_add_call_white.png in Resources */,
@@ -5173,6 +5200,7 @@
 				1599BB1821B14E9600A7903D /* NSData+Base64.m in Sources */,
 				D35E7597159460580066B1C1 /* ChatsListView.m in Sources */,
 				84EFFE1B1FF3E6B60085A9F4 /* DGActivityIndicatorBallClipRotateMultipleAnimation.m in Sources */,
+				15ABD96B224B60A7002902B6 /* RecordsFileListView.m in Sources */,
 				84EDEE4D1FB712F200FF665C /* LanguageViewController.m in Sources */,
 				D35E759F159460B70066B1C1 /* SettingsView.m in Sources */,
 				84AEA9241FC4FD5500DAA68A /* EditContactViewController.m in Sources */,
@@ -5280,6 +5308,7 @@
 				633E41821D74259000320475 /* AssistantLinkView.m in Sources */,
 				1521E0A821EED5140085EAB1 /* iPadNewContactViewController.m in Sources */,
 				846B716920E240410019AD41 /* SipUtils.m in Sources */,
+				15ABD977224B64D9002902B6 /* RecordAudioCallCell.m in Sources */,
 				D3807FE815C2894A005BE9BC /* IASKAppSettingsViewController.m in Sources */,
 				D3807FEA15C2894A005BE9BC /* IASKAppSettingsWebViewController.m in Sources */,
 				1578D06C21ACEB6100E8BA5F /* SendLogsViewController.m in Sources */,
@@ -5311,6 +5340,7 @@
 				84EFFE151FF3E6B60085A9F4 /* DGActivityIndicatorLineScalePulseOutAnimation.m in Sources */,
 				D3807FFC15C2894A005BE9BC /* IASKPSTitleValueSpecifierViewCell.m in Sources */,
 				D3807FFE15C2894A005BE9BC /* IASKSlider.m in Sources */,
+				15ABD97C224B792D002902B6 /* RecordsListViewController.m in Sources */,
 				D380800015C2894A005BE9BC /* IASKSwitch.m in Sources */,
 				84EFFE0B1FF3E6B60085A9F4 /* DGActivityIndicatorBallPulseAnimation.m in Sources */,
 				D380800215C2894A005BE9BC /* IASKTextField.m in Sources */,
