@@ -1123,12 +1123,11 @@
 
 + (BOOL)deleteFileWithPath:(NSString *)filePath
 {
-    if( ![self isFileExist: filePath] ) return TRUE;
+    if(![self isFileExist: filePath]){
+        return YES;
+    }
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSLog(@"deleteFileWithPath %@",filePath);
-    BOOL sussess = [fileManager removeItemAtPath:filePath error:NULL];
-    NSLog(@"deleteFileWithPath %i",sussess);
-    return sussess;
+    return [fileManager removeItemAtPath:filePath error:NULL];
 }
 
 + (BOOL) isFileExist: (NSString*) file

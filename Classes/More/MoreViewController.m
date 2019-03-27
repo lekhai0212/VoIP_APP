@@ -15,6 +15,7 @@
 #import "SendLogsViewController.h"
 #import "PolicyViewController.h"
 #import "IntroduceViewController.h"
+#import "PolicyViewController.h"
 #import "TabBarView.h"
 #import "StatusBarView.h"
 #import "NSData+Base64.h"
@@ -280,7 +281,7 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case ePrivayPolicy:{
-            [[PhoneMainView instance] changeCurrentView:[IntroduceViewController compositeViewDescription] push:true];
+            [[PhoneMainView instance] changeCurrentView:[PolicyViewController compositeViewDescription] push:true];
             break;
         }
         case eIntroduction:{

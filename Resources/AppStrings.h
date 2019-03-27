@@ -50,7 +50,7 @@
 
 #define link_appstore   @""
 #define link_introduce  @"https://cloudcall.vn/about.html"
-#define link_policy     @""
+#define link_policy     @"https://cloudcall.vn/privacy.html"
 #define youtube_channel @""
 #define facebook_link   @""
 

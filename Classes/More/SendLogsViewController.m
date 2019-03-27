@@ -97,7 +97,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         
         MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
         
-        NSString *emailTitle =  @"Send logs files";
+        NSString *emailTitle =  @"Gửi nhật ký ứng dụng";
         NSString *messageBody = @"";
         NSArray *toRecipents = [NSArray arrayWithObject:@"lekhai0212@gmail.com"];
         

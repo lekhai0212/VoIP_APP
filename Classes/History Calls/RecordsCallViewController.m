@@ -55,6 +55,8 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
     
+    [WriteLogsUtils writeForGoToScreen:@"RecordsCallViewController"];
+    
     startDate = nil;
     endDate = nil;
     indexSelected = 0;
@@ -75,9 +77,14 @@
     }
     
     myExt = [SipUtils getExtensionOfDefaultProxyConfig];
-    if (datePicker.frame.size.height > 0) {
-        [self closeDatePicker];
-    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:showOrHideDeleteCallHistoryButton
+                                                        object:@"0"];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear: animated];
+    [self closeDatePicker];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -287,11 +294,11 @@
         make.height.mas_equalTo(hTextfield);
     }];
     
-    [btnListFiles setTitle:@"Danh sách tải" forState:UIControlStateNormal];
+    [btnListFiles setTitle:@"Danh sách đã lưu" forState:UIControlStateNormal];
     btnListFiles.titleLabel.font = [LinphoneAppDelegate sharedInstance].headerFontNormal;
-    [btnListFiles setTitleColor:UIColor.blackColor forState:UIControlStateNormal];
-    btnListFiles.backgroundColor = [UIColor colorWithRed:(220/255.0) green:(220/255.0)
-                                                    blue:(220/255.0) alpha:1.0];
+    [btnListFiles setTitleColor:UIColor.darkGrayColor forState:UIControlStateNormal];
+    btnListFiles.backgroundColor = [UIColor colorWithRed:(235/255.0) green:(235/255.0)
+                                                    blue:(235/255.0) alpha:1.0];
     btnListFiles.layer.cornerRadius = btnSearch.layer.cornerRadius;
     [btnListFiles mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(lbEndTime);
