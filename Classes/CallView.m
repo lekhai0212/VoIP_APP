@@ -1551,7 +1551,7 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     marginPhone = 30.0;
     
     NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
-    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE] || [deviceMode isEqualToString: simulator])
+    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE])
     {
         //  Screen width: 320.000000 - Screen height: 667.000000
         wAvatar = 110.0;
@@ -1575,14 +1575,18 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
         wSmallIcon = 58.0;
         marginIcon = 12.0;
         
-    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS]){
+    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2] || [deviceMode isEqualToString: simulator]){
         //  Screen width: 375.000000 - Screen height: 812.000000
-        
-    }else if ([deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2]){
-        //  Screen width: 375.000000 - Screen height: 812.000000
-        
+        wAvatar = 150.0;
+        wEndIcon = 75.0;
+        wSmallIcon = 58.0;
+        marginIcon = 12.0;
     }else{
-        
+        //  Screen width: 375.000000 - Screen height: 812.000000
+        wAvatar = 150.0;
+        wEndIcon = 75.0;
+        wSmallIcon = 58.0;
+        marginIcon = 12.0;
     }
 }
 

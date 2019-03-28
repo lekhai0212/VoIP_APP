@@ -175,9 +175,10 @@ static UICompositeViewDescription *compositeDescription = nil;
     float margin = 25.0;
     wIconEndCall = 80.0;
     marginQuality = 50.0;
+    wAvatar = 120.0;
     
     NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
-    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE] || [deviceMode isEqualToString: simulator])
+    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE])
     {
         //  Screen width: 320.000000 - Screen height: 667.000000
         wAvatar = 110.0;
@@ -200,11 +201,18 @@ static UICompositeViewDescription *compositeDescription = nil;
         wSmallIcon = 60.0;
         margin = 45.0;
         
-    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2]){
+    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2] || [deviceMode isEqualToString: simulator]){
         //  Screen width: 375.000000 - Screen height: 812.000000
-        wAvatar = 110.0;
+        wAvatar = 130.0;
+        wIconEndCall = 80.0;
+        wSmallIcon = 60.0;
+        margin = 45.0;
+        
     }else{
-        wAvatar = 90.0;
+        wAvatar = 130.0;
+        wIconEndCall = 80.0;
+        wSmallIcon = 60.0;
+        margin = 45.0;
     }
     
     if (SCREEN_WIDTH > 320) {

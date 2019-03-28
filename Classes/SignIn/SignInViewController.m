@@ -272,7 +272,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         btnMarginTop = 20.0;
         btnStart.titleLabel.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightMedium];
         
-    }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2] || [deviceMode isEqualToString: simulator])
+    }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
     {
         //  Screen width: 414.000000 - Screen height: 736.000000
         hLogo = 50.0;
@@ -292,7 +292,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         btnMarginTop = 30.0;
         btnStart.titleLabel.font = [UIFont systemFontOfSize:22.0 weight:UIFontWeightMedium];
         
-    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2]){
+    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2] || [deviceMode isEqualToString: simulator]){
         //  Screen width: 375.000000 - Screen height: 812.000000;
         hLogo = 55.0;
         sloganFont = [UIFont systemFontOfSize:20.0 weight:UIFontWeightRegular];
@@ -307,7 +307,19 @@ static UICompositeViewDescription *compositeDescription = nil;
         
         btnStart.titleLabel.font = [UIFont systemFontOfSize:22.0 weight:UIFontWeightMedium];
     }else{
-        hLogo = 60.0;
+        //  Screen width: 375.000000 - Screen height: 812.000000;
+        hLogo = 55.0;
+        sloganFont = [UIFont systemFontOfSize:20.0 weight:UIFontWeightRegular];
+        marginTop = 30.0;
+        marginSlogan = 30.0;
+        
+        topPadding = [UIApplication sharedApplication].statusBarFrame.size.height + 5;
+        padding = 30.0;
+        hLogoColor = 50.0;
+        headerFont = [UIFont systemFontOfSize:25.0 weight:UIFontWeightBold];
+        accMargin = 20.0;
+        
+        btnStart.titleLabel.font = [UIFont systemFontOfSize:22.0 weight:UIFontWeightMedium];
     }
     
     UIImage *logoImg = [UIImage imageNamed:@"logo_white.png"];

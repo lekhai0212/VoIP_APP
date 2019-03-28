@@ -292,7 +292,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     [_iconMissed mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_viewHeader).offset(marginTop);
         make.centerX.equalTo(_viewHeader.mas_centerX);
-        make.width.mas_equalTo(sizeButton.width);
+        make.width.mas_equalTo(sizeButton.width + 15.0);
         make.height.mas_equalTo(hButton);
     }];
     

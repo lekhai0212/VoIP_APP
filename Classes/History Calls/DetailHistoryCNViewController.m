@@ -150,34 +150,18 @@ static UICompositeViewDescription *compositeDescription = nil;
 {
     float sizeIcon = 60.0;
     float hAvatar = 100.0;
-    UIFont *fontName = [UIFont fontWithName:MYRIADPRO_BOLD size:16.0];
-    UIFont *fontPhone = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
     float hHeader = 220+[LinphoneAppDelegate sharedInstance]._hStatus;
     UIEdgeInsets backEdge = UIEdgeInsetsMake(5, 5, 5, 5);
     float hInfo = 80.0;
     
     NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
-    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE] || [deviceMode isEqualToString: simulator])
+    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE])
     {
-        fontName = [UIFont fontWithName:MYRIADPRO_BOLD size:16.0];
-        fontPhone = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
-        
         sizeIcon = 50.0;
         hAvatar = 80.0;
         hHeader = 200+[LinphoneAppDelegate sharedInstance]._hStatus;
         backEdge = UIEdgeInsetsMake(6.5, 6.5, 6.5, 6.5);
         hInfo = 65.0;
-        
-    }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2]) {
-        
-        
-    }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
-    {
-        fontName = [UIFont fontWithName:MYRIADPRO_BOLD size:17.0];
-        fontPhone = [UIFont fontWithName:MYRIADPRO_REGULAR size:17.0];
-    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2])
-    {
-        
     }
     
     self.view.backgroundColor = UIColor.whiteColor;
