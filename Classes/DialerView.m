@@ -1162,7 +1162,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] NONE ACCOUNT", __FUNCTION__] toFilePath:appDelegate.logFilePath];
     }else {
-        NSString *accountID = [SipUtils getAccountIdOfDefaultProxyConfig];
+        NSString *accountID = [SipUtils getExtensionOfDefaultProxyConfig];
         _lbAccount.text = accountID;
         if (curState == eAccountOff) {
             _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Disabled"];

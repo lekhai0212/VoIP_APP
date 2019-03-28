@@ -69,7 +69,7 @@
     {
       "size" : "20x20",
       "idiom" : "ipad",
-      "filename" : "Icon copy.png",
+      "filename" : "Icon-20.png",
       "scale" : "1x"
     },
     {
@@ -147,7 +147,7 @@
     {
       "size" : "1024x1024",
       "idiom" : "ios-marketing",
-      "filename" : "icon_app.png",
+      "filename" : "new_1024.png",
       "scale" : "1x"
     }
   ],

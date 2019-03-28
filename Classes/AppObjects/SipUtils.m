@@ -333,6 +333,8 @@
         if (![AppUtils isNullOrEmpty: defaultUsername]) {
             if (defaultUsername.length > 5) {
                 return [defaultUsername substringFromIndex: 5];
+            }else{
+                return defaultUsername;
             }
         }
     }

@@ -94,9 +94,9 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Ứng dụng muốn truy cập micro của bạn để thực hiện cuộc gọi</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Share photos with your friends and customize avatars</string>
+	<string>Ứng dụng muốn truy cập thư viên ảnh để chia sẻ hình ảnh với bạn bè và cập nhật ảnh đại diện của bạn</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Share photos with your friends and customize avatars</string>
+	<string>Ứng dụng muốn truy cập thư viên ảnh để chia sẻ hình ảnh với bạn bè và cập nhật ảnh đại diện của bạn</string>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>INStartVideoCallIntent</string>
@@ -150,9 +150,9 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
 	<key>UISupportsDocumentBrowser</key>
 	<true/>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>
