@@ -26,12 +26,20 @@
 @end
 
 @implementation TabBarView
+@synthesize viewIpadMenu, btnDialerIpad, btnCallHistoryIpad, btnContactsIpad, btnMoreIpad, lbMenuTopSepa;
 
 #pragma mark - ViewController Functions
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 
+    if (!IS_IPOD && !IS_IPHONE) {
+        viewIpadMenu.hidden = NO;
+        [self setupUIForIpadMenuView];
+    }else{
+        viewIpadMenu.hidden = YES;
+    }
+    
     //  Added by Khai Le on 03/10/2018
     self.lbTopSepa.backgroundColor = [UIColor colorWithRed:(220/255.0) green:(220/255.0) blue:(220/255.0) alpha:1.0];
     [self.lbTopSepa mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -126,13 +134,23 @@
 }
 
 - (void)updateSelectedButton:(UICompositeViewDescription *)view {
-    _historyButton.selected = [view equal:CallsHistoryViewController.compositeViewDescription] ||
-    [view equal:HistoryDetailsView.compositeViewDescription];
-    
-	_contactsButton.selected = [view equal:ContactsViewController.compositeViewDescription] ||
-							   [view equal:KContactDetailViewController.compositeViewDescription];
-	_dialerButton.selected = [view equal:DialerView.compositeViewDescription];
-    _moreButton.selected = [view equal:MoreViewController.compositeViewDescription];
+    if (IS_IPOD || IS_IPHONE) {
+        _historyButton.selected = [view equal:CallsHistoryViewController.compositeViewDescription] ||
+        [view equal:HistoryDetailsView.compositeViewDescription];
+        
+        _contactsButton.selected = [view equal:ContactsViewController.compositeViewDescription] ||
+        [view equal:KContactDetailViewController.compositeViewDescription];
+        _dialerButton.selected = [view equal:DialerView.compositeViewDescription];
+        _moreButton.selected = [view equal:MoreViewController.compositeViewDescription];
+    }else{
+        btnCallHistoryIpad.selected = [view equal:CallsHistoryViewController.compositeViewDescription] ||
+        [view equal:HistoryDetailsView.compositeViewDescription];
+        
+        btnContactsIpad.selected = [view equal:ContactsViewController.compositeViewDescription] ||
+        [view equal:KContactDetailViewController.compositeViewDescription];
+        btnDialerIpad.selected = [view equal:DialerView.compositeViewDescription];
+        btnMoreIpad.selected = [view equal:MoreViewController.compositeViewDescription];
+    }
 }
 
 #pragma mark - Action Functions
@@ -202,6 +220,94 @@
     }else{
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     }
+}
+
+- (IBAction)btnDialerIpadPress:(UIButton *)sender {
+    [PhoneMainView.instance changeCurrentView:DialerView.compositeViewDescription];
+}
+
+- (IBAction)btnCallHistoryIpadPress:(UIButton *)sender {
+    linphone_core_reset_missed_calls_count(LC);
+    [self update:FALSE];
+    [PhoneMainView.instance updateApplicationBadgeNumber];
+    [PhoneMainView.instance changeCurrentView:CallsHistoryViewController.compositeViewDescription];
+}
+
+- (IBAction)btnContactsIpadPress:(UIButton *)sender {
+    [ContactSelection setAddAddress:nil];
+    [ContactSelection enableEmailFilter:FALSE];
+    [ContactSelection setNameOrEmailFilter:nil];
+    //  [PhoneMainView.instance changeCurrentView:ContactsListView.compositeViewDescription];
+    [PhoneMainView.instance changeCurrentView:ContactsViewController.compositeViewDescription];
+}
+
+- (IBAction)btnMoreIpadPress:(UIButton *)sender {
+    [PhoneMainView.instance changeCurrentView:MoreViewController.compositeViewDescription];
+}
+
+- (void)setupUIForIpadMenuView {
+    [viewIpadMenu mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.bottom.right.equalTo(self.view);
+    }];
+    
+    float iconSize = 25.0;
+    UIFont *textFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
+    UIColor *defColor = [UIColor colorWithRed:(172/255.0) green:(172/255.0) blue:(172/255.0) alpha:1.0];
+    UIColor *actColor = [UIColor colorWithRed:(50/255.0) green:(196/255.0) blue:(124/255.0) alpha:1.0];
+    
+    NSAttributedString *dialerAct = [AppUtils getAttributeTitle:@" Cuộc gọi" font:textFont sizeIcon:iconSize color:actColor image:[UIImage imageNamed:@"ipad_menu_dialer_act"]];
+    NSAttributedString *dialerDef = [AppUtils getAttributeTitle:@" Cuộc gọi" font:textFont sizeIcon:iconSize color:defColor image:[UIImage imageNamed:@"ipad_menu_dialer_def"]];
+    
+    [btnDialerIpad setAttributedTitle:dialerDef forState:UIControlStateNormal];
+    [btnDialerIpad setAttributedTitle:dialerAct forState:UIControlStateSelected];
+    [btnDialerIpad mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.bottom.left.equalTo(self.view);
+        make.width.mas_equalTo(SCREEN_WIDTH/4);
+    }];
+    btnDialerIpad.selected = YES;
+    
+    //  call history button
+    NSAttributedString *historyAct = [AppUtils getAttributeTitle:@" Lịch sử" font:textFont sizeIcon:iconSize color:actColor image:[UIImage imageNamed:@"ipad_menu_history_act"]];
+    NSAttributedString *historyDef = [AppUtils getAttributeTitle:@" Lịch sử" font:textFont sizeIcon:iconSize color:defColor image:[UIImage imageNamed:@"ipad_menu_history_def"]];
+    
+    [btnCallHistoryIpad setAttributedTitle:historyDef forState:UIControlStateNormal];
+    [btnCallHistoryIpad setAttributedTitle:historyAct forState:UIControlStateSelected];
+    
+    [btnCallHistoryIpad mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(btnDialerIpad.mas_right);
+        make.top.bottom.equalTo(self.view);
+        make.width.mas_equalTo(SCREEN_WIDTH/4);
+    }];
+    
+    //  Contacts button
+    NSAttributedString *contactsAct = [AppUtils getAttributeTitle:@" Danh bạ" font:textFont sizeIcon:iconSize color:actColor image:[UIImage imageNamed:@"ipad_menu_contacts_act"]];
+    NSAttributedString *contactsDef = [AppUtils getAttributeTitle:@" Danh bạ" font:textFont sizeIcon:iconSize color:defColor image:[UIImage imageNamed:@"ipad_menu_contacts_def"]];
+    
+    [btnContactsIpad setAttributedTitle:contactsDef forState:UIControlStateNormal];
+    [btnContactsIpad setAttributedTitle:contactsAct forState:UIControlStateSelected];
+    
+    [btnContactsIpad mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(btnCallHistoryIpad.mas_right);
+        make.top.bottom.equalTo(self.view);
+        make.width.mas_equalTo(SCREEN_WIDTH/4);
+    }];
+    
+    //  More button
+    NSAttributedString *moreAct = [AppUtils getAttributeTitle:@" Xem thêm" font:textFont sizeIcon:iconSize color:actColor image:[UIImage imageNamed:@"ipad_menu_more_act"]];
+    NSAttributedString *moreDef = [AppUtils getAttributeTitle:@" Xem thêm" font:textFont sizeIcon:iconSize color:defColor image:[UIImage imageNamed:@"ipad_menu_more_def"]];
+    
+    [btnMoreIpad setAttributedTitle:moreDef forState:UIControlStateNormal];
+    [btnMoreIpad setAttributedTitle:moreAct forState:UIControlStateSelected];
+    [btnMoreIpad mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.bottom.right.equalTo(self.view);
+        make.width.mas_equalTo(SCREEN_WIDTH/4);
+    }];
+    
+    lbMenuTopSepa.backgroundColor = [UIColor colorWithRed:(225/255.0) green:(225/255.0) blue:(225/255.0) alpha:1.0];
+    [lbMenuTopSepa mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.right.equalTo(self.view);
+        make.height.mas_equalTo(1.0);
+    }];
 }
 
 @end

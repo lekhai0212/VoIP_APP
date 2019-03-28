@@ -74,7 +74,6 @@
 #define SELECT_TAB_BG_COLOR [UIColor colorWithRed:(42/255.0) green:(172/255.0) blue:(255/255.0) alpha:1.0]
 #define GRAY_COLOR ([UIColor colorWithRed:(150/255.0) green:(150/255.0) blue:(150/255.0) alpha:1.0])
 
-#define showIpadPopupCall                   @"showIpadPopupCall"
 #define reloadHistoryCallForIpad            @"reloadHistoryCallForIpad"
 #define reloadContactsListForIpad           @"reloadContactsListForIpad"
 #define reloadContactAfterAdd               @"reloadContactAfterAdd"

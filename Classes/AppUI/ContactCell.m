@@ -33,8 +33,8 @@
         marginLeft = 15.0;
         icCall.imageEdgeInsets = UIEdgeInsetsMake(8, 8, 8, 8);
     }else{
-        marginRight = 5.0;
-        marginLeft = 0.0;
+        marginRight = 15.0;
+        marginLeft = 15.0;
         icCall.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
     }
     

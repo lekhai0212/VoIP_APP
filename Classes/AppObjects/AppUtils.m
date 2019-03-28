@@ -1142,4 +1142,21 @@
     return directoryContent;
 }
 
++ (NSAttributedString *)getAttributeTitle: (NSString *)content font: (UIFont *)textFont sizeIcon: (float)size color: (UIColor *)color image: (UIImage *)image
+{
+    CustomTextAttachment *attachment = [[CustomTextAttachment alloc] init];
+    attachment.image = image;
+    [attachment setImageHeight: size];
+    
+    NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:attachment];
+    NSMutableAttributedString *contentString = [[NSMutableAttributedString alloc] initWithString:content];
+    [contentString addAttribute:NSFontAttributeName value:textFont range:NSMakeRange(0, contentString.length)];
+    [contentString addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, contentString.length)];
+    
+    NSMutableAttributedString *verString = [[NSMutableAttributedString alloc] initWithAttributedString: attachmentString];
+    //
+    [verString appendAttributedString: contentString];
+    return verString;
+}
+
 @end

@@ -40,4 +40,16 @@
 - (IBAction)onChatClick:(id)event;
 - (IBAction)onMoreClick:(UIButton *)sender;
 
+@property (weak, nonatomic) IBOutlet UIView *viewIpadMenu;
+@property (weak, nonatomic) IBOutlet UIButton *btnDialerIpad;
+@property (weak, nonatomic) IBOutlet UIButton *btnCallHistoryIpad;
+@property (weak, nonatomic) IBOutlet UIButton *btnContactsIpad;
+@property (weak, nonatomic) IBOutlet UIButton *btnMoreIpad;
+@property (weak, nonatomic) IBOutlet UILabel *lbMenuTopSepa;
+
+- (IBAction)btnDialerIpadPress:(UIButton *)sender;
+- (IBAction)btnCallHistoryIpadPress:(UIButton *)sender;
+- (IBAction)btnContactsIpadPress:(UIButton *)sender;
+- (IBAction)btnMoreIpadPress:(UIButton *)sender;
+
 @end

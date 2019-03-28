@@ -187,7 +187,13 @@ static UICompositeViewDescription *compositeDescription = nil;
     gradient.colors = @[(id)[UIColor colorWithRed:(154/255.0) green:(215/255.0) blue:(9/255.0) alpha:1.0].CGColor, (id)[UIColor colorWithRed:(60/255.0) green:(198/255.0) blue:(116/255.0) alpha:1.0].CGColor];
     [viewWelcome.layer insertSublayer:gradient atIndex:0];
     
-    float wImgWelcome = SCREEN_WIDTH*4/6;
+    float wImgWelcome;
+    if (IS_IPHONE || IS_IPOD) {
+        wImgWelcome = SCREEN_WIDTH*4/6;
+    }else{
+        wImgWelcome = 300.0;
+    }
+    
     imgWelcome.clipsToBounds = YES;
     imgWelcome.layer.cornerRadius = wImgWelcome/2;
     [imgWelcome mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -219,107 +225,127 @@ static UICompositeViewDescription *compositeDescription = nil;
     float padding = 30.0;
     float btnMarginTop = 20.0;
     
-    NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
-    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE])
-    {
-        //  Screen width: 320.000000 - Screen height: 667.000000
-        hLogo = 40.0;
-        marginTop = 10.0;
-        marginSlogan = 20.0;
-        wButtonStart = 150.0;
-        hButtonStart = 40.0;
-        sloganFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
-        
-        padding = 30.0;
-        hLogoColor = 30.0;
-        topPadding = 10.0;
-        headerFont = [UIFont systemFontOfSize:18.0 weight:UIFontWeightBold];
-        accMargin = 5.0;
-        
-        topHeader = 15.0;
-        hBTN = 38.0;
-        hSepa = 30.0;
-        hTextfield = 40.0;
-        edge = 10.0;
-        sizeIconQR = 20.0;
-        btnMarginTop = 20.0;
-        
-        textfieldFont = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
-        buttonFont = [UIFont systemFontOfSize:16.0 weight:UIFontWeightRegular];
-        
-        edgeBack = 15.0;
-        
-        btnStart.titleLabel.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightMedium];
-        
-    }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
-    {
-        //  Screen width: 375.000000 - Screen height: 667.000000
-        hLogo = 48.0;
-        marginTop = 20.0;
-        marginSlogan = 30.0;
-        wButtonStart = 170.0;
-        hButtonStart = 50.0;
-        sloganFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:19.0];
-        
-        padding = 25.0;
-        topPadding = 15.0;
-        hLogoColor = 40.0;
-        accMargin = 10.0;
-        edgeBack = 14.0;
-        edge = 9.0;
-        headerFont = [UIFont systemFontOfSize:20.0 weight:UIFontWeightBold];
-        
-        btnMarginTop = 20.0;
-        btnStart.titleLabel.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightMedium];
-        
-    }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
-    {
-        //  Screen width: 414.000000 - Screen height: 736.000000
-        hLogo = 50.0;
-        
-        padding = 30.0;
-        hLogoColor = 50.0;
-        topPadding = 10.0;
-        edgeBack = 14.0;
-        edge = 12.0;
-        sloganFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:22.0];
-        
-        accMargin = 20.0;
-        headerFont = [UIFont systemFontOfSize:26.0 weight:UIFontWeightBold];
-        hTextfield = 46.0;
-        hBTN = 50.0;
-        buttonFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:22.0];
-        btnMarginTop = 30.0;
-        btnStart.titleLabel.font = [UIFont systemFontOfSize:22.0 weight:UIFontWeightMedium];
-        
-    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2] || [deviceMode isEqualToString: simulator]){
+    if (!IS_IPHONE && !IS_IPOD) {
         //  Screen width: 375.000000 - Screen height: 812.000000;
-        hLogo = 55.0;
+        hLogo = 60.0;
         sloganFont = [UIFont systemFontOfSize:20.0 weight:UIFontWeightRegular];
-        marginTop = 30.0;
+        marginTop = 50.0;
         marginSlogan = 30.0;
         
         topPadding = [UIApplication sharedApplication].statusBarFrame.size.height + 5;
-        padding = 30.0;
+        padding = 50.0;
         hLogoColor = 50.0;
-        headerFont = [UIFont systemFontOfSize:25.0 weight:UIFontWeightBold];
+        headerFont = [UIFont systemFontOfSize:30.0 weight:UIFontWeightBold];
         accMargin = 20.0;
+        hTextfield = 50.0;
+        btnMarginTop = 40.0;
+        edge = 10.0;
+        hBTN = 55.0;
         
         btnStart.titleLabel.font = [UIFont systemFontOfSize:22.0 weight:UIFontWeightMedium];
     }else{
-        //  Screen width: 375.000000 - Screen height: 812.000000;
-        hLogo = 55.0;
-        sloganFont = [UIFont systemFontOfSize:20.0 weight:UIFontWeightRegular];
-        marginTop = 30.0;
-        marginSlogan = 30.0;
-        
-        topPadding = [UIApplication sharedApplication].statusBarFrame.size.height + 5;
-        padding = 30.0;
-        hLogoColor = 50.0;
-        headerFont = [UIFont systemFontOfSize:25.0 weight:UIFontWeightBold];
-        accMargin = 20.0;
-        
-        btnStart.titleLabel.font = [UIFont systemFontOfSize:22.0 weight:UIFontWeightMedium];
+        NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
+        if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE])
+        {
+            //  Screen width: 320.000000 - Screen height: 667.000000
+            hLogo = 40.0;
+            marginTop = 10.0;
+            marginSlogan = 20.0;
+            wButtonStart = 150.0;
+            hButtonStart = 40.0;
+            sloganFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
+            
+            padding = 30.0;
+            hLogoColor = 30.0;
+            topPadding = 10.0;
+            headerFont = [UIFont systemFontOfSize:18.0 weight:UIFontWeightBold];
+            accMargin = 5.0;
+            
+            topHeader = 15.0;
+            hBTN = 38.0;
+            hSepa = 30.0;
+            hTextfield = 40.0;
+            edge = 10.0;
+            sizeIconQR = 20.0;
+            btnMarginTop = 20.0;
+            
+            textfieldFont = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
+            buttonFont = [UIFont systemFontOfSize:16.0 weight:UIFontWeightRegular];
+            
+            edgeBack = 15.0;
+            
+            btnStart.titleLabel.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightMedium];
+            
+        }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
+        {
+            //  Screen width: 375.000000 - Screen height: 667.000000
+            hLogo = 48.0;
+            marginTop = 20.0;
+            marginSlogan = 30.0;
+            wButtonStart = 170.0;
+            hButtonStart = 50.0;
+            sloganFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:19.0];
+            
+            padding = 25.0;
+            topPadding = 15.0;
+            hLogoColor = 40.0;
+            accMargin = 10.0;
+            edgeBack = 14.0;
+            edge = 9.0;
+            headerFont = [UIFont systemFontOfSize:20.0 weight:UIFontWeightBold];
+            
+            btnMarginTop = 20.0;
+            btnStart.titleLabel.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightMedium];
+            
+        }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
+        {
+            //  Screen width: 414.000000 - Screen height: 736.000000
+            hLogo = 50.0;
+            
+            padding = 30.0;
+            hLogoColor = 50.0;
+            topPadding = 10.0;
+            edgeBack = 14.0;
+            edge = 12.0;
+            sloganFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:22.0];
+            
+            accMargin = 20.0;
+            headerFont = [UIFont systemFontOfSize:26.0 weight:UIFontWeightBold];
+            hTextfield = 46.0;
+            hBTN = 50.0;
+            buttonFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:22.0];
+            btnMarginTop = 30.0;
+            btnStart.titleLabel.font = [UIFont systemFontOfSize:22.0 weight:UIFontWeightMedium];
+            
+        }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2] || [deviceMode isEqualToString: simulator]){
+            //  Screen width: 375.000000 - Screen height: 812.000000;
+            hLogo = 55.0;
+            sloganFont = [UIFont systemFontOfSize:20.0 weight:UIFontWeightRegular];
+            marginTop = 30.0;
+            marginSlogan = 30.0;
+            
+            topPadding = [UIApplication sharedApplication].statusBarFrame.size.height + 5;
+            padding = 30.0;
+            hLogoColor = 50.0;
+            headerFont = [UIFont systemFontOfSize:25.0 weight:UIFontWeightBold];
+            accMargin = 20.0;
+            
+            btnStart.titleLabel.font = [UIFont systemFontOfSize:22.0 weight:UIFontWeightMedium];
+        }else{
+            //  Screen width: 375.000000 - Screen height: 812.000000;
+            hLogo = 55.0;
+            sloganFont = [UIFont systemFontOfSize:20.0 weight:UIFontWeightRegular];
+            marginTop = 30.0;
+            marginSlogan = 30.0;
+            
+            topPadding = [UIApplication sharedApplication].statusBarFrame.size.height + 5;
+            padding = 30.0;
+            hLogoColor = 50.0;
+            headerFont = [UIFont systemFontOfSize:25.0 weight:UIFontWeightBold];
+            accMargin = 20.0;
+            
+            btnStart.titleLabel.font = [UIFont systemFontOfSize:22.0 weight:UIFontWeightMedium];
+        }
     }
     
     UIImage *logoImg = [UIImage imageNamed:@"logo_white.png"];
@@ -397,6 +423,13 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
     
     //  account textfield
+    float textfieldPadding;
+    if (IS_IPOD || IS_IPHONE) {
+        textfieldPadding = 10.0;
+    }else{
+        textfieldPadding = 20.0;
+    }
+    
     tfAccountID.placeholder = [[LanguageUtil sharedInstance] getContent:@"Account ID"];
     [tfAccountID addTarget:self
                     action:@selector(whenTextfieldDidChange:)
@@ -443,7 +476,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     tfPassword.secureTextEntry = YES;
     tfPassword.textColor = tfAccountID.textColor;
     [tfPassword mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(tfAccountID.mas_bottom).offset(10.0);
+        make.top.equalTo(tfAccountID.mas_bottom).offset(textfieldPadding);
         make.left.right.equalTo(tfAccountID);
         make.height.mas_equalTo(hTextfield);
     }];
@@ -456,12 +489,21 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     //  show, hide password
     btnShowPass.tag = 0;
-    btnShowPass.imageEdgeInsets = UIEdgeInsetsMake(6,6, 6, 6);
-    [btnShowPass mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(tfPassword).offset(edge);
-        make.top.bottom.equalTo(tfPassword);
-        make.width.mas_equalTo(hTextfield);
-    }];
+    if (IS_IPOD || IS_IPHONE) {
+        btnShowPass.imageEdgeInsets = UIEdgeInsetsMake(6,6, 6, 6);
+        [btnShowPass mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(tfPassword).offset(edge);
+            make.top.bottom.equalTo(tfPassword);
+            make.width.mas_equalTo(hTextfield);
+        }];
+    }else{
+        btnShowPass.imageEdgeInsets = UIEdgeInsetsMake(9, 9, 9, 9);
+        [btnShowPass mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(tfPassword).offset(edge);
+            make.top.bottom.equalTo(tfPassword);
+            make.width.mas_equalTo(hTextfield);
+        }];
+    }
     
     UILabel *lbPassword = [[UILabel alloc] init];
     lbPassword.backgroundColor = lbAccount.backgroundColor;

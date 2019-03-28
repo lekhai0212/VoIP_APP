@@ -21,6 +21,10 @@
 
 //  [Khai le - 28/10/2018]
 + (float)getSizeOfKeypadButtonForDevice {
+    if (!IS_IPOD && !IS_IPHONE) {
+        return 85.0;
+    }
+    
     NSString *deviceMode = [self getModelsOfCurrentDevice];
     if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE])
     {
@@ -45,6 +49,10 @@
 
 + (float)getSpaceXBetweenKeypadButtonsForDevice
 {
+    if (!IS_IPOD && !IS_IPHONE) {
+        return 50.0;
+    }
+    
     NSString *deviceMode = [self getModelsOfCurrentDevice];
     
     if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE])
@@ -58,6 +66,10 @@
     }
 }
 + (float)getSpaceYBetweenKeypadButtonsForDevice {
+    if (!IS_IPOD && !IS_IPHONE) {
+        return 40.0;
+    }
+    
     NSString *deviceMode = [self getModelsOfCurrentDevice];
     
     if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE])

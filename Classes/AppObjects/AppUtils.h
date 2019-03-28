@@ -130,5 +130,6 @@
 + (BOOL)deleteFileWithPath:(NSString *)filePath;
 + (BOOL) isFileExist: (NSString*) file;
 + (NSArray *)getAllFilesInDirectory: (NSString *)subPath;
++ (NSAttributedString *)getAttributeTitle: (NSString *)content font: (UIFont *)textFont sizeIcon: (float)size color: (UIColor *)color image: (UIImage *)image;
 
 @end

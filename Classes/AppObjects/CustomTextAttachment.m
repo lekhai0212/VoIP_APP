@@ -12,7 +12,12 @@
 
 - (CGRect)attachmentBoundsForTextContainer:(NSTextContainer *)textContainer proposedLineFragment:(CGRect)lineFrag glyphPosition:(CGPoint)position characterIndex:(NSUInteger)charIndex {
     CGRect bounds;
-    bounds.origin = CGPointMake(0, -4.5);
+    if (IS_IPHONE || IS_IPOD) {
+        bounds.origin = CGPointMake(0, -4.5);
+    }else{
+        bounds.origin = CGPointMake(0, -6.5);
+    }
+    
     bounds.size = CGSizeMake(imgHeight, imgHeight);
     return bounds;
 }

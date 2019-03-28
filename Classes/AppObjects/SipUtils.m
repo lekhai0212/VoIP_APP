@@ -260,23 +260,12 @@
         if (addr)
             linphone_address_destroy(addr);
         
-        if (IS_IPHONE || IS_IPOD) {
-            OutgoingCallViewController *controller = VIEW(OutgoingCallViewController);
-            if (controller != nil) {
-                [controller setPhoneNumberForView: phoneNumber];
-            }
-            [[PhoneMainView instance] changeCurrentView:[OutgoingCallViewController compositeViewDescription] push:TRUE];
-           
-//            CallView *controller = VIEW(CallView);
-//            if (controller != nil) {
-//                controller.phoneNumber = phoneNumber;
-//            }
-//            [[PhoneMainView instance] changeCurrentView:[CallView compositeViewDescription] push:TRUE];
-
-        }else{
-            [[NSNotificationCenter defaultCenter] postNotificationName:showIpadPopupCall
-                                                                object:phoneNumber];
+        OutgoingCallViewController *controller = VIEW(OutgoingCallViewController);
+        if (controller != nil) {
+            [controller setPhoneNumberForView: phoneNumber];
         }
+        [[PhoneMainView instance] changeCurrentView:[OutgoingCallViewController compositeViewDescription] push:TRUE];
+        
         return YES;
     }else{
         NSString *content = [[LanguageUtil sharedInstance] getContent:@"Phone number can not empty!"];

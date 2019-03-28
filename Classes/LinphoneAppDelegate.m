@@ -486,14 +486,6 @@ void onUncaughtException(NSException* exception)
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadContactListAfterAddSuccess)
                                                  name:reloadContactAfterAdd object:nil];
     
-    if (!IS_IPOD && !IS_IPHONE) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showPopupCallForIpad:)
-                                                     name:showIpadPopupCall object:nil];
-        
-        [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(callUpdateEvent:)
-                                                   name:kLinphoneCallUpdate object:nil];
-    }
-    
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(registrationUpdateEvent:)
                                                name:kLinphoneRegistrationUpdate object:nil];
     
@@ -2488,86 +2480,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     [self.bluetoothManager stopScan];
 }
 
-#pragma mark - Call update event
-- (void)callUpdateEvent:(NSNotification *)notif {
-    NSString *message = [notif.userInfo objectForKey:@"message"];
-    LinphoneCall *call = [[notif.userInfo objectForKey:@"call"] pointerValue];
-    LinphoneCallState state = [[notif.userInfo objectForKey:@"state"] intValue];
-    [self callUpdate:call state:state animated:TRUE message: message];
-}
-
-- (void)callUpdate:(LinphoneCall *)call state:(LinphoneCallState)state animated:(BOOL)animated message: (NSString *)message
-{
-    // Fake call update
-    if (call == NULL) {
-        return;
-    }
-    
-    switch (state) {
-        case LinphoneCallOutgoingRinging:{
-            NSLog(@"Debug: LinphoneCallOutgoingRinging");
-            break;
-        }
-        case LinphoneCallIncomingReceived:{
-            NSLog(@"Debug: LinphoneCallIncomingReceived");
-            break;
-        }
-        case LinphoneCallOutgoingProgress:{
-            NSLog(@"Debug: LinphoneCallOutgoingProgress");
-            
-            break;
-        }
-        case LinphoneCallOutgoingInit:{
-            NSLog(@"Debug: LinphoneCallOutgoingInit");
-            break;
-        }
-        case LinphoneCallConnected:{
-            LinphoneCallDir callDirection = linphone_call_get_dir(call);
-            if (callDirection == LinphoneCallIncoming) {
-                NSString *phoneNumber = [SipUtils getPhoneNumberOfCall:call orLinphoneAddress:nil];
-                [self showIncomingPopupCallForIpad: phoneNumber];
-            }
-            
-            NSLog(@"Debug: LinphoneCallConnected");
-            
-            break;
-        }
-        case LinphoneCallStreamsRunning: {
-            NSLog(@"Debug: LinphoneCallStreamsRunning");
-            
-            break;
-        }
-        case LinphoneCallUpdatedByRemote: {
-            NSLog(@"Debug: LinphoneCallUpdatedByRemote");
-            break;
-        }
-        case LinphoneCallPausing:
-        case LinphoneCallPaused:{
-            break;
-        }
-        case LinphoneCallPausedByRemote:
-            NSLog(@"Debug: LinphoneCallPausedByRemote");
-            break;
-        case LinphoneCallEnd:{
-            NSLog(@"Debug: LinphoneCallEnd");
-            break;
-        }
-        case LinphoneCallError:{
-            NSLog(@"Debug: LinphoneCallError");
-            break;
-        }
-        case LinphoneCallReleased:{
-            //  [Khai Le - 14/02/2019]
-            [[NSNotificationCenter defaultCenter] postNotificationName:reloadHistoryCallForIpad
-                                                                object:nil];
-            NSLog(@"Debug: LinphoneCallReleased");
-            break;
-        }
-        default:
-            break;
-    }
-}
-
 - (void)showWaiting: (BOOL)show {
     ipadWaiting.hidden = !show;
     if (show) {
@@ -2624,9 +2536,13 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 }
 
 - (void)setupValueForDevice {
-    float wMenu = SCREEN_WIDTH/4;
-    CGSize bgMenu = [UIImage imageNamed:@"menu_dialer_def.png"].size;
-    _hTabbar = wMenu * bgMenu.height/bgMenu.width;
+    if (IS_IPHONE || IS_IPOD) {
+        float wMenu = SCREEN_WIDTH/4;
+        CGSize bgMenu = [UIImage imageNamed:@"menu_dialer_def.png"].size;
+        _hTabbar = wMenu * bgMenu.height/bgMenu.width;
+    }else{
+        _hTabbar = 55.0;
+    }
     
     _hStatus = [UIApplication sharedApplication].statusBarFrame.size.height;
     NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];

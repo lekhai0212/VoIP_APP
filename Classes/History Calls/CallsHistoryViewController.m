@@ -268,6 +268,11 @@ static UICompositeViewDescription *compositeDescription = nil;
     float hHeader = [LinphoneAppDelegate sharedInstance]._hRegistrationState;
     float hButton = 40.0;
     float padding = 15.0;
+    float more = 15.0;
+    if (!IS_IPHONE && !IS_IPOD) {
+        padding = 40.0;
+        more = 40.0;
+    }
     
     hIcon = [LinphoneAppDelegate sharedInstance]._hRegistrationState - [LinphoneAppDelegate sharedInstance]._hStatus;
     
@@ -285,14 +290,14 @@ static UICompositeViewDescription *compositeDescription = nil;
     CGSize sizeButton = [AppUtils getSizeWithText:[[LanguageUtil sharedInstance] getContent:@"Missed history"] withFont:[LinphoneAppDelegate sharedInstance].headerFontBold andMaxWidth:SCREEN_WIDTH];
     
     _iconMissed.backgroundColor = UIColor.clearColor;
-    _iconMissed.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    _iconMissed.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
     [_iconMissed setTitle:[[LanguageUtil sharedInstance] getContent:@"Missed history"] forState:UIControlStateNormal];
     [_iconMissed setTitleColor:noActiveColor forState:UIControlStateNormal];
     _iconMissed.titleLabel.font = [LinphoneAppDelegate sharedInstance].headerFontBold;
     [_iconMissed mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_viewHeader).offset(marginTop);
         make.centerX.equalTo(_viewHeader.mas_centerX);
-        make.width.mas_equalTo(sizeButton.width + 15.0);
+        make.width.mas_equalTo(sizeButton.width + more);
         make.height.mas_equalTo(hButton);
     }];
     

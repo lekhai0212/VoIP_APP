@@ -20,8 +20,8 @@
         marginRight = 15.0;
         marginLeft = 15.0;
     }else{
-        marginRight = 5.0;
-        marginLeft = 0.0;
+        marginRight = 15.0;
+        marginLeft = 15.0;
     }
 
     _imgAvatar.clipsToBounds = YES;
@@ -71,10 +71,6 @@
         make.left.right.bottom.equalTo(self);
         make.height.mas_equalTo(1.0);
     }];
-    
-    
-    
-    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

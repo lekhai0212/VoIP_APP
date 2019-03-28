@@ -569,23 +569,26 @@ static UICompositeViewDescription *compositeDescription = nil;
     UIEdgeInsets callEdgeInsets = UIEdgeInsetsZero;
     UIEdgeInsets clearEdgeInsets = UIEdgeInsetsMake(12, 12, 12, 12);
     
-    NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
-    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE])
-    {
-        hLogo = 19.0;
-        callEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
-        clearEdgeInsets = UIEdgeInsetsMake(16, 16, 16, 16);
-        
-    }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2]) {
-        
-    }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
-    {
-        
-    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2] || [deviceMode isEqualToString: simulator]) {
-        
+    if (!IS_IPHONE && !IS_IPOD) {
         hAddressField = 80.0;
+    }else{
+        NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
+        if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE])
+        {
+            hLogo = 19.0;
+            callEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
+            clearEdgeInsets = UIEdgeInsetsMake(16, 16, 16, 16);
+            
+        }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2]) {
+            
+        }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
+        {
+            
+        }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2] || [deviceMode isEqualToString: simulator]) {
+            
+            hAddressField = 80.0;
+        }
     }
-    
     
     self.view.backgroundColor = UIColor.whiteColor;
     //  view status
