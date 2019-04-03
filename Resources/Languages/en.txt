@@ -12,7 +12,7 @@
 "Can not access to your gallery. Please check your permission!" = "Can not access to your gallery. Please check your permission!"
 "Can not access to your camera. Please check your permission!" = "Can not access to your camera. Please check your permission!"
 
-"Disabled" = "Off"
+"Disabled" = "Do not disturb"
 "Online" = "Online"
 "Offline" = "Offline"
 "Connecting" = "Connecting"
@@ -109,7 +109,7 @@
 "Search" = "Search"
 "Start date" = "Start date"
 "End date" = "End date"
-
+"DND" = "Do not disturb"
 
 
 

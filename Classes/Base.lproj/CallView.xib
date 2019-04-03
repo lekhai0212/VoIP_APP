@@ -624,7 +624,7 @@
                 </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-            <point key="canvasLocation" x="-47054" y="-1398"/>
+            <point key="canvasLocation" x="-47362" y="-1429"/>
         </view>
         <view contentMode="scaleToFill" id="heN-QM-XwE" userLabel="iphone6View">
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>

@@ -62,6 +62,8 @@
         make.left.right.bottom.equalTo(self);
         make.height.mas_equalTo(1.0);
     }];
+    
+    icVideoCall.hidden = ![LinphoneAppDelegate sharedInstance].supportVideoCall;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

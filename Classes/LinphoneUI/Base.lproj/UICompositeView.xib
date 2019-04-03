@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -58,40 +58,41 @@
                 </view>
             </subviews>
             <nil key="simulatedStatusBarMetrics"/>
-            <point key="canvasLocation" x="-96.5" y="-25.5"/>
+            <point key="canvasLocation" x="-1222" y="-385"/>
         </view>
         <view contentMode="scaleToFill" id="20" userLabel="Landscape View">
-            <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view autoresizesSubviews="NO" tag="5" contentMode="scaleToFill" id="Vgs-Nv-m9Q" userLabel="detailsView">
-                    <rect key="frame" x="379" y="42" width="288" height="333"/>
+                    <rect key="frame" x="379" y="42" width="0.0" height="625"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
                 <view autoresizesSubviews="NO" tag="1" contentMode="scaleToFill" id="23" userLabel="mainView">
-                    <rect key="frame" x="90" y="42" width="289" height="333"/>
+                    <rect key="frame" x="90" y="42" width="143" height="625"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
                 <view autoresizesSubviews="NO" tag="3" contentMode="scaleToFill" id="21" userLabel="tabBar">
-                    <rect key="frame" x="0.0" y="42" width="90" height="333"/>
+                    <rect key="frame" x="0.0" y="42" width="90" height="625"/>
                     <autoresizingMask key="autoresizingMask" heightSizable="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" red="0.0054755001599999997" green="1" blue="0.30046484340000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
                 <view clearsContextBeforeDrawing="NO" tag="4" contentMode="scaleToFill" id="JXU-o0-1po" userLabel="sideMenuView">
-                    <rect key="frame" x="0.0" y="42" width="667" height="333"/>
+                    <rect key="frame" x="0.0" y="42" width="375" height="625"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="0.1137254902" green="0.41568627450000001" blue="0.81176470590000005" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
                 <view autoresizesSubviews="NO" tag="2" contentMode="scaleToFill" id="22" userLabel="statusBar">
-                    <rect key="frame" x="0.0" y="0.0" width="667" height="42"/>
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="42"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
             <nil key="simulatedStatusBarMetrics"/>
-            <point key="canvasLocation" x="452.5" y="-106.5"/>
+            <point key="canvasLocation" x="724" y="-95.802098950524751"/>
         </view>
         <swipeGestureRecognizer direction="right" id="40">
             <connections>

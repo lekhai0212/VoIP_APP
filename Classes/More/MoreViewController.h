@@ -10,6 +10,7 @@
 #import "UICompositeView.h"
 
 enum moreValue{
+    eDNDMode,
     eRingtone,
     eCallSettings,
     eAppInfo,

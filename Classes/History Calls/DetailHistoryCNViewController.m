@@ -228,19 +228,31 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.height.mas_equalTo(hInfo);
     }];
     
-    iconVideo.imageEdgeInsets = UIEdgeInsetsMake(2, 2, 2, 2);
-    [iconVideo mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(viewInfo.mas_centerY);
-        make.right.equalTo(viewInfo.mas_centerX).offset(-8.0);
-        make.width.height.mas_equalTo(sizeIcon);
-    }];
+    if ([LinphoneAppDelegate sharedInstance].supportVideoCall) {
+        iconVideo.imageEdgeInsets = UIEdgeInsetsMake(2, 2, 2, 2);
+        [iconVideo mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(viewInfo.mas_centerY);
+            make.right.equalTo(viewInfo.mas_centerX).offset(-8.0);
+            make.width.height.mas_equalTo(sizeIcon);
+        }];
+        
+        iconAudio.imageEdgeInsets = UIEdgeInsetsMake(2, 2, 2, 2);
+        [iconAudio mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.bottom.equalTo(iconVideo);
+            make.left.equalTo(viewInfo.mas_centerX).offset(8.0);
+            make.width.mas_equalTo(sizeIcon);
+        }];
+        
+    }else{
+        iconVideo.hidden = YES;
+        iconAudio.imageEdgeInsets = UIEdgeInsetsMake(2, 2, 2, 2);
+        [iconAudio mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(viewInfo.mas_centerY);
+            make.centerX.equalTo(viewInfo.mas_centerX);
+            make.width.height.mas_equalTo(sizeIcon);
+        }];
+    }
     
-    iconAudio.imageEdgeInsets = UIEdgeInsetsMake(2, 2, 2, 2);
-    [iconAudio mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.bottom.equalTo(iconVideo);
-        make.left.equalTo(viewInfo.mas_centerX).offset(8.0);
-        make.width.mas_equalTo(sizeIcon);
-    }];
     
     //  content
     [_tbHistory mas_makeConstraints:^(MASConstraintMaker *make) {

@@ -261,8 +261,9 @@
     [btnDialerIpad setAttributedTitle:dialerDef forState:UIControlStateNormal];
     [btnDialerIpad setAttributedTitle:dialerAct forState:UIControlStateSelected];
     [btnDialerIpad mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.bottom.left.equalTo(self.view);
-        make.width.mas_equalTo(SCREEN_WIDTH/4);
+        make.top.bottom.left.equalTo(viewIpadMenu);
+        //  make.width.mas_equalTo(SCREEN_WIDTH/4);
+        make.width.equalTo(viewIpadMenu.mas_width).multipliedBy(0.25);
     }];
     btnDialerIpad.selected = YES;
     
@@ -275,8 +276,9 @@
     
     [btnCallHistoryIpad mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(btnDialerIpad.mas_right);
-        make.top.bottom.equalTo(self.view);
-        make.width.mas_equalTo(SCREEN_WIDTH/4);
+        make.top.bottom.equalTo(viewIpadMenu);
+        make.width.equalTo(viewIpadMenu.mas_width).multipliedBy(0.25);
+        //  make.width.mas_equalTo(SCREEN_WIDTH/4);
     }];
     
     //  Contacts button
@@ -288,8 +290,9 @@
     
     [btnContactsIpad mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(btnCallHistoryIpad.mas_right);
-        make.top.bottom.equalTo(self.view);
-        make.width.mas_equalTo(SCREEN_WIDTH/4);
+        make.top.bottom.equalTo(viewIpadMenu);
+        //  make.width.mas_equalTo(SCREEN_WIDTH/4);
+        make.width.equalTo(viewIpadMenu.mas_width).multipliedBy(0.25);
     }];
     
     //  More button
@@ -299,13 +302,14 @@
     [btnMoreIpad setAttributedTitle:moreDef forState:UIControlStateNormal];
     [btnMoreIpad setAttributedTitle:moreAct forState:UIControlStateSelected];
     [btnMoreIpad mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.bottom.right.equalTo(self.view);
-        make.width.mas_equalTo(SCREEN_WIDTH/4);
+        make.top.bottom.right.equalTo(viewIpadMenu);
+        //  make.width.mas_equalTo(SCREEN_WIDTH/4);
+        make.width.equalTo(viewIpadMenu.mas_width).multipliedBy(0.25);
     }];
     
     lbMenuTopSepa.backgroundColor = [UIColor colorWithRed:(225/255.0) green:(225/255.0) blue:(225/255.0) alpha:1.0];
     [lbMenuTopSepa mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.left.right.equalTo(self.view);
+        make.top.left.right.equalTo(viewIpadMenu);
         make.height.mas_equalTo(1.0);
     }];
 }

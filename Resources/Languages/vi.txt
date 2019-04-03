@@ -13,7 +13,7 @@
 "Can not access to your gallery. Please check your permission!" = "Không thể truy cập vào thư viện ảnh. Vui lòng kiểm tra lại quyền của ứng dụng!"
 "Can not access to your camera. Please check your permission!" = "Không thể truy cập camera. Vui lòng kiểm tra lại quyền của ứng dụng!"
 
-"Disabled" = "Đã tắt"
+"Disabled" = "Không làm phiền"
 "Online" = "Sẵn sàng"
 "Offline" = "Chưa kết nối"
 "Connecting" = "Đang kết nối"
@@ -110,7 +110,7 @@
 "Search" = "Tìm kiếm"
 "Start date" = "Ngày bắt đầu"
 "End date" = "Ngày kết thúc"
-
+"DND" = "Không làm phiền"
 
 
 

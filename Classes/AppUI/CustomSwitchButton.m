@@ -15,8 +15,8 @@
 {
     self = [super initWithFrame: frame];
     if (self) {
-        bgOn = [UIColor colorWithRed:(27/255.0) green:(104/255.0)
-                                blue:(213/255.0) alpha:1.0];
+        curState = state;
+        bgOn = [UIColor colorWithRed:(80/255.0) green:(208/255.0) blue:(135/255.0) alpha:1.0];
         
         bgOff = [UIColor colorWithRed:(118/255.0) green:(134/255.0)
                                  blue:(158/255.0) alpha:1.0];

@@ -167,9 +167,9 @@
         }
         
         if (![AppUtils isNullOrEmpty: name]) {
-            cell.lbDIDNumber.text = name;
+            cell.lbTitle.text = name;
         }else{
-            cell.lbDIDNumber.text = @"";
+            cell.lbTitle.text = @"";
         }
     }
     

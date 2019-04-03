@@ -636,7 +636,7 @@
 		if (UIInterfaceOrientationIsPortrait([self currentOrientation])) {
 			mainFrame.size.height -= viewFrame.size.height - tabFrame.origin.y;
 		} else {
-			mainFrame.origin.x = tabFrame.origin.x + tabFrame.size.width;
+			//  mainFrame.origin.x = tabFrame.origin.x + tabFrame.size.width;
 			mainFrame.size.width -= mainFrame.origin.x;
 		}
 	}
@@ -652,6 +652,7 @@
 	// 1. main view and details view
 	self.mainView.frame = mainFrame;
 	self.mainViewController.view.frame = self.mainView.bounds;
+    
 	self.detailsView.frame = detailsFrame;
 	self.detailsViewController.view.frame = self.detailsView.bounds;
 
@@ -659,18 +660,30 @@
 	self.tabBarView.frame = tabFrame;
 	CGRect frame = self.tabBarViewController.view.frame;
 	frame.size = self.tabBarView.bounds.size;
-	self.tabBarViewController.view.frame = frame;
-
+    
+    frame = CGRectMake(0, SCREEN_HEIGHT-[LinphoneAppDelegate sharedInstance]._hTabbar, SCREEN_WIDTH, [LinphoneAppDelegate sharedInstance]._hTabbar);
+    
+    if (self.tabBarViewController != nil && currentViewDescription.tabBarEnabled) {
+        
+    } else {
+        frame.size.height = 0;
+    }
+    
+    self.tabBarView.frame = frame;
+    self.tabBarViewController.view.frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
+    
+    self.tabBarView.backgroundColor = UIColor.redColor;
+    
 	// 3. status bar
 	self.statusBarView.frame = statusBarFrame;
 	frame = self.statusBarViewController.view.frame;
 	frame.size = self.statusBarView.bounds.size;
 	self.statusBarViewController.view.frame = frame;
-
+    
 	// 4. side menu
 	self.sideMenuView.frame = sideMenuFrame;
 	self.sideMenuViewController.view.frame = self.sideMenuView.bounds;
-
+    
 	// Commit animation
 	if (tabBar != nil || statusBar != nil || sideMenu != nil || fullscreen != nil) {
 		[UIView commitAnimations];

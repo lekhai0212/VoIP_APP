@@ -61,11 +61,11 @@
             <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="calibratedRGB"/>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="-216" y="-473"/>
+            <point key="canvasLocation" x="101" y="-479"/>
         </view>
     </objects>
     <resources>
         <image name="ic_back.png" width="200" height="200"/>
-        <image name="no_avatar.png" width="256" height="256"/>
+        <image name="no_avatar.png" width="201" height="201"/>
     </resources>
 </document>

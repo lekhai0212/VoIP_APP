@@ -242,6 +242,10 @@
         cell.icVideoCall.hidden = YES;
     }
     
+    if (![LinphoneAppDelegate sharedInstance].supportVideoCall) {
+        cell.icVideoCall.hidden = YES;
+    }
+    
     if (![AppUtils isNullOrEmpty: contact._avatar]) {
         NSData *imageData = [NSData dataFromBase64String:contact._avatar];
         cell._imgAvatar.image = [UIImage imageWithData: imageData];

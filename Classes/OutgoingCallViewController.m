@@ -95,7 +95,14 @@ static UICompositeViewDescription *compositeDescription = nil;
     PulsingHaloLayer *layer = [PulsingHaloLayer layer];
     self.halo = layer;
     [_imgAvatar.superview.layer insertSublayer:self.halo below:_imgAvatar.layer];
-    [self setupInitialValuesWithNumLayer:5 radius:0.8 duration:0.45 color:[UIColor colorWithRed:(240/255.0) green:(240/255.0) blue:(240/255.0) alpha:0.8]];
+    if (IS_IPHONE || IS_IPOD) {
+        [self setupInitialValuesWithNumLayer:5 radius:0.8 duration:0.45 color:[UIColor colorWithRed:(240/255.0) green:(240/255.0) blue:(240/255.0) alpha:0.8]];
+        
+    }else{
+        [self setupInitialValuesWithNumLayer:7 radius:1.5 duration:0.7 color:[UIColor colorWithRed:(240/255.0) green:(240/255.0) blue:(240/255.0) alpha:0.8]];
+        
+    }
+    
     [self.halo start];
     
     //  [Khai Le - 12/02/2019]
@@ -118,8 +125,10 @@ static UICompositeViewDescription *compositeDescription = nil;
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(uiForiPhoneReceiverEnabled)
                                                name:@"iPhoneReceiverEnabled" object:nil];
     
-    NSNumber *value = [NSNumber numberWithInt:UIDeviceOrientationLandscapeLeft];
-    [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
+    if (IS_IPHONE || IS_IPOD) {
+        NSNumber *value = [NSNumber numberWithInt:UIDeviceOrientationLandscapeLeft];
+        [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -177,43 +186,52 @@ static UICompositeViewDescription *compositeDescription = nil;
     marginQuality = 50.0;
     wAvatar = 120.0;
     
-    NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
-    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE])
-    {
-        //  Screen width: 320.000000 - Screen height: 667.000000
-        wAvatar = 110.0;
-        wIconEndCall = 60.0;
-        wSmallIcon = 45.0;
-        marginQuality = 30.0;
-        
-    }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
-    {
-        //  Screen width: 375.000000 - Screen height: 667.000000
-        wAvatar = 120.0;
-        wIconEndCall = 80.0;
-        wSmallIcon = 60.0;
-        
-    }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
-    {
-        //  Screen width: 414.000000 - Screen height: 736.000000
-        wAvatar = 130.0;
-        wIconEndCall = 80.0;
-        wSmallIcon = 60.0;
-        margin = 45.0;
-        
-    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2] || [deviceMode isEqualToString: simulator]){
-        //  Screen width: 375.000000 - Screen height: 812.000000
-        wAvatar = 130.0;
-        wIconEndCall = 80.0;
-        wSmallIcon = 60.0;
-        margin = 45.0;
+    if (IS_IPHONE || IS_IPOD) {
+        NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
+        if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE])
+        {
+            //  Screen width: 320.000000 - Screen height: 667.000000
+            wAvatar = 110.0;
+            wIconEndCall = 60.0;
+            wSmallIcon = 45.0;
+            marginQuality = 30.0;
+            
+        }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
+        {
+            //  Screen width: 375.000000 - Screen height: 667.000000
+            wAvatar = 120.0;
+            wIconEndCall = 80.0;
+            wSmallIcon = 60.0;
+            
+        }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
+        {
+            //  Screen width: 414.000000 - Screen height: 736.000000
+            wAvatar = 130.0;
+            wIconEndCall = 80.0;
+            wSmallIcon = 60.0;
+            margin = 45.0;
+            
+        }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2] || [deviceMode isEqualToString: simulator]){
+            //  Screen width: 375.000000 - Screen height: 812.000000
+            wAvatar = 130.0;
+            wIconEndCall = 80.0;
+            wSmallIcon = 60.0;
+            margin = 45.0;
+            
+        }else{
+            wAvatar = 130.0;
+            wIconEndCall = 80.0;
+            wSmallIcon = 60.0;
+            margin = 45.0;
+        }
         
     }else{
-        wAvatar = 130.0;
+        wAvatar = 180.0;
         wIconEndCall = 80.0;
         wSmallIcon = 60.0;
         margin = 45.0;
     }
+    
     
     if (SCREEN_WIDTH > 320) {
         hStateLabel = 25.0;

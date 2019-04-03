@@ -136,15 +136,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 #pragma mark - ViewController Functions
-- (void)changeRotationOfDevice {
-    NSLog(@"Current orientation %ld", (long)UIDevice.currentDevice.orientation);
-//    NSNumber *value1 = [NSNumber numberWithInt:UIDeviceOrientationFaceUp];
-//    [[UIDevice currentDevice] setValue:value1 forKey:@"orientation"];
-    
-    NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationPortrait];
-    [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
-}
-
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
@@ -280,6 +271,12 @@ static UICompositeViewDescription *compositeDescription = nil;
                                                    selector:@selector(callDurationUpdate)
                                                    userInfo:nil repeats:YES];
     
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged)
+                                                 name:UIDeviceOrientationDidChangeNotification object:nil];
+    
+    [viewVideoCall addObserver:self forKeyPath:@"hidden" options:0 context:NULL];
+    
     //  Update address
     [self updateAddress];
     
@@ -334,6 +331,20 @@ static UICompositeViewDescription *compositeDescription = nil;
     viewVideoCall.hidden = isAudioCall;
 }
 
+- (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context {
+    if (object == viewVideoCall)
+    {
+        if ([keyPath isEqualToString:@"hidden"])
+        {
+        }
+    }
+}
+
+- (void) orientationChanged {
+    viewVideoCall.hidden = isAudioCall;
+    [self setupUIForView];
+}
+
 - (void)tryToUpdateCamera {
     linphone_call_enable_camera(linphone_core_get_current_call(LC), YES);
 }
@@ -341,7 +352,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
     
-    if (isAudioCall) {
+    if (isAudioCall && (IS_IPHONE || IS_IPOD)) {
         NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationPortrait];
         [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
     }
@@ -1550,43 +1561,51 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     marginQuality = 50.0;
     marginPhone = 30.0;
     
-    NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
-    if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE])
-    {
-        //  Screen width: 320.000000 - Screen height: 667.000000
-        wAvatar = 110.0;
-        wEndIcon = 60.0;
-        wSmallIcon = 45.0;
-        marginQuality = 30.0;
-        marginIcon = 10.0;
-        marginPhone = 20.0;
+    if (IS_IPHONE || IS_IPOD) {
+        NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
+        if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE])
+        {
+            //  Screen width: 320.000000 - Screen height: 667.000000
+            wAvatar = 110.0;
+            wEndIcon = 60.0;
+            wSmallIcon = 45.0;
+            marginQuality = 30.0;
+            marginIcon = 10.0;
+            marginPhone = 20.0;
+            
+        }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
+        {
+            wAvatar = 130.0;
+            wEndIcon = 70.0;
+            wSmallIcon = 55.0;
+            marginIcon = 10.0;
+            
+        }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
+        {
+            wAvatar = 150.0;
+            wEndIcon = 75.0;
+            wSmallIcon = 58.0;
+            marginIcon = 12.0;
+            
+        }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2] || [deviceMode isEqualToString: simulator]){
+            //  Screen width: 375.000000 - Screen height: 812.000000
+            wAvatar = 150.0;
+            wEndIcon = 75.0;
+            wSmallIcon = 58.0;
+            marginIcon = 12.0;
+        }else{
+            //  Screen width: 375.000000 - Screen height: 812.000000
+            wAvatar = 150.0;
+            wEndIcon = 75.0;
+            wSmallIcon = 58.0;
+            marginIcon = 12.0;
+        }
         
-    }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
-    {
-        wAvatar = 130.0;
-        wEndIcon = 70.0;
-        wSmallIcon = 55.0;
-        marginIcon = 10.0;
-        
-    }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
-    {
-        wAvatar = 150.0;
-        wEndIcon = 75.0;
-        wSmallIcon = 58.0;
-        marginIcon = 12.0;
-        
-    }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2] || [deviceMode isEqualToString: simulator]){
-        //  Screen width: 375.000000 - Screen height: 812.000000
-        wAvatar = 150.0;
-        wEndIcon = 75.0;
-        wSmallIcon = 58.0;
-        marginIcon = 12.0;
     }else{
-        //  Screen width: 375.000000 - Screen height: 812.000000
-        wAvatar = 150.0;
-        wEndIcon = 75.0;
-        wSmallIcon = 58.0;
-        marginIcon = 12.0;
+        wAvatar = 180.0;
+        wEndIcon = 80.0;
+        wSmallIcon = 60.0;
+        marginIcon = 20.0;
     }
 }
 

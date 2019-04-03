@@ -56,7 +56,6 @@
 #import "iPadMoreViewController.h"
 #import "iPadPopupCall.h"
 #import "TestViewController.h"
-#import <ExternalAccessory/ExternalAccessory.h>
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
 
@@ -92,7 +91,7 @@
 @synthesize webService, keepAwakeTimer, listNumber, listInfoPhoneNumber, supportLoginWithPhoneNumber, logFilePath, dbQueue, splashScreen;
 @synthesize supportVoice;
 @synthesize homeSplitVC, contactType, historyType, callTransfered, hNavigation, hasBluetoothEar, ipadWaiting;
-@synthesize phoneForCall, configPushToken;
+@synthesize phoneForCall, configPushToken, supportVideoCall;
 
 #pragma mark - Lifecycle Functions
 
@@ -438,13 +437,6 @@ void onUncaughtException(NSException* exception)
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"==================================================\n==               START APPLICATION ON IPAD              ==\n=================================================="] toFilePath:logFilePath];
     }
     
-    /*  check bluetooth
-    [[EAAccessoryManager sharedAccessoryManager] registerForLocalNotifications];
-    NSArray *list = [[EAAccessoryManager sharedAccessoryManager] connectedAccessories];
-    NSLog(@"%d", (int)list.count);
-    [self detectBluetooth];
-    */
-    
     //  set default ringtone if have not yet
     NSString *ringtone = [[NSUserDefaults standardUserDefaults] objectForKey:DEFAULT_RINGTONE];
     if (ringtone == nil || [ringtone isEqualToString:@""]) {
@@ -476,6 +468,7 @@ void onUncaughtException(NSException* exception)
     _isSyncing = false;
     supportLoginWithPhoneNumber = NO;
     supportVoice = NO;
+    supportVideoCall = NO;
     
     listInfoPhoneNumber = [[NSMutableArray alloc] init];
     
@@ -1530,11 +1523,17 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 #pragma mark - Prevent ImagePickerView from rotating
 
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
-    if ([[(PhoneMainView*)self.window.rootViewController currentView] equal:CallView.compositeViewDescription])
-    {
+    return UIInterfaceOrientationMaskPortrait;
+    
+    if (IS_IPHONE || IS_IPOD) {
+        if ([[(PhoneMainView*)self.window.rootViewController currentView] equal:CallView.compositeViewDescription])
+        {
+            return UIInterfaceOrientationMaskAll;
+        }
+        return UIInterfaceOrientationMaskPortrait;
+    }else{
         return UIInterfaceOrientationMaskAll;
     }
-    return UIInterfaceOrientationMaskPortrait;
 }
 
 #pragma mark - Khai Le functions
@@ -2432,54 +2431,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     [popupCall showInView:self.window animated:YES];
 }
 
-#pragma mark - Bluetooth Delegate
-
-- (void)detectBluetooth
-{
-    if(!self.bluetoothManager)
-    {
-        // Put on main queue so we can call UIAlertView from delegate callbacks.
-        self.bluetoothManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
-    }
-    [self centralManagerDidUpdateState:self.bluetoothManager]; // Show initial state
-}
-
--(void) centralManagerDidUpdateState:(CBCentralManager *)central {
-    if (central.state == CBCentralManagerStatePoweredOn) {
-        //Powered on means ready for use
-        [self.bluetoothManager scanForPeripheralsWithServices:nil options:nil];
-    }
-}
-
--(void) centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI {
-    // NSLog(@"bluetoothHandler: Found peripheral with UUID : %@ and Name : %@ (%ld dBm)",peripheral.identifier,peripheral.name,(long)[RSSI integerValue]);
-    if (peripheral.state == CBPeripheralStateConnected) {
-        NSLog(@"Ahi ahi");
-    }
-    NSString *localName = [advertisementData objectForKey:CBAdvertisementDataLocalNameKey];
-    NSLog(@"Local name: %@ - state: %d", localName, (int)peripheral.state);
-}
-
--(void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
-    NSLog(@"didDisconnectPeripheral called");
-}
-
-
-- (void)centralManager:(CBCentralManager *)central didRetrieveConnectedPeripherals:(NSArray *)peripherals{
-    NSLog(@"didRetrieveConnectedPeripherals called");
-    for (CBPeripheral *a in peripherals){
-        NSLog(@"%@", a);
-    } //but it never ends up logging anything, and I have a BT keyboard paired/connected with the iPhone 5
-}
-
-/// This delegate method is called when iOS has established connection with a
-/// peripheral after the connectToPeripheral call, here we start scanning of
-/// services automatically
-- (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
-    NSLog(@"bluetoothHandler: Connected to peripheral %@ with UUID : %@", peripheral.name, peripheral.identifier);
-    [self.bluetoothManager stopScan];
-}
-
 - (void)showWaiting: (BOOL)show {
     ipadWaiting.hidden = !show;
     if (show) {
@@ -2495,13 +2446,22 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 }
 
 - (void)showPopupToChooseDID: (id)data {
-    if ([data isKindOfClass:[NSArray class]] && data != nil) {
-        float wPopup = 300.0;
-        float hCell = 60.0;
-        if (SCREEN_WIDTH == 320) {
-            wPopup = 280.0;
-            hCell = 50.0;
+    if ([data isKindOfClass:[NSArray class]]) {
+        if (data == nil) {
+            data = [[NSArray alloc] init];
         }
+        
+        float wPopup = 350.0;
+        float hCell = 60.0;
+        if (IS_IPHONE || IS_IPOD) {
+            if (SCREEN_WIDTH <= 320) {
+                wPopup = 300.0;
+                hCell = 50.0;
+            }
+        }else{
+            wPopup = 420.0;
+        }
+        
         
         float popupHeight;
         if ([(NSArray *)data count] > 6) {
@@ -2516,7 +2476,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [popupDID.tbDIDList reloadData];
         [popupDID showInView:self.window animated:YES];
     }else{
-        NSLog(@"Make call right now");
+        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Can not get data for prefix", __FUNCTION__] toFilePath:logFilePath];
     }
 }
 

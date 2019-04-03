@@ -22,17 +22,33 @@
     lbTitle.textColor = lbDIDNumber.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     
     lbTitle.text = @"Gọi ra prefix";
-    [lbTitle mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self).offset(20.0);
-        make.right.equalTo(self.mas_centerX);
-        make.top.bottom.equalTo(self);
-    }];
+    if (IS_IPHONE || IS_IPOD) {
+        [lbTitle mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self).offset(10);
+            make.right.equalTo(self.mas_centerX).offset(30.0);
+            make.top.bottom.equalTo(self);
+        }];
+        
+        [lbDIDNumber mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.mas_centerX);
+            make.right.equalTo(self).offset(-20.0);
+            make.top.bottom.equalTo(self);
+        }];
+        
+    }else{
+        [lbTitle mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self).offset(20.0);
+            make.right.equalTo(self.mas_centerX).offset(30.0);
+            make.top.bottom.equalTo(self);
+        }];
+        
+        [lbDIDNumber mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(lbTitle.mas_right).offset(5.0);
+            make.right.equalTo(self).offset(-20.0);
+            make.top.bottom.equalTo(self);
+        }];
+    }
     
-    [lbDIDNumber mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.mas_centerX);
-        make.right.equalTo(self).offset(-20.0);
-        make.top.bottom.equalTo(self);
-    }];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

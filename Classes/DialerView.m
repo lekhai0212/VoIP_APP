@@ -87,6 +87,12 @@ static UICompositeViewDescription *compositeDescription = nil;
 	[super viewWillAppear:animated];
     [WriteLogsUtils writeForGoToScreen: @"DialerView"];
     
+    if ([LinphoneAppDelegate sharedInstance].supportVideoCall) {
+        btnVideoCall.hidden = _backspaceButton.hidden = NO;
+    }else{
+        btnVideoCall.hidden = _backspaceButton.hidden = YES;
+    }
+    
     if (webService == nil) {
         webService = [[WebServices alloc] init];
         webService.delegate = self;
@@ -436,6 +442,10 @@ static UICompositeViewDescription *compositeDescription = nil;
 #pragma mark - Khai Le Functions
 
 - (void)networkDown {
+    if ([DeviceUtils checkNetworkAvailable]) {
+        return;
+    }
+    
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
     
     _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"No network"];
@@ -555,7 +565,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)enableNAT
 {
-    return;
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
     
     LinphoneNatPolicy *LNP = linphone_core_get_nat_policy(LC);
@@ -592,7 +601,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     self.view.backgroundColor = UIColor.whiteColor;
     //  view status
-    _viewStatus.backgroundColor = UIColor.clearColor;
+    _viewStatus.backgroundColor = UIColor.redColor;
     [_viewStatus mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self.view);
         make.height.mas_equalTo(appDelegate._hRegistrationState);
@@ -602,7 +611,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     float wLogo = hLogo * logoImg.size.width / logoImg.size.height;
     _imgLogoSmall.image = logoImg;
     [_imgLogoSmall mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_viewStatus).offset(appDelegate._hRegistrationState/4);
+        make.left.equalTo(_viewStatus).offset(5.0);
         make.centerY.equalTo(_viewStatus.mas_centerY).offset(appDelegate._hStatus/2-5.0);
         make.height.mas_equalTo(hLogo);
         make.width.mas_equalTo(wLogo);
@@ -615,17 +624,17 @@ static UICompositeViewDescription *compositeDescription = nil;
         //  make.top.bottom.equalTo(_imgLogoSmall);
         make.centerY.equalTo(_viewStatus.mas_centerY).offset(appDelegate._hStatus/2);
         make.centerX.equalTo(_viewStatus.mas_centerX);
-        make.width.mas_equalTo(120);
+        make.width.mas_equalTo(60);
         make.height.mas_equalTo(40.0);
     }];
     
     //  status label
-    _lbStatus.font = [LinphoneAppDelegate sharedInstance].headerFontNormal;
+    _lbStatus.font = [LinphoneAppDelegate sharedInstance].contentFontNormal;
     _lbStatus.numberOfLines = 0;
     [_lbStatus mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_lbAccount.mas_right);
         make.top.bottom.equalTo(_lbAccount);
-        make.right.equalTo(_viewStatus).offset(-appDelegate._hRegistrationState/4);
+        make.right.equalTo(_viewStatus).offset(-5.0);
     }];
     UITapGestureRecognizer *tapOnStatus = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(whenTappedOnStatusAccount)];
     _lbStatus.userInteractionEnabled = YES;
