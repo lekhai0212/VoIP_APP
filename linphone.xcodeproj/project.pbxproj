@@ -438,6 +438,7 @@
 		841EAEF6224D2B260028CAF9 /* ipad_menu_contacts_def.png in Resources */ = {isa = PBXBuildFile; fileRef = 841EAEEE224D2B260028CAF9 /* ipad_menu_contacts_def.png */; };
 		841F97E61FB4B2DC00A9A8CD /* UIConferenceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 841F97E41FB4B2DC00A9A8CD /* UIConferenceCell.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		841F97E71FB4B2DC00A9A8CD /* UIConferenceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 841F97E51FB4B2DC00A9A8CD /* UIConferenceCell.xib */; };
+		84221EFD22565C0A0024F77A /* CustomAvatarImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84221EFC22565C0A0024F77A /* CustomAvatarImageView.m */; };
 		842814DE223ABED000E8EAC0 /* switchcam_dis.png in Resources */ = {isa = PBXBuildFile; fileRef = 842814D5223ABECC00E8EAC0 /* switchcam_dis.png */; };
 		842814DF223ABED000E8EAC0 /* switchcam_enable.png in Resources */ = {isa = PBXBuildFile; fileRef = 842814DC223ABECC00E8EAC0 /* switchcam_enable.png */; };
 		842814E0223ABED000E8EAC0 /* switchcam_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 842814DD223ABECD00E8EAC0 /* switchcam_normal.png */; };
@@ -1537,6 +1538,8 @@
 		841F97E31FB4B2DC00A9A8CD /* UIConferenceCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIConferenceCell.h; path = AppUI/UIConferenceCell.h; sourceTree = "<group>"; };
 		841F97E41FB4B2DC00A9A8CD /* UIConferenceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIConferenceCell.m; path = AppUI/UIConferenceCell.m; sourceTree = "<group>"; };
 		841F97E51FB4B2DC00A9A8CD /* UIConferenceCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = UIConferenceCell.xib; path = AppUI/UIConferenceCell.xib; sourceTree = "<group>"; };
+		84221EFB22565C0A0024F77A /* CustomAvatarImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CustomAvatarImageView.h; path = AppUI/CustomAvatarImageView.h; sourceTree = "<group>"; };
+		84221EFC22565C0A0024F77A /* CustomAvatarImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CustomAvatarImageView.m; path = AppUI/CustomAvatarImageView.m; sourceTree = "<group>"; };
 		842814D5223ABECC00E8EAC0 /* switchcam_dis.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switchcam_dis.png; sourceTree = "<group>"; };
 		842814DC223ABECC00E8EAC0 /* switchcam_enable.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switchcam_enable.png; sourceTree = "<group>"; };
 		842814DD223ABECD00E8EAC0 /* switchcam_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switchcam_normal.png; sourceTree = "<group>"; };
@@ -3745,6 +3748,8 @@
 				15ABD974224B64D9002902B6 /* RecordAudioCallCell.h */,
 				15ABD975224B64D9002902B6 /* RecordAudioCallCell.m */,
 				15ABD976224B64D9002902B6 /* RecordAudioCallCell.xib */,
+				84221EFB22565C0A0024F77A /* CustomAvatarImageView.h */,
+				84221EFC22565C0A0024F77A /* CustomAvatarImageView.m */,
 			);
 			name = AppUI;
 			sourceTree = "<group>";
@@ -5156,6 +5161,7 @@
 				84EFFE021FF3E6B60085A9F4 /* DGActivityIndicatorFiveDotsAnimation.m in Sources */,
 				34216F401547EBCD00EA9777 /* VideoZoomHandler.m in Sources */,
 				D3F83EEC1582021700336684 /* CallView.m in Sources */,
+				84221EFD22565C0A0024F77A /* CustomAvatarImageView.m in Sources */,
 				158A87C5217D83720093A641 /* DeviceUtils.m in Sources */,
 				84D0320C1FB51C50002D2524 /* ContactCell.m in Sources */,
 				84BCC9E81FC1E162001F26FE /* PEResizeControl.m in Sources */,

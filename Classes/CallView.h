@@ -56,7 +56,7 @@ typedef enum typeCall{
 @property(weak, nonatomic) IBOutlet MarqueeLabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *lbPhoneNumber;
 @property(weak, nonatomic) IBOutlet UILabel *durationLabel;
-@property(weak, nonatomic) IBOutlet UIRoundedImageView *avatarImage;
+@property(weak, nonatomic) IBOutlet UIImageView *avatarImage;
 @property (weak, nonatomic) IBOutlet UILabel *_lbQuality;
 @property(nonatomic, strong) IBOutlet UIButton *speakerButton;
 @property(nonatomic, strong) IBOutlet UIHangUpButton *hangupButton;

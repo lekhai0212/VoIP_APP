@@ -569,6 +569,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)enableNAT
 {
+    return;
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
     
     LinphoneNatPolicy *LNP = linphone_core_get_nat_policy(LC);
@@ -605,7 +606,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     self.view.backgroundColor = UIColor.whiteColor;
     //  view status
-    _viewStatus.backgroundColor = UIColor.redColor;
+    _viewStatus.backgroundColor = UIColor.clearColor;
     [_viewStatus mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self.view);
         make.height.mas_equalTo(appDelegate._hRegistrationState);

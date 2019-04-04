@@ -57,7 +57,6 @@ const NSInteger SECURE_BUTTON_TAG = 5;
 
 @interface CallView ()<UITableViewDelegate, UITableViewDataSource>{
     BOOL isAudioCall;
-    float wAvatar;
     float wEndIcon;
     float wSmallIcon;
     float marginIcon;
@@ -89,6 +88,9 @@ const NSInteger SECURE_BUTTON_TAG = 5;
     UIImageView *imgOffCam;
     float marginQuality;
     float marginPhone;
+    float wAvatar;
+    float marginBottom;
+    float paddingAvatar;
 }
 
 @end
@@ -393,6 +395,10 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 	// Remove observer
     [NSNotificationCenter.defaultCenter removeObserver:self];
+    if (IS_IPHONE || IS_IPOD) {
+        NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationPortrait];
+        [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -932,7 +938,7 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
                                          action:@selector(endCallFromMiniKeypad)
                                forControlEvents:UIControlEventTouchUpInside];
     
-    [viewKeypad mas_makeConstraints:^(MASConstraintMaker *make) {
+    [viewKeypad mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.left.bottom.right.equalTo(aview);
     }];
     [viewKeypad setupUIForView];
@@ -1218,23 +1224,29 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 }
 
 - (void)setupUIForView {
+    UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+    if (orientation == UIDeviceOrientationUnknown || orientation == UIDeviceOrientationFaceUp || orientation == UIDeviceOrientationFaceDown) {
+        return;
+    }
+    
     [self setupSizeWithDevice];
     
     //  Audio call view
-    [callView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [callView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.left.bottom.right.equalTo(self.view);
     }];
     
-    [bgAudioCall mas_makeConstraints:^(MASConstraintMaker *make) {
+    [bgAudioCall mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.left.bottom.right.equalTo(callView);
     }];
     
-    avatarImage.backgroundColor = UIColor.redColor;
-    [avatarImage mas_makeConstraints:^(MASConstraintMaker *make) {
+    avatarImage.backgroundColor = UIColor.clearColor;
+    [avatarImage mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(callView.mas_centerX);
-        make.centerY.equalTo(callView.mas_centerY);
+        make.centerY.equalTo(callView.mas_centerY).offset(paddingAvatar);
         make.width.height.mas_equalTo(wAvatar);
     }];
+    
     avatarImage.clipsToBounds = YES;
     avatarImage.layer.borderColor = UIColor.whiteColor.CGColor;
     avatarImage.layer.borderWidth = 2.0;
@@ -1242,7 +1254,7 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     
     _lbQuality.font = [UIFont systemFontOfSize:16.0 weight:UIFontWeightThin];
     [_lbQuality setTextColor: [UIColor whiteColor]];
-    [_lbQuality mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_lbQuality mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(callView.mas_centerX);
         make.bottom.equalTo(avatarImage.mas_top).offset(-marginQuality);
         make.width.mas_equalTo(200.0);
@@ -1250,7 +1262,7 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     }];
     
     durationLabel.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:40.0];
-    [durationLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+    [durationLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(callView.mas_centerX);
         make.bottom.equalTo(_lbQuality.mas_top);
         make.width.mas_equalTo(200.0);
@@ -1258,14 +1270,14 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     }];
     
     lbPhoneNumber.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightRegular];
-    [lbPhoneNumber mas_makeConstraints:^(MASConstraintMaker *make) {
+    [lbPhoneNumber mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(callView.mas_centerX);
         make.bottom.equalTo(durationLabel.mas_top).offset(-marginPhone);
         make.width.mas_equalTo(200.0);
         make.height.mas_equalTo(30);
     }];
     
-    [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+    [nameLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(callView).offset(5.0);
         make.right.equalTo(callView).offset(-5.0);
         make.bottom.equalTo(lbPhoneNumber.mas_top);
@@ -1279,9 +1291,9 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     nameLabel.font = [UIFont systemFontOfSize:22.0 weight:UIFontWeightBold];
     nameLabel.textColor = UIColor.whiteColor;
 
-    [hangupButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    [hangupButton mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(callView.mas_centerX);
-        make.bottom.equalTo(callView).offset(-40.0);
+        make.bottom.equalTo(callView).offset(-marginBottom);
         make.width.height.mas_equalTo(wEndIcon);
     }];
     [hangupButton addTarget:self
@@ -1290,26 +1302,26 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     
     [speakerButton setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
     [speakerButton setImage:[UIImage imageNamed:@"speaker_dis"] forState:UIControlStateDisabled];
-    [speakerButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    [speakerButton mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(hangupButton.mas_centerY);
         make.right.equalTo(hangupButton.mas_left).offset(-marginIcon);
         make.width.height.mas_equalTo(wSmallIcon);
     }];
     
-    [microButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    [microButton mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(speakerButton);
         make.right.equalTo(speakerButton.mas_left).offset(-marginIcon);
         make.width.mas_equalTo(wSmallIcon);
     }];
     
     callPauseButton.delegate = self;
-    [callPauseButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    [callPauseButton mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(speakerButton);
         make.left.equalTo(hangupButton.mas_right).offset(marginIcon);
         make.width.mas_equalTo(wSmallIcon);
     }];
     
-    [numpadButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    [numpadButton mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(speakerButton);
         make.left.equalTo(callPauseButton.mas_right).offset(marginIcon);
         make.width.mas_equalTo(wSmallIcon);
@@ -1320,11 +1332,11 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     
     //  video call view
     float paddingVideo = 20.0;
-    [viewVideoCall mas_makeConstraints:^(MASConstraintMaker *make) {
+    [viewVideoCall mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.left.bottom.right.equalTo(self.view);
     }];
     
-    [_videoView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_videoView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.left.bottom.right.equalTo(viewVideoCall);
     }];
     
@@ -1333,7 +1345,7 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     _videoPreview.layer.borderColor = [UIColor whiteColor].CGColor;
     _videoPreview.layer.borderWidth = 1.0;
     _videoPreview.clipsToBounds = YES;
-    [_videoPreview mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_videoPreview mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(viewVideoCall).offset(appDelegate._hStatus);
         make.right.equalTo(viewVideoCall).offset(-paddingVideo);
         make.width.mas_equalTo(100.0);
@@ -1341,7 +1353,7 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     }];
     
     lbAddressVideoCall.textAlignment = NSTextAlignmentLeft;
-    [lbAddressVideoCall mas_makeConstraints:^(MASConstraintMaker *make) {
+    [lbAddressVideoCall mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(viewVideoCall).offset(appDelegate._hStatus);
         make.left.equalTo(viewVideoCall).offset(paddingVideo);
         make.right.equalTo(_videoPreview).offset(-paddingVideo);
@@ -1358,7 +1370,7 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     _lbVideoTime.textAlignment = NSTextAlignmentLeft;
     _lbVideoTime.textColor = UIColor.whiteColor;
     _lbVideoTime.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
-    [_lbVideoTime mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_lbVideoTime mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(lbAddressVideoCall.mas_bottom).offset(3.0);
         make.left.equalTo(lbAddressVideoCall);
         make.right.equalTo(viewVideoCall.mas_centerX);
@@ -1367,7 +1379,7 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     
     lbVideoQuality.textAlignment = NSTextAlignmentLeft;
     lbVideoQuality.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
-    [lbVideoQuality mas_makeConstraints:^(MASConstraintMaker *make) {
+    [lbVideoQuality mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_lbVideoTime.mas_bottom).offset(3.0);
         make.left.equalTo(lbAddressVideoCall);
         make.right.equalTo(viewVideoCall.mas_centerX);
@@ -1375,7 +1387,7 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     }];
     
     btnOffCamera.tag = 0;
-    [btnOffCamera mas_makeConstraints:^(MASConstraintMaker *make) {
+    [btnOffCamera mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(viewVideoCall.mas_centerX);
         make.bottom.equalTo(viewVideoCall).offset(-20.0);
         make.width.height.mas_equalTo(wSmallIcon);
@@ -1383,7 +1395,7 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     
     [btnSpeakerVideo setImage:[UIImage imageNamed:@"speaker_normal"] forState:UIControlStateNormal];
     [btnSpeakerVideo setImage:[UIImage imageNamed:@"speaker_dis"] forState:UIControlStateDisabled];
-    [btnSpeakerVideo mas_makeConstraints:^(MASConstraintMaker *make) {
+    [btnSpeakerVideo mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(btnOffCamera.mas_centerY);
         make.right.equalTo(btnOffCamera.mas_left).offset(-marginIcon);
         make.width.height.mas_equalTo(wSmallIcon);
@@ -1391,25 +1403,25 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     
     [btnMicroVideo setImage:[UIImage imageNamed:@"mute_normal"] forState:UIControlStateNormal];
     [btnMicroVideo setImage:[UIImage imageNamed:@"mute_dis"] forState:UIControlStateDisabled];
-    [btnMicroVideo mas_makeConstraints:^(MASConstraintMaker *make) {
+    [btnMicroVideo mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(btnSpeakerVideo.mas_centerY);
         make.right.equalTo(btnSpeakerVideo.mas_left).offset(-marginIcon);
         make.width.height.mas_equalTo(wSmallIcon);
     }];
     
-    [btnSwitchCamera mas_makeConstraints:^(MASConstraintMaker *make) {
+    [btnSwitchCamera mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(btnOffCamera.mas_centerY);
         make.left.equalTo(btnOffCamera.mas_right).offset(marginIcon);
         make.width.height.mas_equalTo(wSmallIcon);
     }];
     
-    [btnKeypadVideo mas_makeConstraints:^(MASConstraintMaker *make) {
+    [btnKeypadVideo mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(btnSwitchCamera.mas_centerY);
         make.left.equalTo(btnSwitchCamera.mas_right).offset(marginIcon);
         make.width.height.mas_equalTo(wSmallIcon);
     }];
     
-    [btnHangupVideo mas_makeConstraints:^(MASConstraintMaker *make) {
+    [btnHangupVideo mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(viewVideoCall.mas_centerX);
         make.bottom.equalTo(btnOffCamera.mas_top).offset(-marginIcon);
         make.width.height.mas_equalTo(wEndIcon);
@@ -1560,47 +1572,72 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 - (void)setupSizeWithDevice {
     marginQuality = 50.0;
     marginPhone = 30.0;
+    marginBottom = 40.0;
+    paddingAvatar = 0.0;
     
     if (IS_IPHONE || IS_IPOD) {
         NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
-        if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE])
-        {
+        
+        if ([DeviceUtils isPortraitMode]) {
+            if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE])
+            {
+                //  Screen width: 320.000000 - Screen height: 667.000000
+                wAvatar = 110.0;
+                wEndIcon = 60.0;
+                wSmallIcon = 45.0;
+                marginQuality = 30.0;
+                marginIcon = 10.0;
+                marginPhone = 20.0;
+                
+            }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
+            {
+                wAvatar = 130.0;
+                wEndIcon = 70.0;
+                wSmallIcon = 55.0;
+                marginIcon = 10.0;
+                
+            }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
+            {
+                wAvatar = 150.0;
+                wEndIcon = 75.0;
+                wSmallIcon = 58.0;
+                marginIcon = 12.0;
+                
+            }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2] || [deviceMode isEqualToString: simulator]){
+                //  Screen width: 375.000000 - Screen height: 812.000000
+                wAvatar = 150.0;
+                wEndIcon = 75.0;
+                wSmallIcon = 58.0;
+                marginIcon = 12.0;
+            }else{
+                //  Screen width: 375.000000 - Screen height: 812.000000
+                wAvatar = 150.0;
+                wEndIcon = 75.0;
+                wSmallIcon = 58.0;
+                marginIcon = 12.0;
+            }
+        }else{
             //  Screen width: 320.000000 - Screen height: 667.000000
-            wAvatar = 110.0;
-            wEndIcon = 60.0;
-            wSmallIcon = 45.0;
-            marginQuality = 30.0;
-            marginIcon = 10.0;
-            marginPhone = 20.0;
-            
-        }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
-        {
-            wAvatar = 130.0;
+            wAvatar = 100.0;
             wEndIcon = 70.0;
             wSmallIcon = 55.0;
-            marginIcon = 10.0;
+            marginQuality = 5.0;
+            marginIcon = 20.0;
+            marginPhone = 10.0;
+            marginBottom = 20.0;
+            paddingAvatar = 30.0;
             
-        }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
-        {
-            wAvatar = 150.0;
-            wEndIcon = 75.0;
-            wSmallIcon = 58.0;
-            marginIcon = 12.0;
-            
-        }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2] || [deviceMode isEqualToString: simulator]){
-            //  Screen width: 375.000000 - Screen height: 812.000000
-            wAvatar = 150.0;
-            wEndIcon = 75.0;
-            wSmallIcon = 58.0;
-            marginIcon = 12.0;
-        }else{
-            //  Screen width: 375.000000 - Screen height: 812.000000
-            wAvatar = 150.0;
-            wEndIcon = 75.0;
-            wSmallIcon = 58.0;
-            marginIcon = 12.0;
+            if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE] || [deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
+            {
+                //  Screen width: 320.000000 - Screen height: 667.000000
+                marginBottom = 5.0;
+                wAvatar = 100.0;
+                wEndIcon = 65.0;
+                wSmallIcon = 55.0;
+                paddingAvatar = 45.0;
+            }
+            show mini keypad o landscape mode
         }
-        
     }else{
         wAvatar = 180.0;
         wEndIcon = 80.0;
@@ -1615,14 +1652,14 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
         viewOffCam.hidden = YES;
         [_videoPreview addSubview: viewOffCam];
         viewOffCam.backgroundColor = UIColor.blackColor;
-        [viewOffCam mas_makeConstraints:^(MASConstraintMaker *make) {
+        [viewOffCam mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.top.left.bottom.right.equalTo(_videoPreview);
         }];
         
         imgOffCam = [[UIImageView alloc] init];
         imgOffCam.image = [UIImage imageNamed:@"cam_enable.png"];
         [viewOffCam addSubview: imgOffCam];
-        [imgOffCam mas_makeConstraints:^(MASConstraintMaker *make) {
+        [imgOffCam mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(viewOffCam.mas_centerX);
             make.centerY.equalTo(viewOffCam.mas_centerY);
             make.width.height.mas_equalTo(35.0);
@@ -1674,7 +1711,7 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     tbRoutes.scrollEnabled = NO;
     tbRoutes.dataSource = self;
     [contentVC.view addSubview: tbRoutes];
-    [tbRoutes mas_makeConstraints:^(MASConstraintMaker *make) {
+    [tbRoutes mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.left.bottom.right.equalTo(contentVC.view);
     }];
     [alertViewController setValue:contentVC forKey:@"contentViewController"];

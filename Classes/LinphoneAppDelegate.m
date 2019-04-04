@@ -1524,7 +1524,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
     if (IS_IPHONE || IS_IPOD) {
-        if ([[(PhoneMainView*)self.window.rootViewController currentView] equal:CallView.compositeViewDescription])
+        if ([[(PhoneMainView*)self.window.rootViewController currentView] equal:CallView.compositeViewDescription] || [[(PhoneMainView*)self.window.rootViewController currentView] equal:OutgoingCallViewController.compositeViewDescription])
         {
             return UIInterfaceOrientationMaskAll;
         }

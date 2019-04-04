@@ -213,9 +213,9 @@ static UICompositeViewDescription *compositeDescription = nil;
             
         }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2] || [deviceMode isEqualToString: simulator]){
             //  Screen width: 375.000000 - Screen height: 812.000000
-            wAvatar = 130.0;
-            wIconEndCall = 80.0;
-            wSmallIcon = 60.0;
+            wAvatar = 150.0;
+            wIconEndCall = 75.0;
+            wSmallIcon = 58.0;
             margin = 45.0;
             
         }else{
@@ -244,11 +244,11 @@ static UICompositeViewDescription *compositeDescription = nil;
         textFont = [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0];
     }
     
-    [_imgBackground mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_imgBackground mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.left.bottom.right.equalTo(self.view);
     }];
     
-    [_imgAvatar mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_imgAvatar mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view.mas_centerX);
         make.centerY.equalTo(self.view.mas_centerY);
         make.width.height.mas_equalTo(wAvatar);
@@ -260,21 +260,21 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     
     _lbCallState.font = textFont;
-    [_lbCallState mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_lbCallState mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view.mas_centerX);
         make.bottom.equalTo(_imgAvatar.mas_top).offset(-marginQuality);
         make.width.mas_equalTo(300.0);
         make.height.mas_equalTo(30.0);
     }];
     
-    [_imgCallState mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_imgCallState mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view.mas_centerX);
         make.bottom.equalTo(_lbCallState.mas_top).offset(-5.0);
         make.width.height.mas_equalTo(28.0);
     }];
     
     lbPhone.font = textFont;
-    [lbPhone mas_makeConstraints:^(MASConstraintMaker *make) {
+    [lbPhone mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view.mas_centerX);
         make.bottom.equalTo(_imgCallState.mas_top).offset(-30.0);
         make.height.mas_equalTo(25.0);
@@ -282,14 +282,14 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
     
     _lbName.font = textFontBold;
-    [_lbName mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_lbName mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view.mas_centerX);
         make.bottom.equalTo(lbPhone.mas_top);
         make.height.mas_equalTo(35.0);
         make.width.mas_equalTo(300.0);
     }];
     
-    [_btnEndCall mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_btnEndCall mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view.mas_centerX);
         make.bottom.equalTo(self.view).offset(-40.0);
         make.width.height.mas_equalTo(wIconEndCall);
@@ -298,7 +298,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     //  video speaker
     
-    [_btnSpeaker mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_btnSpeaker mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(_btnEndCall.mas_centerY);
         make.left.equalTo(_btnEndCall.mas_right).offset(margin);
         make.width.height.mas_equalTo(wSmallIcon);
@@ -307,7 +307,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     _btnSpeaker.backgroundColor = UIColor.clearColor;
     
     //  mute button
-    [_btnMute mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_btnMute mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(_btnEndCall.mas_centerY);
         make.right.equalTo(_btnEndCall.mas_left).offset(-margin);
         make.width.height.mas_equalTo(wSmallIcon);

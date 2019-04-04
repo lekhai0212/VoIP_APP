@@ -620,7 +620,7 @@
     //  [Khai le - 01/11/2018] UI with iPhoneX
     NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
     if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: simulator] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2] || [deviceMode isEqualToString: simulator]) {
-        if (![description.name isEqualToString:@"CallView"] && ![description.name isEqualToString:@"OutgoingCallViewController"])
+        if ((description != nil && ![description.name isEqualToString:@"CallView"] && ![description.name isEqualToString:@"OutgoingCallViewController"]) || (description == nil && ![[(PhoneMainView*)[LinphoneAppDelegate sharedInstance].window.rootViewController currentView] equal:CallView.compositeViewDescription]))
         {
             if (@available(iOS 11.0, *)) {
                 UIWindow *window = UIApplication.sharedApplication.keyWindow;
@@ -673,7 +673,7 @@
     
     if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: simulator] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2] || [deviceMode isEqualToString: simulator]) {
         
-        if (![description.name isEqualToString:@"CallView"] && ![description.name isEqualToString:@"OutgoingCallViewController"])
+        if ((description != nil && ![description.name isEqualToString:@"CallView"] && ![description.name isEqualToString:@"OutgoingCallViewController"]) || (description == nil && ![[(PhoneMainView*)[LinphoneAppDelegate sharedInstance].window.rootViewController currentView] equal:CallView.compositeViewDescription]))
         {
             if (@available(iOS 11.0, *)) {
                 UIWindow *window = UIApplication.sharedApplication.keyWindow;
@@ -686,7 +686,7 @@
     self.tabBarView.frame = frame;
     self.tabBarViewController.view.frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
     
-    self.tabBarView.backgroundColor = UIColor.redColor;
+    self.tabBarView.backgroundColor = UIColor.clearColor;
     
 	// 3. status bar
 	self.statusBarView.frame = statusBarFrame;
