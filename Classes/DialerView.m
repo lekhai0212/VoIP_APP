@@ -783,6 +783,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.width.height.mas_equalTo(wIcon);
     }];
     
+    
     btnVideoCall.tag = TAG_VIDEO_CALL;
     btnVideoCall.imageEdgeInsets = [DeviceUtils getEdgeOfVideoCallDialerForDevice];
     btnVideoCall.layer.cornerRadius = wIcon/2;
@@ -857,6 +858,12 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.top.equalTo(_eightButton.mas_bottom).offset(spaceMarginY/2);
         make.height.equalTo(lbSepa123.mas_height);
     }];
+    
+    if ([LinphoneAppDelegate sharedInstance].supportVideoCall) {
+        btnVideoCall.hidden = _backspaceButton.hidden = NO;
+    }else{
+        btnVideoCall.hidden = _backspaceButton.hidden = YES;
+    }
 }
 
 #pragma mark - Tap Gesture delegate
