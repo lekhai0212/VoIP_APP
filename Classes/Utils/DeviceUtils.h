@@ -43,5 +43,6 @@ typedef enum {
 + (TypeOutputRoute)getCurrentRouteForCall;
 
 + (void)setupFontSizeForDevice;
++ (BOOL)isPortraitMode;
 
 @end

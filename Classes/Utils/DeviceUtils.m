@@ -22,6 +22,10 @@
 //  [Khai le - 28/10/2018]
 + (float)getSizeOfKeypadButtonForDevice {
     if (!IS_IPOD && !IS_IPHONE) {
+        UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+        if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight) {
+            return 75.0;
+        }
         return 85.0;
     }
     
@@ -67,6 +71,10 @@
 }
 + (float)getSpaceYBetweenKeypadButtonsForDevice {
     if (!IS_IPOD && !IS_IPHONE) {
+        UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+        if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight) {
+            return 15.0;
+        }
         return 40.0;
     }
     
@@ -345,7 +353,7 @@
         }else if (route.portType == AVAudioSessionPortBuiltInSpeaker || [[route.portType lowercaseString] containsString:@"speaker"]) {
             return eSpeaker;
             
-        }else if (route.portType == AVAudioSessionPortBluetoothHFP || route.portType == AVAudioSessionPortBluetoothLE || route.portType == AVAudioSessionPortBluetoothA2DP) {
+        }else if (route.portType == AVAudioSessionPortBluetoothHFP || route.portType == AVAudioSessionPortBluetoothLE || route.portType == AVAudioSessionPortBluetoothA2DP || [[route.portType lowercaseString] containsString:@"bluetooth"]) {
             return eEarphone;
         }
     }
@@ -411,6 +419,15 @@
         
         [LinphoneAppDelegate sharedInstance].descFontBold = [UIFont fontWithName:MYRIADPRO_BOLD size: 16.0];
         [LinphoneAppDelegate sharedInstance].descFontNormal = [UIFont fontWithName:MYRIADPRO_REGULAR size: 16.0];
+    }
+}
+
++ (BOOL)isPortraitMode {
+    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+    if (orientation == UIDeviceOrientationLandscapeRight || orientation == UIDeviceOrientationLandscapeLeft) {
+        return NO;
+    }else{
+        return YES;
     }
 }
 

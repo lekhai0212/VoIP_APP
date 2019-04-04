@@ -1523,8 +1523,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 #pragma mark - Prevent ImagePickerView from rotating
 
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
-    return UIInterfaceOrientationMaskPortrait;
-    
     if (IS_IPHONE || IS_IPOD) {
         if ([[(PhoneMainView*)self.window.rootViewController currentView] equal:CallView.compositeViewDescription])
         {
@@ -2153,6 +2151,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }else if ([link isEqualToString: get_didlist_func]) {
         [self.window makeToast:[[LanguageUtil sharedInstance] getContent:@"Can not get DID list"]
                       duration:2.0 position:CSToastPositionCenter];
+        [self showPopupToChooseDID: @[]];
     }else if ([link isEqualToString: get_missedcall_func]) {
         NSLog(@"Can not get missed call");
     }
@@ -2593,7 +2592,5 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         }
     }
 }
-
-
 
 @end

@@ -3,6 +3,14 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "-[UICompositeView update:tabBar:statusBar:sideMenu:fullscreen:]:UICompositeView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[(PhoneMainView*)[LinphoneAppDelegate sharedInstance].window.rootViewController currentView]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "-[WebServices connectionDidFinishLoading:]:WebServices.m">
          <PersistentStrings>
             <PersistentString

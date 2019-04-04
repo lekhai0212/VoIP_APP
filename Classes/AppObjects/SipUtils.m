@@ -188,6 +188,8 @@
 
 + (void)registerPBXAccount: (NSString *)pbxAccount password: (NSString *)password ipAddress: (NSString *)address port: (NSString *)portID
 {
+    address = @"nhanhoa.cloudcall.vn";
+    
     NSString *displayName = @"";
     LinphoneProxyConfig *config = linphone_core_create_proxy_config(LC);
     

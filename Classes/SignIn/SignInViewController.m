@@ -19,6 +19,8 @@
     WebServices *webService;
     NSString *port;
     NSString *domain;
+    
+    NSTimer *loginTimer;
 }
 @end
 
@@ -600,7 +602,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         {
             [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] state is LinphoneRegistrationOk", __FUNCTION__]
                                  toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-            
+            [self clearLoginTimerIfNeed];
             icWaiting.hidden = YES;
             [icWaiting stopAnimating];
             
@@ -635,6 +637,7 @@ static UICompositeViewDescription *compositeDescription = nil;
             [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] state is LinphoneRegistrationFailed", __FUNCTION__]
                                  toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
             
+            [self clearLoginTimerIfNeed];
             icWaiting.hidden = YES;
             [icWaiting stopAnimating];
             
@@ -898,6 +901,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         tfAccountID.text = userName;
         tfPassword.text = password;
         
+        [self startTimerToCheckRegisterSIP];
         [SipUtils registerPBXAccount:userName password:password ipAddress:domain port:port];
     }else{
         [self hideWaitingView: YES];
@@ -905,6 +909,31 @@ static UICompositeViewDescription *compositeDescription = nil;
     }
 }
 
+- (void)startTimerToCheckRegisterSIP {
+    if (loginTimer != nil) {
+        [loginTimer invalidate];
+        loginTimer = nil;
+    }
+    loginTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(cannotRegisterSIP) userInfo:nil repeats:NO];
+}
+
+- (void)clearLoginTimerIfNeed {
+    if (loginTimer != nil) {
+        [loginTimer invalidate];
+        loginTimer = nil;
+    }
+}
+
+- (void)cannotRegisterSIP {
+    linphone_core_clear_proxy_config(LC);
+    
+    [self clearLoginTimerIfNeed];
+    
+    icWaiting.hidden = YES;
+    [icWaiting stopAnimating];
+    
+    [self.view makeToast:@"Không thể đăng nhập. Vui lòng kiểm tra thông tin tài khoản!" duration:2.0 position:CSToastPositionCenter];
+}
 
 #pragma mark - Webservice Delegate
 
@@ -939,6 +968,8 @@ static UICompositeViewDescription *compositeDescription = nil;
             if ([port isKindOfClass:[NSNumber class]]) {
                 port = [NSString stringWithFormat:@"%d", [port intValue]];
             }
+            
+            [self startTimerToCheckRegisterSIP];
             [SipUtils registerPBXAccount:tfAccountID.text password:tfPassword.text ipAddress:domain port:port];
         }
     }else if ([link isEqualToString: decryptRSA_func]) {

@@ -619,13 +619,15 @@
     
     //  [Khai le - 01/11/2018] UI with iPhoneX
     NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
-    if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: simulator] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2]) {
-        if (@available(iOS 11.0, *)) {
-            UIWindow *window = UIApplication.sharedApplication.keyWindow;
-            CGFloat bottomPadding = window.safeAreaInsets.bottom;
-            tabFrame.origin.y = tabFrame.origin.y - bottomPadding;
+    if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: simulator] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2] || [deviceMode isEqualToString: simulator]) {
+        if (![description.name isEqualToString:@"CallView"] && ![description.name isEqualToString:@"OutgoingCallViewController"])
+        {
+            if (@available(iOS 11.0, *)) {
+                UIWindow *window = UIApplication.sharedApplication.keyWindow;
+                CGFloat bottomPadding = window.safeAreaInsets.bottom;
+                tabFrame.origin.y = tabFrame.origin.y - bottomPadding;
+            }
         }
-        
     }
 
 	//	4. main view and details view - space left width of 35%/65% each
@@ -667,6 +669,18 @@
         
     } else {
         frame.size.height = 0;
+    }
+    
+    if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: simulator] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2] || [deviceMode isEqualToString: simulator]) {
+        
+        if (![description.name isEqualToString:@"CallView"] && ![description.name isEqualToString:@"OutgoingCallViewController"])
+        {
+            if (@available(iOS 11.0, *)) {
+                UIWindow *window = UIApplication.sharedApplication.keyWindow;
+                CGFloat bottomPadding = window.safeAreaInsets.bottom;
+                frame.origin.y = frame.origin.y - bottomPadding;
+            }
+        }
     }
     
     self.tabBarView.frame = frame;

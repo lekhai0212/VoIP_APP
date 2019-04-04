@@ -141,6 +141,10 @@ static UICompositeViewDescription *compositeDescription = nil;
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(registrationUpdateEvent:)
                                                name:kLinphoneRegistrationUpdate object:nil];
     
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged)
+                                                 name:UIDeviceOrientationDidChangeNotification object:nil];
+    
 	// Update on show
 	LinphoneCall *call = linphone_core_get_current_call(LC);
 	LinphoneCallState state = (call != NULL) ? linphone_call_get_state(call) : 0;
@@ -647,15 +651,31 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     float hPadView = 5*wIcon + 6*spaceMarginY;
     _padView.backgroundColor = UIColor.clearColor;
-    [_padView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.bottom.equalTo(self.view);
-        make.height.mas_equalTo(hPadView);
-    }];
+    if (IS_IPHONE || IS_IPOD) {
+        [_padView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.bottom.equalTo(self.view);
+            make.height.mas_equalTo(hPadView);
+        }];
+    }else{
+        if ([DeviceUtils isPortraitMode]) {
+            [_padView mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.left.right.bottom.equalTo(self.view);
+                make.height.mas_equalTo(hPadView);
+            }];
+        }else{
+            [_padView mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.left.right.equalTo(self.view);
+                make.bottom.equalTo(self.view).offset(-appDelegate._hTabbar);
+                make.height.mas_equalTo(hPadView);
+            }];
+        }
+    }
+    
     
     //  1, 2, 3
     _twoButton.layer.cornerRadius = wIcon/2;
     _twoButton.clipsToBounds = YES;
-    [_twoButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_twoButton mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_padView).offset(0);
         make.centerX.equalTo(_padView.mas_centerX);
         make.width.height.mas_equalTo(wIcon);
@@ -663,7 +683,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     _oneButton.layer.cornerRadius = wIcon/2;
     _oneButton.clipsToBounds = YES;
-    [_oneButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_oneButton mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_twoButton.mas_top);
         make.right.equalTo(_twoButton.mas_left).offset(-spaceMarginX);
         make.width.height.mas_equalTo(wIcon);
@@ -671,7 +691,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     _threeButton.layer.cornerRadius = wIcon/2;
     _threeButton.clipsToBounds = YES;
-    [_threeButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_threeButton mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_twoButton.mas_top);
         make.left.equalTo(_twoButton.mas_right).offset(spaceMarginX);
         make.width.height.mas_equalTo(wIcon);
@@ -680,7 +700,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     //  4, 5, 6
     _fiveButton.layer.cornerRadius = wIcon/2;
     _fiveButton.clipsToBounds = YES;
-    [_fiveButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_fiveButton mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_twoButton.mas_bottom).offset(spaceMarginY);
         make.centerX.equalTo(_padView.mas_centerX);
         make.width.height.mas_equalTo(wIcon);
@@ -688,7 +708,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     _fourButton.layer.cornerRadius = wIcon/2;
     _fourButton.clipsToBounds = YES;
-    [_fourButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_fourButton mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_fiveButton.mas_top);
         make.right.equalTo(_fiveButton.mas_left).offset(-spaceMarginX);
         make.width.height.mas_equalTo(wIcon);
@@ -696,7 +716,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     _sixButton.layer.cornerRadius = wIcon/2;
     _sixButton.clipsToBounds = YES;
-    [_sixButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_sixButton mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_fiveButton.mas_top);
         make.left.equalTo(_fiveButton.mas_right).offset(spaceMarginX);
         make.width.height.mas_equalTo(wIcon);
@@ -705,7 +725,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     //  7, 8, 9
     _eightButton.layer.cornerRadius = wIcon/2;
     _eightButton.clipsToBounds = YES;
-    [_eightButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_eightButton mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_fiveButton.mas_bottom).offset(spaceMarginY);
         make.centerX.equalTo(_padView.mas_centerX);
         make.width.height.mas_equalTo(wIcon);
@@ -713,7 +733,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     _sevenButton.layer.cornerRadius = wIcon/2;
     _sevenButton.clipsToBounds = YES;
-    [_sevenButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_sevenButton mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_eightButton.mas_top);
         make.right.equalTo(_eightButton.mas_left).offset(-spaceMarginX);
         make.width.height.mas_equalTo(wIcon);
@@ -721,7 +741,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     _nineButton.layer.cornerRadius = wIcon/2;
     _nineButton.clipsToBounds = YES;
-    [_nineButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_nineButton mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_eightButton.mas_top);
         make.left.equalTo(_eightButton.mas_right).offset(spaceMarginX);
         make.width.height.mas_equalTo(wIcon);
@@ -730,7 +750,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     //  *, 0, #
     _zeroButton.layer.cornerRadius = wIcon/2;
     _zeroButton.clipsToBounds = YES;
-    [_zeroButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_zeroButton mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_eightButton.mas_bottom).offset(spaceMarginY);
         make.centerX.equalTo(_padView.mas_centerX);
         make.width.height.mas_equalTo(wIcon);
@@ -738,7 +758,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     _starButton.layer.cornerRadius = wIcon/2;
     _starButton.clipsToBounds = YES;
-    [_starButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_starButton mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_zeroButton.mas_top);
         make.right.equalTo(_zeroButton.mas_left).offset(-spaceMarginX);
         make.width.height.mas_equalTo(wIcon);
@@ -746,7 +766,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     _hashButton.layer.cornerRadius = wIcon/2;
     _hashButton.clipsToBounds = YES;
-    [_hashButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_hashButton mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_zeroButton.mas_top);
         make.left.equalTo(_zeroButton.mas_right).offset(spaceMarginX);
         make.width.height.mas_equalTo(wIcon);
@@ -757,7 +777,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     _callButton.layer.cornerRadius = wIcon/2;
     _callButton.clipsToBounds = YES;
     _callButton.imageEdgeInsets = callEdgeInsets;
-    [_callButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_callButton mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_zeroButton.mas_bottom).offset(spaceMarginY);
         make.centerX.equalTo(_padView.mas_centerX);
         make.width.height.mas_equalTo(wIcon);
@@ -767,7 +787,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     btnVideoCall.imageEdgeInsets = [DeviceUtils getEdgeOfVideoCallDialerForDevice];
     btnVideoCall.layer.cornerRadius = wIcon/2;
     btnVideoCall.clipsToBounds = YES;
-    [btnVideoCall mas_makeConstraints:^(MASConstraintMaker *make) {
+    [btnVideoCall mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_callButton.mas_top);
         make.right.equalTo(_callButton.mas_left).offset(-spaceMarginX);
         make.width.height.mas_equalTo(wIcon);
@@ -776,7 +796,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     _backspaceButton.imageEdgeInsets = [DeviceUtils getEdgeOfVideoCallDialerForDevice];
     _backspaceButton.layer.cornerRadius = wIcon/2;
     _backspaceButton.clipsToBounds = YES;
-    [_backspaceButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_backspaceButton mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_callButton.mas_top);
         make.left.equalTo(_callButton.mas_right).offset(spaceMarginX);
         make.width.height.mas_equalTo(wIcon);
@@ -784,13 +804,13 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     
     //  Number view
-    [_viewNumber mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_viewNumber mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.view);
         make.top.equalTo(_viewStatus.mas_bottom);
         make.bottom.equalTo(_padView.mas_top);
     }];
     
-    [_addressField mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_addressField mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(_viewNumber.mas_centerY);
         make.left.equalTo(self.view).offset(80);
         make.right.equalTo(self.view).offset(-80);
@@ -808,7 +828,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     icClear.hidden = YES;
     icClear.imageEdgeInsets = clearEdgeInsets;
-    [icClear mas_makeConstraints:^(MASConstraintMaker *make) {
+    [icClear mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(_addressField.mas_centerY);
         make.left.equalTo(_addressField.mas_right);
         make.width.height.mas_equalTo(50.0);
@@ -819,20 +839,20 @@ static UICompositeViewDescription *compositeDescription = nil;
                                                  blue:(240/255.0) alpha:1.0];
     lbSepa456.backgroundColor = lbSepa789.backgroundColor = lbSepa123.backgroundColor;
     
-    [lbSepa123 mas_makeConstraints:^(MASConstraintMaker *make) {
+    [lbSepa123 mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_oneButton);
         make.right.equalTo(_threeButton.mas_right);
         make.top.equalTo(_oneButton.mas_bottom).offset(spaceMarginY/2);
         make.height.mas_equalTo(1.0);
     }];
     
-    [lbSepa456 mas_makeConstraints:^(MASConstraintMaker *make) {
+    [lbSepa456 mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(lbSepa123);
         make.top.equalTo(_fiveButton.mas_bottom).offset(spaceMarginY/2);
         make.height.equalTo(lbSepa123.mas_height);
     }];
     
-    [lbSepa789 mas_makeConstraints:^(MASConstraintMaker *make) {
+    [lbSepa789 mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(lbSepa123);
         make.top.equalTo(_eightButton.mas_bottom).offset(spaceMarginY/2);
         make.height.equalTo(lbSepa123.mas_height);
@@ -1171,6 +1191,16 @@ static UICompositeViewDescription *compositeDescription = nil;
     [popupSearchContacts.tbContacts reloadData];
     popupSearchContacts.delegate = self;
     [popupSearchContacts showInView:appDelegate.window animated:YES];
+}
+
+- (void)orientationChanged {
+    if (!IS_IPHONE && !IS_IPOD) {
+        UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+        if (orientation != UIDeviceOrientationUnknown && orientation != UIDeviceOrientationFaceUp && orientation != UIDeviceOrientationFaceDown)
+        {
+            [self newAutoLayoutForView];
+        }
+    }
 }
 
 #pragma mark - Webservice delegate

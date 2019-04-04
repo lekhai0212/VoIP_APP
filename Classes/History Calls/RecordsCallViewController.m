@@ -475,6 +475,17 @@
     [icWaiting stopAnimating];
     icWaiting.hidden = YES;
     
+    if (audioData == nil) {
+        [self.view makeToast:@"File ghi âm không tồn tại!" duration:2.0 position:CSToastPositionCenter];
+        return;
+    }
+    
+    NSString *value = [[NSString alloc] initWithData:audioData encoding:NSUTF8StringEncoding];
+    if ([[value lowercaseString] containsString:@"file not found"]) {
+        [self.view makeToast:@"File ghi âm không tồn tại!" duration:2.0 position:CSToastPositionCenter];
+        return;
+    }
+    
     if (![AppUtils isNullOrEmpty: recordFile]) {
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *url = [paths objectAtIndex:0];
