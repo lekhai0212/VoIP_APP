@@ -1636,7 +1636,6 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
                 wSmallIcon = 55.0;
                 paddingAvatar = 45.0;
             }
-            show mini keypad o landscape mode
         }
     }else{
         wAvatar = 180.0;
