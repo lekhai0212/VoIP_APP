@@ -185,7 +185,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 	
 	UILongPressGestureRecognizer *backspaceLongGesture =
 		[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onBackspaceLongClick:)];
-	[_backspaceButton addGestureRecognizer:backspaceLongGesture];
+	//  [_backspaceButton addGestureRecognizer:backspaceLongGesture];
+    [icClear addGestureRecognizer:backspaceLongGesture];
 
 	UILongPressGestureRecognizer *zeroLongGesture =
 		[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onZeroLongClick:)];
@@ -422,6 +423,23 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (IBAction)icClearClick:(UIButton *)sender {
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
     
+    if (_addressField.text.length > 0) {
+        _addressField.text = [_addressField.text substringToIndex:[_addressField.text length] - 1];
+    }
+    
+    if (_addressField.text.length > 0) {
+        [pressTimer invalidate];
+        pressTimer = nil;
+        pressTimer = [NSTimer scheduledTimerWithTimeInterval:0.2 target:self
+                                                    selector:@selector(searchPhoneBookWithThread)
+                                                    userInfo:nil repeats:false];
+    }else{
+        resultView.hidden = YES;
+    }
+    return;
+    
+    
+    
     [self hideSearchView];
     [self setupFrameForSearchResultWithExistsData: NO];
 }
@@ -440,6 +458,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
         
         _addressField.text = phoneNumber;
+        icClear.hidden = NO;
     }
 }
 
@@ -543,7 +562,6 @@ static UICompositeViewDescription *compositeDescription = nil;
             make.right.equalTo(self.view).offset(-80);
         }];
         
-        icClear.hidden = NO;
         [icClear mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(_addressField.mas_centerY);
             make.left.equalTo(_addressField.mas_right);
@@ -558,12 +576,16 @@ static UICompositeViewDescription *compositeDescription = nil;
             make.height.mas_equalTo(hAddressField);
         }];
         
-        icClear.hidden = YES;
         [icClear mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(_addressField.mas_centerY);
             make.left.equalTo(_addressField.mas_right);
             make.width.height.mas_equalTo(50.0);
         }];
+    }
+    if (_addressField.text.length > 0) {
+        icClear.hidden = NO;
+    }else{
+        icClear.hidden = YES;
     }
 }
 

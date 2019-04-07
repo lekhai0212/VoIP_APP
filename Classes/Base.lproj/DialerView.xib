@@ -99,7 +99,7 @@
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="hrm-vb-oyF">
                                     <rect key="frame" x="256" y="10" width="40" height="40"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <state key="normal" image="ic_error.png"/>
+                                    <state key="normal" image="backspace-green.png"/>
                                     <connections>
                                         <action selector="icClearClick:" destination="-1" eventType="touchUpInside" id="IDF-eb-21e"/>
                                     </connections>
@@ -357,10 +357,10 @@
     </objects>
     <resources>
         <image name="background_header.jpg" width="1028" height="180"/>
+        <image name="backspace-green.png" width="200" height="200"/>
         <image name="backspace_hover_1" width="241" height="149"/>
         <image name="call_default.png" width="201" height="201"/>
         <image name="call_hover.png" width="201" height="201"/>
-        <image name="ic_error.png" width="200" height="200"/>
         <image name="ic_logo" width="200" height="200"/>
         <image name="numpad_clear.png" width="201" height="201"/>
         <image name="numpad_eight_default.png" width="261" height="261"/>

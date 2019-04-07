@@ -36,7 +36,6 @@
 #import "UIView+Toast.h"
 #import "WebServices.h"
 #import "Constant.h"
-#import "HomeSplitViewController.h"
 #import "ChooseDIDPopupView.h"
 
 #define MINI_KEYPAD_TAG 101
@@ -69,7 +68,7 @@ typedef enum{
     qrCodeLogin,
 }typeLoginPBX;
 
-@interface LinphoneAppDelegate : NSObject <UIApplicationDelegate, PKPushRegistryDelegate, UNUserNotificationCenterDelegate, WebServicesDelegate, UIAlertViewDelegate, UITabBarControllerDelegate, UITabBarDelegate, ChooseDIDPopupViewDelegate> {
+@interface LinphoneAppDelegate : NSObject <UIApplicationDelegate, PKPushRegistryDelegate, UNUserNotificationCenterDelegate, WebServicesDelegate, UIAlertViewDelegate, ChooseDIDPopupViewDelegate> {
     @private
 	UIBackgroundTaskIdentifier bgStartId;
     BOOL startedInBackground;
@@ -92,7 +91,6 @@ typedef enum{
 @property (nonatomic, assign) float _hStatus;
 @property (nonatomic, assign) float _hTabbar;
 @property (nonatomic, assign) float _hHeader;
-@property (nonatomic, assign) float _wSubMenu;
 
 @property (nonatomic, strong) NSString *_deviceToken;
 @property (nonatomic, assign) BOOL _updateTokenSuccess;
@@ -148,7 +146,6 @@ typedef enum{
 @property (nonatomic, assign) BOOL supportVoice;
 
 //  [Khai le - 11/01/2019]
-@property (nonatomic, strong) HomeSplitViewController *homeSplitVC;
 @property (nonatomic, assign) eContact contactType;
 @property (nonatomic, assign) eTypeHistory historyType;
 @property (nonatomic, assign) float hNavigation;
@@ -172,6 +169,8 @@ typedef enum{
 @property (nonatomic, strong) UIFont *descFontNormal;
 
 @property (nonatomic, assign) BOOL supportVideoCall;
+
+@property (nonatomic, strong) NSString *callPrefix;
 
 @end
 

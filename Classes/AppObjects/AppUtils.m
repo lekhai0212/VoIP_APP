@@ -972,24 +972,6 @@
     return result;
 }
 
-+ (UINavigationController *)createNavigationWithController: (UIViewController *)viewController {
-    UINavigationController *navigationVC = [[UINavigationController alloc] initWithRootViewController: viewController];
-    navigationVC.navigationBar.barTintColor = IPAD_HEADER_BG_COLOR;
-    navigationVC.navigationBar.translucent = NO;
-    navigationVC.navigationBar.tintColor = UIColor.whiteColor;
-    //  navigationVC.navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObject:UIColor.whiteColor forKey:NSForegroundColorAttributeName];
-    [navigationVC.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:UIColor.whiteColor, NSFontAttributeName:[UIFont systemFontOfSize:22.0 weight:UIFontWeightThin]}];
-    
-    return navigationVC;
-}
-
-+ (void)showDetailViewWithController: (UIViewController *)detailVC
-{
-    UITabBarController *tabbarVC = [[LinphoneAppDelegate sharedInstance].homeSplitVC.viewControllers objectAtIndex:0];
-    NSArray *viewControllers = [[NSArray alloc] initWithObjects:tabbarVC, detailVC, nil];
-    [LinphoneAppDelegate sharedInstance].homeSplitVC.viewControllers = viewControllers;
-}
-
 + (void)setSelected: (BOOL)selected forButton: (UIButton *)button {
     if (IS_IPHONE || IS_IPOD) {
         button.backgroundColor = (selected) ? SELECT_TAB_BG_COLOR : UIColor.clearColor;

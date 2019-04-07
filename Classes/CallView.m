@@ -1198,6 +1198,11 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
         if (call != NULL) {
             addressPhoneNumber = [SipUtils getPhoneNumberOfCall:call orLinphoneAddress:nil];
             
+            NSString *prefix = [LinphoneAppDelegate sharedInstance].callPrefix;
+            if (![AppUtils isNullOrEmpty: prefix] && addressPhoneNumber.length > prefix.length) {
+                addressPhoneNumber = [addressPhoneNumber stringByReplacingCharactersInRange:NSMakeRange(0, prefix.length) withString:@""];
+            }
+            
             PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: addressPhoneNumber];
             if ([AppUtils isNullOrEmpty: contact.name]) {
                 fullName = [[LanguageUtil sharedInstance] getContent:@"Unknown"];

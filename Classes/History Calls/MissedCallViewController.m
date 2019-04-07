@@ -74,6 +74,9 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getMissedHistoryCallForUser)
                                                  name:reloadHistoryCall object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cancelDeleteCallHistory)
+                                                 name:@"cancelDeleteCallHistory" object:nil];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -400,6 +403,12 @@
             isDeleted = YES;
         }
     }
+    [_tbListCalls reloadData];
+}
+
+- (void)cancelDeleteCallHistory {
+    isDeleted = NO;
+    [listDelete removeAllObjects];
     [_tbListCalls reloadData];
 }
 

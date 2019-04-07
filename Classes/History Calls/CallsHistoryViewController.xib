@@ -69,15 +69,6 @@
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="cAI-EV-ef3">
-                            <rect key="frame" x="272" y="3" width="34" height="34"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                            <state key="normal" image="ic_trash.png"/>
-                            <connections>
-                                <action selector="_btnEditPressed:" destination="-1" eventType="touchUpInside" id="Jse-Ix-qqj"/>
-                            </connections>
-                        </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Bwk-qj-KWk">
                             <rect key="frame" x="192" y="1" width="55" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -86,6 +77,15 @@
                             <state key="selected" backgroundImage="missed_act"/>
                             <connections>
                                 <action selector="_iconRecordClicked:" destination="-1" eventType="touchUpInside" id="tNU-0m-W76"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="cAI-EV-ef3">
+                            <rect key="frame" x="272" y="3" width="34" height="34"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                            <state key="normal" image="ic_trash.png"/>
+                            <connections>
+                                <action selector="_btnEditPressed:" destination="-1" eventType="touchUpInside" id="Jse-Ix-qqj"/>
                             </connections>
                         </button>
                     </subviews>

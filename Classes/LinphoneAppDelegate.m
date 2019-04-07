@@ -48,15 +48,6 @@
 #import "PhoneObject.h"
 #import <Intents/Intents.h>
 
-#import "iPadDialerViewController.h"
-#import "iPadKeypadViewController.h"
-#import "iPadContactsViewController.h"
-#import "iPadNotChooseContactViewController.h"
-#import "iPadNotChoosednMoreViewController.h"
-#import "iPadMoreViewController.h"
-#import "iPadPopupCall.h"
-#import "TestViewController.h"
-
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
 
 @interface LinphoneAppDelegate (){
@@ -75,7 +66,7 @@
 
 @synthesize internetActive, internetReachable;
 @synthesize localization;
-@synthesize _hRegistrationState, _hStatus, _hHeader, _wSubMenu, _hTabbar;
+@synthesize _hRegistrationState, _hStatus, _hHeader, _hTabbar;
 @synthesize _deviceToken, _updateTokenSuccess;
 @synthesize _meEnded;
 @synthesize _acceptCall;
@@ -90,8 +81,8 @@
 @synthesize contactLoaded;
 @synthesize webService, keepAwakeTimer, listNumber, listInfoPhoneNumber, supportLoginWithPhoneNumber, logFilePath, dbQueue, splashScreen;
 @synthesize supportVoice;
-@synthesize homeSplitVC, contactType, historyType, callTransfered, hNavigation, hasBluetoothEar, ipadWaiting;
-@synthesize phoneForCall, configPushToken, supportVideoCall;
+@synthesize contactType, historyType, callTransfered, hNavigation, hasBluetoothEar, ipadWaiting;
+@synthesize phoneForCall, configPushToken, supportVideoCall, callPrefix;
 
 #pragma mark - Lifecycle Functions
 
@@ -469,6 +460,7 @@ void onUncaughtException(NSException* exception)
     supportLoginWithPhoneNumber = NO;
     supportVoice = NO;
     supportVideoCall = NO;
+    callPrefix = @"";
     
     listInfoPhoneNumber = [[NSMutableArray alloc] init];
     
@@ -559,26 +551,6 @@ void onUncaughtException(NSException* exception)
     if (userActivityDictionary != nil) {
         [self showSplashScreenOnView: YES];
     }
-    /*
-    if (IS_IPHONE || IS_IPOD) {
-        [[PhoneMainView instance] changeCurrentView:[SignInViewController compositeViewDescription]];
-        //  [[PhoneMainView instance] changeCurrentView:[DialerView compositeViewDescription]];
-        [PhoneMainView.instance updateStatusBar:nil];
-    }else{
-        contactType = eContactPBX;
-        [self settingForStartApplicationWithIpad];
-        
-        ipadWaiting = [[UIActivityIndicatorView alloc] init];
-        ipadWaiting.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
-        ipadWaiting.hidden = YES;
-        ipadWaiting.backgroundColor = UIColor.whiteColor;
-        ipadWaiting.alpha = 0.5;
-        [self.window addSubview: ipadWaiting];
-        [ipadWaiting mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.left.right.bottom.equalTo(self.window);
-        }];
-    }   */
-    
     //  Enable all notification type. VoIP Notifications don't present a UI but we will use this to show local nofications later
     UIUserNotificationSettings *notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert| UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
     
@@ -2295,144 +2267,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
 }
 
-//  [Khai Le - 11/01/2019]
-- (void)settingForStartApplicationWithIpad {
-    UITabBarController *tabBars = [[UITabBarController alloc] init];
-    //  Dialer and call history
-    iPadDialerViewController *iPadDialerVC = [[iPadDialerViewController alloc] initWithNibName:@"iPadDialerViewController" bundle:nil];
-    iPadDialerVC.tabBarItem.title = @"Dialer";
-    iPadDialerVC.tabBarItem.image = [UIImage imageNamed:@"ic_call_bottom_bar_def"];
-    iPadDialerVC.tabBarItem.selectedImage = [UIImage imageNamed:@"ic_call_bottom_bar_act"];
-    
-    //  contacts
-    iPadContactsViewController *iPadContactsVC = [[iPadContactsViewController alloc] initWithNibName:@"iPadContactsViewController" bundle:nil];
-    iPadContactsVC.tabBarItem.title = @"Contacts";
-    iPadContactsVC.tabBarItem.image = [UIImage imageNamed:@"ic_phonebook_bottom_bar_def"];
-    iPadContactsVC.tabBarItem.selectedImage = [UIImage imageNamed:@"ic_phonebook_bottom_bar_act"];
-    
-    //  more
-    
-    iPadMoreViewController *iPadMoreVC = [[iPadMoreViewController alloc] initWithNibName:@"iPadMoreViewController" bundle:nil];
-    iPadMoreVC.tabBarItem.title = @"More";
-    iPadMoreVC.tabBarItem.image = [UIImage imageNamed:@"ic_more_bottom_bar_def"];
-    iPadMoreVC.tabBarItem.selectedImage = [UIImage imageNamed:@"ic_more_bottom_bar_act"];
-    
-    UINavigationController *moreNavigationVC = [AppUtils createNavigationWithController: iPadMoreVC];
-    
-    //  save navigation bar height
-    hNavigation = moreNavigationVC.navigationBar.frame.size.height;
-    
-    NSArray *listVC = @[iPadDialerVC, iPadContactsVC, moreNavigationVC];
-    tabBars.viewControllers = listVC;
-    tabBars.delegate = self;
-    
-    iPadKeypadViewController *iPadKeypadVC = [[iPadKeypadViewController alloc] initWithNibName:@"iPadKeypadViewController" bundle:nil];
-    
-    homeSplitVC = [[HomeSplitViewController alloc] init];
-    homeSplitVC.maximumPrimaryColumnWidth = SPLIT_MASTER_WIDTH;
-    homeSplitVC.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
-    homeSplitVC.viewControllers = [NSArray arrayWithObjects:tabBars, iPadKeypadVC, nil];
-    self.window.rootViewController = homeSplitVC;
-}
-
-//  [Khai Le - 11/01/2019]
-- (void)testRootVC {
-    
-    TestViewController *testVC = [[TestViewController alloc] initWithNibName:@"TestViewController" bundle:nil];
-    self.window.rootViewController = testVC;
-}
-
-#pragma mark - UITabbar delegate
-- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
-    switch (tabBarController.selectedIndex) {
-        case 0:{
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] ---> selected tab Dialer: index = %d", __FUNCTION__, (int)tabBarController.selectedIndex] toFilePath:logFilePath];
-            
-            iPadKeypadViewController *contentVC = [[iPadKeypadViewController alloc] initWithNibName:@"iPadKeypadViewController" bundle:nil];
-            
-            UITabBarController *tabbarVC = [homeSplitVC.viewControllers objectAtIndex:0];
-            NSArray *viewControllers = [[NSArray alloc] initWithObjects:tabbarVC, contentVC, nil];
-            homeSplitVC.viewControllers = viewControllers;
-            
-            break;
-        }
-        case 1:{
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] ---> selected tab Contacts: index = %d", __FUNCTION__, (int)tabBarController.selectedIndex] toFilePath:logFilePath];
-            
-            iPadNotChooseContactViewController *contentVC = [[iPadNotChooseContactViewController alloc] initWithNibName:@"iPadNotChooseContactViewController" bundle:nil];
-            UINavigationController *detailVC = [AppUtils createNavigationWithController: contentVC];
-            
-            UITabBarController *tabbarVC = [homeSplitVC.viewControllers objectAtIndex:0];
-            NSArray *viewControllers = [[NSArray alloc] initWithObjects:tabbarVC, detailVC, nil];
-            homeSplitVC.viewControllers = viewControllers;
-            
-            break;
-        }
-        case 2:{
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] ---> selected tab More: index = %lu", __FUNCTION__, (unsigned long)tabBarController.selectedIndex] toFilePath:logFilePath];
-            
-            iPadNotChoosednMoreViewController *contentVC = [[iPadNotChoosednMoreViewController alloc] initWithNibName:@"iPadNotChoosednMoreViewController" bundle:nil];
-            UINavigationController *detailVC = [AppUtils createNavigationWithController: contentVC];
-            
-            UITabBarController *tabbarVC = [homeSplitVC.viewControllers objectAtIndex:0];
-            NSArray *viewControllers = [[NSArray alloc] initWithObjects:tabbarVC, detailVC, nil];
-            homeSplitVC.viewControllers = viewControllers;
-            
-            break;
-        }
-        default:
-            break;
-    }
-    NSLog(@"%@ - index = %lu", [viewController class], (unsigned long)tabBarController.selectedIndex);
-}
-
--(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
-    NSLog(@"%@", item);
-}
-
-- (void)showPopupCallForIpad: (NSNotification *)notif
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSString *phonenumber = [notif object];
-        if ([phonenumber isKindOfClass:[NSString class]]) {
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] phone number = %@", __FUNCTION__, phonenumber] toFilePath:logFilePath];
-            
-            NSArray *toplevelObject = [[NSBundle mainBundle] loadNibNamed:@"iPadPopupCall" owner:nil options:nil];
-            iPadPopupCall *popupCall;
-            for(id currentObject in toplevelObject){
-                if ([currentObject isKindOfClass:[iPadPopupCall class]]) {
-                    popupCall = (iPadPopupCall *) currentObject;
-                    break;
-                }
-            }
-            popupCall.frame = CGRectMake((SCREEN_WIDTH-400)/2, (SCREEN_HEIGHT-750)/2, 400, 750);
-            [popupCall setNeedsDisplay];
-            [popupCall setupUIForView];
-            popupCall.phoneNumber = phonenumber;
-            [popupCall showInView:self.window animated:YES];
-        }
-    });
-}
-
-- (void)showIncomingPopupCallForIpad: (NSString *)phoneNumber
-{
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] phone number = %@", __FUNCTION__, phoneNumber] toFilePath:logFilePath];
-    
-    NSArray *toplevelObject = [[NSBundle mainBundle] loadNibNamed:@"iPadPopupCall" owner:nil options:nil];
-    iPadPopupCall *popupCall;
-    for(id currentObject in toplevelObject){
-        if ([currentObject isKindOfClass:[iPadPopupCall class]]) {
-            popupCall = (iPadPopupCall *) currentObject;
-            break;
-        }
-    }
-    popupCall.frame = CGRectMake((SCREEN_WIDTH-400)/2, (SCREEN_HEIGHT-750)/2, 400, 750);
-    [popupCall setNeedsDisplay];
-    [popupCall setupUIForView];
-    popupCall.phoneNumber = phoneNumber;
-    [popupCall showInView:self.window animated:YES];
-}
-
 - (void)showWaiting: (BOOL)show {
     ipadWaiting.hidden = !show;
     if (show) {
@@ -2492,6 +2326,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
     
     if (![AppUtils isNullOrEmpty: phoneForCall]) {
+        callPrefix = prefix;
+        
         NSString *strToCall = [NSString stringWithFormat:@"%@%@", prefix, phoneForCall];
         [SipUtils makeCallWithPhoneNumber: strToCall];
     }
@@ -2512,14 +2348,12 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     {
         //  Screen width: 320.000000 - Screen height: 667.000000
         _hRegistrationState = 44.0 + _hStatus;
-        _wSubMenu = 60.0;
         _hHeader = 50.0;
         
     }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
     {
         //  Screen width: 375.000000 - Screen height: 667.000000
         _hRegistrationState = 44.0 + _hStatus;
-        _wSubMenu = 60.0;
         _hHeader = 50.0;
         
         
@@ -2527,17 +2361,14 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     {
         //  Screen width: 414.000000 - Screen height: 736.000000
         _hRegistrationState = 55.0 + _hStatus;
-        _wSubMenu = 100.0;
         _hHeader = 50.0;
         
     }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2] || [deviceMode isEqualToString: simulator]){
         //  Screen width: 375.000000 - Screen height: 812.000000
         _hRegistrationState = 44.0 + _hStatus;
-        _wSubMenu = 60.0;
         _hHeader = 50.0;
     }else{
         _hRegistrationState = 44.0 + _hStatus;
-        _wSubMenu = 60.0;
         _hHeader = 50.0;
     }
 }

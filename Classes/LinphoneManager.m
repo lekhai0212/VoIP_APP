@@ -908,7 +908,14 @@ static void linphone_iphone_display_status(struct _LinphoneCore *lc, const char 
         }
         
         NSString *phoneNumber = [NSString stringWithUTF8String:linphone_address_get_username(addr)];
+        
         if ([callStatus isEqualToString:missed_call] || [callStatus isEqualToString: aborted_call]) {
+            NSString *prefix = [LinphoneAppDelegate sharedInstance].callPrefix;
+            if (![AppUtils isNullOrEmpty: prefix] && phoneNumber.length > prefix.length) {
+                phoneNumber = [phoneNumber stringByReplacingCharactersInRange:NSMakeRange(0, prefix.length) withString:@""];
+                [LinphoneAppDelegate sharedInstance].callPrefix = @"";
+            }
+            
             int unread = 1;
             if ([callStatus isEqualToString: aborted_call]) {
                 unread = 0;
@@ -924,6 +931,12 @@ static void linphone_iphone_display_status(struct _LinphoneCore *lc, const char 
             // Huỷ bỏ biến cancel cuộc gọi
             [[LinphoneAppDelegate sharedInstance] set_meEnded: FALSE];
         }else if ([callStatus isEqualToString: declined_call]){
+            NSString *prefix = [LinphoneAppDelegate sharedInstance].callPrefix;
+            if (![AppUtils isNullOrEmpty: prefix] && phoneNumber.length > prefix.length) {
+                phoneNumber = [phoneNumber stringByReplacingCharactersInRange:NSMakeRange(0, prefix.length) withString:@""];
+                [LinphoneAppDelegate sharedInstance].callPrefix = @"";
+            }
+            
             int unread = 1;
             
             if ([[[PhoneMainView instance] currentView] isEqual:[DetailHistoryCNViewController compositeViewDescription]] || [[[PhoneMainView instance] currentView] isEqual:[CallsHistoryViewController compositeViewDescription]]) {
@@ -1083,7 +1096,11 @@ static void linphone_iphone_display_status(struct _LinphoneCore *lc, const char 
         NSString *time = [AppUtils getCurrentTimeStamp];
         NSString *callID = [NSString stringWithUTF8String:linphone_call_log_get_call_id(callLog)];
         NSString *phoneNumber = [NSString stringWithUTF8String:linphone_address_get_username(addr)];
-        
+        NSString *prefix = [LinphoneAppDelegate sharedInstance].callPrefix;
+        if (![AppUtils isNullOrEmpty: prefix] && phoneNumber.length > prefix.length) {
+            phoneNumber = [phoneNumber stringByReplacingCharactersInRange:NSMakeRange(0, prefix.length) withString:@""];
+            [LinphoneAppDelegate sharedInstance].callPrefix = @"";
+        }
         
 		if (data != NULL) {
 			linphone_call_set_user_data(call, NULL);

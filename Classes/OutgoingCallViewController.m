@@ -68,8 +68,11 @@ static UICompositeViewDescription *compositeDescription = nil;
     _btnEndCall.enabled = NO;
     _btnMute.delegate = self;
     
-    PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: _phoneNumber];
-    
+    NSString *tmpPhone = _phoneNumber;
+    if (![AppUtils isNullOrEmpty: [LinphoneAppDelegate sharedInstance].callPrefix]) {
+        tmpPhone = [_phoneNumber stringByReplacingCharactersInRange:NSMakeRange(0, [LinphoneAppDelegate sharedInstance].callPrefix.length) withString:@""];
+    }
+    PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: tmpPhone];
     userName = contact.name;
     
     if ([AppUtils isNullOrEmpty: userName]) {
@@ -78,7 +81,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     }else{
         _lbName.text = userName;
     }
-    lbPhone.text = _phoneNumber;
+    lbPhone.text = tmpPhone;
     
     if ([AppUtils isNullOrEmpty: contact.avatar]) {
         _imgAvatar.image = [UIImage imageNamed:@"no_avatar"];
