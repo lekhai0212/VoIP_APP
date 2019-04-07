@@ -16,6 +16,7 @@
     
     UIView *optionsView;
     UIButton *btnSend;
+    UIButton *btnSelectAll;
     UIButton *btnDelete;
     BOOL isEdit;
     NSMutableArray *listChoosed;
@@ -114,6 +115,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         [self displayOptionView: NO];
         
         [listChoosed removeAllObjects];
+        [btnSelectAll setTitle:@"Chọn tất cả" forState:UIControlStateNormal];
     }
     [self updateViewWithList];
     [tbList reloadData];
@@ -217,6 +219,23 @@ static UICompositeViewDescription *compositeDescription = nil;
                 action:@selector(btnSendClicked)
       forControlEvents:UIControlEventTouchUpInside];
     
+    btnSelectAll = [[UIButton alloc] init];
+    btnSelectAll.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+    btnSelectAll.titleLabel.font = [LinphoneAppDelegate sharedInstance].headerFontBold;
+    [btnSelectAll setTitle:@"Chọn tất cả" forState:UIControlStateNormal];
+    [btnSelectAll setTitleColor:[UIColor colorWithRed:(101/255.0) green:(205/255.0)
+                                                 blue:(70/255.0) alpha:1.0]
+                       forState:UIControlStateNormal];
+    [optionsView addSubview: btnSelectAll];
+    [btnSelectAll mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(optionsView.mas_centerX);
+        make.centerY.equalTo(optionsView.mas_centerY);
+        make.width.mas_equalTo(150.0);
+        make.height.mas_equalTo(40.0);
+    }];
+    [btnSelectAll addTarget:self
+                action:@selector(selectAllPress)
+      forControlEvents:UIControlEventTouchUpInside];
     
     //  delete button
     btnDelete = [[UIButton alloc] init];
@@ -283,6 +302,18 @@ static UICompositeViewDescription *compositeDescription = nil;
     [self updateViewWithList];
 }
 
+- (void)selectAllPress {
+    [listChoosed removeAllObjects];
+    if ([btnSelectAll.currentTitle isEqualToString:@"Chọn tất cả"]) {
+        [listChoosed addObjectsFromArray: listRecords];
+        [btnSelectAll setTitle:@"Bỏ chọn tất cả" forState:UIControlStateNormal];
+    }else{
+        [btnSelectAll setTitle:@"Chọn tất cả" forState:UIControlStateNormal];
+    }
+    [self updateViewWithList];
+    [tbList reloadData];
+}
+
 - (void)deleteRecordAudioFile {
     [icWaiting startAnimating];
     icWaiting.hidden = NO;
@@ -313,6 +344,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     [self displayOptionView: NO];
     [icChoose setTitle:@"Chọn" forState:UIControlStateNormal];
+    [btnSelectAll setTitle:@"Chọn tất cả" forState:UIControlStateNormal];
     
     [icWaiting stopAnimating];
     icWaiting.hidden = YES;
@@ -409,6 +441,14 @@ static UICompositeViewDescription *compositeDescription = nil;
     [cell.btnChoose addTarget:self
                        action:@selector(onIconButtonClicked:)
              forControlEvents:UIControlEventTouchUpInside];
+    
+    if (![listChoosed containsObject:fileName]) {
+        [cell.btnChoose setImage:[UIImage imageNamed:@"ic_not_check"]
+                        forState:UIControlStateNormal];
+    }else{
+        [cell.btnChoose setImage:[UIImage imageNamed:@"ic_checked"]
+                        forState:UIControlStateNormal];
+    }
     
     return cell;
 }
