@@ -419,7 +419,8 @@ void onUncaughtException(NSException* exception)
 {
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
-    NSString *subDirectory = [NSString stringWithFormat:@"%@/.%@.txt", logsFolderName, [AppUtils getCurrentDate]];
+    //  NSString *subDirectory = [NSString stringWithFormat:@"%@/.%@.txt", logsFolderName, [AppUtils getCurrentDate]];
+    NSString *subDirectory = [NSString stringWithFormat:@"%@/%@.txt", logsFolderName, [AppUtils getCurrentDate]];
     logFilePath = [WriteLogsUtils makeFilePathWithFileName: subDirectory];
     
     if (IS_IPHONE || IS_IPOD) {
@@ -428,10 +429,13 @@ void onUncaughtException(NSException* exception)
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"==================================================\n==               START APPLICATION ON IPAD              ==\n=================================================="] toFilePath:logFilePath];
     }
     
+    NSString *str = [NSString stringWithFormat:@"%@: %@\n%@: %@", [[LanguageUtil sharedInstance] getContent:@"Version"], [AppUtils getAppVersionWithBuildVersion: YES], [[LanguageUtil sharedInstance] getContent:@"Release date"], [AppUtils getBuildDate]];
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"\nApp's version is %@", str] toFilePath:logFilePath];
+    
     //  set default ringtone if have not yet
     NSString *ringtone = [[NSUserDefaults standardUserDefaults] objectForKey:DEFAULT_RINGTONE];
     if (ringtone == nil || [ringtone isEqualToString:@""]) {
-        [[NSUserDefaults standardUserDefaults] setObject:@"chirtmas.mp3" forKey:DEFAULT_RINGTONE];
+        [[NSUserDefaults standardUserDefaults] setObject:@"htc_tone.mp3" forKey:DEFAULT_RINGTONE];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
@@ -764,7 +768,7 @@ void onUncaughtException(NSException* exception)
                             [LinphoneManager.instance addPushCallId:callId];
                         }
                     } else  if ([callId  isEqual: @""]) {
-                        NSLog(@"PushNotification: does not have call-id yet, fix it !");
+                        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]: PushNotification: does not have call-id yet, fix it !", __FUNCTION__] toFilePath:logFilePath];
                     }
                 }
             }
@@ -998,7 +1002,7 @@ void onUncaughtException(NSException* exception)
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] _deviceToken = %@", __FUNCTION__, _deviceToken] toFilePath:logFilePath];
         
         //  Cap nhat token cho phan chat
-        if (USERNAME != nil && ![USERNAME isEqualToString: @""]) {
+        if (USERNAME != nil && ![USERNAME isEqualToString: @""] && !_updateTokenSuccess) {
             [self updateCustomerTokenIOS];
         }else{
             _updateTokenSuccess = false;
@@ -1515,41 +1519,31 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 {
     // called after network status changes
     NetworkStatus internetStatus = [internetReachable currentReachabilityStatus];
-    switch (internetStatus)
-    {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"\n[%s] Network status is %d", __FUNCTION__, internetStatus] toFilePath: logFilePath];
+    
+    switch (internetStatus){
         case NotReachable: {
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"%s: %@", __FUNCTION__, @"The internet is down!!!!"]
-                                 toFilePath:logFilePath];
             internetActive = NO;
-            [[NSNotificationCenter defaultCenter] postNotificationName:networkChanged
-                                                                object:nil];
             break;
         }
         case ReachableViaWiFi: {
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"%s: %@", __FUNCTION__, @"The internet is working via WIFI."]
-                                 toFilePath:logFilePath];
             internetActive = YES;
-            [[NSNotificationCenter defaultCenter] postNotificationName:networkChanged
-                                                                object:nil];
             break;
         }
         case ReachableViaWWAN: {
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"%s: %@", __FUNCTION__, @"The internet is working via WWAN."]
-                                 toFilePath:logFilePath];
             internetActive = YES;
-            [[NSNotificationCenter defaultCenter] postNotificationName:networkChanged
-                                                                object:nil];
+            
             break;
         }
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:networkChanged object:nil];
 }
 
 #pragma mark - my functions
 
 - (void)getContactsListForFirstLoad
 {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
-                         toFilePath:logFilePath];
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:logFilePath];
     
     if (listContacts == nil) {
         listContacts = [[NSMutableArray alloc] init];
@@ -2193,6 +2187,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 }
 
 - (void)registrationUpdate:(LinphoneRegistrationState)state forProxy:(LinphoneProxyConfig *)proxy message:(NSString *)message {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] ------> registrationUpdate state is %d", __FUNCTION__, state] toFilePath: logFilePath];
+    
     switch (state) {
         case LinphoneRegistrationOk: {
             if (!configPushToken) {

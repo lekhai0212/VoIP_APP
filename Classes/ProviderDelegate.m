@@ -94,7 +94,8 @@
 #pragma mark - CXProdiverDelegate Protocol
 
 - (void)provider:(CXProvider *)provider performAnswerCallAction:(CXAnswerCallAction *)action {
-    LOGD(@"CallKit : Answering Call");
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] CallKit : Answering Call", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
 	self.callKitCalls++;
 	[self configAudioSession:[AVAudioSession sharedInstance]];
 	[action fulfill];
@@ -114,7 +115,8 @@
 }
 
 - (void)provider:(CXProvider *)provider performStartCallAction:(CXStartCallAction *)action {
-	LOGD(@"CallKit : Starting Call");
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] CallKit : Starting Call", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
 	// To restart Audio Unit
 	[self configAudioSession:[AVAudioSession sharedInstance]];
 	[action fulfill];
@@ -133,7 +135,8 @@
 }
 
 - (void)provider:(CXProvider *)provider performEndCallAction:(CXEndCallAction *)action {
-	LOGD(@"CallKit : Ending the Call");
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] CallKit : Ending the Call", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
 	self.callKitCalls--;
 	[action fulfill];
 	if (linphone_core_is_in_conference(LC)) {
@@ -164,7 +167,8 @@
 }
 
 - (void)provider:(CXProvider *)provider performSetHeldCallAction:(nonnull CXSetHeldCallAction *)action {
-	LOGD(@"CallKit : Call paused status changed");
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] CallKit : Call paused status changed", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
 	[action fulfill];
 	if (linphone_core_is_in_conference(LC) && action.isOnHold) {
 		linphone_core_leave_conference(LC);
@@ -200,8 +204,8 @@
 }
 
 - (void)provider:(CXProvider *)provider performPlayDTMFCallAction:(CXPlayDTMFCallAction *)action {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] CallKit : playing DTMF", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
-	LOGD(@"CallKit : playing DTMF");
 	[action fulfill];
 	NSUUID *call_uuid = action.callUUID;
 	NSString *callID = [self.calls objectForKey:call_uuid];
@@ -211,7 +215,8 @@
 }
 
 - (void)provider:(CXProvider *)provider didActivateAudioSession:(AVAudioSession *)audioSession {
-	LOGD(@"CallKit : Audio session activated");
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] CallKit : Audio session activated", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
 	// Now we can (re)start the call
 	if (_pendingCall) {
 		LinphoneCallState state = linphone_call_get_state(_pendingCall);
@@ -242,15 +247,16 @@
 }
 
 - (void)provider:(CXProvider *)provider didDeactivateAudioSession:(nonnull AVAudioSession *)audioSession {
-	LOGD(@"CallKit : Audio session deactivated");
-
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] CallKit : Audio session deactivated", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
 	_pendingCall = NULL;
 	_pendingAddr = NULL;
 	_pendingCallVideo = FALSE;
 }
 
 - (void)providerDidReset:(CXProvider *)provider {
-	LOGD(@"CallKit : Provider reset");
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] CallKit : Provider reset", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
 	LinphoneManager.instance.conf = TRUE;
 	linphone_core_terminate_all_calls(LC);
 	[self.calls removeAllObjects];
@@ -260,7 +266,8 @@
 #pragma mark - CXCallObserverDelegate Protocol
 
 - (void)callObserver:(CXCallObserver *)callObserver callChanged:(CXCall *)call {
-	LOGD(@"CallKit : Call changed");
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] CallKit : Call changed", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
 }
 
 @end

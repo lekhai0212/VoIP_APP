@@ -2415,10 +2415,13 @@ static int comp_call_id(const LinphoneCall *call, const char *callid) {
 }
 
 - (void)addPushCallId:(NSString *)callid {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]: callid = %@", __FUNCTION__, callid] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
 	// first, make sure this callid is not already involved in a call
 	const bctbx_list_t *calls = linphone_core_get_calls(theLinphoneCore);
 	if (bctbx_list_find_custom(calls, (bctbx_compare_func)comp_call_id, [callid UTF8String])) {
-		LOGW(@"Call id [%@] already handled", callid);
+        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]: Call id [%@] already handled", __FUNCTION__, callid] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+        
 		return;
 	};
 	if ([pushCallIDs count] > 10 /*max number of pending notif*/)
@@ -2686,9 +2689,13 @@ static int comp_call_state_paused(const LinphoneCall *call, const void *param) {
 		// be mis-functionning.
         LOGI(@"None connectivity");
 		[self setupNetworkReachabilityCallback];
+        
+        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"\n[%s]: don't trust ios when he says there is no network. Create a new reachability context, the previous one might", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
 	}
     LOGI(@"Network reachability callback setup");
     linphone_core_refresh_registers(theLinphoneCore); // just to make sure REGISTRATION is up to date
+    
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"\n[%s]: Call function ---> linphone_core_refresh_registers", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
 }
 
 - (void)renameDefaultSettings {

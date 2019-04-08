@@ -913,27 +913,21 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)registrationUpdate:(LinphoneRegistrationState)state forProxy:(LinphoneProxyConfig *)proxy message:(NSString *)message
 {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Dialer: state registration is %d", __FUNCTION__, state] toFilePath:appDelegate.logFilePath];
+    
     switch (state) {
         case LinphoneRegistrationOk: {
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] State is LinphoneRegistrationOk", __FUNCTION__] toFilePath:appDelegate.logFilePath];
-            
             _lbStatus.textColor = UIColor.greenColor;
             _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Online"];
             break;
         }
         case LinphoneRegistrationNone:{
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] State is LinphoneRegistrationNone", __FUNCTION__] toFilePath:appDelegate.logFilePath];
-            
             break;
         }
         case LinphoneRegistrationCleared: {
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] State is LinphoneRegistrationCleared", __FUNCTION__] toFilePath:appDelegate.logFilePath];
-            
             break;
         }
         case LinphoneRegistrationFailed: {
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] State is LinphoneRegistrationFailed", __FUNCTION__] toFilePath:appDelegate.logFilePath];
-            
             _lbStatus.textColor = UIColor.orangeColor;
             if ([SipUtils getStateOfDefaultProxyConfig] == eAccountOff) {
                 _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Disabled"];
@@ -943,8 +937,6 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case LinphoneRegistrationProgress: {
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] State is LinphoneRegistrationProgress", __FUNCTION__] toFilePath:appDelegate.logFilePath];
-            
             _lbStatus.textColor = UIColor.whiteColor;
             _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Connecting"];
             break;
