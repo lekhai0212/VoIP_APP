@@ -5621,7 +5621,7 @@
 				PROVISIONING_PROFILE = "9ba894d8-f515-44bd-be45-7fcdf2b92481";
 				PROVISIONING_PROFILE_SPECIFIER = "CloudCall Development";
 				SKIP_INSTALL = NO;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "$(inherited)";
 				WARNING_CFLAGS = (
 					"-Werror=objc-method-access",
@@ -5730,7 +5730,7 @@
 				PROVISIONING_PROFILE = "9ba894d8-f515-44bd-be45-7fcdf2b92481";
 				PROVISIONING_PROFILE_SPECIFIER = "CloudCall Distribution";
 				SKIP_INSTALL = NO;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "$(inherited)";
 				WARNING_CFLAGS = (
 					"-Werror=objc-method-access",
@@ -5839,7 +5839,7 @@
 				PROVISIONING_PROFILE = "f067149d-95bc-414f-9c08-25eec8e1eb4b";
 				PROVISIONING_PROFILE_SPECIFIER = "CloudCall Distribution";
 				SKIP_INSTALL = NO;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "$(inherited)";
 				WARNING_CFLAGS = (
 					"-Werror=objc-method-access",
@@ -5948,7 +5948,7 @@
 				PROVISIONING_PROFILE = "9ba894d8-f515-44bd-be45-7fcdf2b92481";
 				PROVISIONING_PROFILE_SPECIFIER = "CloudCall Distribution";
 				SKIP_INSTALL = NO;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "$(inherited)";
 				WARNING_CFLAGS = (
 					"-Werror=objc-method-access",
