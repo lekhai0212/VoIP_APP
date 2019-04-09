@@ -31,7 +31,8 @@
 
 #pragma mark - API
 
-#define link_api                @"https://api.cloudcall.vn"
+//  #define link_api                @"https://api.cloudcall.vn"
+#define link_api                @"https://api.vfone.vn"
 #define login_func              @"Login"
 #define update_token_func       @"UpdatePushToken"
 #define get_contacts_func       @"GetServerContacts"
