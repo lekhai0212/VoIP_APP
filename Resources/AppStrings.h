@@ -32,14 +32,14 @@
 #pragma mark - API
 
 //  #define link_api                @"https://api.cloudcall.vn"
-#define link_api                @"https://api.vfone.vn"
-#define login_func              @"Login"
-#define update_token_func       @"UpdatePushToken"
-#define get_contacts_func       @"GetServerContacts"
-#define get_didlist_func        @"GetDIDList"
-#define get_missedcall_func     @"GetInfoMissCall"
-#define decryptRSA_func         @"DecryptRSA"
-#define get_list_record_file    @"GetListRecordFile"
+#define link_api                @"https://api.vfone.vn:51100"
+#define login_func              @"logininfo"
+#define update_token_func       @"updatepushtoken"
+#define get_contacts_func       @"getservercontacts"
+#define get_didlist_func        @"getdidlist"
+#define get_missedcall_func     @"getinfomisscall"
+#define decryptRSA_func         @"decryptrsa"
+#define get_list_record_file    @"getlistrecordfile"
 #define get_file_record         @"GetFileRecord"
 
 

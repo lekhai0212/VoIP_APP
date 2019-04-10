@@ -134,7 +134,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     icWaiting.hidden = NO;
     [icWaiting startAnimating];
     
-    NSString *params = [NSString stringWithFormat:@"userName=%@&password=%@", tfAccountID.text, tfPassword.text];
+    NSString *params = [NSString stringWithFormat:@"username=%@", tfAccountID.text];
     [webService callGETWebServiceWithFunction:login_func andParams:params];
 }
 
@@ -806,7 +806,7 @@ static UICompositeViewDescription *compositeDescription = nil;
                          toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     if (![AppUtils isNullOrEmpty: qrcodeResult]) {
-        NSString *params = [NSString stringWithFormat:@"hashString=%@", qrcodeResult];
+        NSString *params = [NSString stringWithFormat:@"hashstring=%@", qrcodeResult];
         [webService callGETWebServiceWithFunction:decryptRSA_func andParams:params];
         return;
     }

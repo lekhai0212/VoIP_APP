@@ -509,7 +509,7 @@
         sender.enabled = NO;
         [self hideWaitingView: NO];
         
-        NSString *params = [NSString stringWithFormat:@"userName=%@", USERNAME];
+        NSString *params = [NSString stringWithFormat:@"username=%@", USERNAME];
         [webService callGETWebServiceWithFunction:get_contacts_func andParams:params];
         
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, params] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];

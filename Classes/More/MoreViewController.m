@@ -337,7 +337,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)clearPushTokenOfUser {
     
     [LinphoneAppDelegate sharedInstance]._updateTokenSuccess = NO;
-    NSString *params = [NSString stringWithFormat:@"pushToken=%@&userName=%@&del=1", @"", USERNAME];
+    NSString *params = [NSString stringWithFormat:@"pushToken=%@&userName=%@", @"", USERNAME];
     [webService callGETWebServiceWithFunction:update_token_func andParams:params];
     
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, params] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];

@@ -2047,7 +2047,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 - (void)updateCustomerTokenIOS {
     if (USERNAME != nil) {
         NSString *destToken = [NSString stringWithFormat:@"ios%@", _deviceToken];
-        NSString *params = [NSString stringWithFormat:@"pushToken=%@&userName=%@&del=0", destToken, USERNAME];
+        NSString *params = [NSString stringWithFormat:@"pushtoken=%@&username=%@", destToken, USERNAME];
         [webService callGETWebServiceWithFunction:update_token_func andParams:params];
         
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, params] toFilePath:logFilePath];
@@ -2273,7 +2273,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 }
 
 - (void)startGetDIDListForCall {
-    NSString *params = [NSString stringWithFormat:@"userName=%@&did=%d", USERNAME, 1];
+    NSString *params = [NSString stringWithFormat:@"username=%@", USERNAME];
     [webService callGETWebServiceWithFunction:get_didlist_func andParams:params];
 }
 

@@ -129,7 +129,7 @@
         long dateFromInterval = [startDate timeIntervalSince1970];
         long dateToInterval = [endDate timeIntervalSince1970];
         
-        NSString *params = [NSString stringWithFormat:@"userName=%@&dateFrom=%ld&dateTo=%ld&as=%d", USERNAME, dateFromInterval, dateToInterval, 1];
+        NSString *params = [NSString stringWithFormat:@"username=%@&datefrom=%ld&dateto=%ld&as=%d", USERNAME, dateFromInterval, dateToInterval, 1];
         [webService callGETWebServiceWithFunction:get_list_record_file andParams:params];
         
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, params] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
@@ -523,7 +523,7 @@
     NSString *src = [callInfo objectForKey:@"src"];
     NSString *userfield = [callInfo objectForKey:@"userfield"];
     
-    id timeObj = [callInfo objectForKey:@"createDate"];
+    id timeObj = [callInfo objectForKey:@"createdate"];
     
     long timeInterval = 0;
     if ([timeObj isKindOfClass:[NSNumber class]] || [timeObj isKindOfClass:[NSString class]]) {
