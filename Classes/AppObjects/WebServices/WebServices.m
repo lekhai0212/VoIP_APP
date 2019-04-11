@@ -52,9 +52,9 @@
     [request setTimeoutInterval: 60];
     
     [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    
-//    [request setValue:[NSString stringWithFormat:@"%d", (int)[requestData length]] forHTTPHeaderField:@"Content-Length"];
-//    [request setHTTPBody: requestData];
+    [request setValue:@"application/json" forHTTPHeaderField:@"hash"];
+    [request setValue:[LinphoneAppDelegate sharedInstance].randomKey forHTTPHeaderField:@"key"];
+    [request setValue:[LinphoneAppDelegate sharedInstance].hashStr forHTTPHeaderField:@"hash"];
     
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     if(connection) {

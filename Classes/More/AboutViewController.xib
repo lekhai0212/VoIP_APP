@@ -83,6 +83,6 @@
     <resources>
         <image name="background_header.jpg" width="1028" height="180"/>
         <image name="ic_back.png" width="200" height="200"/>
-        <image name="lauch_icon.png" width="1024" height="1025"/>
+        <image name="lauch_icon.png" width="1024" height="1024"/>
     </resources>
 </document>

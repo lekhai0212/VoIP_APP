@@ -10,6 +10,7 @@
 #import "QRCodeReaderViewController.h"
 #import "QRCodeReader.h"
 #import "CustomTextAttachment.h"
+#import <CommonCrypto/CommonDigest.h>
 
 @interface SignInViewController (){
     QRCodeReaderViewController *scanQRCodeVC;
@@ -24,6 +25,21 @@
 }
 @end
 
+@implementation NSString (MD5)
+- (NSString *)MD5String {
+    const char *cstr = [self UTF8String];
+    unsigned char result[16];
+    CC_MD5(cstr, (int)strlen(cstr), result);
+    
+    return [NSString stringWithFormat:
+            @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
+            result[0], result[1], result[2], result[3],
+            result[4], result[5], result[6], result[7],
+            result[8], result[9], result[10], result[11],
+            result[12], result[13], result[14], result[15]
+            ];
+}
+@end
 
 @implementation SignInViewController
 @synthesize viewWelcome, imgWelcome, imgLogoWelcome, lbSlogan, btnStart;
@@ -133,6 +149,10 @@ static UICompositeViewDescription *compositeDescription = nil;
     [self.view endEditing: YES];
     icWaiting.hidden = NO;
     [icWaiting startAnimating];
+    
+    NSString *total = [NSString stringWithFormat:@"%@%@%@", tfPassword.text, [LinphoneAppDelegate sharedInstance].randomKey, tfAccountID.text];
+    [LinphoneAppDelegate sharedInstance].hashStr = [[total MD5String] lowercaseString];
+    
     
     NSString *params = [NSString stringWithFormat:@"username=%@", tfAccountID.text];
     [webService callGETWebServiceWithFunction:login_func andParams:params];
@@ -281,7 +301,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
         {
             //  Screen width: 375.000000 - Screen height: 667.000000
-            hLogo = 48.0;
+            hLogo = 65.0;
             marginTop = 20.0;
             marginSlogan = 30.0;
             wButtonStart = 170.0;
@@ -290,7 +310,7 @@ static UICompositeViewDescription *compositeDescription = nil;
             
             padding = 25.0;
             topPadding = 15.0;
-            hLogoColor = 40.0;
+            hLogoColor = 55.0;
             accMargin = 10.0;
             edgeBack = 14.0;
             edge = 9.0;
@@ -302,7 +322,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
         {
             //  Screen width: 414.000000 - Screen height: 736.000000
-            hLogo = 50.0;
+            hLogo = 65.0;
             
             padding = 30.0;
             hLogoColor = 50.0;
@@ -321,7 +341,7 @@ static UICompositeViewDescription *compositeDescription = nil;
             
         }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2] || [deviceMode isEqualToString: simulator]){
             //  Screen width: 375.000000 - Screen height: 812.000000;
-            hLogo = 55.0;
+            hLogo = 65.0;
             sloganFont = [UIFont systemFontOfSize:20.0 weight:UIFontWeightRegular];
             marginTop = 30.0;
             marginSlogan = 30.0;
@@ -350,7 +370,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         }
     }
     
-    UIImage *logoImg = [UIImage imageNamed:@"logo_white.png"];
+    UIImage *logoImg = [UIImage imageNamed:@"logo_transparent.png"];
     float wLogo = logoImg.size.width * hLogo / logoImg.size.height;
     [imgLogoWelcome mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(viewWelcome.mas_centerX);
@@ -806,9 +826,15 @@ static UICompositeViewDescription *compositeDescription = nil;
                          toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     if (![AppUtils isNullOrEmpty: qrcodeResult]) {
-        NSString *params = [NSString stringWithFormat:@"hashstring=%@", qrcodeResult];
-        [webService callGETWebServiceWithFunction:decryptRSA_func andParams:params];
-        return;
+        if (qrcodeResult.length > 5) {
+            NSString *password = [qrcodeResult substringFromIndex: 5];
+            NSString *total = [NSString stringWithFormat:@"%@%@%@", password, [LinphoneAppDelegate sharedInstance].randomKey, qrcodeResult];
+            [LinphoneAppDelegate sharedInstance].hashStr = [[total MD5String] lowercaseString];
+            
+            NSString *params = [NSString stringWithFormat:@"hashstring=%@", qrcodeResult];
+            [webService callGETWebServiceWithFunction:decryptRSA_func andParams:params];
+            return;
+        }
     }
     icWaiting.hidden = YES;
     [icWaiting stopAnimating];
@@ -895,7 +921,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     if ([port isKindOfClass:[NSNumber class]]) {
         port = [NSString stringWithFormat:@"%d", [port intValue]];
     }
-    NSString *userName = [info objectForKey:@"userName"];
+    NSString *userName = [info objectForKey:@"username"];
     NSString *password = [info objectForKey:@"password"];
     if (![AppUtils isNullOrEmpty: userName] && ![AppUtils isNullOrEmpty: password] && ![AppUtils isNullOrEmpty: port] && ![AppUtils isNullOrEmpty: domain]) {
         tfAccountID.text = userName;

@@ -171,6 +171,8 @@ typedef enum{
 @property (nonatomic, assign) BOOL supportVideoCall;
 
 @property (nonatomic, strong) NSString *callPrefix;
+@property (nonatomic, strong) NSString *randomKey;
+@property (nonatomic, strong) NSString *hashStr;
 
 @end
 

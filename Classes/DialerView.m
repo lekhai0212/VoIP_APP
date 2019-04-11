@@ -32,6 +32,7 @@
 #import <CoreTelephony/CTCall.h>
 #import "PBXContact.h"
 #import "AESCrypt.h"
+#import <CommonCrypto/CommonDigest.h>
 
 @interface DialerView (){
     LinphoneAppDelegate *appDelegate;
@@ -51,6 +52,22 @@
     UIButton *btnSearchNum;
     UIButton *btnChooseContact;
     float hAddressField;
+}
+@end
+
+@implementation NSString (MD5)
+- (NSString *)MD5String {
+    const char *cstr = [self UTF8String];
+    unsigned char result[16];
+    CC_MD5(cstr, (int)strlen(cstr), result);
+    
+    return [NSString stringWithFormat:
+            @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
+            result[0], result[1], result[2], result[3],
+            result[4], result[5], result[6], result[7],
+            result[8], result[9], result[10], result[11],
+            result[12], result[13], result[14], result[15]
+            ];
 }
 @end
 
@@ -86,6 +103,9 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
     [WriteLogsUtils writeForGoToScreen: @"DialerView"];
+    
+    NSString *total = [NSString stringWithFormat:@"%@%@%@", PASSWORD, [LinphoneAppDelegate sharedInstance].randomKey, USERNAME];
+    [LinphoneAppDelegate sharedInstance].hashStr = [[total MD5String] lowercaseString];
     
     if ([LinphoneAppDelegate sharedInstance].supportVideoCall) {
         btnVideoCall.hidden = _backspaceButton.hidden = NO;
@@ -600,7 +620,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 
 - (void)newAutoLayoutForView {
-    float hLogo = 22.0;
+    float hLogo = 35.0;
     hAddressField = 60.0;
     UIEdgeInsets callEdgeInsets = UIEdgeInsetsZero;
     UIEdgeInsets clearEdgeInsets = UIEdgeInsetsMake(12, 12, 12, 12);
@@ -611,7 +631,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
         if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: IphoneSE])
         {
-            hLogo = 19.0;
+            hLogo = 25.0;
             callEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
             clearEdgeInsets = UIEdgeInsetsMake(16, 16, 16, 16);
             
@@ -634,7 +654,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.height.mas_equalTo(appDelegate._hRegistrationState);
     }];
     
-    UIImage *logoImg = [UIImage imageNamed:@"logo_white"];
+    UIImage *logoImg = [UIImage imageNamed:@"logo_transparent.png"];
     float wLogo = hLogo * logoImg.size.width / logoImg.size.height;
     _imgLogoSmall.image = logoImg;
     [_imgLogoSmall mas_makeConstraints:^(MASConstraintMaker *make) {

@@ -122,12 +122,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneManager.m"
-            timestampString = "575364267.707267"
+            timestampString = "576668337.239526"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1554"
             endingLineNumber = "1554"
-            landmarkName = "linphone_iphone_message_received_unable_decrypt"
+            landmarkName = "linphone_iphone_message_received"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
@@ -246,12 +246,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneManager.m"
-            timestampString = "575364267.707673"
+            timestampString = "576668337.240474"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "2386"
             endingLineNumber = "2386"
-            landmarkName = "-cancelLocalNotifTimerForCallId:"
+            landmarkName = "-callByCallId:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -294,7 +294,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneManager.m"
-            timestampString = "575364267.7078609"
+            timestampString = "576668337.241089"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "2582"
@@ -470,7 +470,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneManager.m"
-            timestampString = "575364267.708312"
+            timestampString = "576668337.2419111"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "776"
@@ -502,7 +502,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneManager.m"
-            timestampString = "575364267.7085119"
+            timestampString = "576668337.242298"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "209"
@@ -534,11 +534,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneAppDelegate.m"
-            timestampString = "576498511.515408"
+            timestampString = "576668048.04643"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1435"
-            endingLineNumber = "1435"
+            startingLineNumber = "1436"
+            endingLineNumber = "1436"
             landmarkName = "LinphoneAppDelegate"
             landmarkType = "3">
          </BreakpointContent>
@@ -550,11 +550,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneAppDelegate.m"
-            timestampString = "576498511.515613"
+            timestampString = "576668048.046566"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1391"
-            endingLineNumber = "1391"
+            startingLineNumber = "1392"
+            endingLineNumber = "1392"
             landmarkName = "-application:handleActionWithIdentifier:forLocalNotification:withResponseInfo:completionHandler:"
             landmarkType = "7">
          </BreakpointContent>
@@ -566,11 +566,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneAppDelegate.m"
-            timestampString = "576498511.515744"
+            timestampString = "576668048.046682"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1138"
-            endingLineNumber = "1138"
+            startingLineNumber = "1139"
+            endingLineNumber = "1139"
             landmarkName = "-userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:"
             landmarkType = "7">
             <Locations>
@@ -582,11 +582,11 @@
                   moduleName = "linphone"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/lamquangquan/Desktop/KhaiLe/VoIP_APP/Classes/LinphoneAppDelegate.m"
-                  timestampString = "576498520.018308"
+                  timestampString = "576668338.69384"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1139"
-                  endingLineNumber = "1139"
+                  startingLineNumber = "1140"
+                  endingLineNumber = "1140"
                   offsetFromSymbolStart = "6380">
                </Location>
                <Location
@@ -597,11 +597,11 @@
                   moduleName = "linphone"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/lamquangquan/Desktop/KhaiLe/VoIP_APP/Classes/LinphoneAppDelegate.m"
-                  timestampString = "576498520.023677"
+                  timestampString = "576668338.698753"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1139"
-                  endingLineNumber = "1139"
+                  startingLineNumber = "1140"
+                  endingLineNumber = "1140"
                   offsetFromSymbolStart = "6452">
                </Location>
             </Locations>
@@ -614,11 +614,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneAppDelegate.m"
-            timestampString = "576498511.5158679"
+            timestampString = "576668048.046797"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1116"
-            endingLineNumber = "1116"
+            startingLineNumber = "1117"
+            endingLineNumber = "1117"
             landmarkName = "-userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:"
             landmarkType = "7">
          </BreakpointContent>
@@ -630,11 +630,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneAppDelegate.m"
-            timestampString = "576498511.515991"
+            timestampString = "576668048.046912"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1072"
-            endingLineNumber = "1072"
+            startingLineNumber = "1073"
+            endingLineNumber = "1073"
             landmarkName = "-userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:"
             landmarkType = "7">
             <Locations>
@@ -646,11 +646,11 @@
                   moduleName = "linphone"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/lamquangquan/Desktop/KhaiLe/VoIP_APP/Classes/LinphoneAppDelegate.m"
-                  timestampString = "576498520.230875"
+                  timestampString = "576668338.72049"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1073"
-                  endingLineNumber = "1073"
+                  startingLineNumber = "1074"
+                  endingLineNumber = "1074"
                   offsetFromSymbolStart = "3400">
                </Location>
                <Location
@@ -661,11 +661,11 @@
                   moduleName = "linphone"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/lamquangquan/Desktop/KhaiLe/VoIP_APP/Classes/LinphoneAppDelegate.m"
-                  timestampString = "576498520.237038"
+                  timestampString = "576668338.725304"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1073"
-                  endingLineNumber = "1073"
+                  startingLineNumber = "1074"
+                  endingLineNumber = "1074"
                   offsetFromSymbolStart = "3412">
                </Location>
             </Locations>
@@ -678,7 +678,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneAppDelegate.m"
-            timestampString = "576498511.517287"
+            timestampString = "576668048.047029"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "169"
@@ -741,13 +741,29 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Classes/SignIn/SignInViewController.m"
-            timestampString = "576498512.116426"
+            filePath = "Classes/History Calls/RecordsCallViewController.m"
+            timestampString = "576641996.279207"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "964"
-            endingLineNumber = "964"
-            landmarkName = "-successfulToCallWebService:withData:"
+            startingLineNumber = "413"
+            endingLineNumber = "413"
+            landmarkName = "-btnRecordOnCellPressed:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Classes/History Calls/RecordsCallViewController.m"
+            timestampString = "576642110.181075"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "489"
+            endingLineNumber = "489"
+            landmarkName = "-receivedRecordAudioData:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -758,28 +774,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/SignIn/SignInViewController.m"
-            timestampString = "576498560.193151"
+            timestampString = "576664193.312945"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "945"
-            endingLineNumber = "945"
-            landmarkName = "-failedToCallWebService:andError:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Classes/SignIn/SignInViewController.m"
-            timestampString = "576498587.7783639"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "138"
-            endingLineNumber = "138"
-            landmarkName = "-startLogin:"
+            startingLineNumber = "325"
+            endingLineNumber = "325"
+            landmarkName = "-setupUIForView"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

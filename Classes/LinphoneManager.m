@@ -2059,7 +2059,7 @@ static LinphoneCoreVTable linphonec_vtable = {
 
     //  [Khai Le - 15/03/2019]
     NSString *displayName = [NSBundle.mainBundle objectForInfoDictionaryKey:@"CFBundleDisplayName"];
-    displayName = @"Cloudcall";
+    displayName = @"VFONE";
     
 	NSString *device = [[NSMutableString alloc]
 		initWithString:[NSString

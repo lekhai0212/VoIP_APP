@@ -409,7 +409,7 @@
                 [icWaiting startAnimating];
                 icWaiting.hidden = NO;
                 
-                NSString *params = [NSString stringWithFormat:@"userName=%@&userfield=%@", USERNAME, userfield];
+                NSString *params = [NSString stringWithFormat:@"username=%@&userfield=%@", USERNAME, userfield];
                 [webService callGETWebServiceWithFunction:get_file_record andParams:params];
                 
                 [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, params] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];

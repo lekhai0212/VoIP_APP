@@ -10,8 +10,6 @@
 #ifndef AppStrings_h
 #define AppStrings_h
 
-#define DOMAIN_DEFAULT  @"nhanhoa.cloudcall.vn"
-#define PORT_DEFAULT    @"51000"
 #define idSyncPBX           @"keySyncPBX"
 
 #define SILENCE_RINGTONE    @"silence.mp3"
@@ -31,7 +29,6 @@
 
 #pragma mark - API
 
-//  #define link_api                @"https://api.cloudcall.vn"
 #define link_api                @"https://api.vfone.vn:51100"
 #define login_func              @"logininfo"
 #define update_token_func       @"updatepushtoken"
@@ -40,7 +37,7 @@
 #define get_missedcall_func     @"getinfomisscall"
 #define decryptRSA_func         @"decryptrsa"
 #define get_list_record_file    @"getlistrecordfile"
-#define get_file_record         @"GetFileRecord"
+#define get_file_record         @"getfilerecord"
 
 
 
@@ -50,8 +47,8 @@
 
 
 #define link_appstore   @""
-#define link_introduce  @"https://cloudcall.vn/about.html"
-#define link_policy     @"https://cloudcall.vn/privacy.html"
+#define link_introduce  @"https://vfone.vn/about.html"
+#define link_policy     @"https://vfone.vn/privacy.html"
 #define youtube_channel @""
 #define facebook_link   @""
 
@@ -171,7 +168,7 @@
 #define idContactUnknown    -9999
 #define idSyncPBX           @"keySyncPBX"
 #define accSyncPBX          @"accSyncPBX"
-#define nameContactSyncPBX  @"CloudCall PBX"
+#define nameContactSyncPBX  @"VFONE.VN PBX"
 #define nameSyncCompany     @"Nhan Hoa Software Company"
 #define keySyncPBX          @"CloudCallPBX"
 
