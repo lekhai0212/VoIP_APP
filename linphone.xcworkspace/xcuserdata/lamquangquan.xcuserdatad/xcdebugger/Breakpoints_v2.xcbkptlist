@@ -518,7 +518,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneAppDelegate.m"
-            timestampString = "576736067.307997"
+            timestampString = "576749648.459476"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1458"
@@ -534,7 +534,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneAppDelegate.m"
-            timestampString = "576736067.308841"
+            timestampString = "576749648.459999"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1414"
@@ -550,45 +550,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneAppDelegate.m"
-            timestampString = "576736067.309487"
+            timestampString = "576749648.460302"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1161"
             endingLineNumber = "1161"
             landmarkName = "-userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[LinphoneAppDelegate userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:]"
-                  moduleName = "linphone"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lamquangquan/Desktop/KhaiLe/VoIP_APP/Classes/LinphoneAppDelegate.m"
-                  timestampString = "576736068.769195"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1162"
-                  endingLineNumber = "1162"
-                  offsetFromSymbolStart = "6380">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[LinphoneAppDelegate userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:]"
-                  moduleName = "linphone"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lamquangquan/Desktop/KhaiLe/VoIP_APP/Classes/LinphoneAppDelegate.m"
-                  timestampString = "576736068.774482"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1162"
-                  endingLineNumber = "1162"
-                  offsetFromSymbolStart = "6452">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -598,7 +566,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneAppDelegate.m"
-            timestampString = "576736067.310087"
+            timestampString = "576749648.460595"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1139"
@@ -614,45 +582,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneAppDelegate.m"
-            timestampString = "576736067.310674"
+            timestampString = "576749648.460883"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1095"
             endingLineNumber = "1095"
             landmarkName = "-userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[LinphoneAppDelegate userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:]"
-                  moduleName = "linphone"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lamquangquan/Desktop/KhaiLe/VoIP_APP/Classes/LinphoneAppDelegate.m"
-                  timestampString = "576736068.801867"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1096"
-                  endingLineNumber = "1096"
-                  offsetFromSymbolStart = "3400">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[LinphoneAppDelegate userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:]"
-                  moduleName = "linphone"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lamquangquan/Desktop/KhaiLe/VoIP_APP/Classes/LinphoneAppDelegate.m"
-                  timestampString = "576736068.807712"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1096"
-                  endingLineNumber = "1096"
-                  offsetFromSymbolStart = "3412">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -742,7 +678,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/AppObjects/WebServices/WebServices.m"
-            timestampString = "576736067.311775"
+            timestampString = "576749648.461351"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "140"
@@ -780,22 +716,6 @@
             startingLineNumber = "520"
             endingLineNumber = "520"
             landmarkName = "-registrationUpdate:forProxy:message:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Classes/LinphoneAppDelegate.m"
-            timestampString = "576738249.878931"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "553"
-            endingLineNumber = "553"
-            landmarkName = "-application:didFinishLaunchingWithOptions:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
