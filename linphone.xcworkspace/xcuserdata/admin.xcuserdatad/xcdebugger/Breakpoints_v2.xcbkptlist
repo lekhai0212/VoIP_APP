@@ -138,7 +138,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneAppDelegate.m"
-            timestampString = "576599981.5441"
+            timestampString = "576693899.798789"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "2082"
@@ -218,7 +218,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/More/MoreViewController.m"
-            timestampString = "576599981.544313"
+            timestampString = "576693845.885566"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "515"
@@ -234,7 +234,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/More/MoreViewController.m"
-            timestampString = "576599981.5443749"
+            timestampString = "576693845.885983"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "460"
@@ -250,7 +250,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/More/MoreViewController.m"
-            timestampString = "576599981.544433"
+            timestampString = "576693845.886282"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "372"
@@ -282,7 +282,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneAppDelegate.m"
-            timestampString = "576599981.544937"
+            timestampString = "576693899.799374"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "2110"
@@ -298,12 +298,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/SignIn/SignInViewController.m"
-            timestampString = "576599981.545001"
+            timestampString = "576693899.799704"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "138"
             endingLineNumber = "138"
-            landmarkName = "-startLogin:"
+            landmarkName = "-btnShowPassPress:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -314,12 +314,60 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/Contacts/PBXContactsViewController.m"
-            timestampString = "576599981.545067"
+            timestampString = "576693899.800087"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "590"
             endingLineNumber = "590"
             landmarkName = "-savePBXContactInPhoneBook:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Classes/SignIn/SignInViewController.m"
+            timestampString = "576693899.800542"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "118"
+            endingLineNumber = "118"
+            landmarkName = "-btnSignInPress:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Classes/LinphoneAppDelegate.m"
+            timestampString = "576693899.800869"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "2052"
+            endingLineNumber = "2052"
+            landmarkName = "-updateCustomerTokenIOS"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Classes/LinphoneAppDelegate.m"
+            timestampString = "576693899.801183"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "2118"
+            endingLineNumber = "2118"
+            landmarkName = "-failedToCallWebService:andError:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

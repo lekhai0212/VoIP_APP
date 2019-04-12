@@ -201,13 +201,16 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)setupUIForView {
     //  Welcome view
+    viewWelcome.backgroundColor = [UIColor colorWithRed:(235/255.0) green:(235/255.0) blue:(235/255.0) alpha:1.0];
     [viewWelcome mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.bottom.right.equalTo(self.view);
     }];
+    /*
     CAGradientLayer *gradient = [CAGradientLayer layer];
     gradient.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     gradient.colors = @[(id)[UIColor colorWithRed:(154/255.0) green:(215/255.0) blue:(9/255.0) alpha:1.0].CGColor, (id)[UIColor colorWithRed:(60/255.0) green:(198/255.0) blue:(116/255.0) alpha:1.0].CGColor];
     [viewWelcome.layer insertSublayer:gradient atIndex:0];
+    */
     
     float wImgWelcome;
     if (IS_IPHONE || IS_IPOD) {
@@ -220,9 +223,13 @@ static UICompositeViewDescription *compositeDescription = nil;
     imgWelcome.layer.cornerRadius = wImgWelcome/2;
     [imgWelcome mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(viewWelcome.mas_centerX);
-        make.bottom.equalTo(viewWelcome.mas_centerY);
+        make.bottom.equalTo(viewWelcome.mas_centerY).offset(-20.0);
         make.width.height.mas_equalTo(wImgWelcome);
     }];
+    imgWelcome.layer.cornerRadius = wImgWelcome/2;
+    imgWelcome.layer.borderWidth = 5.0;
+    imgWelcome.layer.borderColor = [UIColor colorWithRed:(246/255.0) green:(183/255.0) blue:(150/255.0) alpha:1.0].CGColor;
+    imgWelcome.clipsToBounds = YES;
     
     float topPadding = 30.0;
     float hLogo;
@@ -385,6 +392,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     lbSlogan.font = sloganFont;
     lbSlogan.text = sloganContent;
     lbSlogan.numberOfLines = 5;
+    lbSlogan.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     [lbSlogan mas_makeConstraints:^(MASConstraintMaker *make) {
         //  make.centerX.equalTo(viewWelcome.mas_centerX);
         make.top.equalTo(imgLogoWelcome.mas_bottom).offset(marginSlogan);
@@ -394,12 +402,22 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.height.mas_equalTo(textSize.height + 10);
     }];
     
+    CAGradientLayer *gradient = [CAGradientLayer layer];
+    gradient.frame = CGRectMake(0, 0, wButtonStart, hButtonStart);
+    gradient.colors = @[(id)[UIColor colorWithRed:(154/255.0) green:(215/255.0) blue:(9/255.0) alpha:1.0].CGColor, (id)[UIColor colorWithRed:(60/255.0) green:(198/255.0) blue:(116/255.0) alpha:1.0].CGColor];
+    gradient.startPoint = CGPointMake(1, 0);
+    gradient.endPoint = CGPointMake(0, 1);
     
+    [btnStart.layer insertSublayer:gradient atIndex:0];
     [btnStart setTitle:[[[LanguageUtil sharedInstance] getContent:@"Start"] uppercaseString] forState:UIControlStateNormal];
-    [btnStart setTitleColor:[UIColor colorWithRed:(60/255.0) green:(75/255.0)
-                                             blue:(102/255.0) alpha:1.0] forState:UIControlStateNormal];
+    [btnStart setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+//    [btnStart setTitleColor:[UIColor colorWithRed:(60/255.0) green:(75/255.0)
+//                                             blue:(102/255.0) alpha:1.0] forState:UIControlStateNormal];
     btnStart.layer.cornerRadius = 5.0;
-    btnStart.backgroundColor = UIColor.whiteColor;
+    btnStart.clipsToBounds = YES;
+    //  btnStart.backgroundColor = UIColor.whiteColor;
+    btnStart.backgroundColor = [UIColor colorWithRed:(154/255.0) green:(215/255.0) blue:(9/255.0) alpha:1.0];
+    
     [btnStart mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(viewWelcome.mas_centerX);
         make.top.equalTo(lbSlogan.mas_bottom).offset(40.0);
@@ -848,8 +866,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (IBAction)btnStartPress:(UIButton *)sender {
     sender.enabled = NO;
-    [sender setTitleColor:[UIColor colorWithRed:(60/255.0) green:(198/255.0) blue:(116/255.0) alpha:1.0]
-                 forState:UIControlStateNormal];
+    [sender setTitleColor:[UIColor colorWithRed:(60/255.0) green:(198/255.0) blue:(116/255.0) alpha:1.0] forState:UIControlStateNormal];
     [self performSelector:@selector(goToLoginScreen:) withObject:sender afterDelay:0.15];
 }
 
@@ -857,8 +874,9 @@ static UICompositeViewDescription *compositeDescription = nil;
     [tfAccountID becomeFirstResponder];
     
     sender.enabled = YES;
-    [sender setTitleColor:[UIColor colorWithRed:(60/255.0) green:(75/255.0)
-                                           blue:(102/255.0) alpha:1.0] forState:UIControlStateNormal];
+    [sender setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+//    [sender setTitleColor:[UIColor colorWithRed:(60/255.0) green:(75/255.0)
+//                                           blue:(102/255.0) alpha:1.0] forState:UIControlStateNormal];
     
     BOOL ready = [self checkAccountLoginInformationReady];
     if (ready) {
