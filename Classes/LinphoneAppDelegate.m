@@ -98,8 +98,19 @@
 #pragma mark -
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
+    NSLog(@"tui test Enterbackground");
+    
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"\n%s", __FUNCTION__]
                          toFilePath:logFilePath];
+    
+    LinphoneCall *currentCall = linphone_core_get_current_call(LC);
+    if (currentCall == nil) {
+        LinphoneProxyConfig *defaultConfig = linphone_core_get_default_proxy_config(LC);
+        if (defaultConfig != NULL) {
+            [self tryToUnRegisterSIP];
+            //  [SipUtils enableProxyConfig:defaultConfig withValue:NO withRefresh:TRUE];
+        }
+    }
     
 	//  [LinphoneManager.instance enterBackgroundMode];
 }
@@ -130,6 +141,8 @@
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"\n%s", __FUNCTION__]
                          toFilePath:logFilePath];
     
+    [self checkToReloginPBX];
+    
 	if (startedInBackground) {
 		startedInBackground = FALSE;
 		[PhoneMainView.instance startUp];
@@ -144,6 +157,8 @@
         [self showSplashScreenOnView: NO];
         
 		if (call == instance->currentCallContextBeforeGoingBackground.call) {
+            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] currentCallContextBeforeGoingBackground", __FUNCTION__] toFilePath:logFilePath];
+            
 			const LinphoneCallParams *params = linphone_call_get_current_params(call);
 			if (linphone_call_params_video_enabled(params)) {
 				linphone_call_enable_camera(call, instance->currentCallContextBeforeGoingBackground.cameraIsEnabled);
@@ -157,9 +172,13 @@
 			}
 			if ((floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_9_x_Max)) {
 				if ([LinphoneManager.instance lpConfigBoolForKey:@"autoanswer_notif_preference"]) {
+                    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] call function linphone_core_accept_call and go to CallView", __FUNCTION__] toFilePath:logFilePath];
+                    
 					linphone_core_accept_call(LC, call);
 					[PhoneMainView.instance changeCurrentView:CallView.compositeViewDescription];
 				} else {
+                    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] displayIncomingCall", __FUNCTION__] toFilePath:logFilePath];
+                    
 					[PhoneMainView.instance displayIncomingCall:call];
 				}
 			} else if (linphone_core_get_calls_nb(LC) > 1) {
@@ -171,6 +190,13 @@
 			[self fixRing];
 		}
     }else{
+        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] -------------> Don't have call", __FUNCTION__] toFilePath:logFilePath];
+        
+        LinphoneProxyConfig *defaultConfig = linphone_core_get_default_proxy_config(LC);
+        if (defaultConfig != NULL) {
+            [SipUtils enableProxyConfig:defaultConfig withValue:YES withRefresh:TRUE];
+        }
+        
         NSString *phoneNumber = [[NSUserDefaults standardUserDefaults] objectForKey:UserActivity];
         if (![AppUtils isNullOrEmpty: phoneNumber])
         {
@@ -419,6 +445,11 @@ void onUncaughtException(NSException* exception)
 {
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
+    UInt32 sessionCategory = kAudioSessionCategory_PlayAndRecord;
+    AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(sessionCategory), &sessionCategory);
+    UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_Speaker;
+    AudioSessionSetProperty (kAudioSessionProperty_OverrideAudioRoute,sizeof (audioRouteOverride),&audioRouteOverride);
+    
     //  NSString *subDirectory = [NSString stringWithFormat:@"%@/.%@.txt", logsFolderName, [AppUtils getCurrentDate]];
     NSString *subDirectory = [NSString stringWithFormat:@"%@/%@.txt", logsFolderName, [AppUtils getCurrentDate]];
     logFilePath = [WriteLogsUtils makeFilePathWithFileName: subDirectory];
@@ -547,6 +578,9 @@ void onUncaughtException(NSException* exception)
     
 	[LinphoneManager.instance startLinphoneCore];
 	LinphoneManager.instance.iapManager.notificationCategory = @"expiry_notification";
+    
+    [self checkToReloginPBX];
+    
 	// initialize UI
 	[self.window makeKeyAndVisible];
 	[RootViewManager setupWithPortrait:(PhoneMainView *)self.window.rootViewController];
@@ -615,6 +649,7 @@ void onUncaughtException(NSException* exception)
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
+    [self tryToUnRegisterSIP];
     /*  Leo Kelvin
 	NSLog(@"%@", NSStringFromSelector(_cmd));
 	LinphoneManager.instance.conf = TRUE;
@@ -706,7 +741,22 @@ void onUncaughtException(NSException* exception)
     if (aps != nil)
     {
         NSDictionary *alert = [aps objectForKey:@"alert"];
-        [[LinphoneManager instance] refreshRegisters];
+        
+        const MSList *list = linphone_core_get_proxy_config_list(LC);
+        if (list == NULL) {
+            NSString *username = [[NSUserDefaults standardUserDefaults] objectForKey:key_login];
+            NSString *password = [[NSUserDefaults standardUserDefaults] objectForKey:key_password];
+            NSString *domain = [[NSUserDefaults standardUserDefaults] objectForKey:PBX_SERVER];
+            NSString *port = [[NSUserDefaults standardUserDefaults] objectForKey:PBX_PORT];
+            
+            if (![AppUtils isNullOrEmpty: username] && ![AppUtils isNullOrEmpty: password] && ![AppUtils isNullOrEmpty: domain] && ![AppUtils isNullOrEmpty: port]) {
+                [SipUtils registerPBXAccount:username password:password ipAddress:domain port:port];
+                
+                [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]: Don't have account. Try to register PBX with backup info: %@, %@, %@", __FUNCTION__, username, domain, port] toFilePath:logFilePath];
+            }
+        }else{
+            [[LinphoneManager instance] refreshRegisters];
+        }
         
         NSString *loc_key = [aps objectForKey:@"loc-key"];
         NSString *callId = [aps objectForKey:@"callerid"];
@@ -766,6 +816,8 @@ void onUncaughtException(NSException* exception)
                                 [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
                             }
                         } else {
+                            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] addPushCallId = %@", __FUNCTION__, callId] toFilePath:logFilePath];
+                            
                             [LinphoneManager.instance addPushCallId:callId];
                         }
                     } else  if ([callId  isEqual: @""]) {
@@ -1962,6 +2014,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 //- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
 //{
+//    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, userActivity.activityType] toFilePath:logFilePath];
+//
 //    //  when user click facetime video
 //    if ([userActivity.activityType isEqualToString:@"INStartVideoCallIntent"]) {
 //        return YES;
@@ -2420,6 +2474,30 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                     }
                 }
             }
+        }
+    }
+}
+
+- (void)tryToUnRegisterSIP {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@" ------------->[%s]", __FUNCTION__] toFilePath:logFilePath];
+    
+    linphone_core_clear_proxy_config(LC);
+}
+
+- (void)checkToReloginPBX
+{
+    const MSList *list = linphone_core_get_proxy_config_list(LC);
+    if (list == NULL) {
+        NSString *username = [[NSUserDefaults standardUserDefaults] objectForKey:key_login];
+        NSString *password = [[NSUserDefaults standardUserDefaults] objectForKey:key_password];
+        NSString *domain = [[NSUserDefaults standardUserDefaults] objectForKey:PBX_SERVER];
+        NSString *port = [[NSUserDefaults standardUserDefaults] objectForKey:PBX_PORT];
+        
+        if (![AppUtils isNullOrEmpty: username] && ![AppUtils isNullOrEmpty: password] && ![AppUtils isNullOrEmpty: domain] && ![AppUtils isNullOrEmpty: port])
+        {
+            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:logFilePath];
+            
+            [SipUtils registerPBXAccount:username password:password ipAddress:domain port:port];
         }
     }
 }

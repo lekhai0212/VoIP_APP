@@ -885,14 +885,20 @@ static RootViewManager *rootViewManagerInstance = nil;
 		if (callIDFromPush && autoAnswer) {
 			// accept call automatically
 			[lm acceptCall:call evenWithVideo:YES];
+            
+            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] callIDFromPush && autoAnswer", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
 		} else {
             AudioServicesPlaySystemSound(lm.sounds.vibrate);
             IncomingCallViewController *view = VIEW(IncomingCallViewController);
             [self changeCurrentView:view.compositeViewDescription];
             [view setCall:call];
             [view setDelegate:self];
+            
+            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] go to IncomingCallViewController", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
 		}
-	}
+	}else{
+        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Do not thing", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    }
 }
 
 - (void)batteryLevelChanged:(NSNotification *)notif {

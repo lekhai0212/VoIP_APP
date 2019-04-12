@@ -153,6 +153,11 @@
 			linphone_core_terminate_call(LC, (LinphoneCall *)call);
 		}
 	}
+    
+    if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive) {
+        [[LinphoneAppDelegate sharedInstance] tryToUnRegisterSIP];
+        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] tryToUnRegisterSIP", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    }
 }
 
 - (void)provider:(CXProvider *)provider performSetMutedCallAction:(nonnull CXSetMutedCallAction *)action {
