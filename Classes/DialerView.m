@@ -104,6 +104,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 	[super viewWillAppear:animated];
     [WriteLogsUtils writeForGoToScreen: @"DialerView"];
     
+    NSLog(@"%@", PASSWORD);
+    
     NSString *total = [NSString stringWithFormat:@"%@%@%@", PASSWORD, [LinphoneAppDelegate sharedInstance].randomKey, USERNAME];
     [LinphoneAppDelegate sharedInstance].hashStr = [[total MD5String] lowercaseString];
     

@@ -24,7 +24,7 @@
 @end
 
 @implementation ContactsViewController
-@synthesize _pageViewController, _viewHeader, _iconAll, _iconPBX, _tfSearch, imgBackground, _icClearSearch, lbSepa;
+@synthesize _pageViewController, _viewHeader, _iconAll, _iconPBX, icGroupPBX, _tfSearch, imgBackground, _icClearSearch, lbSepa, lbSepa2;
 @synthesize _listSyncContact, _phoneForSync;
 
 #pragma mark - UICompositeViewDelegate Functions
@@ -167,6 +167,9 @@ static UICompositeViewDescription *compositeDescription = nil;
     _tfSearch.text = @"";
     [[NSNotificationCenter defaultCenter] postNotificationName:searchContactWithValue
                                                         object:_tfSearch.text];
+}
+
+- (IBAction)iconGroupPBXPress:(UIButton *)sender {
 }
 
 //  setup trạng thái cho các button

@@ -137,22 +137,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Classes/LinphoneAppDelegate.m"
-            timestampString = "576693899.798789"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2082"
-            endingLineNumber = "2082"
-            landmarkName = "-getMissedCallFromServer"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "Classes/OutgoingCallViewController.m"
             timestampString = "576317666.864647"
             startingColumnNumber = "9223372036854775807"
@@ -282,13 +266,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneAppDelegate.m"
-            timestampString = "576693899.799374"
+            timestampString = "579655817.282668"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "2110"
             endingLineNumber = "2110"
-            landmarkName = "-insertMissedCallToDatabase:"
-            landmarkType = "7">
+            landmarkName = "LinphoneAppDelegate"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -346,12 +330,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneAppDelegate.m"
-            timestampString = "576693899.800869"
+            timestampString = "579655817.282832"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "2052"
             endingLineNumber = "2052"
-            landmarkName = "-updateCustomerTokenIOS"
+            landmarkName = "-showSplashScreenOnView:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -362,12 +346,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/LinphoneAppDelegate.m"
-            timestampString = "576693899.801183"
+            timestampString = "579655817.282891"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "2118"
             endingLineNumber = "2118"
-            landmarkName = "-failedToCallWebService:andError:"
+            landmarkName = "-toGlobalTime"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
