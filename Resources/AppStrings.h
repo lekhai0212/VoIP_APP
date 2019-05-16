@@ -172,20 +172,13 @@
 #define nameSyncCompany     @"Nhan Hoa Software Company"
 #define keySyncPBX          @"CloudCallPBX"
 
-#define prefix_CHAT_NOTIF   @"prefix_CHAT_NOTIF"
-#define prefix_CHAT_BURN    @"prefix_CHAT_BURN"
-#define prefix_CHAT_BLOCK   @"prefix_CHAT_BLOCK"
-
-
-
-
 #define getServerInfoFunc       @"GetServerInfo"
 #define getServerContacts       @"GetServerContacts"
 #define DecryptRSA              @"DecryptRSA"
 #define PushSharp               @"PushSharp"
 #define ChangeExtPass           @"ChangeExtPass"
-
-
+#define ChangeExtPass           @"ChangeExtPass"
+#define GetServerGroup          @"getservergroup"
 
 #pragma mark - Keys for app
 

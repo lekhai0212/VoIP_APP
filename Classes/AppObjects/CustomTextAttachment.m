@@ -11,6 +11,7 @@
 @synthesize imgHeight;
 
 - (CGRect)attachmentBoundsForTextContainer:(NSTextContainer *)textContainer proposedLineFragment:(CGRect)lineFrag glyphPosition:(CGPoint)position characterIndex:(NSUInteger)charIndex {
+    
     CGRect bounds;
     if (IS_IPHONE || IS_IPOD) {
         bounds.origin = CGPointMake(0, -4.5);

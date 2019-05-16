@@ -9,17 +9,20 @@
 #import "ContactsViewController.h"
 #import "AllContactsViewController.h"
 #import "PBXContactsViewController.h"
+#import "PBXGroupsViewController.h"
 #import "StatusBarView.h"
 #import "TabBarView.h"
 
 @interface ContactsViewController (){
     AllContactsViewController *allContactsVC;
     PBXContactsViewController *pbxContactsVC;
+    PBXGroupsViewController *groupsVC;
     int currentView;
     float hIcon;
     float paddingContent;
     
     NSTimer *searchTimer;
+    UIColor *unselectedColor;
 }
 @end
 
@@ -56,7 +59,8 @@ static UICompositeViewDescription *compositeDescription = nil;
     _pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
     
     self.view.backgroundColor = UIColor.clearColor;
-    
+    unselectedColor = [UIColor colorWithRed:(220/255.0) green:(220/255.0)
+                                       blue:(220/255.0) alpha:1.0];
     [self autoLayoutForMainView];
     
     currentView = eContactAll;
@@ -68,6 +72,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     pbxContactsVC = [[PBXContactsViewController alloc] init];
     allContactsVC = [[AllContactsViewController alloc] init];
+    groupsVC = [[PBXGroupsViewController alloc] init];
     
     NSArray *viewControllers = [NSArray arrayWithObject:allContactsVC];
     [_pageViewController setViewControllers:viewControllers
@@ -116,14 +121,20 @@ static UICompositeViewDescription *compositeDescription = nil;
 #pragma mark – UIPageViewControllerDelegate Method
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController {
-    if (viewController == allContactsVC){
-        currentView = eContactAll;
+    if (viewController == groupsVC) {
+        currentView = eContactGroup;
         [self updateStateIconWithView: currentView];
-        return nil;
-    }else{
+        return pbxContactsVC;
+        
+    }else if (viewController == pbxContactsVC){
         currentView = eContactPBX;
         [self updateStateIconWithView: currentView];
         return allContactsVC;
+        
+    }else{
+        currentView = eContactAll;
+        [self updateStateIconWithView: currentView];
+        return nil;
     }
 }
 
@@ -132,8 +143,14 @@ static UICompositeViewDescription *compositeDescription = nil;
         currentView = eContactAll;
         [self updateStateIconWithView: currentView];
         return pbxContactsVC;
-    }else{
+        
+    }else if (viewController == pbxContactsVC) {
         currentView = eContactPBX;
+        [self updateStateIconWithView: currentView];
+        return groupsVC;
+        
+    }else{
+        currentView = eContactGroup;
         [self updateStateIconWithView: currentView];
         return nil;
     }
@@ -162,14 +179,21 @@ static UICompositeViewDescription *compositeDescription = nil;
     _tfSearch.text = @"";
 }
 
+- (IBAction)iconGroupPBXPress:(UIButton *)sender {
+    currentView = eContactGroup;
+    [self updateStateIconWithView:currentView];
+    [_pageViewController setViewControllers: @[groupsVC]
+                                  direction: UIPageViewControllerNavigationDirectionForward
+                                   animated: false completion: nil];
+    
+    _tfSearch.text = @"";
+}
+
 - (IBAction)_icClearSearchClicked:(UIButton *)sender {
     _icClearSearch.hidden = YES;
     _tfSearch.text = @"";
     [[NSNotificationCenter defaultCenter] postNotificationName:searchContactWithValue
                                                         object:_tfSearch.text];
-}
-
-- (IBAction)iconGroupPBXPress:(UIButton *)sender {
 }
 
 //  setup trạng thái cho các button
@@ -203,37 +227,53 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     float marginTop = [LinphoneAppDelegate sharedInstance]._hStatus + (hHeader - [LinphoneAppDelegate sharedInstance]._hStatus - hTextfield - 10 - hButton)/ 2;
     
+    float sizeText = [AppUtils getSizeWithText:@"Nội bộ" withFont:[LinphoneAppDelegate sharedInstance].headerFontBold].width + 10.0;
     
-    lbSepa.backgroundColor = [UIColor colorWithRed:(220/255.0) green:(220/255.0)
-                                              blue:(220/255.0) alpha:1.0];
+    _iconPBX.titleLabel.font = _iconAll.titleLabel.font = icGroupPBX.titleLabel.font = [LinphoneAppDelegate sharedInstance].headerFontBold;
+    
+    //  icon pbx
+    [_iconPBX setTitle:@"Nội bộ" forState:UIControlStateNormal];
+    [_iconPBX setTitleColor:unselectedColor forState:UIControlStateNormal];
+    [_iconPBX mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_viewHeader).offset(marginTop);
+        make.centerX.equalTo(_viewHeader.mas_centerX);
+        make.width.mas_equalTo(sizeText);
+        make.height.mas_equalTo(hButton);
+    }];
+    
+    lbSepa.backgroundColor = unselectedColor;
     [lbSepa mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_viewHeader).offset(marginTop + 10);
-        make.centerX.equalTo(_viewHeader.mas_centerX);
+        make.right.equalTo(_iconPBX.mas_left).offset(-10.0);
         make.width.mas_equalTo(1.0);
         make.height.mas_equalTo(hButton - 20);
     }];
     
-    float padding = 30.0;
+    //  icon all
     _iconAll.backgroundColor = UIColor.clearColor;
-    [_iconAll setTitle:[[LanguageUtil sharedInstance] getContent:@"All contacts"] forState:UIControlStateNormal];
+    [_iconAll setTitle:@"Danh bạ máy" forState:UIControlStateNormal];
     [_iconAll setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
-    _iconAll.titleLabel.font = [LinphoneAppDelegate sharedInstance].headerFontBold;
     [_iconAll mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(lbSepa.mas_left).offset(-padding);
+        make.right.equalTo(lbSepa.mas_left).offset(-10.0);
         make.top.equalTo(_viewHeader).offset(marginTop);
         make.left.equalTo(_viewHeader).offset(5.0);
         make.height.mas_equalTo(hButton);
     }];
     
-    _iconPBX.backgroundColor = UIColor.clearColor;
-    [_iconPBX setTitle:[[LanguageUtil sharedInstance] getContent:@"PBX contacts"] forState:UIControlStateNormal];
-    [_iconPBX setTitleColor:[UIColor colorWithRed:(220/255.0) green:(220/255.0)
-                                             blue:(220/255.0) alpha:1.0]
-                   forState:UIControlStateNormal];
-    _iconPBX.titleLabel.font = [LinphoneAppDelegate sharedInstance].headerFontBold;
-    [_iconPBX mas_makeConstraints:^(MASConstraintMaker *make) {
+    lbSepa2.backgroundColor = lbSepa.backgroundColor;
+    [lbSepa2 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.bottom.equalTo(lbSepa);
+        make.left.equalTo(_iconPBX.mas_right).offset(10.0);
+        make.width.mas_equalTo(1.0);
+    }];
+    
+    //  icon groups
+    icGroupPBX.backgroundColor = UIColor.clearColor;
+    [icGroupPBX setTitle:@"Nhóm nội bộ" forState:UIControlStateNormal];
+    [icGroupPBX setTitleColor:unselectedColor forState:UIControlStateNormal];
+    [icGroupPBX mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(lbSepa2.mas_right).offset(10.0);
         make.top.equalTo(_viewHeader).offset(marginTop);
-        make.left.equalTo(lbSepa.mas_right).offset(padding);
         make.right.equalTo(_viewHeader).offset(-5.0);
         make.height.mas_equalTo(hButton);
     }];
@@ -278,18 +318,21 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 //  Cập nhật trạng thái của các icon trên header
-- (void)updateStateIconWithView: (int)view
-{
+- (void)updateStateIconWithView: (int)view {
     if (view == eContactAll){
         [_iconAll setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
-        [_iconPBX setTitleColor:[UIColor colorWithRed:(220/255.0) green:(220/255.0)
-                                                 blue:(220/255.0) alpha:1.0]
-                       forState:UIControlStateNormal];
-    }else{
-        [_iconAll setTitleColor:[UIColor colorWithRed:(220/255.0) green:(220/255.0)
-                                                 blue:(220/255.0) alpha:1.0]
-                       forState:UIControlStateNormal];
+        [_iconPBX setTitleColor:unselectedColor forState:UIControlStateNormal];
+        [icGroupPBX setTitleColor:unselectedColor forState:UIControlStateNormal];
+        
+    }else if (view == eContactPBX) {
+        [_iconAll setTitleColor:unselectedColor forState:UIControlStateNormal];
         [_iconPBX setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+        [icGroupPBX setTitleColor:unselectedColor forState:UIControlStateNormal];
+        
+    }else{
+        [_iconAll setTitleColor:unselectedColor forState:UIControlStateNormal];
+        [_iconPBX setTitleColor:unselectedColor forState:UIControlStateNormal];
+        [icGroupPBX setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     }
 }
 
