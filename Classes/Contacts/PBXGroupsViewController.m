@@ -8,6 +8,7 @@
 #import "PBXGroupsViewController.h"
 #import "WebServices.h"
 #import "PBXContactTableCell.h"
+#import "GroupHeaderView.h"
 
 @interface PBXGroupsViewController ()<WebServicesDelegate, UITableViewDelegate, UITableViewDataSource> {
     WebServices *webService;
@@ -16,6 +17,8 @@
     
     NSMutableDictionary *contactSections;
     float hSection;
+    
+    GroupHeaderView *tbHeader;
     
 }
 @end
@@ -27,6 +30,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [self setupUIForView];
+    [self addHeaderForTableContactsView];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -65,9 +69,23 @@
     [webService callGETWebServiceWithFunction:GetServerGroup andParams:params];
 }
 
+- (void)addHeaderForTableContactsView {
+    NSArray *toplevelObject = [[NSBundle mainBundle] loadNibNamed:@"GroupHeaderView" owner:nil options:nil];
+    for(id currentObject in toplevelObject){
+        if ([currentObject isKindOfClass:[GroupHeaderView class]]) {
+            tbHeader = (GroupHeaderView *) currentObject;
+            break;
+        }
+    }
+    tbHeader.frame = CGRectMake(0, 0, SCREEN_WIDTH, 50.0);
+    [tbHeader setupUIForView];
+    tbGroup.tableHeaderView = tbHeader;
+}
+
 - (void)setupUIForView {
     hSection = 50.0;
     
+    tbGroup.backgroundColor = UIColor.orangeColor;
     tbGroup.separatorStyle = UITableViewCellSelectionStyleNone;
     tbGroup.delegate = self;
     tbGroup.dataSource = self;
@@ -83,6 +101,13 @@
         NSString *queuename = [info objectForKey:@"queuename"];
         if (![AppUtils isNullOrEmpty: queuename]) {
             [listQueuename addObject: queuename];
+        }
+    }
+    if (tbHeader != nil) {
+        if (listQueuename.count == 0) {
+            tbHeader.lbTitle.text = @"Chưa có danh sách nhóm";
+        }else{
+            tbHeader.lbTitle.text = [NSString stringWithFormat:@"Tổng cộng %ld nhóm", listQueuename.count];
         }
     }
     [tbGroup reloadData];
@@ -113,12 +138,11 @@
 #pragma mark - UITableview
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return [[contactSections allKeys] count];
+    return listQueuename.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    NSString *str = [[[contactSections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] objectAtIndex:section];
-    return [[contactSections objectForKey:str] count];
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -150,20 +174,48 @@
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, hSection)];
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, hSection)];
     headerView.backgroundColor = UIColor.whiteColor;
     
-    UILabel *descLabel = [[UILabel alloc] initWithFrame:CGRectMake(marginLeft, 0, 150, hSection)];
-    descLabel.textColor = [UIColor colorWithRed:(50/255.0) green:(50/255.0)
-                                           blue:(50/255.0) alpha:1.0];
-    descLabel.font = [LinphoneAppDelegate sharedInstance].contentFontBold;
-    if ([titleHeader isEqualToString:@"z#"]) {
-        descLabel.text = @"#";
-    }else{
-        descLabel.text = titleHeader;
-    }
+    UIImageView *imgArrow = [[UIImageView alloc] init];
+    imgArrow.image = [UIImage imageNamed:@"right-arrow"];
+    [headerView addSubview: imgArrow];
+    [imgArrow mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(headerView).offset(15.0);
+        make.centerY.equalTo(headerView.mas_centerY);
+        make.width.height.mas_equalTo(18.0);
+    }];
+    
+    UIButton *btnCall = [[UIButton alloc] init];
+    btnCall.imageEdgeInsets = UIEdgeInsetsMake(8, 8, 8, 8);
+    [btnCall setImage:[UIImage imageNamed:@"contact_audio_call.png"] forState:UIControlStateNormal];
+    [headerView addSubview: btnCall];
+    [btnCall mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(headerView).offset(-7.0);
+        make.centerY.equalTo(headerView.mas_centerY);
+        make.width.height.mas_equalTo(40.0);
+    }];
+    
+    UILabel *descLabel = [[UILabel alloc] init];
+    descLabel.textColor = [UIColor colorWithRed:(50/255.0) green:(50/255.0) blue:(50/255.0) alpha:1.0];
+    descLabel.font = [LinphoneAppDelegate sharedInstance].contentFontNormal;
+    descLabel.text = [listQueuename objectAtIndex: section];
     descLabel.backgroundColor = UIColor.clearColor;
     [headerView addSubview: descLabel];
+    [descLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.bottom.equalTo(btnCall);
+        make.left.equalTo(imgArrow.mas_right).offset(10.0);
+        make.right.equalTo(btnCall.mas_left).offset(-10.0);
+    }];
+    
+    UILabel *lbSepa = [[UILabel alloc] init];
+    lbSepa.backgroundColor = [UIColor colorWithRed:(240/255.0) green:(240/255.0) blue:(240/255.0) alpha:1.0];
+    [headerView addSubview: lbSepa];
+    [lbSepa mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.bottom.right.equalTo(headerView);
+        make.height.mas_equalTo(1.0);
+    }];
+    
     return headerView;
 }
 
@@ -183,6 +235,7 @@
 //}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 0;
     return 65.0;
 }
 

@@ -583,6 +583,13 @@
 		84C8B2401FBBBDB50080D673 /* UIHistoryDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84C8B23E1FBBBDB50080D673 /* UIHistoryDetailCell.xib */; };
 		84C8B24D1FBBBE6E0080D673 /* CallHistoryObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C8B24C1FBBBE6E0080D673 /* CallHistoryObject.m */; };
 		84CDD2391FD0E6FE003DB5AD /* UIImage+GKContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CDD2371FD0E6FE003DB5AD /* UIImage+GKContact.m */; };
+		84CE055D228DAB8D00CC0F2A /* GroupHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CE055C228DAB8D00CC0F2A /* GroupHeaderView.m */; };
+		84CE0565228DABA900CC0F2A /* GroupHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84CE0564228DABA900CC0F2A /* GroupHeaderView.xib */; };
+		84CE0567228DAC8E00CC0F2A /* sort-arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 84CE0566228DAC8E00CC0F2A /* sort-arrow.png */; };
+		84CE056C228DAED800CC0F2A /* sort-91.png in Resources */ = {isa = PBXBuildFile; fileRef = 84CE0568228DAED700CC0F2A /* sort-91.png */; };
+		84CE056D228DAED800CC0F2A /* sort-19.png in Resources */ = {isa = PBXBuildFile; fileRef = 84CE0569228DAED700CC0F2A /* sort-19.png */; };
+		84CE056E228DAED800CC0F2A /* sort-az.png in Resources */ = {isa = PBXBuildFile; fileRef = 84CE056A228DAED800CC0F2A /* sort-az.png */; };
+		84CE056F228DAED800CC0F2A /* sort-za.png in Resources */ = {isa = PBXBuildFile; fileRef = 84CE056B228DAED800CC0F2A /* sort-za.png */; };
 		84D0320C1FB51C50002D2524 /* ContactCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D0320A1FB51C50002D2524 /* ContactCell.m */; };
 		84D0320D1FB51C50002D2524 /* ContactCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84D0320B1FB51C50002D2524 /* ContactCell.xib */; };
 		84D032181FB52E7A002D2524 /* AllContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D032161FB52E7A002D2524 /* AllContactsViewController.m */; };
@@ -1715,6 +1722,14 @@
 		84C8B24C1FBBBE6E0080D673 /* CallHistoryObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CallHistoryObject.m; path = AppObjects/CallHistoryObject.m; sourceTree = "<group>"; };
 		84CDD2371FD0E6FE003DB5AD /* UIImage+GKContact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+GKContact.m"; path = "OutSources/UIImage+GKContact/UIImage+GKContact.m"; sourceTree = "<group>"; };
 		84CDD2381FD0E6FE003DB5AD /* UIImage+GKContact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+GKContact.h"; path = "OutSources/UIImage+GKContact/UIImage+GKContact.h"; sourceTree = "<group>"; };
+		84CE055B228DAB8D00CC0F2A /* GroupHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GroupHeaderView.h; path = Contacts/Cell/GroupHeaderView.h; sourceTree = "<group>"; };
+		84CE055C228DAB8D00CC0F2A /* GroupHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GroupHeaderView.m; path = Contacts/Cell/GroupHeaderView.m; sourceTree = "<group>"; };
+		84CE0564228DABA900CC0F2A /* GroupHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = GroupHeaderView.xib; path = Contacts/Cell/GroupHeaderView.xib; sourceTree = "<group>"; };
+		84CE0566228DAC8E00CC0F2A /* sort-arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sort-arrow.png"; sourceTree = "<group>"; };
+		84CE0568228DAED700CC0F2A /* sort-91.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sort-91.png"; sourceTree = "<group>"; };
+		84CE0569228DAED700CC0F2A /* sort-19.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sort-19.png"; sourceTree = "<group>"; };
+		84CE056A228DAED800CC0F2A /* sort-az.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sort-az.png"; sourceTree = "<group>"; };
+		84CE056B228DAED800CC0F2A /* sort-za.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sort-za.png"; sourceTree = "<group>"; };
 		84D032091FB51C50002D2524 /* ContactCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ContactCell.h; path = AppUI/ContactCell.h; sourceTree = "<group>"; };
 		84D0320A1FB51C50002D2524 /* ContactCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ContactCell.m; path = AppUI/ContactCell.m; sourceTree = "<group>"; };
 		84D0320B1FB51C50002D2524 /* ContactCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContactCell.xib; path = AppUI/ContactCell.xib; sourceTree = "<group>"; };
@@ -3080,6 +3095,11 @@
 				8489DED12160B2EC00A7A1DD /* icon-next.png */,
 				633FECD81D3CD5580014B822 /* menu.png */,
 				633FECD91D3CD5580014B822 /* menu@2x.png */,
+				84CE0566228DAC8E00CC0F2A /* sort-arrow.png */,
+				84CE0569228DAED700CC0F2A /* sort-19.png */,
+				84CE0568228DAED700CC0F2A /* sort-91.png */,
+				84CE056A228DAED800CC0F2A /* sort-az.png */,
+				84CE056B228DAED800CC0F2A /* sort-za.png */,
 			);
 			path = images;
 			sourceTree = "<group>";
@@ -3856,6 +3876,9 @@
 				84F742BA20163333000F7FFF /* FriendForAcceptCell.h */,
 				84F742BB20163334000F7FFF /* FriendForAcceptCell.m */,
 				84F742BC20163334000F7FFF /* FriendForAcceptCell.xib */,
+				84CE055B228DAB8D00CC0F2A /* GroupHeaderView.h */,
+				84CE055C228DAB8D00CC0F2A /* GroupHeaderView.m */,
+				84CE0564228DABA900CC0F2A /* GroupHeaderView.xib */,
 			);
 			name = Cell;
 			sourceTree = "<group>";
@@ -4421,6 +4444,7 @@
 				84F742BE20163334000F7FFF /* FriendForAcceptCell.xib in Resources */,
 				84F81BDA21EF8418009629C9 /* ic_muted_white.png in Resources */,
 				639E9C9D1C0DB7DF00019A75 /* UICallPausedCell.xib in Resources */,
+				84CE0565228DABA900CC0F2A /* GroupHeaderView.xib in Resources */,
 				848D7CB82237FDE30010CC5E /* state_video_call.png in Resources */,
 				8429870D21B29D4000150EB0 /* ic_call_bottom_bar_def.png in Resources */,
 				84C47D171FB632640015695E /* IncomingCallViewController.xib in Resources */,
@@ -4443,6 +4467,7 @@
 				848D7CB72237FDE30010CC5E /* state_audio_call.png in Resources */,
 				D34F6F9E1594D3FB0095705B /* InAppSettings.bundle in Resources */,
 				8404CD5621EDE20B00C28E48 /* close_white.png in Resources */,
+				84CE0567228DAC8E00CC0F2A /* sort-arrow.png in Resources */,
 				84D2321F22350B360015335B /* video_call_hover.png in Resources */,
 				639CEB091A1DF4FA004DE38F /* UIChatCell.xib in Resources */,
 				15906E3B217AEBCF000877A9 /* bg_button.png in Resources */,
@@ -4489,6 +4514,7 @@
 				84B4F0E821E8CD4E00591C50 /* ic_more_bottom_bar_def@2x.png in Resources */,
 				84D2321C22350AD70015335B /* call_default.png in Resources */,
 				63CDC45E1C3BDE370085F529 /* msg.caf in Resources */,
+				84CE056C228DAED800CC0F2A /* sort-91.png in Resources */,
 				8459953A216F8CE00004143A /* ic_add_def.png in Resources */,
 				84D2321822350A720015335B /* numpad_two_default.png in Resources */,
 				D38187DD15FE348A00C3EDCA /* AssistantView.xib in Resources */,
@@ -4497,8 +4523,10 @@
 				84B4F0E021E8CC2B00591C50 /* ic_call_bottom_bar_act@2x.png in Resources */,
 				1578D07221AD3DDF00E8BA5F /* SendLogFileCell.xib in Resources */,
 				84D231E22235034A0015335B /* menu_contact_def.png in Resources */,
+				84CE056D228DAED800CC0F2A /* sort-19.png in Resources */,
 				841B359E2191F26D0019BD45 /* button-endcall.png in Resources */,
 				840E964E22371CF90040CDCC /* more_policy.png in Resources */,
+				84CE056F228DAED800CC0F2A /* sort-za.png in Resources */,
 				159E0879217984F00056E2BB /* RegisterPBXWithPhoneView.xib in Resources */,
 				842DEC441FC478F300E7F74D /* UIMiniKeypad.xib in Resources */,
 				15CAD27322436CE1007F43C5 /* speaker_bluetooth_normal.png in Resources */,
@@ -4613,6 +4641,7 @@
 				84C47CD81FB5E8B60015695E /* UIKContactCell.xib in Resources */,
 				84E87DDB1FC1DE3B0074A54C /* NewContactViewController.xib in Resources */,
 				63AADBF51B6A0FF200AA16FD /* linphonerc in Resources */,
+				84CE056E228DAED800CC0F2A /* sort-az.png in Resources */,
 				8442A3651FB1321D00F08F11 /* MYRIADPRO-REGULAR.OTF in Resources */,
 				15A2B8A922325F6F00DA6342 /* login_graphic.png in Resources */,
 				84E07EFF2025F39E0000CD12 /* SettingSoundCell.xib in Resources */,
@@ -5071,6 +5100,7 @@
 				15F2E603216B6DA60076CB1F /* CustomTextAttachment.m in Sources */,
 				84C8B24D1FBBBE6E0080D673 /* CallHistoryObject.m in Sources */,
 				63BC49E21BA2CDFC004EC273 /* UICallPausedCell.m in Sources */,
+				84CE055D228DAB8D00CC0F2A /* GroupHeaderView.m in Sources */,
 				840B574320061FD300DCBA7E /* QRCodeReaderViewController.m in Sources */,
 				15A64DA0216C8BC700D194BD /* InfoForNewContactTableCell.m in Sources */,
 				84E286CC1FC9E1AC009CBA27 /* UIImage+WebP.m in Sources */,
