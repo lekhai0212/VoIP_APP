@@ -13,8 +13,9 @@
 #import "PBXContactTableCell.h"
 #import "UIImage+GKContact.h"
 #import "CustomTextAttachment.h"
+#import "PBXHeaderView.h"
 
-@interface PBXContactsViewController (){
+@interface PBXContactsViewController ()<PBXHeaderViewDelegate>{
     BOOL isSearching;
     
     NSMutableArray *listSearch;
@@ -26,12 +27,12 @@
     float hSection;
     NSMutableArray *pbxList;
     
-    UILabel *lbAllContacts;
-    UIButton *btnSyncContacts;
     WebServices *webService;
     
     UIActivityIndicatorView *waitingView;
     float marginLeft;
+    
+    PBXHeaderView *pbxHeaderView;
 }
 
 @end
@@ -102,7 +103,7 @@
         
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"List pbx contact count: %lu", (unsigned long)pbxList.count]
                              toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-        lbAllContacts.text = [NSString stringWithFormat:@"%@ (%d)", [[LanguageUtil sharedInstance] getContent:@"Count all contacts"], (int)pbxList.count];
+        pbxHeaderView.lbTitle.text = [NSString stringWithFormat:@"Tất cả liên hện (%d)", (int)pbxList.count];
         
         if (pbxList.count > 0) {
             [_tbContacts reloadData];
@@ -140,32 +141,42 @@
     [_tbContacts reloadData];
 }
 
+#pragma mark - Header delegate
+- (void)onSyncButtonPress {
+    if (USERNAME != nil) {
+        pbxHeaderView.btnSync.enabled = NO;
+        [self hideWaitingView: NO];
+        
+        NSString *params = [NSString stringWithFormat:@"username=%@", USERNAME];
+        [webService callGETWebServiceWithFunction:get_contacts_func andParams:params];
+        
+        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, params] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    }
+}
+
+-(void)onIconSortClick {
+    
+}
+
+- (void)onSortTypeButtonPress {
+    
+}
+
 #pragma mark - my functions
 
 - (void)addHeaderForTableContactsView {
-    UIView *headerView = [[UIView alloc] init];
-    headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 40.0);
-    headerView.backgroundColor = [UIColor colorWithRed:(240/255.0) green:(240/255.0)
-                                                  blue:(240/255.0) alpha:1.0];
-    //  getSyncTitleContentWithFont
-    btnSyncContacts = [[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-10-140, 0, 140, headerView.frame.size.height)];
-    btnSyncContacts.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-    btnSyncContacts.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-    
-    [btnSyncContacts setAttributedTitle:[self getSyncTitleContentWithFont:[LinphoneAppDelegate sharedInstance].contentFontBold andSizeIcon:wIconSync] forState:UIControlStateNormal];
-    [headerView addSubview: btnSyncContacts];
-    [btnSyncContacts addTarget:self
-                        action:@selector(btnSyncContactsPress:)
-              forControlEvents:UIControlEventTouchUpInside];
-    
-    lbAllContacts = [[UILabel alloc] initWithFrame:CGRectMake(marginLeft, 0, SCREEN_WIDTH-2*marginLeft-btnSyncContacts.frame.size.width-10.0, headerView.frame.size.height)];
-    lbAllContacts.font = [LinphoneAppDelegate sharedInstance].contentFontBold;
-    lbAllContacts.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
-    [headerView addSubview: lbAllContacts];
-    
-    _tbContacts.tableHeaderView = headerView;
+    NSArray *toplevelObject = [[NSBundle mainBundle] loadNibNamed:@"PBXHeaderView" owner:nil options:nil];
+    for(id currentObject in toplevelObject){
+        if ([currentObject isKindOfClass:[PBXHeaderView class]]) {
+            pbxHeaderView = (PBXHeaderView *) currentObject;
+            break;
+        }
+    }
+    pbxHeaderView.delegate = self;
+    pbxHeaderView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 80.0);
+    [pbxHeaderView setupUIForView];
+    _tbContacts.tableHeaderView = pbxHeaderView;
 }
-
 
 //  setup thông tin cho tableview
 - (void)autoLayoutForView {
@@ -503,23 +514,10 @@
     }
 }
 
-
-- (void)btnSyncContactsPress: (UIButton *)sender {
-    if (USERNAME != nil) {
-        sender.enabled = NO;
-        [self hideWaitingView: NO];
-        
-        NSString *params = [NSString stringWithFormat:@"username=%@", USERNAME];
-        [webService callGETWebServiceWithFunction:get_contacts_func andParams:params];
-        
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, params] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-    }
-}
-
 #pragma mark - Webservice delegate
 - (void)failedToCallWebService:(NSString *)link andError:(NSString *)error
 {
-    btnSyncContacts.enabled = YES;
+    pbxHeaderView.btnSync.enabled = YES;
     [self hideWaitingView: YES];
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Result for %@:\nResponse data: %@\n", __FUNCTION__, link, error] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
 }
@@ -532,7 +530,7 @@
             [self whenStartSyncPBXContacts: (NSArray *)data];
         }else{
             [self hideWaitingView: YES];
-            btnSyncContacts.enabled = YES;
+            pbxHeaderView.btnSync.enabled = YES;
         }
     }
 }
@@ -766,7 +764,7 @@
         [pbxList addObjectsFromArray:[[LinphoneAppDelegate sharedInstance].pbxContacts copy]];
     }
     
-    btnSyncContacts.enabled = YES;
+    pbxHeaderView.btnSync.enabled = YES;
     [self hideWaitingView: YES];
     [_tbContacts reloadData];
     

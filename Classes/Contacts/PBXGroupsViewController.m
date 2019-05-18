@@ -19,12 +19,14 @@
     float hSection;
     
     GroupHeaderView *tbHeader;
+    int sectionSelected;
+    int sortType;
     
 }
 @end
 
 @implementation PBXGroupsViewController
-@synthesize tbGroup;
+@synthesize tbGroup, icWaiting;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -51,6 +53,10 @@
     }
     [listQueuename removeAllObjects];
     
+    sectionSelected = -1;
+    sortType = 0;
+    [self updateSortTypeIcon];
+    
     [self getPBXGroupContacts];
 }
 
@@ -64,7 +70,20 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)updateSortTypeIcon {
+    if (tbHeader != nil) {
+        if (sortType == 0) {
+            [tbHeader.icSort setImage:[UIImage imageNamed:@"sort-az"] forState:UIControlStateNormal];
+        }else{
+            [tbHeader.icSort setImage:[UIImage imageNamed:@"sort-za"] forState:UIControlStateNormal];
+        }
+    }
+}
+
 - (void)getPBXGroupContacts {
+    icWaiting.hidden = FALSE;
+    [icWaiting startAnimating];
+    
     NSString *params = [NSString stringWithFormat:@"username=%@", USERNAME];
     [webService callGETWebServiceWithFunction:GetServerGroup andParams:params];
 }
@@ -77,19 +96,55 @@
             break;
         }
     }
+    tbHeader.lbTitle.text = @"";
+    [tbHeader.icSort addTarget:self
+                        action:@selector(sortGroupWithName)
+              forControlEvents:UIControlEventTouchUpInside];
     tbHeader.frame = CGRectMake(0, 0, SCREEN_WIDTH, 50.0);
     [tbHeader setupUIForView];
     tbGroup.tableHeaderView = tbHeader;
 }
 
+- (void)sortGroupWithName {
+    sectionSelected = -1;
+    sortType = 1 - sortType;
+    [self updateSortTypeIcon];
+    [self sortDataListWithType: sortType];
+    [tbGroup reloadData];
+}
+
+- (void)sortDataListWithType: (int)type {
+    //  1: is z --> a
+    if (type == 1) {
+        NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:nil ascending:NO selector:@selector(localizedCaseInsensitiveCompare:)];
+        NSArray *sortArr = [listQueuename sortedArrayUsingDescriptors:@[sort]];
+        [listQueuename removeAllObjects];
+        [listQueuename addObjectsFromArray: sortArr];
+    }else{
+        NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:nil ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)];
+        NSArray *sortArr = [listQueuename sortedArrayUsingDescriptors:@[sort]];
+        [listQueuename removeAllObjects];
+        [listQueuename addObjectsFromArray: sortArr];
+    }
+    [tbGroup reloadData];
+}
+
 - (void)setupUIForView {
-    hSection = 50.0;
+    hSection = 60.0;
     
-    tbGroup.backgroundColor = UIColor.orangeColor;
+    tbGroup.backgroundColor = UIColor.whiteColor;
     tbGroup.separatorStyle = UITableViewCellSelectionStyleNone;
     tbGroup.delegate = self;
     tbGroup.dataSource = self;
     [tbGroup mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.bottom.right.equalTo(self.view);
+    }];
+    
+    icWaiting.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+    icWaiting.backgroundColor = UIColor.whiteColor;
+    icWaiting.alpha = 0.5;
+    icWaiting.hidden = TRUE;
+    [icWaiting mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.bottom.right.equalTo(self.view);
     }];
 }
@@ -103,6 +158,12 @@
             [listQueuename addObject: queuename];
         }
     }
+    
+    NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:nil ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)];
+    NSArray *sortArr = [listQueuename sortedArrayUsingDescriptors:@[sort]];
+    [listQueuename removeAllObjects];
+    [listQueuename addObjectsFromArray: sortArr];
+    
     if (tbHeader != nil) {
         if (listQueuename.count == 0) {
             tbHeader.lbTitle.text = @"Chưa có danh sách nhóm";
@@ -113,16 +174,95 @@
     [tbGroup reloadData];
 }
 
+- (void)clickOnIconCall: (UIButton *)sender {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] num = %@", __FUNCTION__, sender.currentTitle] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
+    NSString *num = sender.currentTitle;
+    if (![AppUtils isNullOrEmpty: num]) {
+        num = [AppUtils removeAllSpecialInString: num];
+        [SipUtils makeCallWithPhoneNumber: num];
+    }
+}
+
+- (int)getNumRowsForSection: (NSInteger)section {
+    NSString *queuename = [listQueuename objectAtIndex: section];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.queuename == %@", queuename];
+    NSArray *tmpArr = [listGroup filteredArrayUsingPredicate: predicate];
+    if (tmpArr.count > 0) {
+        NSDictionary *info = [tmpArr objectAtIndex: 0];
+        NSArray *members = [info objectForKey:@"members"];
+        if (members != nil && [members isKindOfClass:[NSArray class]]) {
+            return (int)members.count;
+        }
+        return 0;
+    }
+    return 0;
+}
+
+- (NSDictionary *)getMembersAtIndex: (int)row section: (int)section {
+    NSString *queuename = [listQueuename objectAtIndex: section];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.queuename == %@", queuename];
+    NSArray *tmpArr = [listGroup filteredArrayUsingPredicate: predicate];
+    if (tmpArr.count > 0) {
+        NSDictionary *info = [tmpArr objectAtIndex: 0];
+        NSArray *members = [info objectForKey:@"members"];
+        if (members != nil && [members isKindOfClass:[NSArray class]]) {
+            if (row < members.count) {
+                return [members objectAtIndex: row];
+            }
+        }
+    }
+    return nil;
+}
+
+- (NSString *)getQueueNumberWithQueueName: (NSString *)queuename {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.queuename == %@", queuename];
+    NSArray *tmpArr = [listGroup filteredArrayUsingPredicate: predicate];
+    if (tmpArr.count > 0) {
+        NSDictionary *info = [tmpArr objectAtIndex: 0];
+        NSString *queueNum = [info objectForKey:@"queue"];
+        if (![AppUtils isNullOrEmpty: queueNum]) {
+            return queueNum;
+        }
+    }
+    return @"";
+}
+
+- (void)whenTapOnHeader: (UIGestureRecognizer *)recognizer {
+    int section = (int)recognizer.view.tag;
+    if (section == sectionSelected) {
+        sectionSelected = -1;
+    }else{
+        sectionSelected = section;
+    }
+    [tbGroup beginUpdates];
+    [tbGroup endUpdates];
+}
+
+- (void)callGroup: (UIButton *)sender {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] queue = %@", __FUNCTION__, sender.currentTitle] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
+    NSString *queue = sender.currentTitle;
+    queue = [AppUtils removeAllSpecialInString: queue];
+    if (![AppUtils isNullOrEmpty: queue]) {
+        [SipUtils makeCallWithPhoneNumber: queue];
+    }
+}
+
 #pragma mark - Webservice Delegate
 
 - (void)failedToCallWebService:(NSString *)link andError:(id)error
 {
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] link: %@.\nResponse data: %@", __FUNCTION__, link, @[error]] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    icWaiting.hidden = TRUE;
+    [icWaiting stopAnimating];
 }
 
 - (void)successfulToCallWebService:(NSString *)link withData:(NSDictionary *)data
 {
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] link: %@.\nResponse data: %@", __FUNCTION__, link, @[data]] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    icWaiting.hidden = TRUE;
+    [icWaiting stopAnimating];
     
     if ([link isEqualToString: GetServerGroup]) {
         if (data != nil && [data isKindOfClass:[NSArray class]]) {
@@ -142,7 +282,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 1;
+    return [self getNumRowsForSection: section];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -155,25 +295,30 @@
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    
-    
-//    members =     (
-//                   {
-//                       name = "T\U00ean 201";
-//                       num = 201;
-//                   },
-//                   {
-//                       name = "thiep hoang";
-//                       num = 203;
-//                   }
-//                   );
-//    queue = 1000;
-//    queuename = "nh\U00f3m test 1000";
+    NSDictionary *member = [self getMembersAtIndex: (int)indexPath.row section: (int)indexPath.section];
+    if (member == nil) {
+        cell._lbName.text = @"Không xác định";
+        cell._lbPhone.text = @"";
+    }else{
+        NSString *name = [member objectForKey:@"name"];
+        NSString *num = [member objectForKey:@"num"];
+        cell._lbName.text = name;
+        cell._lbPhone.text = num;
+        
+        [cell.icCall setTitle:num forState:UIControlStateNormal];
+        [cell.icCall addTarget:self
+                        action:@selector(clickOnIconCall:)
+              forControlEvents:UIControlEventTouchUpInside];
+    }
+    cell.icVideoCall.hidden = TRUE;
     
     return cell;
 }
 
-- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    NSString *queueName = [listQueuename objectAtIndex: section];
+    
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, hSection)];
     headerView.backgroundColor = UIColor.whiteColor;
     
@@ -186,8 +331,10 @@
         make.width.height.mas_equalTo(18.0);
     }];
     
+    //  group call icon
     UIButton *btnCall = [[UIButton alloc] init];
     btnCall.imageEdgeInsets = UIEdgeInsetsMake(8, 8, 8, 8);
+    [btnCall setTitleColor:UIColor.clearColor forState:UIControlStateNormal];
     [btnCall setImage:[UIImage imageNamed:@"contact_audio_call.png"] forState:UIControlStateNormal];
     [headerView addSubview: btnCall];
     [btnCall mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -195,26 +342,54 @@
         make.centerY.equalTo(headerView.mas_centerY);
         make.width.height.mas_equalTo(40.0);
     }];
+    NSString *queueNum = [self getQueueNumberWithQueueName: queueName];
+    [btnCall setTitle:queueNum forState:UIControlStateNormal];
+    [btnCall addTarget:self
+                action:@selector(callGroup:)
+      forControlEvents:UIControlEventTouchUpInside];
     
     UILabel *descLabel = [[UILabel alloc] init];
     descLabel.textColor = [UIColor colorWithRed:(50/255.0) green:(50/255.0) blue:(50/255.0) alpha:1.0];
     descLabel.font = [LinphoneAppDelegate sharedInstance].contentFontNormal;
-    descLabel.text = [listQueuename objectAtIndex: section];
+    descLabel.text = queueName;
     descLabel.backgroundColor = UIColor.clearColor;
     [headerView addSubview: descLabel];
     [descLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.bottom.equalTo(btnCall);
+        make.bottom.equalTo(headerView.mas_centerY).offset(-2.0);
         make.left.equalTo(imgArrow.mas_right).offset(10.0);
         make.right.equalTo(btnCall.mas_left).offset(-10.0);
     }];
     
+    UILabel *lbCount = [[UILabel alloc] init];
+    lbCount.textColor = [UIColor colorWithRed:(150/255.0) green:(150/255.0) blue:(150/255.0) alpha:1.0];
+    lbCount.font = [UIFont italicSystemFontOfSize: 14.0];
+    lbCount.backgroundColor = UIColor.clearColor;
+    [headerView addSubview: lbCount];
+    [lbCount mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(headerView.mas_centerY).offset(2.0);
+        make.left.right.equalTo(descLabel);
+    }];
+    int membersCount = [self getNumRowsForSection: section];
+    if (membersCount > 0) {
+        lbCount.text = [NSString stringWithFormat:@"%d thành viên", membersCount];
+    }else{
+        lbCount.text = @"Chưa có thành viên";
+    }
+    
+    
     UILabel *lbSepa = [[UILabel alloc] init];
+    
     lbSepa.backgroundColor = [UIColor colorWithRed:(240/255.0) green:(240/255.0) blue:(240/255.0) alpha:1.0];
     [headerView addSubview: lbSepa];
     [lbSepa mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.bottom.right.equalTo(headerView);
         make.height.mas_equalTo(1.0);
     }];
+    
+    UITapGestureRecognizer *tapOnHeader = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(whenTapOnHeader:)];
+    headerView.userInteractionEnabled = TRUE;
+    headerView.tag = section;
+    [headerView addGestureRecognizer: tapOnHeader];
     
     return headerView;
 }
@@ -235,8 +410,10 @@
 //}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == sectionSelected) {
+        return 65.0;
+    }
     return 0;
-    return 65.0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
@@ -249,6 +426,13 @@
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"closeKeyboard" object:nil];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView*)scrollView {
+    CGPoint scrollViewOffset = scrollView.contentOffset;
+    if (scrollViewOffset.y < 0) {
+        [scrollView setContentOffset:CGPointMake(0, 0)];
+    }
 }
 
 @end

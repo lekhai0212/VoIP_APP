@@ -523,7 +523,7 @@ void onUncaughtException(NSException* exception)
     
     [self setupValueForDevice];
     
-    listNumber = [[NSArray alloc] initWithObjects: @"+", @"0", @"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", nil];
+    listNumber = [[NSArray alloc] initWithObjects: @"+", @"#", @"*", @"0", @"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", nil];
     
     //  Set default language for app if haven't setted yet
     [[LanguageUtil sharedInstance] setCustomLanguage: key_vi];

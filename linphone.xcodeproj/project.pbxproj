@@ -504,6 +504,8 @@
 		8494CBA022102F1B001D6FB4 /* ic_trash_ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 8494CB9F22102F1B001D6FB4 /* ic_trash_ipad.png */; };
 		8494CBA222102FA6001D6FB4 /* ic_tick_ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 8494CBA122102FA6001D6FB4 /* ic_tick_ipad.png */; };
 		84969C30222BAF51008C7E1B /* ic_muted_red.png in Resources */ = {isa = PBXBuildFile; fileRef = 84969C2F222BAF51008C7E1B /* ic_muted_red.png */; };
+		84A0E779228F795E004D8135 /* PBXHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A0E778228F795E004D8135 /* PBXHeaderView.m */; };
+		84A0E781228F7973004D8135 /* PBXHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84A0E780228F7973004D8135 /* PBXHeaderView.xib */; };
 		84A10DBA2259C3BE00362331 /* backspace-green.png in Resources */ = {isa = PBXBuildFile; fileRef = 84A10DB92259C3BD00362331 /* backspace-green.png */; };
 		84AA051E21855ADD008CA775 /* lauch_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AA051721855ADC008CA775 /* lauch_icon.png */; };
 		84AEA9241FC4FD5500DAA68A /* EditContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AEA9221FC4FD5500DAA68A /* EditContactViewController.m */; };
@@ -1596,6 +1598,9 @@
 		8494CB9F22102F1B001D6FB4 /* ic_trash_ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_trash_ipad.png; sourceTree = "<group>"; };
 		8494CBA122102FA6001D6FB4 /* ic_tick_ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_tick_ipad.png; sourceTree = "<group>"; };
 		84969C2F222BAF51008C7E1B /* ic_muted_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_muted_red.png; sourceTree = "<group>"; };
+		84A0E777228F795E004D8135 /* PBXHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PBXHeaderView.h; path = Contacts/Cell/PBXHeaderView.h; sourceTree = "<group>"; };
+		84A0E778228F795E004D8135 /* PBXHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PBXHeaderView.m; path = Contacts/Cell/PBXHeaderView.m; sourceTree = "<group>"; };
+		84A0E780228F7973004D8135 /* PBXHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = PBXHeaderView.xib; path = Contacts/Cell/PBXHeaderView.xib; sourceTree = "<group>"; };
 		84A10DB92259C3BD00362331 /* backspace-green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "backspace-green.png"; sourceTree = "<group>"; };
 		84AA051721855ADC008CA775 /* lauch_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lauch_icon.png; sourceTree = "<group>"; };
 		84AEA9211FC4FD5500DAA68A /* EditContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditContactViewController.h; path = Contacts/EditContactViewController.h; sourceTree = "<group>"; };
@@ -3879,6 +3884,9 @@
 				84CE055B228DAB8D00CC0F2A /* GroupHeaderView.h */,
 				84CE055C228DAB8D00CC0F2A /* GroupHeaderView.m */,
 				84CE0564228DABA900CC0F2A /* GroupHeaderView.xib */,
+				84A0E777228F795E004D8135 /* PBXHeaderView.h */,
+				84A0E778228F795E004D8135 /* PBXHeaderView.m */,
+				84A0E780228F7973004D8135 /* PBXHeaderView.xib */,
 			);
 			name = Cell;
 			sourceTree = "<group>";
@@ -4456,6 +4464,7 @@
 				63E27A321C4FECD000D332AE /* LaunchScreen.xib in Resources */,
 				15DD9FD42223A0810073B1BE /* SignInViewController.xib in Resources */,
 				848C5D9221F4313200094D7C /* ic_muted_gray.png in Resources */,
+				84A0E781228F7973004D8135 /* PBXHeaderView.xib in Resources */,
 				15C5A5FE219AAF5600FDD6C5 /* NewHistoryDetailCell.xib in Resources */,
 				636316D41A1DEC650009B839 /* SettingsView.xib in Resources */,
 				157C7252223B4B1B00EA607F /* bapoo_aau.mp3 in Resources */,
@@ -4974,6 +4983,7 @@
 				633888451BFB2C49001D5E7B /* HPGrowingTextView.m in Sources */,
 				84C47D091FB62CC10015695E /* HistoryCallCell.m in Sources */,
 				63F1DF441BCE618E00EDED90 /* UIAddressTextField.m in Sources */,
+				84A0E779228F795E004D8135 /* PBXHeaderView.m in Sources */,
 				842DEC431FC478F300E7F74D /* UIMiniKeypad.m in Sources */,
 				1578D07121AD3DDF00E8BA5F /* SendLogFileCell.m in Sources */,
 				D3EA540D1598528B0037DC6B /* ChatsListTableView.m in Sources */,

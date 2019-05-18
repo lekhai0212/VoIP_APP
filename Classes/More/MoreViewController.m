@@ -108,16 +108,23 @@ static UICompositeViewDescription *compositeDescription = nil;
 {
     if ([SipUtils getStateOfDefaultProxyConfig] != eAccountNone)
     {
-        _lbName.text = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Account"], USERNAME];
-        
         NSString *accountID = [SipUtils getAccountIdOfDefaultProxyConfig];
         if (![AppUtils isNullOrEmpty: accountID] && accountID.length > 5) {
             NSString *ext = [accountID substringFromIndex: 5];
             lbPBXAccount.text = ext;
             
-            lbPBXAccount.text = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Extension"], ext];
+            lbPBXAccount.text = [NSString stringWithFormat:@"Số nội bộ: %@", ext];
+            
+            PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: ext];
+            if (contact != nil) {
+                _lbName.text = contact.name;
+            }else{
+                _lbName.text = ext;
+            }
+            NSLog(@"%@", contact);
         }else{
-            lbPBXAccount.text = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Extension"], @"N/A"];
+            lbPBXAccount.text = [NSString stringWithFormat:@"Số nội bộ: %@", @"Không có"];
+            _lbName.text = @"Tài khoản: Chưa có";
         }
         
         NSString *pbxKeyAvatar = [NSString stringWithFormat:@"%@_%@", @"pbxAvatar", accountID];

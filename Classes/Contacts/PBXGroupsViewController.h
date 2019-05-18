@@ -10,5 +10,6 @@
 @interface PBXGroupsViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UITableView *tbGroup;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *icWaiting;
 
 @end
