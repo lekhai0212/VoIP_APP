@@ -31,6 +31,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setupUIForView ;
 - (IBAction)btnSortTypePress:(UIButton *)sender;
 
+- (void)updateSortViewInfo;
+
 @end
 
 NS_ASSUME_NONNULL_END

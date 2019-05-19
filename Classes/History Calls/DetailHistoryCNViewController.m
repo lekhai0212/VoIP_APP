@@ -120,7 +120,12 @@ static UICompositeViewDescription *compositeDescription = nil;
     if (![AppUtils isNullOrEmpty:contact.name]) {
         _lbName.text = contact.name;
     }else{
-        _lbName.text = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
+        NSString *groupName = [AppUtils getGroupNameWithQueueNumber: phoneNumber];
+        if (![AppUtils isNullOrEmpty: groupName]) {
+            _lbName.text = groupName;
+        }else{
+            _lbName.text = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
+        }
     }
     
     if (![AppUtils isNullOrEmpty: contact.avatar]) {

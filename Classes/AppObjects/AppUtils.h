@@ -130,4 +130,8 @@
 + (NSArray *)getAllFilesInDirectory: (NSString *)subPath;
 + (NSAttributedString *)getAttributeTitle: (NSString *)content font: (UIFont *)textFont sizeIcon: (float)size color: (UIColor *)color image: (UIImage *)image;
 
++ (void)setupFirstValueForSortPBXContactList;
++ (NSString *)getGroupNameWithQueueNumber: (NSString *)queueNum;
++ (BOOL)checkPhoneNumberIsFromGroup: (NSString *)queue existsMember: (NSString *)member;
+
 @end

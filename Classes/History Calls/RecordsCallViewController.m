@@ -527,7 +527,7 @@
     
     long timeInterval = 0;
     if ([timeObj isKindOfClass:[NSNumber class]] || [timeObj isKindOfClass:[NSString class]]) {
-        timeInterval = [timeObj intValue];
+        timeInterval = [timeObj longValue];
     }
     
     if ([src isEqualToString: myExt]) {

@@ -72,6 +72,7 @@
 }
 
 - (IBAction)btnSortTypePress:(UIButton *)sender {
+    [delegate onSortTypeButtonPress];
 }
 
 - (IBAction)btnSyncPress:(UIButton *)sender {
@@ -98,6 +99,27 @@
     //
     [verString appendAttributedString: contentString];
     return verString;
+}
+
+- (void)updateSortViewInfo {
+    NSString *sortType = [[NSUserDefaults standardUserDefaults] objectForKey:key_sort_type];
+    NSString *ascending = [[NSUserDefaults standardUserDefaults] objectForKey:sort_ascending];
+    
+    if ([sortType isEqualToString: sort_with_phone]) {
+        tfSort.text = @"Số điện thoại";
+        if ([ascending isEqualToString:@"YES"]) {
+            [icSort setImage:[UIImage imageNamed:@"sort-19"] forState:UIControlStateNormal];
+        }else{
+            [icSort setImage:[UIImage imageNamed:@"sort-91"] forState:UIControlStateNormal];
+        }
+    }else{
+        tfSort.text = @"Tên";
+        if ([ascending isEqualToString:@"YES"]) {
+            [icSort setImage:[UIImage imageNamed:@"sort-az"] forState:UIControlStateNormal];
+        }else{
+            [icSort setImage:[UIImage imageNamed:@"sort-za"] forState:UIControlStateNormal];
+        }
+    }
 }
 
 @end

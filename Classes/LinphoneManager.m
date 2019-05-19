@@ -910,6 +910,14 @@ static void linphone_iphone_display_status(struct _LinphoneCore *lc, const char 
         NSString *phoneNumber = [NSString stringWithUTF8String:linphone_address_get_username(addr)];
         
         if ([callStatus isEqualToString:missed_call] || [callStatus isEqualToString: aborted_call]) {
+            //  Kiem tra nếu đang trong group call, 1 client join vào và sẽ nhận đc event này từ client đó, nên mình sẽ ko xử lý để save vào call history
+            if ([PhoneMainView.instance.currentView isEqual: CallView.compositeViewDescription]) {
+                BOOL isGroupCall = [AppUtils checkPhoneNumberIsFromGroup: [LinphoneAppDelegate sharedInstance].phoneForCall existsMember: phoneNumber];
+                if (isGroupCall) {
+                    return;
+                }
+            }
+            
             NSString *prefix = [LinphoneAppDelegate sharedInstance].callPrefix;
             if (![AppUtils isNullOrEmpty: prefix] && phoneNumber.length > prefix.length) {
                 phoneNumber = [phoneNumber stringByReplacingCharactersInRange:NSMakeRange(0, prefix.length) withString:@""];
@@ -1108,6 +1116,13 @@ static void linphone_iphone_display_status(struct _LinphoneCore *lc, const char 
 		}
         
         if (![callStatus isEqualToString: aborted_call] && ![callStatus isEqualToString:missed_call]) {
+            if ([PhoneMainView.instance.currentView isEqual: CallView.compositeViewDescription]) {
+                BOOL isGroupCall = [AppUtils checkPhoneNumberIsFromGroup: [LinphoneAppDelegate sharedInstance].phoneForCall existsMember: phoneNumber];
+                if (isGroupCall) {
+                    return;
+                }
+            }
+            
             // Trường hợp cancel 1 cuộc gọi đến khi đang trong cuộc gọi thì chuyển trạng thái Declined của nó thành trạng thái Missed và chưa xem
             int duration = linphone_call_log_get_duration(callLog);
             

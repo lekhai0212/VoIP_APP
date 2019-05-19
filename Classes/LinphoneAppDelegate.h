@@ -174,6 +174,7 @@ typedef enum{
 @property (nonatomic, strong) NSString *callPrefix;
 @property (nonatomic, strong) NSString *randomKey;
 @property (nonatomic, strong) NSString *hashStr;
+@property (nonatomic, strong) NSMutableArray *listGroup;
 
 - (void)tryToUnRegisterSIP;
 

@@ -140,7 +140,12 @@ static UICompositeViewDescription *compositeDescription = nil;
         
         PhoneObject *contact= [ContactUtils getContactPhoneObjectWithNumber: phonenumber];
         if ([AppUtils isNullOrEmpty: contact.name]) {
-            _lbName.text = [localization localizedStringForKey: @"Unknown"];
+            NSString *fullName = [AppUtils getGroupNameWithQueueNumber: phonenumber];
+            if (![AppUtils isNullOrEmpty: fullName]) {
+                _lbName.text = fullName;
+            }else{
+                _lbName.text = [localization localizedStringForKey: @"Unknown"];
+            }
         }else{
             _lbName.text = contact.name;
         }

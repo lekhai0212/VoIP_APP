@@ -12,15 +12,17 @@
 
 @interface PBXGroupsViewController ()<WebServicesDelegate, UITableViewDelegate, UITableViewDataSource> {
     WebServices *webService;
-    NSMutableArray *listGroup;
     NSMutableArray *listQueuename;
     
+    NSMutableArray *listSearch;
     NSMutableDictionary *contactSections;
     float hSection;
     
     GroupHeaderView *tbHeader;
     int sectionSelected;
     int sortType;
+    
+    BOOL isSearching;
     
 }
 @end
@@ -38,24 +40,36 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
     
-    if (webService == nil) {
-        webService = [[WebServices alloc] init];
-        webService.delegate = self;
-    }
-    
-    if (listGroup == nil) {
-        listGroup = [[NSMutableArray alloc] init];
-    }
-    [listGroup removeAllObjects];
-    
     if (listQueuename == nil) {
         listQueuename = [[NSMutableArray alloc] init];
     }
     [listQueuename removeAllObjects];
     
+    if (listSearch == nil) {
+        listSearch = [[NSMutableArray alloc] init];
+    }
+    [listSearch removeAllObjects];
+    
+    
     sectionSelected = -1;
     sortType = 0;
     [self updateSortTypeIcon];
+    
+    if ([LinphoneAppDelegate sharedInstance].listGroup.count == 0) {
+        [self regetPBXGroupContactList];
+    }else{
+        [self prepareDataToDisplay: nil];
+    }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startSearchContactWithValue:)
+                                                 name:searchContactWithValue object:nil];
+}
+
+- (void)regetPBXGroupContactList {
+    if (webService == nil) {
+        webService = [[WebServices alloc] init];
+        webService.delegate = self;
+    }
     
     [self getPBXGroupContacts];
 }
@@ -63,6 +77,7 @@
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear: animated];
     webService = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver: self];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -77,6 +92,43 @@
         }else{
             [tbHeader.icSort setImage:[UIImage imageNamed:@"sort-za"] forState:UIControlStateNormal];
         }
+    }
+}
+
+- (void)startSearchContactWithValue: (NSNotification *)notif {
+    
+    id object = [notif object];
+    if ([object isKindOfClass:[NSString class]])
+    {
+        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"%s search value = %@", __FUNCTION__, object] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+        
+        if ([object isEqualToString:@""]) {
+            isSearching = NO;
+            [tbGroup reloadData];
+            
+        }else{
+            isSearching = YES;
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                [self startSearchPBXGroupsWithContent: object];
+                dispatch_async(dispatch_get_main_queue(), ^(void){
+                    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"%s Finished search contact with value = %@", __FUNCTION__, object] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+                    
+                    [tbGroup reloadData];
+                });
+            });
+        }
+    }
+}
+
+- (void)startSearchPBXGroupsWithContent: (NSString *)content {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] search group = %@", __FUNCTION__, content] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
+    [listSearch removeAllObjects];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self CONTAINS[cd] %@", content];
+    NSArray *filter = [listQueuename filteredArrayUsingPredicate: predicate];
+    if (filter.count > 0) {
+        [listSearch addObjectsFromArray: filter];
     }
 }
 
@@ -150,9 +202,17 @@
 }
 
 - (void)prepareDataToDisplay: (NSArray *)data {
-    [listGroup addObjectsFromArray:(NSArray *)data];
-    for (int index=0; index<listGroup.count; index++) {
-        NSDictionary *info = [listGroup objectAtIndex: index];
+    if (data != nil) {
+        [[LinphoneAppDelegate sharedInstance].listGroup removeAllObjects];
+        [[LinphoneAppDelegate sharedInstance].listGroup addObjectsFromArray:(NSArray *)data];
+        
+        NSData *myData = [NSKeyedArchiver archivedDataWithRootObject: [LinphoneAppDelegate sharedInstance].listGroup];
+        [[NSUserDefaults standardUserDefaults] setObject:myData forKey:@"group_pbx_list"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    
+    for (int index=0; index<[LinphoneAppDelegate sharedInstance].listGroup.count; index++) {
+        NSDictionary *info = [[LinphoneAppDelegate sharedInstance].listGroup objectAtIndex: index];
         NSString *queuename = [info objectForKey:@"queuename"];
         if (![AppUtils isNullOrEmpty: queuename]) {
             [listQueuename addObject: queuename];
@@ -168,7 +228,7 @@
         if (listQueuename.count == 0) {
             tbHeader.lbTitle.text = @"Chưa có danh sách nhóm";
         }else{
-            tbHeader.lbTitle.text = [NSString stringWithFormat:@"Tổng cộng %ld nhóm", listQueuename.count];
+            tbHeader.lbTitle.text = [NSString stringWithFormat:@"Tổng cộng %d nhóm", (int)listQueuename.count];
         }
     }
     [tbGroup reloadData];
@@ -185,9 +245,15 @@
 }
 
 - (int)getNumRowsForSection: (NSInteger)section {
-    NSString *queuename = [listQueuename objectAtIndex: section];
+    NSString *queuename;
+    if (isSearching) {
+        queuename = [listSearch objectAtIndex: section];
+    }else{
+        queuename = [listQueuename objectAtIndex: section];
+    }
+    
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.queuename == %@", queuename];
-    NSArray *tmpArr = [listGroup filteredArrayUsingPredicate: predicate];
+    NSArray *tmpArr = [[LinphoneAppDelegate sharedInstance].listGroup filteredArrayUsingPredicate: predicate];
     if (tmpArr.count > 0) {
         NSDictionary *info = [tmpArr objectAtIndex: 0];
         NSArray *members = [info objectForKey:@"members"];
@@ -200,9 +266,14 @@
 }
 
 - (NSDictionary *)getMembersAtIndex: (int)row section: (int)section {
-    NSString *queuename = [listQueuename objectAtIndex: section];
+    NSString *queuename;
+    if (isSearching) {
+        queuename = [listSearch objectAtIndex: section];
+    }else{
+        queuename = [listQueuename objectAtIndex: section];
+    }
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.queuename == %@", queuename];
-    NSArray *tmpArr = [listGroup filteredArrayUsingPredicate: predicate];
+    NSArray *tmpArr = [[LinphoneAppDelegate sharedInstance].listGroup filteredArrayUsingPredicate: predicate];
     if (tmpArr.count > 0) {
         NSDictionary *info = [tmpArr objectAtIndex: 0];
         NSArray *members = [info objectForKey:@"members"];
@@ -217,7 +288,7 @@
 
 - (NSString *)getQueueNumberWithQueueName: (NSString *)queuename {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.queuename == %@", queuename];
-    NSArray *tmpArr = [listGroup filteredArrayUsingPredicate: predicate];
+    NSArray *tmpArr = [[LinphoneAppDelegate sharedInstance].listGroup filteredArrayUsingPredicate: predicate];
     if (tmpArr.count > 0) {
         NSDictionary *info = [tmpArr objectAtIndex: 0];
         NSString *queueNum = [info objectForKey:@"queue"];
@@ -235,8 +306,7 @@
     }else{
         sectionSelected = section;
     }
-    [tbGroup beginUpdates];
-    [tbGroup endUpdates];
+    [tbGroup reloadData];
 }
 
 - (void)callGroup: (UIButton *)sender {
@@ -245,7 +315,14 @@
     NSString *queue = sender.currentTitle;
     queue = [AppUtils removeAllSpecialInString: queue];
     if (![AppUtils isNullOrEmpty: queue]) {
-        [SipUtils makeCallWithPhoneNumber: queue];
+        [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:IS_VIDEO_CALL_KEY];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        [LinphoneAppDelegate sharedInstance].phoneForCall = queue;
+        [[NSNotificationCenter defaultCenter] postNotificationName:getDIDListForCall object:nil];
+        
+    }else{
+        [self.view makeToast:@"Số điện thoại không hợp lệ" duration:2.0 position:CSToastPositionCenter];
     }
 }
 
@@ -278,7 +355,11 @@
 #pragma mark - UITableview
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return listQueuename.count;
+    if (isSearching) {
+        return listSearch.count;
+    }else{
+        return listQueuename.count;
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -317,19 +398,29 @@
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    NSString *queueName = [listQueuename objectAtIndex: section];
+    NSString *queueName;
+    if (isSearching) {
+        queueName = [listSearch objectAtIndex: section];
+    }else{
+        queueName = [listQueuename objectAtIndex: section];
+    }
     
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, hSection)];
     headerView.backgroundColor = UIColor.whiteColor;
     
     UIImageView *imgArrow = [[UIImageView alloc] init];
-    imgArrow.image = [UIImage imageNamed:@"right-arrow"];
+    
     [headerView addSubview: imgArrow];
     [imgArrow mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(headerView).offset(15.0);
         make.centerY.equalTo(headerView.mas_centerY);
         make.width.height.mas_equalTo(18.0);
     }];
+    if (section == sectionSelected) {
+        imgArrow.image = [UIImage imageNamed:@"right-arrow-down"];
+    }else{
+        imgArrow.image = [UIImage imageNamed:@"right-arrow"];
+    }
     
     //  group call icon
     UIButton *btnCall = [[UIButton alloc] init];

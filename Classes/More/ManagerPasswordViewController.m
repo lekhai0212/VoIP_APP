@@ -8,6 +8,7 @@
 #import "ManagerPasswordViewController.h"
 #import <CommonCrypto/CommonDigest.h>
 #import "CustomTextAttachment.h"
+#import "SignInViewController.h"
 
 @interface ManagerPasswordViewController (){
     WebServices *webService;
@@ -18,6 +19,7 @@
     NSString *portPBX;
     
     LinphoneProxyConfig *enableProxyConfig;
+    int numTryToLogin;
 }
 
 @end
@@ -76,6 +78,8 @@ static UICompositeViewDescription *compositeDescription = nil;
     [super viewWillAppear: animated];
 
     [WriteLogsUtils writeForGoToScreen: @"ManagerPasswordViewController"];
+    
+    numTryToLogin = 0;
     
     serverPBX = [[NSUserDefaults standardUserDefaults] objectForKey:PBX_SERVER];
     
@@ -471,6 +475,18 @@ static UICompositeViewDescription *compositeDescription = nil;
         }
         case LinphoneRegistrationFailed: {
             [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] registration state is LinphoneRegistrationFailed", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            
+            if (numTryToLogin < MAX_TIME_FOR_LOGIN) {
+                numTryToLogin++;
+                
+                [LinphoneManager.instance refreshRegisters];
+            }else{
+                numTryToLogin = 0;
+                
+                linphone_core_clear_proxy_config(LC);
+                [LinphoneAppDelegate sharedInstance].configPushToken = NO;
+                [[PhoneMainView instance] changeCurrentView:[SignInViewController compositeViewDescription]];
+            }
             
             break;
         }

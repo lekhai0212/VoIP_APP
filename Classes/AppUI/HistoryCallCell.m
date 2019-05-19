@@ -31,10 +31,10 @@
         wNotif = 15.0;
     }
     
-    _lbName.font = [LinphoneAppDelegate sharedInstance].contentFontBold;
-    _lbPhone.font = [LinphoneAppDelegate sharedInstance].contentFontNormal;
-    _lbTime.font = [LinphoneAppDelegate sharedInstance].contentFontNormal;
-    lbDate.font = [LinphoneAppDelegate sharedInstance].contentFontNormal;
+    _lbName.font = [LinphoneAppDelegate sharedInstance].descFontBold;
+    _lbPhone.font = [LinphoneAppDelegate sharedInstance].descFontNormal;
+    _lbTime.font = [LinphoneAppDelegate sharedInstance].descFontNormal;
+    lbDate.font = [LinphoneAppDelegate sharedInstance].descFontNormal;
     
     UIColor *textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     

@@ -418,6 +418,8 @@
 		841F97E61FB4B2DC00A9A8CD /* UIConferenceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 841F97E41FB4B2DC00A9A8CD /* UIConferenceCell.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		841F97E71FB4B2DC00A9A8CD /* UIConferenceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 841F97E51FB4B2DC00A9A8CD /* UIConferenceCell.xib */; };
 		84221EFD22565C0A0024F77A /* CustomAvatarImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84221EFC22565C0A0024F77A /* CustomAvatarImageView.m */; };
+		84276F0A2290058E00FA0ED4 /* ChooseSortCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84276F082290058E00FA0ED4 /* ChooseSortCell.m */; };
+		84276F0B2290058E00FA0ED4 /* ChooseSortCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84276F092290058E00FA0ED4 /* ChooseSortCell.xib */; };
 		842814DE223ABED000E8EAC0 /* switchcam_dis.png in Resources */ = {isa = PBXBuildFile; fileRef = 842814D5223ABECC00E8EAC0 /* switchcam_dis.png */; };
 		842814DF223ABED000E8EAC0 /* switchcam_enable.png in Resources */ = {isa = PBXBuildFile; fileRef = 842814DC223ABECC00E8EAC0 /* switchcam_enable.png */; };
 		842814E0223ABED000E8EAC0 /* switchcam_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 842814DD223ABECD00E8EAC0 /* switchcam_normal.png */; };
@@ -1462,6 +1464,9 @@
 		841F97E51FB4B2DC00A9A8CD /* UIConferenceCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = UIConferenceCell.xib; path = AppUI/UIConferenceCell.xib; sourceTree = "<group>"; };
 		84221EFB22565C0A0024F77A /* CustomAvatarImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CustomAvatarImageView.h; path = AppUI/CustomAvatarImageView.h; sourceTree = "<group>"; };
 		84221EFC22565C0A0024F77A /* CustomAvatarImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CustomAvatarImageView.m; path = AppUI/CustomAvatarImageView.m; sourceTree = "<group>"; };
+		84276F072290058E00FA0ED4 /* ChooseSortCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ChooseSortCell.h; path = Contacts/Cell/ChooseSortCell.h; sourceTree = "<group>"; };
+		84276F082290058E00FA0ED4 /* ChooseSortCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ChooseSortCell.m; path = Contacts/Cell/ChooseSortCell.m; sourceTree = "<group>"; };
+		84276F092290058E00FA0ED4 /* ChooseSortCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ChooseSortCell.xib; path = Contacts/Cell/ChooseSortCell.xib; sourceTree = "<group>"; };
 		842814D5223ABECC00E8EAC0 /* switchcam_dis.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switchcam_dis.png; sourceTree = "<group>"; };
 		842814DC223ABECC00E8EAC0 /* switchcam_enable.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switchcam_enable.png; sourceTree = "<group>"; };
 		842814DD223ABECD00E8EAC0 /* switchcam_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switchcam_normal.png; sourceTree = "<group>"; };
@@ -3887,6 +3892,9 @@
 				84A0E777228F795E004D8135 /* PBXHeaderView.h */,
 				84A0E778228F795E004D8135 /* PBXHeaderView.m */,
 				84A0E780228F7973004D8135 /* PBXHeaderView.xib */,
+				84276F072290058E00FA0ED4 /* ChooseSortCell.h */,
+				84276F082290058E00FA0ED4 /* ChooseSortCell.m */,
+				84276F092290058E00FA0ED4 /* ChooseSortCell.xib */,
 			);
 			name = Cell;
 			sourceTree = "<group>";
@@ -4326,6 +4334,7 @@
 				157C724D223B4B1B00EA607F /* cute_cat_song.mp3 in Resources */,
 				D38187F815FE355D00C3EDCA /* TabBarView.xib in Resources */,
 				1575279821661D1A007D789A /* ic_search.png in Resources */,
+				84276F0B2290058E00FA0ED4 /* ChooseSortCell.xib in Resources */,
 				84EA0AE21FE9243000C3C78E /* ringbacktone.mp3 in Resources */,
 				15A2B8A622325F6F00DA6342 /* icon_back.png in Resources */,
 				8414C3D121EB23D400F54DD1 /* youtube_blue.png in Resources */,
@@ -5020,6 +5029,7 @@
 				84EFFE1A1FF3E6B60085A9F4 /* DGActivityIndicatorBallScaleRippleMultipleAnimation.m in Sources */,
 				84EFFE081FF3E6B60085A9F4 /* DGActivityIndicatorBallClipRotateAnimation.m in Sources */,
 				84C1E2391FAEBAE100EED0B9 /* BEMPathManager.m in Sources */,
+				84276F0A2290058E00FA0ED4 /* ChooseSortCell.m in Sources */,
 				84CDD2391FD0E6FE003DB5AD /* UIImage+GKContact.m in Sources */,
 				D3C6526715AC1A8F0092A874 /* UIContactDetailsCell.m in Sources */,
 				631348301B6F7B6600C6BDCB /* UIRoundBorderedButton.m in Sources */,

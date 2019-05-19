@@ -33,6 +33,7 @@
 #import "PBXContact.h"
 #import "AESCrypt.h"
 #import <CommonCrypto/CommonDigest.h>
+#import "SignInViewController.h"
 
 @interface DialerView (){
     LinphoneAppDelegate *appDelegate;
@@ -52,6 +53,7 @@
     UIButton *btnSearchNum;
     UIButton *btnChooseContact;
     float hAddressField;
+    int numTryToLogin;
 }
 @end
 
@@ -104,7 +106,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 	[super viewWillAppear:animated];
     [WriteLogsUtils writeForGoToScreen: @"DialerView"];
     
-    NSLog(@"%@", PASSWORD);
+    //  variable for num login
+    numTryToLogin = 0;
     
     NSString *total = [NSString stringWithFormat:@"%@%@%@", PASSWORD, [LinphoneAppDelegate sharedInstance].randomKey, USERNAME];
     [LinphoneAppDelegate sharedInstance].hashStr = [[total MD5String] lowercaseString];
@@ -950,12 +953,26 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case LinphoneRegistrationFailed: {
-            _lbStatus.textColor = UIColor.orangeColor;
-            if ([SipUtils getStateOfDefaultProxyConfig] == eAccountOff) {
-                _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Disabled"];
+            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] state is LinphoneRegistrationFailed, numTryToLogin = %d ", __FUNCTION__, numTryToLogin] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            
+            if (numTryToLogin < MAX_TIME_FOR_LOGIN) {
+                numTryToLogin++;
+               
+                [LinphoneManager.instance refreshRegisters];
             }else{
-                _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Offline"];
+                numTryToLogin = 0;
+                
+                linphone_core_clear_proxy_config(LC);
+                [LinphoneAppDelegate sharedInstance].configPushToken = NO;
+                [[PhoneMainView instance] changeCurrentView:[SignInViewController compositeViewDescription]];
             }
+            
+//            _lbStatus.textColor = UIColor.orangeColor;
+//            if ([SipUtils getStateOfDefaultProxyConfig] == eAccountOff) {
+//                _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Disabled"];
+//            }else{
+//                _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Offline"];
+//            }
             break;
         }
         case LinphoneRegistrationProgress: {

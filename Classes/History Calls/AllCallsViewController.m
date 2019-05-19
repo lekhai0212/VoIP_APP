@@ -175,7 +175,12 @@
     cell._lbPhone.hidden = NO;
     
     if ([AppUtils isNullOrEmpty: aCall._phoneName]) {
-        cell._lbName.text = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
+        NSString *groupName = [AppUtils getGroupNameWithQueueNumber: aCall._phoneNumber];
+        if (![AppUtils isNullOrEmpty: groupName]) {
+            cell._lbName.text = groupName;
+        }else{
+            cell._lbName.text = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
+        }
     }else{
         cell._lbName.text = aCall._phoneName;
     }
@@ -354,6 +359,7 @@
             }
             
             [LinphoneAppDelegate sharedInstance].phoneForCall = phoneNumber;
+            
             [[NSNotificationCenter defaultCenter] postNotificationName:getDIDListForCall object:nil];
         }
         return;

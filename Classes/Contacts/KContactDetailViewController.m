@@ -335,6 +335,7 @@ static UICompositeViewDescription *compositeDescription = nil;
             }
             
             [LinphoneAppDelegate sharedInstance].phoneForCall = phoneNumber;
+            
             [[NSNotificationCenter defaultCenter] postNotificationName:getDIDListForCall object:nil];
         }
         return;

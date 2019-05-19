@@ -988,11 +988,8 @@ static UICompositeViewDescription *compositeDescription = nil;
     [self hideWaitingView: YES];
     if ([link isEqualToString: login_func]) {
         if ([error isKindOfClass:[NSDictionary class]]) {
-            NSString *errorCode = [error objectForKey:@"errorCode"];
-            if ([errorCode isKindOfClass:[NSString class]] && [errorCode isEqualToString: errorLoginCode]) {
-                [self.view makeToast:@"Sai tên đăng nhập hoặc mật khẩu"
-                            duration:2.0 position:CSToastPositionCenter];
-            }
+            [self.view makeToast:@"Sai tên đăng nhập hoặc mật khẩu"
+                        duration:2.0 position:CSToastPositionCenter];
         }
         
     }else if ([link isEqualToString: decryptRSA_func]) {
@@ -1015,6 +1012,15 @@ static UICompositeViewDescription *compositeDescription = nil;
             
             [self startTimerToCheckRegisterSIP];
             [SipUtils registerPBXAccount:tfAccountID.text password:tfPassword.text ipAddress:domain port:port];
+            
+            [[NSUserDefaults standardUserDefaults] setObject:tfAccountID.text forKey:key_login];
+            [[NSUserDefaults standardUserDefaults] setObject:@"123456" forKey:key_password];
+            
+            [[NSUserDefaults standardUserDefaults] setObject:domain forKey:PBX_SERVER];
+            [[NSUserDefaults standardUserDefaults] setObject:port forKey:PBX_PORT];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
+            [PhoneMainView.instance changeCurrentView:DialerView.compositeViewDescription];
         }
     }else if ([link isEqualToString: decryptRSA_func]) {
         if ([data isKindOfClass:[NSDictionary class]]) {

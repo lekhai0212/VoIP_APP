@@ -528,36 +528,36 @@ static RootViewManager *rootViewManagerInstance = nil;
 }
 - (void)startUp {
 	@try {
-		LinphoneManager *lm = LinphoneManager.instance;
-		if (linphone_core_get_global_state(LC) != LinphoneGlobalOn) {
+        LinphoneManager *lm = LinphoneManager.instance;
+        if (linphone_core_get_global_state(LC) != LinphoneGlobalOn) {
             NSString *goHistoryCall = [[NSUserDefaults standardUserDefaults] objectForKey:@"isGoToHistoryCall"];
             if (goHistoryCall != nil && [goHistoryCall isEqualToString:@"YES"]) {
-                
+
                 //  reset value
                 [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"isGoToHistoryCall"];
                 [[NSUserDefaults standardUserDefaults] synchronize];
-                
+
                 //  Di chuyen den view history neu nguoi dung click vao history tu dien thoai de mo app
                 [self changeCurrentView:CallsHistoryViewController.compositeViewDescription];
             }else{
                 [self changeCurrentView:SignInViewController.compositeViewDescription];
             }
-		} else if ([LinphoneManager.instance lpConfigBoolForKey:@"enable_first_login_view_preference"] == true) {
+        } else if ([LinphoneManager.instance lpConfigBoolForKey:@"enable_first_login_view_preference"] == true) {
             [PhoneMainView.instance changeCurrentView:SignInViewController.compositeViewDescription];
-		} else {
-			// always start to dialer when testing
-			// Change to default view
-			const MSList *list = linphone_core_get_proxy_config_list(LC);
+        } else {
+            // always start to dialer when testing
+            // Change to default view
+            const MSList *list = linphone_core_get_proxy_config_list(LC);
             LinphoneProxyConfig *defaultConfig = linphone_core_get_default_proxy_config(LC);
-            
-			if ((list != NULL || ([lm lpConfigBoolForKey:@"hide_assistant_preference"] == true) || lm.isTesting) && defaultConfig != NULL) {
+
+            if ((list != NULL || ([lm lpConfigBoolForKey:@"hide_assistant_preference"] == true) || lm.isTesting) && defaultConfig != NULL) {
                 NSString *goHistoryCall = [[NSUserDefaults standardUserDefaults] objectForKey:@"isGoToHistoryCall"];
                 if (goHistoryCall != nil && [goHistoryCall isEqualToString:@"YES"]) {
-                    
+
                     //  reset value
                     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"isGoToHistoryCall"];
                     [[NSUserDefaults standardUserDefaults] synchronize];
-                    
+
                     //  Di chuyen den view history neu nguoi dung click vao history tu dien thoai de mo app
                     [self changeCurrentView:CallsHistoryViewController.compositeViewDescription];
                 }else{
@@ -567,10 +567,10 @@ static RootViewManager *rootViewManagerInstance = nil;
                         [PhoneMainView.instance changeCurrentView:SignInViewController.compositeViewDescription];
                     }
                 }
-			} else {
-				[PhoneMainView.instance changeCurrentView:SignInViewController.compositeViewDescription];
-			}
-		}
+            } else {
+                [PhoneMainView.instance changeCurrentView:SignInViewController.compositeViewDescription];
+            }
+        }
 		[self updateApplicationBadgeNumber]; // Update Badge at startup
 	} @catch (NSException *exception) {
 		// we'll wait until the app transitions correctly

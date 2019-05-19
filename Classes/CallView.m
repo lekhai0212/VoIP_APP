@@ -344,6 +344,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void) orientationChanged {
     viewVideoCall.hidden = isAudioCall;
+    return;
     [self setupUIForView];
 }
 
@@ -1205,7 +1206,10 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
             
             PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: addressPhoneNumber];
             if ([AppUtils isNullOrEmpty: contact.name]) {
-                fullName = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
+                fullName = [AppUtils getGroupNameWithQueueNumber: addressPhoneNumber];
+                if ([AppUtils isNullOrEmpty: fullName]) {
+                    fullName = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
+                }
             }else{
                 fullName = contact.name;
             }

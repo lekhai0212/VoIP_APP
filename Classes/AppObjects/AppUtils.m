@@ -1141,4 +1141,41 @@
     return verString;
 }
 
++ (void)setupFirstValueForSortPBXContactList {
+    [[NSUserDefaults standardUserDefaults] setObject:sort_with_phone forKey:key_sort_type];
+    [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:sort_ascending];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (NSString *)getGroupNameWithQueueNumber: (NSString *)queueNum {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.queue == %@", queueNum];
+    NSArray *tmpArr = [[LinphoneAppDelegate sharedInstance].listGroup filteredArrayUsingPredicate: predicate];
+    if (tmpArr.count > 0) {
+        NSDictionary *info = [tmpArr objectAtIndex: 0];
+        NSString *queueName = [info objectForKey:@"queuename"];
+        if (![AppUtils isNullOrEmpty: queueName]) {
+            return queueName;
+        }
+    }
+    return @"";
+}
+
++ (BOOL)checkPhoneNumberIsFromGroup: (NSString *)queue existsMember: (NSString *)member {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.queue == %@", queue];
+    NSArray *tmpArr = [[LinphoneAppDelegate sharedInstance].listGroup filteredArrayUsingPredicate: predicate];
+    if (tmpArr.count > 0) {
+        NSDictionary *info = [tmpArr objectAtIndex: 0];
+        NSArray *members = [info objectForKey:@"members"];
+        if (members.count > 0) {
+            predicate = [NSPredicate predicateWithFormat:@"num == %@", member];
+            NSArray *filter = [members filteredArrayUsingPredicate: predicate];
+            if (filter.count > 0) {
+                return TRUE;
+            }
+        }
+    }
+
+    return FALSE;
+}
+
 @end

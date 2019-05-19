@@ -21,6 +21,8 @@
 #define AUDIO_CALL_TYPE 1
 #define VIDEO_CALL_TYPE 2
 
+#define MAX_TIME_FOR_LOGIN  3
+
 
 #define getDIDListForCall                   @"getDIDListForCall"
 #define speakerEnabledForVideoCall          @"speakerEnabledForVideoCall"
@@ -315,5 +317,10 @@
 
 
 #define Close   @"Close"
+
+#define key_sort_type       @"key_sort_type"
+#define sort_with_phone     @"sort_with_phone"
+#define sort_with_name      @"sort_with_name"
+#define sort_ascending      @"sort_ascending"
 
 #endif /* AppStrings_h */

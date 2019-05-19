@@ -82,7 +82,7 @@
 @synthesize webService, keepAwakeTimer, listNumber, listInfoPhoneNumber, supportLoginWithPhoneNumber, logFilePath, dbQueue, splashScreen;
 @synthesize supportVoice;
 @synthesize contactType, historyType, callTransfered, hNavigation, hasBluetoothEar, ipadWaiting;
-@synthesize phoneForCall, configPushToken, supportVideoCall, callPrefix, randomKey, hashStr;
+@synthesize phoneForCall, configPushToken, supportVideoCall, callPrefix, randomKey, hashStr, listGroup;
 
 #pragma mark - Lifecycle Functions
 
@@ -459,6 +459,12 @@ void onUncaughtException(NSException* exception)
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"==================================================\n==               START APPLICATION ON IPAD              ==\n=================================================="] toFilePath:logFilePath];
     }
     
+    //  save value for pbx contacts sort
+    NSString *sortType = [[NSUserDefaults standardUserDefaults] objectForKey: key_sort_type];
+    if ([AppUtils isNullOrEmpty: sortType]) {
+        [AppUtils setupFirstValueForSortPBXContactList];
+    }
+    
     //  nhcla154 - rzfpGFlsEx
     NSString *str = [NSString stringWithFormat:@"%@: %@\n%@: %@", [[LanguageUtil sharedInstance] getContent:@"Version"], [AppUtils getAppVersionWithBuildVersion: YES], [[LanguageUtil sharedInstance] getContent:@"Release date"], [AppUtils getBuildDate]];
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"\nApp's version is %@", str] toFilePath:logFilePath];
@@ -497,7 +503,6 @@ void onUncaughtException(NSException* exception)
     supportVideoCall = NO;
     callPrefix = @"";
     randomKey = [AppUtils randomStringWithLength: 10];
-    
     listInfoPhoneNumber = [[NSMutableArray alloc] init];
     
     // check for internet connection
@@ -631,7 +636,27 @@ void onUncaughtException(NSException* exception)
         //  [self removeAllRecordsAudioFile];    //  T_T
     }
     
+    //  get pbx group contact list
+    [self getPBXGroupContactList];
+    
 	return YES;
+}
+
+- (void)getPBXGroupContactList {
+    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:logFilePath];
+    
+    listGroup = [[NSMutableArray alloc] init];
+    
+    NSData* myEncodedData = [[NSUserDefaults standardUserDefaults] objectForKey:@"group_pbx_list"];
+    NSArray *myArray = (NSArray*) [NSKeyedUnarchiver unarchiveObjectWithData:myEncodedData];
+    if (myArray != nil) {
+        [listGroup addObjectsFromArray: myArray];
+    }
+    
+    if (![AppUtils isNullOrEmpty: USERNAME] && ![AppUtils isNullOrEmpty: PASSWORD]) {
+        NSString *params = [NSString stringWithFormat:@"username=%@", USERNAME];
+        [webService callGETWebServiceWithFunction:GetServerGroup andParams:params];
+    }
 }
 
 - (void)reloadContactListAfterAddSuccess {
@@ -765,6 +790,11 @@ void onUncaughtException(NSException* exception)
         PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: callId];
         if (![AppUtils isNullOrEmpty: contact.name]) {
             caller = contact.name;
+        }else{
+            caller = [AppUtils getGroupNameWithQueueNumber: callId];
+            if ([AppUtils isNullOrEmpty: caller]) {
+                caller = callId;
+            }
         }
         
         NSString *content = [NSString stringWithFormat:@"Bạn có cuộc gọi từ %@", caller];
@@ -2192,6 +2222,16 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         
     }else if ([link isEqualToString: get_missedcall_func]) {
         [self insertMissedCallToDatabase: data];
+        
+    }else if ([link isEqualToString: GetServerGroup]) {
+        if (data != nil && [data isKindOfClass:[NSArray class]]) {
+            [listGroup removeAllObjects];
+            [listGroup addObjectsFromArray:(NSArray *)data];
+            
+            NSData *myData = [NSKeyedArchiver archivedDataWithRootObject: listGroup];
+            [[NSUserDefaults standardUserDefaults] setObject:myData forKey:@"group_pbx_list"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
     }
 }
 
