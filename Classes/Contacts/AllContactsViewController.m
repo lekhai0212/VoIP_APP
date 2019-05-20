@@ -365,6 +365,7 @@
         if ([object isEqualToString:@""]) {
             isSearching = NO;
             lbAllContacts.text = [NSString stringWithFormat:@"Tất cả liên hệ (%d)", (int)tbDatas.count];
+            [_tbContacts reloadData];
         }else{
             isSearching = YES;
             
