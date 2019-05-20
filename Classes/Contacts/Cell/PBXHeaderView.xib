@@ -16,34 +16,12 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Tất cả liên hệ" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dr3-k3-3wL">
-                    <rect key="frame" x="9" y="8" width="101" height="21"/>
+                    <rect key="frame" x="58" y="11" width="101" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Sắp xếp theo:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SZm-2x-Kw4">
-                    <rect key="frame" x="9" y="45" width="105" height="21"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <nil key="textColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" text="Số điện thoại" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lkJ-cw-JrI">
-                    <rect key="frame" x="122" y="40" width="124" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <nil key="textColor"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <textInputTraits key="textInputTraits"/>
-                </textField>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sWf-nf-zoS">
-                    <rect key="frame" x="283" y="40" width="30" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" image="sort-19.png"/>
-                    <connections>
-                        <action selector="icSortClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="pkh-OH-jd6"/>
-                    </connections>
-                </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GRX-Mx-1OM">
                     <rect key="frame" x="219" y="2" width="94" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -54,34 +32,26 @@
                         <action selector="btnSyncPress:" destination="iN0-l3-epB" eventType="touchUpInside" id="rlh-UU-xzb"/>
                     </connections>
                 </button>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="sort-arrow.png" translatesAutoresizingMaskIntoConstraints="NO" id="ijX-e4-HfL">
-                    <rect key="frame" x="233" y="52" width="13" height="14"/>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sWf-nf-zoS">
+                    <rect key="frame" x="9" y="6" width="30" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                </imageView>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m0Q-77-ZdC">
-                    <rect key="frame" x="122" y="40" width="124" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" image="sort-19.png"/>
                     <connections>
-                        <action selector="btnSortTypePress:" destination="iN0-l3-epB" eventType="touchUpInside" id="mns-Cz-1gd"/>
+                        <action selector="icSortClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="pkh-OH-jd6"/>
                     </connections>
                 </button>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="btnSortType" destination="m0Q-77-ZdC" id="UtX-7X-JH8"/>
                 <outlet property="btnSync" destination="GRX-Mx-1OM" id="jKI-a3-s2D"/>
                 <outlet property="icSort" destination="sWf-nf-zoS" id="Jj9-4i-rpN"/>
-                <outlet property="imgArrow" destination="ijX-e4-HfL" id="CUz-Sa-ESb"/>
-                <outlet property="lbSortType" destination="SZm-2x-Kw4" id="F5a-mJ-kUU"/>
                 <outlet property="lbTitle" destination="dr3-k3-3wL" id="Gb2-FK-Tv0"/>
-                <outlet property="tfSort" destination="lkJ-cw-JrI" id="QYS-BJ-hvO"/>
             </connections>
-            <point key="canvasLocation" x="-398.39999999999998" y="14.392803598200901"/>
+            <point key="canvasLocation" x="142" y="40"/>
         </view>
     </objects>
     <resources>
         <image name="sort-19.png" width="128" height="128"/>
-        <image name="sort-arrow.png" width="100" height="100"/>
     </resources>
 </document>

@@ -16,11 +16,6 @@
 #import "PBXHeaderView.h"
 #import "ChooseSortCell.h"
 
-typedef enum{
-    eSortName,
-    eSortPhone
-}SortType;
-
 @interface PBXContactsViewController ()<PBXHeaderViewDelegate>{
     BOOL isSearching;
     
@@ -39,9 +34,6 @@ typedef enum{
     float marginLeft;
     
     PBXHeaderView *pbxHeaderView;
-    UITableView *tbSort;
-    SortType eSortType;
-    BOOL sortAscending;
 }
 
 @end
@@ -54,7 +46,7 @@ typedef enum{
     
     //  my code here
     [self autoLayoutForView];
-    [self addHeaderForTableContactsView];
+    
     
     contactSections = [[NSMutableDictionary alloc] init];
     listCharacter = [[NSArray alloc] initWithObjects: @"A", @"B", @"C", @"D", @"E", @"F",
@@ -76,8 +68,11 @@ typedef enum{
         pbxList = [[NSMutableArray alloc] init];
     }
     [pbxList removeAllObjects];
-    //  -----
-    [self setupSortInformation];
+    
+    if (pbxHeaderView == nil) {
+        [self addHeaderForTableContactsView];
+    }
+    [pbxHeaderView updateUIWithCurrentInfo];
     
     isSearching = NO;
     
@@ -127,28 +122,7 @@ typedef enum{
                                                  name:finishGetPBXContacts object:nil];
 }
 
--(void)viewDidLayoutSubviews {
-    CGRect rect = [pbxHeaderView convertRect:pbxHeaderView.tfSort.frame toView:self.view];
-    float newYFrame = rect.origin.y + pbxHeaderView.tfSort.frame.size.height + 1;
-    if (tbSort == nil) {
-        tbSort = [[UITableView alloc] initWithFrame:CGRectMake(rect.origin.x, newYFrame, rect.size.width, 0)];
-        tbSort.backgroundColor = UIColor.whiteColor;
-        tbSort.separatorStyle = UITableViewCellSelectionStyleNone;
-        tbSort.delegate = self;
-        tbSort.dataSource = self;
-        tbSort.layer.cornerRadius = 5.0;
-        tbSort.layer.borderWidth = 1.0;
-        tbSort.layer.borderColor = [UIColor colorWithRed:(220/255.0) green:(220/255.0)
-                                                    blue:(220/255.0) alpha:1.0].CGColor;
-        [self.view addSubview: tbSort];
-    }else{
-        tbSort.frame = CGRectMake(rect.origin.x, newYFrame, rect.size.width, tbSort.frame.size.height);
-    }
-}
-
 - (void)scrollViewDidScroll:(UIScrollView*)scrollView {
-    tbSort.frame = CGRectMake(tbSort.frame.origin.x, tbSort.frame.origin.y, tbSort.frame.size.width, 0);
-    
     CGPoint scrollViewOffset = scrollView.contentOffset;
     if (scrollViewOffset.y < 0) {
         [scrollView setContentOffset:CGPointMake(0, 0)];
@@ -185,28 +159,17 @@ typedef enum{
 }
 
 -(void)onIconSortClick {
-    sortAscending = !sortAscending;
-    if (sortAscending) {
-        [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:sort_ascending];
-    }else{
-        [[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:sort_ascending];
+    NSNumber *sort = [[NSUserDefaults standardUserDefaults] objectForKey:sort_pbx];
+    if ([sort intValue] == eSort91) {
+        sort = [NSNumber numberWithInt: eSortAZ];
+    }else {
+        sort = [NSNumber numberWithInt:([sort intValue] + 1)];
     }
+    [[NSUserDefaults standardUserDefaults] setObject:sort forKey:sort_pbx];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    [pbxHeaderView updateUIWithCurrentInfo];
     
-    [pbxHeaderView updateSortViewInfo];
     [_tbContacts reloadData];
-}
-
-- (void)onSortTypeButtonPress {
-    if (tbSort.frame.size.height == 0) {
-        [UIView animateWithDuration:0.15 animations:^{
-            tbSort.frame = CGRectMake(tbSort.frame.origin.x, tbSort.frame.origin.y, tbSort.frame.size.width, 70.0);
-        }];
-    }else{
-        [UIView animateWithDuration:0.15 animations:^{
-            tbSort.frame = CGRectMake(tbSort.frame.origin.x, tbSort.frame.origin.y, tbSort.frame.size.width, 0);
-        }];
-    }
 }
 
 #pragma mark - my functions
@@ -220,7 +183,7 @@ typedef enum{
         }
     }
     pbxHeaderView.delegate = self;
-    pbxHeaderView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 80.0);
+    pbxHeaderView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 45.0);
     [pbxHeaderView setupUIForView];
     _tbContacts.tableHeaderView = pbxHeaderView;
 }
@@ -245,156 +208,109 @@ typedef enum{
 #pragma mark - UITableview
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if (tableView == tbSort) {
-        return 1;
+    if (isSearching) {
+        [self getSectionsForContactsList: listSearch];
     }else{
-        if (isSearching) {
-            [self getSectionsForContactsList: listSearch];
-        }else{
-            [self getSectionsForContactsList: pbxList];
-        }
-        return [[contactSections allKeys] count];
+        [self getSectionsForContactsList: pbxList];
     }
+    return [[contactSections allKeys] count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (tableView == tbSort) {
-        return 2;
-    }else{
-        NSSortDescriptor* sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:nil ascending:sortAscending selector:@selector(localizedCaseInsensitiveCompare:)];
-        NSArray* sortedArray = [[contactSections allKeys] sortedArrayUsingDescriptors:@[sortDescriptor]];
-        NSString *str = [sortedArray objectAtIndex:section];
-        
-        return [[contactSections objectForKey:str] count];
-    }
+    NSSortDescriptor* sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:nil ascending:pbxHeaderView.sortAscending selector:@selector(localizedCaseInsensitiveCompare:)];
+    NSArray* sortedArray = [[contactSections allKeys] sortedArrayUsingDescriptors:@[sortDescriptor]];
+    NSString *str = [sortedArray objectAtIndex:section];
+    
+    return [[contactSections objectForKey:str] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (tableView == tbSort) {
-        static NSString *identifier = @"ChooseSortCell";
-        ChooseSortCell *cell = [tableView dequeueReusableCellWithIdentifier: identifier];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        if (cell == nil) {
-            NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"ChooseSortCell" owner:self options:nil];
-            cell = topLevelObjects[0];
-        }
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        if (indexPath.row == 0) {
-            cell.lbName.text = @"Số điện thoại";
-            cell.lbSepa.hidden = FALSE;
-        }else{
-            cell.lbName.text = @"Tên";
-            cell.lbSepa.hidden = TRUE;
-        }
-        return cell;
+    BOOL sortAscending = FALSE;
+    NSNumber *sort = [[NSUserDefaults standardUserDefaults] objectForKey:sort_pbx];
+    if ([sort intValue] == eSortAZ || [sort intValue] == eSort19) {
+        sortAscending = TRUE;
+    }
+    
+    static NSString *identifier = @"PBXContactTableCell";
+    PBXContactTableCell *cell = [tableView dequeueReusableCellWithIdentifier: identifier];
+    if (cell == nil) {
+        NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"PBXContactTableCell" owner:self options:nil];
+        cell = topLevelObjects[0];
+    }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    NSSortDescriptor* sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:nil ascending:sortAscending selector:@selector(localizedCaseInsensitiveCompare:)];
+    NSArray* sortedArray = [[contactSections allKeys] sortedArrayUsingDescriptors:@[sortDescriptor]];
+    NSString *key = [sortedArray objectAtIndex:indexPath.section];
+    
+    PBXContact *contact = [[contactSections objectForKey: key] objectAtIndex:indexPath.row];
+    
+    // Tên contact
+    if (contact._name != nil && ![contact._name isKindOfClass:[NSNull class]]) {
+        cell._lbName.text = contact._name;
     }else{
-        static NSString *identifier = @"PBXContactTableCell";
-        PBXContactTableCell *cell = [tableView dequeueReusableCellWithIdentifier: identifier];
-        if (cell == nil) {
-            NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"PBXContactTableCell" owner:self options:nil];
-            cell = topLevelObjects[0];
-        }
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-        NSSortDescriptor* sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:nil ascending:sortAscending selector:@selector(localizedCaseInsensitiveCompare:)];
-        NSArray* sortedArray = [[contactSections allKeys] sortedArrayUsingDescriptors:@[sortDescriptor]];
-        NSString *key = [sortedArray objectAtIndex:indexPath.section];
-        
-        PBXContact *contact = [[contactSections objectForKey: key] objectAtIndex:indexPath.row];
-        
-        // Tên contact
-        if (contact._name != nil && ![contact._name isKindOfClass:[NSNull class]]) {
-            cell._lbName.text = contact._name;
-        }else{
-            cell._lbName.text = @"";
-        }
-        
-        if (contact._number != nil && ![contact._number isKindOfClass:[NSNull class]]) {
-            cell._lbPhone.text = contact._number;
-            
-            [cell.icCall setTitle:contact._number forState:UIControlStateNormal];
-            cell.icCall.hidden = NO;
-            cell.icCall.tag = AUDIO_CALL_TYPE;
-            [cell.icCall addTarget:self
-                            action:@selector(onIconCallClicked:)
-                  forControlEvents:UIControlEventTouchUpInside];
-            
-            [cell.icVideoCall setTitle:contact._number forState:UIControlStateNormal];
-            cell.icVideoCall.hidden = NO;
-            cell.icVideoCall.tag = VIDEO_CALL_TYPE;
-            [cell.icVideoCall addTarget:self
-                                 action:@selector(onIconCallClicked:)
-                       forControlEvents:UIControlEventTouchUpInside];
-        }else{
-            cell._lbPhone.text = @"";
-            cell.icCall.hidden = YES;
-            cell.icVideoCall.hidden = YES;
-        }
-        
-        if (![LinphoneAppDelegate sharedInstance].supportVideoCall) {
-            cell.icVideoCall.hidden = YES;
-        }
-        
-        if (![AppUtils isNullOrEmpty: contact._avatar]) {
-            NSData *imageData = [NSData dataFromBase64String:contact._avatar];
-            cell._imgAvatar.image = [UIImage imageWithData: imageData];
-        }else{
-            NSString *firstChar = [contact._name substringToIndex:1];
-            UIImage *avatar = [UIImage imageForName:[firstChar uppercaseString] size:CGSizeMake(60.0, 60.0)
-                                    backgroundColor:[UIColor colorWithRed:(154/255.0) green:(215/255.0) blue:(9/255.0) alpha:1.0]
-                                          textColor:UIColor.whiteColor
-                                               font:[UIFont fontWithName:HelveticaNeue size:30.0]];
-            cell._imgAvatar.image = avatar;
-        }
-        
-        if ([contact._name isEqualToString:@""]) {
-            UIImage *avatar = [UIImage imageForName:@"#" size:CGSizeMake(60.0, 60.0)
-                                    backgroundColor:[UIColor colorWithRed:(154/255.0) green:(215/255.0) blue:(9/255.0) alpha:1.0]
-                                          textColor:UIColor.whiteColor
-                                               font:[UIFont fontWithName:HelveticaNeue size:30.0]];
-            cell._imgAvatar.image = avatar;
-        }
-        
-        int count = (int)[[contactSections objectForKey:key] count];
-        if (indexPath.row == count-1) {
-            cell._lbSepa.hidden = YES;
-        }else{
-            cell._lbSepa.hidden = NO;
-        }
-        
-        return cell;
+        cell._lbName.text = @"";
     }
-}
-
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (tableView == tbSort) {
-        if (indexPath.row == 0) {
-            eSortType = eSortPhone;
-            pbxHeaderView.tfSort.text = @"Số điện thoại";
-            
-            [[NSUserDefaults standardUserDefaults] setObject:sort_with_phone forKey:key_sort_type];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        }else{
-            eSortType = eSortName;
-            pbxHeaderView.tfSort.text = @"Tên";
-            
-            [[NSUserDefaults standardUserDefaults] setObject:sort_with_name forKey:key_sort_type];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        }
-        [self onSortTypeButtonPress];
-        [pbxHeaderView updateSortViewInfo];
+    
+    if (contact._number != nil && ![contact._number isKindOfClass:[NSNull class]]) {
+        cell._lbPhone.text = contact._number;
         
-        [_tbContacts reloadData];
+        [cell.icCall setTitle:contact._number forState:UIControlStateNormal];
+        cell.icCall.hidden = NO;
+        cell.icCall.tag = AUDIO_CALL_TYPE;
+        [cell.icCall addTarget:self
+                        action:@selector(onIconCallClicked:)
+              forControlEvents:UIControlEventTouchUpInside];
+        
+        [cell.icVideoCall setTitle:contact._number forState:UIControlStateNormal];
+        cell.icVideoCall.hidden = NO;
+        cell.icVideoCall.tag = VIDEO_CALL_TYPE;
+        [cell.icVideoCall addTarget:self
+                             action:@selector(onIconCallClicked:)
+                   forControlEvents:UIControlEventTouchUpInside];
+    }else{
+        cell._lbPhone.text = @"";
+        cell.icCall.hidden = YES;
+        cell.icVideoCall.hidden = YES;
     }
+    
+    if (![LinphoneAppDelegate sharedInstance].supportVideoCall) {
+        cell.icVideoCall.hidden = YES;
+    }
+    
+    if (![AppUtils isNullOrEmpty: contact._avatar]) {
+        NSData *imageData = [NSData dataFromBase64String:contact._avatar];
+        cell._imgAvatar.image = [UIImage imageWithData: imageData];
+    }else{
+        NSString *firstChar = [contact._name substringToIndex:1];
+        UIImage *avatar = [UIImage imageForName:[firstChar uppercaseString] size:CGSizeMake(60.0, 60.0)
+                                backgroundColor:[UIColor colorWithRed:(154/255.0) green:(215/255.0) blue:(9/255.0) alpha:1.0]
+                                      textColor:UIColor.whiteColor
+                                           font:[UIFont fontWithName:HelveticaNeue size:30.0]];
+        cell._imgAvatar.image = avatar;
+    }
+    
+    if ([contact._name isEqualToString:@""]) {
+        UIImage *avatar = [UIImage imageForName:@"#" size:CGSizeMake(60.0, 60.0)
+                                backgroundColor:[UIColor colorWithRed:(154/255.0) green:(215/255.0) blue:(9/255.0) alpha:1.0]
+                                      textColor:UIColor.whiteColor
+                                           font:[UIFont fontWithName:HelveticaNeue size:30.0]];
+        cell._imgAvatar.image = avatar;
+    }
+    
+    int count = (int)[[contactSections objectForKey:key] count];
+    if (indexPath.row == count-1) {
+        cell._lbSepa.hidden = YES;
+    }else{
+        cell._lbSepa.hidden = NO;
+    }
+    
+    return cell;
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    if (tableView == tbSort) {
-        return nil;
-    }
-    
-    NSSortDescriptor* sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:nil ascending:sortAscending selector:@selector(localizedCaseInsensitiveCompare:)];
+    NSSortDescriptor* sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:nil ascending:pbxHeaderView.sortAscending selector:@selector(localizedCaseInsensitiveCompare:)];
     NSArray* sortedArray = [[contactSections allKeys] sortedArrayUsingDescriptors:@[sortDescriptor]];
     NSString *titleHeader = [sortedArray objectAtIndex:section];
     
@@ -432,16 +348,10 @@ typedef enum{
 //}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (tableView == tbSort) {
-        return 35.0;
-    }
     return 65.0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    if (tableView == tbSort) {
-        return 0;
-    }
     return hSection;
 }
 
@@ -464,6 +374,7 @@ typedef enum{
         if ([object isEqualToString:@""]) {
             isSearching = NO;
             [_tbContacts reloadData];
+            pbxHeaderView.lbTitle.text = [NSString stringWithFormat:@"Tất cả liên hệ (%d)", (int)pbxList.count];
             
         }else{
             isSearching = YES;
@@ -472,6 +383,7 @@ typedef enum{
                 [self startSearchPBXContactsWithContent: object];
                 dispatch_async(dispatch_get_main_queue(), ^(void){
                     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"%s Finished search contact with value = %@", __FUNCTION__, object] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+                    pbxHeaderView.lbTitle.text = [NSString stringWithFormat:@"Tất cả liên hệ (%d)", (int)listSearch.count];
                     
                     [_tbContacts reloadData];
                 });
@@ -484,7 +396,9 @@ typedef enum{
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] search contact = %@", __FUNCTION__, content] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     [listSearch removeAllObjects];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"_name CONTAINS[cd] %@ OR _number CONTAINS[cd] %@", content, content];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"_name CONTAINS[cd] %@ OR _convertName CONTAINS[cd] %@  OR _number CONTAINS[cd] %@", content, content, content];
+    
     NSArray *filter = [pbxList filteredArrayUsingPredicate: predicate];
     if (filter.count > 0) {
         [listSearch addObjectsFromArray: filter];
@@ -492,7 +406,8 @@ typedef enum{
 }
 
 - (void)getSectionsForContactsList: (NSMutableArray *)contactList {
-    if (eSortType == eSortName) {
+    NSNumber *sort = [[NSUserDefaults standardUserDefaults] objectForKey:sort_pbx];
+    if ([sort intValue] == eSortAZ || [sort intValue] == eSortZA) {
         [contactSections removeAllObjects];
         
         // Loop through the books and create our keys
@@ -534,7 +449,7 @@ typedef enum{
         }
         // Sort each section array
         for (NSString *key in [contactSections allKeys]){
-            [[contactSections objectForKey:key] sortUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"_name" ascending:sortAscending]]];
+            [[contactSections objectForKey:key] sortUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"_name" ascending:pbxHeaderView.sortAscending]]];
         }
         
     }else{
@@ -570,7 +485,7 @@ typedef enum{
         }
         // Sort each section array
         for (NSString *key in [contactSections allKeys]){
-            [[contactSections objectForKey:key] sortUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"_number" ascending:sortAscending]]];
+            [[contactSections objectForKey:key] sortUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"_number" ascending:pbxHeaderView.sortAscending]]];
         }
     }
 }
@@ -921,28 +836,5 @@ typedef enum{
     
     [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Successful"] duration:2.0 position:CSToastPositionCenter];
 }
-
-- (void)setupSortInformation {
-    NSString *sortType = [[NSUserDefaults standardUserDefaults] objectForKey:key_sort_type];
-    if ([AppUtils isNullOrEmpty: sortType]) {
-        [AppUtils setupFirstValueForSortPBXContactList];
-    }
-    
-    if ([sortType isEqualToString: sort_with_phone]) {
-        eSortType = eSortPhone;
-    }else{
-        eSortType = eSortName;
-    }
-    
-    NSString *ascending = [[NSUserDefaults standardUserDefaults] objectForKey:sort_ascending];
-    if ([ascending isEqualToString:@"YES"]) {
-        sortAscending = TRUE;
-    }else{
-        sortAscending = FALSE;
-    }
-    
-    [pbxHeaderView updateSortViewInfo];
-}
-
 
 @end

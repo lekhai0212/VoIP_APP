@@ -273,11 +273,11 @@ static UICompositeViewDescription *compositeDescription = nil;
     if (indexPath.row == eDNDMode) {
         cell.imgNext.hidden = YES;
         
-        BOOL state = YES;
-        if (curState == eAccountOn) {
-            state = NO;
+        BOOL state = TRUE;
+        NSString *dndMode = [[NSUserDefaults standardUserDefaults] objectForKey:switch_dnd];
+        if (![dndMode isEqualToString:@"YES"]) {
+            state = FALSE;
         }
-        //[[NSUserDefaults standardUserDefaults] objectForKey:@"switch_dnd"];
         switchDND = [[CustomSwitchButton alloc] initWithState:state frame:CGRectMake(SCREEN_WIDTH-20-85.0, (hCell-32.0)/2, 85.0, 32.0)];
         switchDND.delegate = self;
         [cell addSubview: switchDND];
@@ -358,6 +358,9 @@ static UICompositeViewDescription *compositeDescription = nil;
     icWaiting.hidden = YES;
     [LinphoneAppDelegate sharedInstance].configPushToken = NO;
     
+    [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:switch_dnd];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
     [[PhoneMainView instance] changeCurrentView:[SignInViewController compositeViewDescription]];
 }
 
@@ -430,6 +433,9 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     LinphoneProxyConfig *defaultConfig = linphone_core_get_default_proxy_config(LC);
     if (defaultConfig != NULL) {
+        [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:switch_dnd];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
         turnOffAcc = YES;
         turnOnAcc = NO;
         
@@ -455,6 +461,9 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     LinphoneProxyConfig *defaultConfig = linphone_core_get_default_proxy_config(LC);
     if (defaultConfig != NULL) {
+        [[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:switch_dnd];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
         turnOffAcc = NO;
         turnOnAcc = YES;
         
@@ -475,7 +484,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)updateCustomerTokenIOS {
     if (USERNAME != nil && ![AppUtils isNullOrEmpty: [LinphoneAppDelegate sharedInstance]._deviceToken]) {
         NSString *destToken = [NSString stringWithFormat:@"ios%@", [LinphoneAppDelegate sharedInstance]._deviceToken];
-        NSString *params = [NSString stringWithFormat:@"pushToken=%@&username=%@&del=0", destToken, USERNAME];
+        NSString *params = [NSString stringWithFormat:@"pushToken=%@&username=%@", destToken, USERNAME];
         [webService callGETWebServiceWithFunction:update_token_func andParams:params];
         
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, params] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];

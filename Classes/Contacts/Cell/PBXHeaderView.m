@@ -9,70 +9,33 @@
 #import "CustomTextAttachment.h"
 
 @implementation PBXHeaderView
-@synthesize lbTitle, btnSync, lbSortType, tfSort, imgArrow, icSort, btnSortType;
+@synthesize lbTitle, btnSync, icSort, sortAscending;
 @synthesize delegate;
 
 - (void)setupUIForView {
-    self.backgroundColor = [UIColor colorWithRed:(240/255.0) green:(240/255.0)
-                                            blue:(240/255.0) alpha:1.0];
+    self.backgroundColor = UIColor.whiteColor;
     
-    lbTitle.font = [LinphoneAppDelegate sharedInstance].contentFontBold;
+    icSort.imageEdgeInsets = UIEdgeInsetsMake(8, 8, 8, 8);
+    [icSort mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self).offset(10.0);
+        make.centerY.equalTo(self.mas_centerY);
+        make.width.height.mas_equalTo(40.0);
+    }];
+    
+    lbTitle.font = [LinphoneAppDelegate sharedInstance].contentFontNormal;
     lbTitle.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     [lbTitle mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self).offset(15.0);
-        make.top.equalTo(self).offset(5.0);
-        make.height.mas_equalTo(35.0);
+        make.left.equalTo(icSort.mas_right).offset(5.0);
+        make.top.bottom.equalTo(icSort);
         make.right.equalTo(self.mas_centerX).offset(50);
     }];
     
-    [btnSync setAttributedTitle:[self getSyncTitleContentWithFont:[LinphoneAppDelegate sharedInstance].contentFontBold andSizeIcon:17.0] forState:UIControlStateNormal];
+    [btnSync setAttributedTitle:[self getSyncTitleContentWithFont:[LinphoneAppDelegate sharedInstance].contentFontNormal andSizeIcon:17.0] forState:UIControlStateNormal];
     [btnSync mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self).offset(-15.0);
         make.top.bottom.equalTo(lbTitle);
         make.left.equalTo(lbTitle.mas_right);
     }];
-    
-    lbSortType.font = [LinphoneAppDelegate sharedInstance].contentFontNormal;
-    lbSortType.textColor = [UIColor colorWithRed:(100/255.0) green:(100/255.0) blue:(100/255.0) alpha:1.0];
-    float sizeText = [AppUtils getSizeWithText:lbSortType.text withFont:lbSortType.font].width + 10.0;
-    
-    [lbSortType mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(lbTitle);
-        make.top.equalTo(lbTitle.mas_bottom);
-        make.width.mas_equalTo(sizeText);
-        make.height.mas_equalTo(35.0);
-    }];
-    
-    tfSort.font = [LinphoneAppDelegate sharedInstance].contentFontNormal;
-    
-    sizeText = [AppUtils getSizeWithText:tfSort.text withFont:tfSort.font].width + 10 + 25.0;
-    [tfSort mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(lbSortType.mas_right);
-        make.centerY.equalTo(lbSortType.mas_centerY);
-        make.width.mas_equalTo(sizeText);
-        make.height.mas_equalTo(30.0);
-    }];
-    
-    [btnSortType mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.left.bottom.right.equalTo(tfSort);
-    }];
-    
-    [imgArrow mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(tfSort.mas_right).offset(-3.0);
-        make.centerY.equalTo(tfSort.mas_centerY);
-        make.width.height.mas_equalTo(14.0);
-    }];
-    
-    icSort.imageEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
-    [icSort mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self).offset(-10.0);
-        make.top.bottom.equalTo(lbSortType);
-        make.width.mas_equalTo(35.0);
-    }];
-}
-
-- (IBAction)btnSortTypePress:(UIButton *)sender {
-    [delegate onSortTypeButtonPress];
 }
 
 - (IBAction)btnSyncPress:(UIButton *)sender {
@@ -101,24 +64,23 @@
     return verString;
 }
 
-- (void)updateSortViewInfo {
-    NSString *sortType = [[NSUserDefaults standardUserDefaults] objectForKey:key_sort_type];
-    NSString *ascending = [[NSUserDefaults standardUserDefaults] objectForKey:sort_ascending];
-    
-    if ([sortType isEqualToString: sort_with_phone]) {
-        tfSort.text = @"Số điện thoại";
-        if ([ascending isEqualToString:@"YES"]) {
-            [icSort setImage:[UIImage imageNamed:@"sort-19"] forState:UIControlStateNormal];
-        }else{
-            [icSort setImage:[UIImage imageNamed:@"sort-91"] forState:UIControlStateNormal];
-        }
+- (void)updateUIWithCurrentInfo {
+    NSNumber *sort = [[NSUserDefaults standardUserDefaults] objectForKey:sort_pbx];
+    if ([sort intValue] == eSortAZ) {
+        [icSort setImage:[UIImage imageNamed:@"sort-az"] forState:UIControlStateNormal];
+        sortAscending = TRUE;
+        
+    }else if ([sort intValue] == eSortZA) {
+        [icSort setImage:[UIImage imageNamed:@"sort-za"] forState:UIControlStateNormal];
+        sortAscending = FALSE;
+        
+    }else if ([sort intValue] == eSort19) {
+        [icSort setImage:[UIImage imageNamed:@"sort-19"] forState:UIControlStateNormal];
+        sortAscending = TRUE;
+        
     }else{
-        tfSort.text = @"Tên";
-        if ([ascending isEqualToString:@"YES"]) {
-            [icSort setImage:[UIImage imageNamed:@"sort-az"] forState:UIControlStateNormal];
-        }else{
-            [icSort setImage:[UIImage imageNamed:@"sort-za"] forState:UIControlStateNormal];
-        }
+        [icSort setImage:[UIImage imageNamed:@"sort-91"] forState:UIControlStateNormal];
+        sortAscending = FALSE;
     }
 }
 

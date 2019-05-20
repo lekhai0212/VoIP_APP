@@ -13,10 +13,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *lbTitle;
 @property (weak, nonatomic) IBOutlet UIButton *icSort;
 @property (weak, nonatomic) IBOutlet UILabel *lbSepa;
+@property (nonatomic, assign) BOOL sortAscending;
 
 - (IBAction)icSortClick:(UIButton *)sender;
 
 - (void)setupUIForView;
+- (void)updateUIWithCurrentInfo;
 
 @end
 

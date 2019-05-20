@@ -12,7 +12,7 @@
 
 @interface PBXGroupsViewController ()<WebServicesDelegate, UITableViewDelegate, UITableViewDataSource> {
     WebServices *webService;
-    NSMutableArray *listQueuename;
+    NSMutableArray *listData;
     
     NSMutableArray *listSearch;
     NSMutableDictionary *contactSections;
@@ -20,7 +20,6 @@
     
     GroupHeaderView *tbHeader;
     int sectionSelected;
-    int sortType;
     
     BOOL isSearching;
     
@@ -34,36 +33,53 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [self setupUIForView];
-    [self addHeaderForTableContactsView];
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
     
-    if (listQueuename == nil) {
-        listQueuename = [[NSMutableArray alloc] init];
+    if (listData == nil) {
+        listData = [[NSMutableArray alloc] init];
     }
-    [listQueuename removeAllObjects];
+    [listData removeAllObjects];
     
     if (listSearch == nil) {
         listSearch = [[NSMutableArray alloc] init];
     }
     [listSearch removeAllObjects];
     
+    if (tbHeader == nil) {
+        [self addHeaderForTableContactsView];
+    }
+    [tbHeader updateUIWithCurrentInfo];
+    
     
     sectionSelected = -1;
-    sortType = 0;
-    [self updateSortTypeIcon];
     
     if ([LinphoneAppDelegate sharedInstance].listGroup.count == 0) {
         [self regetPBXGroupContactList];
     }else{
+        [self storeCurrentListToListData];
         [self prepareDataToDisplay: nil];
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startSearchContactWithValue:)
                                                  name:searchContactWithValue object:nil];
 }
+
+- (void)storeCurrentListToListData {
+    for (int index=0; index<[LinphoneAppDelegate sharedInstance].listGroup.count; index++) {
+        NSDictionary *info = [[LinphoneAppDelegate sharedInstance].listGroup objectAtIndex: index];
+        
+        NSMutableDictionary *tmpInfo = [[NSMutableDictionary alloc] initWithDictionary: info];
+        NSString *queue = [info objectForKey:@"queue"];
+        [tmpInfo setObject:[NSNumber numberWithInt:[queue intValue]] forKeyedSubscript:@"tmp_queue"];
+        [listData addObject: tmpInfo];
+    }
+}
+
+
 
 - (void)regetPBXGroupContactList {
     if (webService == nil) {
@@ -85,16 +101,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)updateSortTypeIcon {
-    if (tbHeader != nil) {
-        if (sortType == 0) {
-            [tbHeader.icSort setImage:[UIImage imageNamed:@"sort-az"] forState:UIControlStateNormal];
-        }else{
-            [tbHeader.icSort setImage:[UIImage imageNamed:@"sort-za"] forState:UIControlStateNormal];
-        }
-    }
-}
-
 - (void)startSearchContactWithValue: (NSNotification *)notif {
     
     id object = [notif object];
@@ -105,6 +111,7 @@
         if ([object isEqualToString:@""]) {
             isSearching = NO;
             [tbGroup reloadData];
+            tbHeader.lbTitle.text = [NSString stringWithFormat:@"Tổng cộng %d nhóm", (int)listData.count];
             
         }else{
             isSearching = YES;
@@ -113,7 +120,7 @@
                 [self startSearchPBXGroupsWithContent: object];
                 dispatch_async(dispatch_get_main_queue(), ^(void){
                     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"%s Finished search contact with value = %@", __FUNCTION__, object] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-                    
+                    tbHeader.lbTitle.text = [NSString stringWithFormat:@"Tổng cộng %d nhóm", (int)listSearch.count];
                     [tbGroup reloadData];
                 });
             });
@@ -125,8 +132,8 @@
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] search group = %@", __FUNCTION__, content] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     [listSearch removeAllObjects];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self CONTAINS[cd] %@", content];
-    NSArray *filter = [listQueuename filteredArrayUsingPredicate: predicate];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"queue CONTAINS[cd] %@ OR queuename CONTAINS[cd] %@ ", content, content];
+    NSArray *filter = [listData filteredArrayUsingPredicate: predicate];
     if (filter.count > 0) {
         [listSearch addObjectsFromArray: filter];
     }
@@ -150,34 +157,60 @@
     }
     tbHeader.lbTitle.text = @"";
     [tbHeader.icSort addTarget:self
-                        action:@selector(sortGroupWithName)
+                        action:@selector(onIconSortClick)
               forControlEvents:UIControlEventTouchUpInside];
     tbHeader.frame = CGRectMake(0, 0, SCREEN_WIDTH, 50.0);
     [tbHeader setupUIForView];
     tbGroup.tableHeaderView = tbHeader;
 }
 
-- (void)sortGroupWithName {
-    sectionSelected = -1;
-    sortType = 1 - sortType;
-    [self updateSortTypeIcon];
-    [self sortDataListWithType: sortType];
+- (void)onIconSortClick {
+    NSNumber *sort = [[NSUserDefaults standardUserDefaults] objectForKey:sort_group];
+    if ([sort intValue] == eSort91) {
+        sort = [NSNumber numberWithInt: eSortAZ];
+    }else {
+        sort = [NSNumber numberWithInt:([sort intValue] + 1)];
+    }
+    [[NSUserDefaults standardUserDefaults] setObject:sort forKey:sort_group];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    [tbHeader updateUIWithCurrentInfo];
+    
+    NSSortDescriptor *sortDescriptor;
+    if ([sort intValue] == eSortZA || [sort intValue] == eSortAZ) {
+        sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"queuename" ascending:tbHeader.sortAscending selector:@selector(localizedCaseInsensitiveCompare:)];
+    }else{
+        sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"tmp_queue" ascending:tbHeader.sortAscending];
+    }
+    
+    if (isSearching) {
+        NSArray *sortArr = [listSearch sortedArrayUsingDescriptors:@[sortDescriptor]];
+        [listSearch removeAllObjects];
+        [listSearch addObjectsFromArray: sortArr];
+    }else{
+        NSArray *sortArr = [listData sortedArrayUsingDescriptors:@[sortDescriptor]];
+        [listData removeAllObjects];
+        [listData addObjectsFromArray: sortArr];
+    }
     [tbGroup reloadData];
 }
 
-- (void)sortDataListWithType: (int)type {
-    //  1: is z --> a
-    if (type == 1) {
-        NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:nil ascending:NO selector:@selector(localizedCaseInsensitiveCompare:)];
-        NSArray *sortArr = [listQueuename sortedArrayUsingDescriptors:@[sort]];
-        [listQueuename removeAllObjects];
-        [listQueuename addObjectsFromArray: sortArr];
-    }else{
-        NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:nil ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)];
-        NSArray *sortArr = [listQueuename sortedArrayUsingDescriptors:@[sort]];
-        [listQueuename removeAllObjects];
-        [listQueuename addObjectsFromArray: sortArr];
+- (void)sortDataListWithType {
+    NSNumber *sort = [[NSUserDefaults standardUserDefaults] objectForKey:sort_group];
+    if ([sort intValue] == eSortAZ) {
+        
     }
+    //  1: is z --> a
+//    if (type == 1) {
+//        NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:nil ascending:NO selector:@selector(localizedCaseInsensitiveCompare:)];
+//        NSArray *sortArr = [listQueuename sortedArrayUsingDescriptors:@[sort]];
+//        [listQueuename removeAllObjects];
+//        [listQueuename addObjectsFromArray: sortArr];
+//    }else{
+//        NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:nil ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)];
+//        NSArray *sortArr = [listQueuename sortedArrayUsingDescriptors:@[sort]];
+//        [listQueuename removeAllObjects];
+//        [listQueuename addObjectsFromArray: sortArr];
+//    }
     [tbGroup reloadData];
 }
 
@@ -206,29 +239,30 @@
         [[LinphoneAppDelegate sharedInstance].listGroup removeAllObjects];
         [[LinphoneAppDelegate sharedInstance].listGroup addObjectsFromArray:(NSArray *)data];
         
+        [self storeCurrentListToListData];
+        
         NSData *myData = [NSKeyedArchiver archivedDataWithRootObject: [LinphoneAppDelegate sharedInstance].listGroup];
         [[NSUserDefaults standardUserDefaults] setObject:myData forKey:@"group_pbx_list"];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
-    for (int index=0; index<[LinphoneAppDelegate sharedInstance].listGroup.count; index++) {
-        NSDictionary *info = [[LinphoneAppDelegate sharedInstance].listGroup objectAtIndex: index];
-        NSString *queuename = [info objectForKey:@"queuename"];
-        if (![AppUtils isNullOrEmpty: queuename]) {
-            [listQueuename addObject: queuename];
-        }
+    NSNumber *sort = [[NSUserDefaults standardUserDefaults] objectForKey:sort_group];
+    NSSortDescriptor *sortDescriptor;
+    if ([sort intValue] == eSortZA || [sort intValue] == eSortAZ) {
+        sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"queuename" ascending:tbHeader.sortAscending selector:@selector(localizedCaseInsensitiveCompare:)];
+    }else{
+        sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"tmp_queue" ascending:tbHeader.sortAscending];
     }
     
-    NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:nil ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)];
-    NSArray *sortArr = [listQueuename sortedArrayUsingDescriptors:@[sort]];
-    [listQueuename removeAllObjects];
-    [listQueuename addObjectsFromArray: sortArr];
+    NSArray *sortArr = [listData sortedArrayUsingDescriptors:@[sortDescriptor]];
+    [listData removeAllObjects];
+    [listData addObjectsFromArray: sortArr];
     
     if (tbHeader != nil) {
-        if (listQueuename.count == 0) {
+        if (listData.count == 0) {
             tbHeader.lbTitle.text = @"Chưa có danh sách nhóm";
         }else{
-            tbHeader.lbTitle.text = [NSString stringWithFormat:@"Tổng cộng %d nhóm", (int)listQueuename.count];
+            tbHeader.lbTitle.text = [NSString stringWithFormat:@"Tổng cộng %d nhóm", (int)listData.count];
         }
     }
     [tbGroup reloadData];
@@ -244,16 +278,25 @@
     }
 }
 
-- (int)getNumRowsForSection: (NSInteger)section {
-    NSString *queuename;
+- (NSString *)getQueueNameWithSection: (int)section {
+    NSDictionary *info;
     if (isSearching) {
-        queuename = [listSearch objectAtIndex: section];
+        info = [listSearch objectAtIndex: section];
     }else{
-        queuename = [listQueuename objectAtIndex: section];
+        info = [listData objectAtIndex: section];
     }
     
+    if (info != nil) {
+        return [info objectForKey:@"queuename"];
+    }
+    return @"";
+}
+
+- (int)getNumRowsForSection: (NSInteger)section {
+    NSString *queuename = [self getQueueNameWithSection: (int)section];
+    
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.queuename == %@", queuename];
-    NSArray *tmpArr = [[LinphoneAppDelegate sharedInstance].listGroup filteredArrayUsingPredicate: predicate];
+    NSArray *tmpArr = [listData filteredArrayUsingPredicate: predicate];
     if (tmpArr.count > 0) {
         NSDictionary *info = [tmpArr objectAtIndex: 0];
         NSArray *members = [info objectForKey:@"members"];
@@ -266,14 +309,10 @@
 }
 
 - (NSDictionary *)getMembersAtIndex: (int)row section: (int)section {
-    NSString *queuename;
-    if (isSearching) {
-        queuename = [listSearch objectAtIndex: section];
-    }else{
-        queuename = [listQueuename objectAtIndex: section];
-    }
+    NSString *queuename = [self getQueueNameWithSection: (int)section];
+    
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.queuename == %@", queuename];
-    NSArray *tmpArr = [[LinphoneAppDelegate sharedInstance].listGroup filteredArrayUsingPredicate: predicate];
+    NSArray *tmpArr = [listData filteredArrayUsingPredicate: predicate];
     if (tmpArr.count > 0) {
         NSDictionary *info = [tmpArr objectAtIndex: 0];
         NSArray *members = [info objectForKey:@"members"];
@@ -288,7 +327,7 @@
 
 - (NSString *)getQueueNumberWithQueueName: (NSString *)queuename {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.queuename == %@", queuename];
-    NSArray *tmpArr = [[LinphoneAppDelegate sharedInstance].listGroup filteredArrayUsingPredicate: predicate];
+    NSArray *tmpArr = [listData filteredArrayUsingPredicate: predicate];
     if (tmpArr.count > 0) {
         NSDictionary *info = [tmpArr objectAtIndex: 0];
         NSString *queueNum = [info objectForKey:@"queue"];
@@ -358,7 +397,7 @@
     if (isSearching) {
         return listSearch.count;
     }else{
-        return listQueuename.count;
+        return listData.count;
     }
 }
 
@@ -398,12 +437,7 @@
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    NSString *queueName;
-    if (isSearching) {
-        queueName = [listSearch objectAtIndex: section];
-    }else{
-        queueName = [listQueuename objectAtIndex: section];
-    }
+    NSString *queueName = [self getQueueNameWithSection: (int)section];
     
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, hSection)];
     headerView.backgroundColor = UIColor.whiteColor;

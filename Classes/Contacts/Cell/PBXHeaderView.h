@@ -12,7 +12,6 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol PBXHeaderViewDelegate
 - (void)onIconSortClick;
 - (void)onSyncButtonPress;
-- (void)onSortTypeButtonPress;
 @end
 
 @interface PBXHeaderView : UIView
@@ -20,18 +19,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (weak, nonatomic) IBOutlet UILabel *lbTitle;
 @property (weak, nonatomic) IBOutlet UIButton *btnSync;
-@property (weak, nonatomic) IBOutlet UILabel *lbSortType;
-@property (weak, nonatomic) IBOutlet UITextField *tfSort;
 @property (weak, nonatomic) IBOutlet UIButton *icSort;
-@property (weak, nonatomic) IBOutlet UIImageView *imgArrow;
-@property (weak, nonatomic) IBOutlet UIButton *btnSortType;
+
+@property (nonatomic, assign) BOOL sortAscending;
 
 - (IBAction)btnSyncPress:(UIButton *)sender;
 - (IBAction)icSortClick:(UIButton *)sender;
 - (void)setupUIForView ;
-- (IBAction)btnSortTypePress:(UIButton *)sender;
+- (void)updateUIWithCurrentInfo;
 
-- (void)updateSortViewInfo;
 
 @end
 

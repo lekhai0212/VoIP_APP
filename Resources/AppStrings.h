@@ -318,9 +318,9 @@
 
 #define Close   @"Close"
 
-#define key_sort_type       @"key_sort_type"
-#define sort_with_phone     @"sort_with_phone"
-#define sort_with_name      @"sort_with_name"
-#define sort_ascending      @"sort_ascending"
+#define sort_group      @"sort_group"
+#define sort_pbx        @"sort_pbx"
+
+#define switch_dnd      @"switch_dnd"
 
 #endif /* AppStrings_h */

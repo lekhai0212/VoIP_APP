@@ -69,6 +69,13 @@ typedef enum{
     qrCodeLogin,
 }typeLoginPBX;
 
+typedef enum {
+    eSortAZ,
+    eSortZA,
+    eSort19,
+    eSort91,
+}eSortType;
+
 @interface LinphoneAppDelegate : NSObject <UIApplicationDelegate, PKPushRegistryDelegate, UNUserNotificationCenterDelegate, WebServicesDelegate, UIAlertViewDelegate, ChooseDIDPopupViewDelegate> {
     @private
 	UIBackgroundTaskIdentifier bgStartId;

@@ -212,8 +212,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     paddingContent = 30.0;
     
     hIcon = [LinphoneAppDelegate sharedInstance]._hRegistrationState - [LinphoneAppDelegate sharedInstance]._hStatus;
-    _viewHeader.backgroundColor = [UIColor colorWithRed:(240/255.0) green:(240/255.0)
-                                                   blue:(240/255.0) alpha:1.0];
+    _viewHeader.backgroundColor = UIColor.whiteColor;
     float hHeader = [LinphoneAppDelegate sharedInstance]._hRegistrationState + 40.0;
     [_viewHeader mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self.view);

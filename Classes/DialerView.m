@@ -942,14 +942,24 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     switch (state) {
         case LinphoneRegistrationOk: {
-            _lbStatus.textColor = UIColor.greenColor;
-            _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Online"];
+            NSString *dndMode = [[NSUserDefaults standardUserDefaults] objectForKey:switch_dnd];
+            if ([dndMode isEqualToString:@"YES"]) {
+                [self turnOffCurrentAccount];
+            }else{
+                _lbStatus.textColor = UIColor.greenColor;
+                _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Online"];
+            }
             break;
         }
         case LinphoneRegistrationNone:{
             break;
         }
         case LinphoneRegistrationCleared: {
+            NSString *dndMode = [[NSUserDefaults standardUserDefaults] objectForKey:switch_dnd];
+            if ([dndMode isEqualToString:@"YES"]) {
+                _lbStatus.textColor = UIColor.orangeColor;
+                _lbStatus.text = @"Không làm phiền";
+            }
             break;
         }
         case LinphoneRegistrationFailed: {
@@ -1001,6 +1011,16 @@ static UICompositeViewDescription *compositeDescription = nil;
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
     }
+}
+
+- (void)turnOffCurrentAccount {
+    LinphoneProxyConfig *defaultConfig = linphone_core_get_default_proxy_config(LC);
+    if (defaultConfig != NULL) {
+        [SipUtils enableProxyConfig:defaultConfig withValue:NO withRefresh:YES];
+        
+        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Disable proxy config with accountId = %@", __FUNCTION__, [SipUtils getExtensionOfDefaultProxyConfig]] toFilePath: [LinphoneAppDelegate sharedInstance].logFilePath];
+    }
+
 }
 
 //  Added by Khai Le on 30/09/2018

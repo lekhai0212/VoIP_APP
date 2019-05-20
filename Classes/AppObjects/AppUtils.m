@@ -198,6 +198,9 @@
 
 // Hàm chuyển chuỗi ký tự có dấu thành không dấu
 + (NSString *)convertUTF8CharacterToCharacter: (NSString *)parentStr{
+    parentStr = [parentStr stringByReplacingOccurrencesOfString:@"đ" withString:@"d"];
+    parentStr = [parentStr stringByReplacingOccurrencesOfString:@"Đ" withString:@"D"];
+    
     NSData *dataConvert = [parentStr dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *convertName = [[NSString alloc] initWithData:dataConvert encoding:NSASCIIStringEncoding];
     return convertName;
@@ -1141,12 +1144,6 @@
     return verString;
 }
 
-+ (void)setupFirstValueForSortPBXContactList {
-    [[NSUserDefaults standardUserDefaults] setObject:sort_with_phone forKey:key_sort_type];
-    [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:sort_ascending];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
 + (NSString *)getGroupNameWithQueueNumber: (NSString *)queueNum {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.queue == %@", queueNum];
     NSArray *tmpArr = [[LinphoneAppDelegate sharedInstance].listGroup filteredArrayUsingPredicate: predicate];
@@ -1177,5 +1174,22 @@
 
     return FALSE;
 }
+
++ (void)setupFirstValueForSortContact {
+    NSNumber *sortPBX = [[NSUserDefaults standardUserDefaults] objectForKey: sort_pbx];
+    if (sortPBX == nil) {
+        sortPBX = [NSNumber numberWithInt: eSortAZ];
+        [[NSUserDefaults standardUserDefaults] setObject:sortPBX forKey:sort_pbx];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    
+    NSNumber *sortGroup = [[NSUserDefaults standardUserDefaults] objectForKey: sort_group];
+    if (sortGroup == nil) {
+        sortGroup = [NSNumber numberWithInt: eSortAZ];
+        [[NSUserDefaults standardUserDefaults] setObject:sortGroup forKey:sort_group];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+
 
 @end

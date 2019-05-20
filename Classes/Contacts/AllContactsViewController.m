@@ -114,11 +114,10 @@
 - (void)addHeaderForTableContactsView {
     UIView *headerView = [[UIView alloc] init];
     headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 40.0);
-    headerView.backgroundColor = [UIColor colorWithRed:(240/255.0) green:(240/255.0)
-                                                  blue:(240/255.0) alpha:1.0];
+    headerView.backgroundColor = UIColor.whiteColor;
     
     lbAllContacts = [[UILabel alloc] initWithFrame:CGRectMake(marginLeft, 0, SCREEN_WIDTH-2*marginLeft, headerView.frame.size.height)];
-    lbAllContacts.font = [LinphoneAppDelegate sharedInstance].contentFontBold;
+    lbAllContacts.font = [LinphoneAppDelegate sharedInstance].contentFontNormal;
     lbAllContacts.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     [headerView addSubview: lbAllContacts];
     
@@ -365,15 +364,18 @@
     {
         if ([object isEqualToString:@""]) {
             isSearching = NO;
+            lbAllContacts.text = [NSString stringWithFormat:@"Tất cả liên hệ (%d)", (int)tbDatas.count];
         }else{
             isSearching = YES;
-        }
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            [self searchPhoneBook: object];
-            dispatch_async(dispatch_get_main_queue(), ^(void){
-                [_tbContacts reloadData];
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                [self searchPhoneBook: object];
+                dispatch_async(dispatch_get_main_queue(), ^(void){
+                    lbAllContacts.text = [NSString stringWithFormat:@"Tất cả liên hệ (%d)", (int)_searchResults.count];
+                    [_tbContacts reloadData];
+                });
             });
-        });
+        }
     }
 }
 

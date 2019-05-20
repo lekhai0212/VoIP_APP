@@ -459,11 +459,14 @@ void onUncaughtException(NSException* exception)
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"==================================================\n==               START APPLICATION ON IPAD              ==\n=================================================="] toFilePath:logFilePath];
     }
     
-    //  save value for pbx contacts sort
-    NSString *sortType = [[NSUserDefaults standardUserDefaults] objectForKey: key_sort_type];
-    if ([AppUtils isNullOrEmpty: sortType]) {
-        [AppUtils setupFirstValueForSortPBXContactList];
+    NSString *dndMode = [[NSUserDefaults standardUserDefaults] objectForKey:switch_dnd];
+    if ([AppUtils isNullOrEmpty: dndMode]) {
+        [[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:switch_dnd];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
+    
+    //  save value for pbx contacts sort
+    [AppUtils setupFirstValueForSortContact];
     
     //  nhcla154 - rzfpGFlsEx
     NSString *str = [NSString stringWithFormat:@"%@: %@\n%@: %@", [[LanguageUtil sharedInstance] getContent:@"Version"], [AppUtils getAppVersionWithBuildVersion: YES], [[LanguageUtil sharedInstance] getContent:@"Release date"], [AppUtils getBuildDate]];
@@ -1687,6 +1690,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                         NSString *convertName = [AppUtils convertUTF8CharacterToCharacter: nameStr];
                         NSString *nameForSearch = [AppUtils getNameForSearchOfConvertName: convertName];
                         pbxContact._nameForSearch = nameForSearch;
+                        pbxContact._convertName = convertName;
                         
                         NSString *avatarStr = @"";
                         if (![AppUtils isNullOrEmpty: pbxServer]) {
@@ -2042,53 +2046,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
 }
 
-- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
-{
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, userActivity.activityType] toFilePath:logFilePath];
-
-    //  when user click facetime video
-    if ([userActivity.activityType isEqualToString:@"INStartVideoCallIntent"]) {
-        return YES;
-    }
-
-    INInteraction *interaction = userActivity.interaction;
-    if (interaction != nil) {
-        INStartAudioCallIntent *startAudioCallIntent = (INStartAudioCallIntent *)interaction.intent;
-        if (startAudioCallIntent != nil && startAudioCallIntent.contacts.count > 0) {
-            INPerson *contact = startAudioCallIntent.contacts[0];
-            if (contact != nil) {
-                INPersonHandle *personHandle = contact.personHandle;
-                NSString *phoneNumber = personHandle.value;
-                if (![AppUtils isNullOrEmpty: phoneNumber])
-                {
-                    phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
-                    if ([AppUtils isNullOrEmpty: phoneNumber]) {
-                        [self showSplashScreenOnView: NO];
-                    }else{
-                        [self showSplashScreenOnView: YES];
-
-                        [[NSUserDefaults standardUserDefaults] setObject:phoneNumber forKey:UserActivity];
-                        [[NSUserDefaults standardUserDefaults] synchronize];
-                    }
-                }
-            }
-        }
-    }
-    return YES;
-}
-
-- (void)showSplashScreenOnView: (BOOL)show {
-    if (splashScreen == nil) {
-        UINib *nib = [UINib nibWithNibName:@"LaunchScreen" bundle:nil];
-        splashScreen = [[nib instantiateWithOwner:self options:nil] objectAtIndex:0];
-        [self.window addSubview:splashScreen];
-    }
-    splashScreen.frame = [UIScreen mainScreen].bounds;
-    splashScreen.hidden = !show;
-}
-
-//-(BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+//- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
 //{
+//    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, userActivity.activityType] toFilePath:logFilePath];
+//
 //    //  when user click facetime video
 //    if ([userActivity.activityType isEqualToString:@"INStartVideoCallIntent"]) {
 //        return YES;
@@ -2105,7 +2066,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 //                if (![AppUtils isNullOrEmpty: phoneNumber])
 //                {
 //                    phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
-//
 //                    if ([AppUtils isNullOrEmpty: phoneNumber]) {
 //                        [self showSplashScreenOnView: NO];
 //                    }else{
@@ -2121,6 +2081,50 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 //    return YES;
 //}
 
+- (void)showSplashScreenOnView: (BOOL)show {
+    if (splashScreen == nil) {
+        UINib *nib = [UINib nibWithNibName:@"LaunchScreen" bundle:nil];
+        splashScreen = [[nib instantiateWithOwner:self options:nil] objectAtIndex:0];
+        [self.window addSubview:splashScreen];
+    }
+    splashScreen.frame = [UIScreen mainScreen].bounds;
+    splashScreen.hidden = !show;
+}
+
+-(BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+{
+    //  when user click facetime video
+    if ([userActivity.activityType isEqualToString:@"INStartVideoCallIntent"]) {
+        return YES;
+    }
+
+    INInteraction *interaction = userActivity.interaction;
+    if (interaction != nil) {
+        INStartAudioCallIntent *startAudioCallIntent = (INStartAudioCallIntent *)interaction.intent;
+        if (startAudioCallIntent != nil && startAudioCallIntent.contacts.count > 0) {
+            INPerson *contact = startAudioCallIntent.contacts[0];
+            if (contact != nil) {
+                INPersonHandle *personHandle = contact.personHandle;
+                NSString *phoneNumber = personHandle.value;
+                if (![AppUtils isNullOrEmpty: phoneNumber])
+                {
+                    phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
+
+                    if ([AppUtils isNullOrEmpty: phoneNumber]) {
+                        [self showSplashScreenOnView: NO];
+                    }else{
+                        [self showSplashScreenOnView: YES];
+
+                        [[NSUserDefaults standardUserDefaults] setObject:phoneNumber forKey:UserActivity];
+                        [[NSUserDefaults standardUserDefaults] synchronize];
+                    }
+                }
+            }
+        }
+    }
+    return YES;
+}
+
 #pragma mark - sync contact xmpp
 
 +(LinphoneAppDelegate*) sharedInstance{
@@ -2130,7 +2134,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 #pragma mark - Web services delegate
 
 - (void)updateCustomerTokenIOS {
-    if (USERNAME != nil) {
+    NSString *dndMode = [[NSUserDefaults standardUserDefaults] objectForKey:switch_dnd];
+    if (USERNAME != nil && ![dndMode isEqualToString:@"YES"]) {
         NSString *destToken = [NSString stringWithFormat:@"ios%@", _deviceToken];
         NSString *params = [NSString stringWithFormat:@"pushtoken=%@&username=%@", destToken, USERNAME];
         [webService callGETWebServiceWithFunction:update_token_func andParams:params];
