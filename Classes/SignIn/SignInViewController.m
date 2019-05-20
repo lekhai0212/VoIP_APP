@@ -1012,15 +1012,6 @@ static UICompositeViewDescription *compositeDescription = nil;
             
             [self startTimerToCheckRegisterSIP];
             [SipUtils registerPBXAccount:tfAccountID.text password:tfPassword.text ipAddress:domain port:port];
-            
-            [[NSUserDefaults standardUserDefaults] setObject:tfAccountID.text forKey:key_login];
-            [[NSUserDefaults standardUserDefaults] setObject:@"123456" forKey:key_password];
-            
-            [[NSUserDefaults standardUserDefaults] setObject:domain forKey:PBX_SERVER];
-            [[NSUserDefaults standardUserDefaults] setObject:port forKey:PBX_PORT];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            
-            [PhoneMainView.instance changeCurrentView:DialerView.compositeViewDescription];
         }
     }else if ([link isEqualToString: decryptRSA_func]) {
         if ([data isKindOfClass:[NSDictionary class]]) {

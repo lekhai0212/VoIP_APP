@@ -277,7 +277,8 @@ static UICompositeViewDescription *compositeDescription = nil;
         if (curState == eAccountOn) {
             state = NO;
         }
-        switchDND = [[CustomSwitchButton alloc] initWithState:state frame:CGRectMake(SCREEN_WIDTH-20-70.0, (hCell-28.0)/2, 70.0, 28.0)];
+        //[[NSUserDefaults standardUserDefaults] objectForKey:@"switch_dnd"];
+        switchDND = [[CustomSwitchButton alloc] initWithState:state frame:CGRectMake(SCREEN_WIDTH-20-85.0, (hCell-32.0)/2, 85.0, 32.0)];
         switchDND.delegate = self;
         [cell addSubview: switchDND];
     }else{
@@ -344,7 +345,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)clearPushTokenOfUser {
     
     [LinphoneAppDelegate sharedInstance]._updateTokenSuccess = NO;
-    NSString *params = [NSString stringWithFormat:@"pushToken=%@&userName=%@", @"", USERNAME];
+    NSString *params = [NSString stringWithFormat:@"pushToken=%@&username=%@", @"", USERNAME];
     [webService callGETWebServiceWithFunction:update_token_func andParams:params];
     
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, params] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
@@ -377,7 +378,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         if (turnOffAcc) {
             turnOffAcc = NO;
             [icWaiting stopAnimating];
-            icWaiting.hidden = NO;
+            icWaiting.hidden = TRUE;
             
             [self.view makeToast:@"Đã xảy ra lỗi, vui lòng thử lại!" duration:2.0 position:CSToastPositionCenter];
         }else if (turnOnAcc){
@@ -474,7 +475,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)updateCustomerTokenIOS {
     if (USERNAME != nil && ![AppUtils isNullOrEmpty: [LinphoneAppDelegate sharedInstance]._deviceToken]) {
         NSString *destToken = [NSString stringWithFormat:@"ios%@", [LinphoneAppDelegate sharedInstance]._deviceToken];
-        NSString *params = [NSString stringWithFormat:@"pushToken=%@&userName=%@&del=0", destToken, USERNAME];
+        NSString *params = [NSString stringWithFormat:@"pushToken=%@&username=%@&del=0", destToken, USERNAME];
         [webService callGETWebServiceWithFunction:update_token_func andParams:params];
         
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, params] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
