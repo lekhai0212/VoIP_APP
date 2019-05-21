@@ -950,11 +950,6 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case LinphoneRegistrationCleared: {
-            NSString *dndMode = [[NSUserDefaults standardUserDefaults] objectForKey:switch_dnd];
-            if ([dndMode isEqualToString:@"YES"]) {
-                _lbStatus.textColor = UIColor.orangeColor;
-                _lbStatus.text = @"Không làm phiền";
-            }
             break;
         }
         case LinphoneRegistrationFailed: {
