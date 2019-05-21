@@ -345,7 +345,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)clearPushTokenOfUser {
     
     [LinphoneAppDelegate sharedInstance]._updateTokenSuccess = NO;
-    NSString *params = [NSString stringWithFormat:@"pushToken=%@&username=%@", @"", USERNAME];
+    NSString *params = [NSString stringWithFormat:@"pushtoken=%@&username=%@", @"", USERNAME];
     [webService callGETWebServiceWithFunction:update_token_func andParams:params];
     
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, params] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
@@ -376,12 +376,12 @@ static UICompositeViewDescription *compositeDescription = nil;
 #pragma mark - Webservice delegate
 - (void)failedToCallWebService:(NSString *)link andError:(id)error {
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] link: %@\nError: %@", __FUNCTION__ , link, @[error]] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [icWaiting stopAnimating];
+    icWaiting.hidden = TRUE;
     
     if ([link isEqualToString: update_token_func]) {
         if (turnOffAcc) {
             turnOffAcc = NO;
-            [icWaiting stopAnimating];
-            icWaiting.hidden = TRUE;
             
             [self.view makeToast:@"Đã xảy ra lỗi, vui lòng thử lại!" duration:2.0 position:CSToastPositionCenter];
         }else if (turnOnAcc){
@@ -484,7 +484,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)updateCustomerTokenIOS {
     if (USERNAME != nil && ![AppUtils isNullOrEmpty: [LinphoneAppDelegate sharedInstance]._deviceToken]) {
         NSString *destToken = [NSString stringWithFormat:@"ios%@", [LinphoneAppDelegate sharedInstance]._deviceToken];
-        NSString *params = [NSString stringWithFormat:@"pushToken=%@&username=%@", destToken, USERNAME];
+        NSString *params = [NSString stringWithFormat:@"pushtoken=%@&username=%@", destToken, USERNAME];
         [webService callGETWebServiceWithFunction:update_token_func andParams:params];
         
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, params] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];

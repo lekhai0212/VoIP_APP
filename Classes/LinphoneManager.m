@@ -674,6 +674,7 @@ static void linphone_iphone_display_status(struct _LinphoneCore *lc, const char 
 }
 
 - (void)onCall:(LinphoneCall *)call StateChanged:(LinphoneCallState)state withMessage:(const char *)message {
+    //  Khai Le - Incoming call
 	// Handling wrapper
 	LinphoneCallAppData *data = (__bridge LinphoneCallAppData *)linphone_call_get_user_data(call);
 	if (!data) {
@@ -698,6 +699,16 @@ static void linphone_iphone_display_status(struct _LinphoneCore *lc, const char 
     NSString *address = [self getNameForCurrentPhoneNumber: callerId];
     if ([address isEqualToString: callerId]) {
         address = [ContactUtils getContactNameWithNumber: callerId];
+    }
+    
+    if (state == LinphoneCallIncomingReceived) {
+        NSString *dndMode = [[NSUserDefaults standardUserDefaults] objectForKey:switch_dnd];
+        if (![AppUtils isNullOrEmpty: dndMode] && [dndMode isEqualToString:@"YES"]) {
+            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]: check DND mode is enable, so decline this call from callerId = %@ with reason  LinphoneReasonBusy", __FUNCTION__, callerId] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            
+            linphone_core_decline_call(theLinphoneCore, call, LinphoneReasonBusy);
+            return;
+        }
     }
     
 	if (state == LinphoneCallIncomingReceived) {
