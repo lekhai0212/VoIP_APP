@@ -32,9 +32,8 @@
     UIActivityIndicatorView *icWaiting;
     float hCell;
     CustomSwitchButton *switchDND;
-    AccountState curState;
-    BOOL turnOffAcc;
-    BOOL turnOnAcc;
+    BOOL isEnableDND;
+    BOOL isDisableDND;
 }
 
 @end
@@ -80,16 +79,11 @@ static UICompositeViewDescription *compositeDescription = nil;
         webService.delegate = self;
     }
     
-    curState = [SipUtils getStateOfDefaultProxyConfig];
-    
     [self autoLayoutForMainView];
     
     [self showContentWithCurrentLanguage];
     
     [self updateInformationOfUser];
-    
-    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(registrationUpdateEvent:)
-                                               name:kLinphoneRegistrationUpdate object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -380,13 +374,13 @@ static UICompositeViewDescription *compositeDescription = nil;
     icWaiting.hidden = TRUE;
     
     if ([link isEqualToString: update_token_func]) {
-        if (turnOffAcc) {
-            turnOffAcc = NO;
-            
+        if (isEnableDND) {
             [self.view makeToast:@"Đã xảy ra lỗi, vui lòng thử lại!" duration:2.0 position:CSToastPositionCenter];
-        }else if (turnOnAcc){
-            turnOnAcc = NO;
+            isEnableDND = FALSE;
+            
+        }else if (isDisableDND) {
             [self.view makeToast:@"Không tìm thấy push token" duration:2.0 position:CSToastPositionCenter];
+            isDisableDND = FALSE;
         }else{
             [self startResetValueWhenLogout];
         }
@@ -395,20 +389,23 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)successfulToCallWebService:(NSString *)link withData:(NSDictionary *)data {
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] link: %@\nData: %@", __FUNCTION__ , link, @[data]] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [icWaiting stopAnimating];
+    icWaiting.hidden = TRUE;
+    
     if ([link isEqualToString: update_token_func]) {
-        if (turnOffAcc) {
-            turnOffAcc = NO;
-            [icWaiting stopAnimating];
-            icWaiting.hidden = YES;
+        if (isEnableDND) {
+            [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:switch_dnd];
+            [[NSUserDefaults standardUserDefaults] synchronize];
             
             [self.view makeToast:@"Bạn đã bật chế độ \"Không làm phiền\"." duration:2.0 position:CSToastPositionCenter];
-        }else if(turnOnAcc){
-            turnOnAcc = NO;
-            [icWaiting stopAnimating];
-            icWaiting.hidden = YES;
+            isEnableDND = FALSE;
+            
+        }else if (isDisableDND){
+            [[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:switch_dnd];
+            [[NSUserDefaults standardUserDefaults] synchronize];
             
             [self.view makeToast:@"Bạn đã tắt chế độ \"Không làm phiền\"." duration:2.0 position:CSToastPositionCenter];
-            
+            isDisableDND = FALSE;
         }else{
             [self startResetValueWhenLogout];
         }
@@ -431,22 +428,11 @@ static UICompositeViewDescription *compositeDescription = nil;
         return;
     }
     
-    LinphoneProxyConfig *defaultConfig = linphone_core_get_default_proxy_config(LC);
-    if (defaultConfig != NULL) {
-        [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:switch_dnd];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        
-        turnOffAcc = YES;
-        turnOnAcc = NO;
-        
-        [icWaiting startAnimating];
-        icWaiting.hidden = NO;
-        
-        [SipUtils enableProxyConfig:defaultConfig withValue:NO withRefresh:YES];
-        
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Disable proxy config with accountId = %@", __FUNCTION__, [SipUtils getExtensionOfDefaultProxyConfig]] toFilePath: [LinphoneAppDelegate sharedInstance].logFilePath];
-    }
-    NSLog(@"switch ONNNNNNNN");
+    [icWaiting startAnimating];
+    icWaiting.hidden = NO;
+    
+    isEnableDND = TRUE;
+    [self clearPushTokenOfUser];
 }
 
 - (void)switchButtonDisabled {
@@ -459,26 +445,12 @@ static UICompositeViewDescription *compositeDescription = nil;
         return;
     }
     
-    LinphoneProxyConfig *defaultConfig = linphone_core_get_default_proxy_config(LC);
-    if (defaultConfig != NULL) {
-        [[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:switch_dnd];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        
-        turnOffAcc = NO;
-        turnOnAcc = YES;
-        
-        [icWaiting startAnimating];
-        icWaiting.hidden = NO;
-        
-        [SipUtils enableProxyConfig:defaultConfig withValue:YES withRefresh:YES];
-        
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Enable proxy config with accountId = %@", __FUNCTION__, [SipUtils getAccountIdOfDefaultProxyConfig]] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-    }else{
-        [switchDND setUIForDisableStateWithActionTarget: NO];
-        [self.view makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"You have not signed your account yet"] duration:2.0 position:CSToastPositionCenter];
-        
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Can not enable with defaultConfig = NULL", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-    }
+    [icWaiting startAnimating];
+    icWaiting.hidden = NO;
+    
+    isDisableDND = TRUE;
+    
+    [self updateCustomerTokenIOS];
 }
 
 - (void)updateCustomerTokenIOS {
@@ -494,61 +466,6 @@ static UICompositeViewDescription *compositeDescription = nil;
         [self.view makeToast:@"Không tìm thấy push token" duration:2.0 position:CSToastPositionCenter];
         
         [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Không tìm thấy push token", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-    }
-}
-
-- (void)registrationUpdateEvent:(NSNotification *)notif {
-    NSString *message = [notif.userInfo objectForKey:@"message"];
-    [self registrationUpdate:[[notif.userInfo objectForKey:@"state"] intValue]
-                    forProxy:[[notif.userInfo objectForKeyedSubscript:@"cfg"] pointerValue]
-                     message:message];
-}
-
-- (void)registrationUpdate:(LinphoneRegistrationState)state forProxy:(LinphoneProxyConfig *)proxy message:(NSString *)message
-{
-    switch (state) {
-        case LinphoneRegistrationOk:
-        {
-            if (turnOnAcc) {
-                [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] state is LinphoneRegistrationOk, turnOnAcc = YES", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-                
-                //  Update token after registration okay
-                if (![AppUtils isNullOrEmpty: [LinphoneAppDelegate sharedInstance]._deviceToken]) {
-                    [self updateCustomerTokenIOS];
-                }else{
-                    [icWaiting stopAnimating];
-                    icWaiting.hidden = YES;
-                    [self.view makeToast:@"Không tìm thấy push token" duration:2.0 position:CSToastPositionCenter];
-                    
-                    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Không tìm thấy push token, registrationUpdate = LinphoneRegistrationOk", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-                }
-                break;
-            }
-            
-            break;
-        }
-        case LinphoneRegistrationNone:{
-            
-            break;
-        }
-        case LinphoneRegistrationCleared: {
-            if (turnOffAcc) {
-                [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] state is LinphoneRegistrationCleared with enableProxyConfig != NULL. So, register with enableProxyConfig", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-                [self clearPushTokenOfUser];
-                return;
-            }
-            break;
-        }
-        case LinphoneRegistrationFailed:
-        {
-            
-            break;
-        }
-        case LinphoneRegistrationProgress: {
-            break;
-        }
-        default:
-            break;
     }
 }
 
