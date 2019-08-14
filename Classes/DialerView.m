@@ -19,7 +19,6 @@
 
 #import <AVFoundation/AVAudioSession.h>
 #import <AudioToolbox/AudioToolbox.h>
-#import "PBXSettingViewController.h"
 #import "LinphoneManager.h"
 #import <AVFoundation/AVFoundation.h>
 #import "PhoneBookContactCell.h"
@@ -27,7 +26,6 @@
 #import <objc/runtime.h>
 #import "ContactDetailObj.h"
 #import "UIVIew+Toast.h"
-
 #import <CoreTelephony/CTCallCenter.h>
 #import <CoreTelephony/CTCall.h>
 #import "PBXContact.h"
@@ -105,6 +103,16 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
     [WriteLogsUtils writeForGoToScreen: @"DialerView"];
+    
+    //  set content for Fabric
+    NSString *server = [[NSUserDefaults standardUserDefaults] objectForKey:PBX_SERVER];
+    NSString *port = [[NSUserDefaults standardUserDefaults] objectForKey:PBX_PORT];
+    if (![AppUtils isNullOrEmpty: server] && ![AppUtils isNullOrEmpty: port]) {
+        NSString *fabricInfo = [NSString stringWithFormat:@"%@ - %@:%@", USERNAME, server, port];
+        [[Crashlytics sharedInstance] setUserName:fabricInfo];
+    }else{
+        [[Crashlytics sharedInstance] setUserName:USERNAME];
+    }
     
     //  variable for num login
     numTryToLogin = 0;
@@ -496,7 +504,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
     
-    _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"No network"];
+    _lbStatus.text = text_no_network;
     _lbStatus.textColor = UIColor.orangeColor;
 }
 
@@ -561,7 +569,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         if (![AppUtils isNullOrEmpty: contact.name]) {
             lbName.text = contact.name;
         }else{
-            lbName.text = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
+            lbName.text = text_unknown;
         }
         lbPhone.text = contact.number;
         
@@ -943,7 +951,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     switch (state) {
         case LinphoneRegistrationOk: {
             _lbStatus.textColor = UIColor.greenColor;
-            _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Online"];
+            _lbStatus.text = text_online;
             break;
         }
         case LinphoneRegistrationNone:{
@@ -966,18 +974,11 @@ static UICompositeViewDescription *compositeDescription = nil;
                 [LinphoneAppDelegate sharedInstance].configPushToken = NO;
                 [[PhoneMainView instance] changeCurrentView:[SignInViewController compositeViewDescription]];
             }
-            
-//            _lbStatus.textColor = UIColor.orangeColor;
-//            if ([SipUtils getStateOfDefaultProxyConfig] == eAccountOff) {
-//                _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Disabled"];
-//            }else{
-//                _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Offline"];
-//            }
             break;
         }
         case LinphoneRegistrationProgress: {
             _lbStatus.textColor = UIColor.whiteColor;
-            _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Connecting"];
+            _lbStatus.text = text_connecting;
             break;
         }
         default:
@@ -1017,7 +1018,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         NSString *accountID = [SipUtils getExtensionOfDefaultProxyConfig];
         _lbAccount.text = accountID;
         if (curState == eAccountOff) {
-            _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Disabled"];
+            _lbStatus.text = text_disabled;
             _lbStatus.textColor = UIColor.orangeColor;
             
             [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] AccountId = %@, state is OFF", __FUNCTION__, accountID] toFilePath:appDelegate.logFilePath];
@@ -1026,10 +1027,10 @@ static UICompositeViewDescription *compositeDescription = nil;
             if (state == LinphoneRegistrationOk) {
                 //  account on
                 _lbStatus.textColor = UIColor.greenColor;
-                _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Online"];
+                _lbStatus.text = text_online;
             }else{
                 _lbStatus.textColor = UIColor.orangeColor;
-                _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"Offline"];
+                _lbStatus.text = text_offline;
             }
             
             [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] AccountId = %@, state is ON", __FUNCTION__, accountID] toFilePath:appDelegate.logFilePath];
@@ -1053,7 +1054,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)whenNetworkChanged {
     NetworkStatus internetStatus = [appDelegate.internetReachable currentReachabilityStatus];
     if (internetStatus == NotReachable) {
-        _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"No network"];
+        _lbStatus.text = text_no_network;
         _lbStatus.textColor = UIColor.orangeColor;
     }else{
         [self checkAccountForApp];
@@ -1066,7 +1067,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
     
     if ([LinphoneManager instance].connectivity == none){
-        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
+        [self.view makeToast:text_check_network duration:2.0 position:CSToastPositionCenter];
         return;
     }
     
@@ -1093,36 +1094,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)hideSearchView {
     _addressField.text = @"";
     resultView.hidden = YES;
-}
-
-#pragma mark - UIAlertview Delegate
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (alertView.tag == 1)
-    {
-        if (buttonIndex == 1){
-            [[PhoneMainView instance] changeCurrentView:[PBXSettingViewController compositeViewDescription] push:YES];
-        }
-    }
-    else if (alertView.tag == 2){
-        if (buttonIndex == 0) {
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] You don't want to enable this account with Id = %@", __FUNCTION__, [SipUtils getAccountIdOfDefaultProxyConfig]] toFilePath:appDelegate.logFilePath];
-        }else if (buttonIndex == 1){
-            LinphoneProxyConfig *defaultConfig = linphone_core_get_default_proxy_config(LC);
-            if (defaultConfig != NULL) {
-                linphone_proxy_config_enable_register(defaultConfig, YES);
-                linphone_proxy_config_refresh_register(defaultConfig);
-                linphone_proxy_config_done(defaultConfig);
-                
-                linphone_core_refresh_registers(LC);
-                
-                [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] You turned on account with Id = %@", __FUNCTION__, [SipUtils getAccountIdOfDefaultProxyConfig]] toFilePath:appDelegate.logFilePath];
-            }
-        }
-        
-    }else if (alertView.tag == 2){
-        [WriteLogsUtils writeLogContent:@"Make call to hotline" toFilePath:appDelegate.logFilePath];
-        [SipUtils makeCallWithPhoneNumber: hotline];
-    }
 }
 
 - (void)selectContactFromSearchPopup:(NSString *)phoneNumber {

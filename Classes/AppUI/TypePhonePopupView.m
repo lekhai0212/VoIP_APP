@@ -54,22 +54,22 @@
 - (void)createTypePhoneList {
     TypePhoneObject *type1 = [[TypePhoneObject alloc] init];
     type1._strIcon = @"btn_contacts_mobile.png";
-    type1._strTitle = [[LanguageUtil sharedInstance] getContent:@"Mobile"];
+    type1._strTitle = text_mobile;
     type1._strType = type_phone_mobile;
     
     TypePhoneObject *type2 = [[TypePhoneObject alloc] init];
     type2._strIcon = @"btn_contacts_work.png";
-    type2._strTitle = [[LanguageUtil sharedInstance] getContent:@"Work"];
+    type2._strTitle = text_work;
     type2._strType = type_phone_work;
     
     TypePhoneObject *type3 = [[TypePhoneObject alloc] init];
     type3._strIcon = @"btn_contacts_fax.png";
-    type3._strTitle = [[LanguageUtil sharedInstance] getContent:@"Fax"];
+    type3._strTitle = text_fax;
     type3._strType = type_phone_fax;
     
     TypePhoneObject *type4 = [[TypePhoneObject alloc] init];
     type4._strIcon = @"btn_contacts_home.png";
-    type4._strTitle = [[LanguageUtil sharedInstance] getContent:@"Home"];
+    type4._strTitle = text_home;
     type4._strType = type_phone_home;
     
     listTypePhone = [[NSArray alloc] initWithObjects: type1, type2, type3, type4, nil];

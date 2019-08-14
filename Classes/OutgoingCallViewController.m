@@ -78,7 +78,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     if ([AppUtils isNullOrEmpty: userName]) {
         userName = [AppUtils getGroupNameWithQueueNumber: tmpPhone];
         if ([AppUtils isNullOrEmpty: userName]) {
-            userName = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
+            userName = text_unknown;
         }
         _lbName.text = userName;
     }else{

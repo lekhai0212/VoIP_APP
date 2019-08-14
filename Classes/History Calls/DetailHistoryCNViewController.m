@@ -72,13 +72,12 @@ static UICompositeViewDescription *compositeDescription = nil;
     if (phoneNumber != nil && ![phoneNumber isEqualToString:@""]) {
         [SipUtils makeCallWithPhoneNumber: phoneNumber];
     }else{
-        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"The phone number can not empty"] duration:2.0 position:CSToastPositionCenter];
+        [self.view makeToast:text_phone_empty duration:2.0 position:CSToastPositionCenter];
     }
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     [self setupUIForView];
 }
 
@@ -88,7 +87,9 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     [WriteLogsUtils writeForGoToScreen:@"DetailHistoryCNViewController"];
     
-    [self showContentWithCurrentLanguage];
+    if (![AppUtils isNullOrEmpty: phoneNumber]) {
+        _lbHeader.text = text_call_details;
+    }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateView)
                                                  name:reloadHistoryCall object:nil];
@@ -107,12 +108,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)showContentWithCurrentLanguage {
-    if (![AppUtils isNullOrEmpty: phoneNumber]) {
-        _lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"Calls detail"];
-    }
-}
-
 //  Cập nhật view sau khi get xong phone number
 - (void)updateView
 {
@@ -124,7 +119,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         if (![AppUtils isNullOrEmpty: groupName]) {
             _lbName.text = groupName;
         }else{
-            _lbName.text = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
+            _lbName.text = text_unknown;
         }
     }
     
@@ -428,10 +423,10 @@ static UICompositeViewDescription *compositeDescription = nil;
         if (![dateStr isEqualToString:@"Today"]) {
             dateStr = [AppUtils checkYesterdayForHistoryCall: aCall._date];
             if ([dateStr isEqualToString:@"Yesterday"]) {
-                dateStr = [[LanguageUtil sharedInstance] getContent:@"Yesterday"];
+                dateStr = text_yesterday;
             }
         }else{
-            dateStr = [[LanguageUtil sharedInstance] getContent:@"Today"];
+            dateStr = text_today;
         }
         cell.lbDate.text = dateStr;
         
@@ -445,7 +440,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (IBAction)icDeleteClick:(UIButton *)sender
 {
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:[[LanguageUtil sharedInstance] getContent:@"Do you want to delete call history?"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"No"] otherButtonTitles:[[LanguageUtil sharedInstance] getContent:@"Delete"], nil];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:confirm_delete_history delegate:self cancelButtonTitle:text_no otherButtonTitles:text_delete, nil];
     alertView.delegate = self;
     [alertView show];
 }

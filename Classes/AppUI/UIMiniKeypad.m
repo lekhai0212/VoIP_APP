@@ -179,4 +179,8 @@
     tfNumber.text = [NSString stringWithFormat:@"%@%@", tfNumber.text, value];
 }
 
+- (IBAction)icHangupCallClick:(UIButton *)sender {
+    
+}
+
 @end

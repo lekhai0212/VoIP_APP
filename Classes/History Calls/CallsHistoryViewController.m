@@ -99,8 +99,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     _btnEdit.tag = 0;
     [_btnEdit setImage:[UIImage imageNamed:@"ic_trash"] forState:UIControlStateNormal];
     
-    [self showContentWithCurrentLanguage];
-    
     //  Reset lại các UI khi vào màn hình
     [self resetUIForView];
     
@@ -232,11 +230,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 #pragma mark - My functions
 
-- (void)showContentWithCurrentLanguage {
-    [_iconAll setTitle:[[LanguageUtil sharedInstance] getContent:@"All history"] forState:UIControlStateNormal];
-    [_iconMissed setTitle:[[LanguageUtil sharedInstance] getContent:@"Missed history"] forState:UIControlStateNormal];
-}
-
 //  Reset lại các UI khi vào màn hình
 - (void)resetUIForView {
     _btnEdit.hidden = NO;
@@ -291,11 +284,11 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     float marginTop = [LinphoneAppDelegate sharedInstance]._hStatus + (hHeader - [LinphoneAppDelegate sharedInstance]._hStatus - hButton)/ 2;
     
-    CGSize sizeButton = [AppUtils getSizeWithText:[[LanguageUtil sharedInstance] getContent:@"Missed history"] withFont:[LinphoneAppDelegate sharedInstance].headerFontBold andMaxWidth:SCREEN_WIDTH];
+    CGSize sizeButton = [AppUtils getSizeWithText:text_missed_call withFont:[LinphoneAppDelegate sharedInstance].headerFontBold andMaxWidth:SCREEN_WIDTH];
     
     _iconMissed.backgroundColor = UIColor.clearColor;
     _iconMissed.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-    [_iconMissed setTitle:[[LanguageUtil sharedInstance] getContent:@"Missed history"] forState:UIControlStateNormal];
+    [_iconMissed setTitle:text_missed_call forState:UIControlStateNormal];
     [_iconMissed setTitleColor:noActiveColor forState:UIControlStateNormal];
     _iconMissed.titleLabel.font = [LinphoneAppDelegate sharedInstance].headerFontBold;
     [_iconMissed mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -316,7 +309,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     _iconAll.backgroundColor = UIColor.clearColor;
     _iconAll.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-    [_iconAll setTitle:[[LanguageUtil sharedInstance] getContent:@"All history"] forState:UIControlStateNormal];
+    [_iconAll setTitle:text_all_call forState:UIControlStateNormal];
     [_iconAll setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     _iconAll.titleLabel.font = [LinphoneAppDelegate sharedInstance].headerFontBold;
     [_iconAll mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -334,7 +327,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
     
     _iconRecord.backgroundColor = UIColor.clearColor;
-    [_iconRecord setTitle:[[LanguageUtil sharedInstance] getContent:@"Records call"] forState:UIControlStateNormal];
+    [_iconRecord setTitle:text_record_call forState:UIControlStateNormal];
     [_iconRecord setTitleColor:noActiveColor forState:UIControlStateNormal];
     _iconRecord.titleLabel.font = [LinphoneAppDelegate sharedInstance].headerFontBold;
     [_iconRecord mas_makeConstraints:^(MASConstraintMaker *make) {

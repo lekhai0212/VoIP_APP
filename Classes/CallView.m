@@ -1208,7 +1208,7 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
             if ([AppUtils isNullOrEmpty: contact.name]) {
                 fullName = [AppUtils getGroupNameWithQueueNumber: addressPhoneNumber];
                 if ([AppUtils isNullOrEmpty: fullName]) {
-                    fullName = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
+                    fullName = text_unknown;
                 }
             }else{
                 fullName = contact.name;

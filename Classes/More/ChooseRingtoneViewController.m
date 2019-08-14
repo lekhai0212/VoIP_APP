@@ -145,7 +145,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     NSString *curRingTone = [[NSUserDefaults standardUserDefaults] objectForKey:DEFAULT_RINGTONE];
     
     if (indexPath.row == 0) {
-        cell.lbName.text = [[LanguageUtil sharedInstance] getContent:@"Silent"];
+        cell.lbName.text = text_silent;
         cell.imgRingTone.image = [UIImage imageNamed:@"no_sound"];
         
         if ([curRingTone isEqualToString:@"silence.mp3"]) {

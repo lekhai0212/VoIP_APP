@@ -226,12 +226,12 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     float marginTop = [LinphoneAppDelegate sharedInstance]._hStatus + (hHeader - [LinphoneAppDelegate sharedInstance]._hStatus - hTextfield - 10 - hButton)/ 2;
     
-    float sizeText = [AppUtils getSizeWithText:@"Nội bộ" withFont:[LinphoneAppDelegate sharedInstance].headerFontBold].width + 10.0;
+    float sizeText = [AppUtils getSizeWithText:text_pbx_contacts withFont:[LinphoneAppDelegate sharedInstance].headerFontBold].width + 10.0;
     
     _iconPBX.titleLabel.font = _iconAll.titleLabel.font = icGroupPBX.titleLabel.font = [LinphoneAppDelegate sharedInstance].headerFontBold;
     
     //  icon pbx
-    [_iconPBX setTitle:@"Nội bộ" forState:UIControlStateNormal];
+    [_iconPBX setTitle:text_pbx_contacts forState:UIControlStateNormal];
     [_iconPBX setTitleColor:unselectedColor forState:UIControlStateNormal];
     [_iconPBX mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_viewHeader).offset(marginTop);
@@ -250,7 +250,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     //  icon all
     _iconAll.backgroundColor = UIColor.clearColor;
-    [_iconAll setTitle:@"Danh bạ máy" forState:UIControlStateNormal];
+    [_iconAll setTitle:text_all_contacts forState:UIControlStateNormal];
     [_iconAll setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     [_iconAll mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(lbSepa.mas_left).offset(-10.0);
@@ -268,7 +268,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     //  icon groups
     icGroupPBX.backgroundColor = UIColor.clearColor;
-    [icGroupPBX setTitle:@"Nhóm nội bộ" forState:UIControlStateNormal];
+    [icGroupPBX setTitle:text_pbx_groups forState:UIControlStateNormal];
     [icGroupPBX setTitleColor:unselectedColor forState:UIControlStateNormal];
     [icGroupPBX mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(lbSepa2.mas_right).offset(10.0);
@@ -279,7 +279,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     _tfSearch.backgroundColor = UIColor.whiteColor;
     _tfSearch.font = [LinphoneAppDelegate sharedInstance].contentFontNormal;
-    _tfSearch.placeholder = [[LanguageUtil sharedInstance] getContent:@"Search name or phone number"];
+    _tfSearch.placeholder = search_name_or_phone;
     _tfSearch.textColor = UIColor.darkGrayColor;
 
     [_tfSearch addTarget:self

@@ -9,7 +9,6 @@
 #import "MoreViewController.h"
 #import "MenuCell.h"
 #import "ChooseRingtoneViewController.h"
-#import "KSettingViewController.h"
 #import "SignInViewController.h"
 #import "AboutViewController.h"
 #import "SendLogsViewController.h"
@@ -224,7 +223,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 //  Khoi tao du lieu cho view
 - (void)createDataForMenuView {
-    listTitle = [[NSMutableArray alloc] initWithObjects: [[LanguageUtil sharedInstance] getContent:@"DND"], [[LanguageUtil sharedInstance] getContent:@"Choose ringtone"], [[LanguageUtil sharedInstance] getContent:@"Call settings"], [[LanguageUtil sharedInstance] getContent:@"App information"], [[LanguageUtil sharedInstance] getContent:@"Send reports"], [[LanguageUtil sharedInstance] getContent:@"Sign out"], [[LanguageUtil sharedInstance] getContent:@"Privacy & Policy"], [[LanguageUtil sharedInstance] getContent:@"Introduction"], nil];
+    listTitle = [[NSMutableArray alloc] initWithObjects: text_do_not_disturb, text_choose_ringtone, text_call_settings, text_app_info, text_send_reports, text_sign_out, text_privacy_policy, text_introduction, nil];
     
     listIcon = [[NSMutableArray alloc] initWithObjects: @"more_dnd", @"more_ringtone", @"more_call_settings", @"more_app_info", @"more_send_reports", @"more_signout", @"more_policy", @"more_support", nil];
 }
@@ -302,7 +301,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         }
         case eSignOut:{
             
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:[[LanguageUtil sharedInstance] getContent:@"Do you want to log out?"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"No"] otherButtonTitles:[[LanguageUtil sharedInstance] getContent:@"Sign out"], nil];
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:text_confirm_sign_out delegate:self cancelButtonTitle:text_no otherButtonTitles:text_sign_out, nil];
             alertView.tag = 1;
             alertView.delegate = self;
             [alertView show];
@@ -424,7 +423,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] with networkReady = %d", __FUNCTION__, networkReady] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     if (!networkReady) {
-        [self.view makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
+        [self.view makeToast:text_check_network duration:2.0 position:CSToastPositionCenter];
         return;
     }
     
@@ -441,7 +440,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] with networkReady = %d", __FUNCTION__, networkReady] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     if (!networkReady) {
-        [self.view makeToast:[[LinphoneAppDelegate sharedInstance].localization localizedStringForKey:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
+        [self.view makeToast:text_check_network duration:2.0 position:CSToastPositionCenter];
         return;
     }
     

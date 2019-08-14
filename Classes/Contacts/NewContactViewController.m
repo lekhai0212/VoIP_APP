@@ -105,7 +105,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     {
         ContactDetailObj *aPhone = [[ContactDetailObj alloc] init];
         aPhone._iconStr = @"btn_contacts_mobile.png";
-        aPhone._titleStr = [[LanguageUtil sharedInstance] getContent:type_phone_mobile];
+        aPhone._titleStr = text_mobile;
         aPhone._valueStr = currentPhoneNumber;
         aPhone._buttonStr = @"contact_detail_icon_call.png";
         aPhone._typePhone = type_phone_mobile;
@@ -160,18 +160,11 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (IBAction)_btnAvatarPressed:(UIButton *)sender {
     [self.view endEditing: YES];
     if (appDelegate._dataCrop != nil) {
-        UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Options"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles:
-                                          [[LanguageUtil sharedInstance] getContent:@"Gallery"],
-                                          [[LanguageUtil sharedInstance] getContent:@"Camera"],
-                                          [[LanguageUtil sharedInstance] getContent:@"Remove Avatar"],
-                                          nil];
+        UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:text_options delegate:self cancelButtonTitle:text_cancel destructiveButtonTitle:nil otherButtonTitles: text_gallery, text_camera, text_remove_avatar, nil];
         popupAddContact.tag = 100;
         [popupAddContact showInView:self.view];
     }else{
-        UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Options"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles:
-                                          [[LanguageUtil sharedInstance] getContent:@"Gallery"],
-                                          [[LanguageUtil sharedInstance] getContent:@"Camera"],
-                                          nil];
+        UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:text_options delegate:self cancelButtonTitle:text_cancel destructiveButtonTitle:nil otherButtonTitles: text_gallery, text_camera, nil];
         popupAddContact.tag = 101;
         [popupAddContact showInView:self.view];
     }
@@ -180,11 +173,9 @@ static UICompositeViewDescription *compositeDescription = nil;
 #pragma mark - my functions
 
 - (void)showContentWithCurrentLanguage {
-    _lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"Add contact"];
-    [btnCancel setTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"]
-               forState:UIControlStateNormal];
-    [btnSave setTitle:[[LanguageUtil sharedInstance] getContent:@"Save"]
-             forState:UIControlStateNormal];
+    _lbHeader.text = text_add_contact;
+    [btnCancel setTitle:text_cancel forState:UIControlStateNormal];
+    [btnSave setTitle:text_save forState:UIControlStateNormal];
 }
 
 - (NSString *)getAvatarOfContact: (ABRecordRef)aPerson
@@ -211,9 +202,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)afterAddAndReloadContactDone {
     [waitingHud dismissAnimated:YES];
     appDelegate._newContact = nil;
-    [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Successful"]
-                duration:1.0 position:CSToastPositionCenter];
-    
+    [self.view makeToast:text_successful duration:1.0 position:CSToastPositionCenter];
     [self performSelector:@selector(backToView) withObject:nil afterDelay:1.0];
 }
 
@@ -304,8 +293,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     viewFooter.frame = CGRectMake(0, 0, SCREEN_WIDTH, 100);
     
     btnCancel = [[UIButton alloc] init];
-    [btnCancel setTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"]
-               forState:UIControlStateNormal];
+    [btnCancel setTitle:text_cancel forState:UIControlStateNormal];
     
     btnCancel.backgroundColor = [UIColor colorWithRed:(210/255.0) green:(51/255.0)
                                                  blue:(92/255.0) alpha:1.0];
@@ -321,8 +309,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
     
     btnSave = [[UIButton alloc] init];
-    [btnSave setTitle:[[LanguageUtil sharedInstance] getContent:@"Save"]
-             forState:UIControlStateNormal];
+    [btnSave setTitle:text_save forState:UIControlStateNormal];
     btnSave.backgroundColor = [UIColor colorWithRed:(20/255.0) green:(129/255.0)
                                                blue:(211/255.0) alpha:1.0];
     [btnSave setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
@@ -379,27 +366,26 @@ static UICompositeViewDescription *compositeDescription = nil;
                 {
                     aPhone._typePhone = type_phone_work;
                     aPhone._iconStr = @"btn_contacts_work.png";
-                    aPhone._titleStr = [[LanguageUtil sharedInstance] getContent:type_phone_work];
+                    aPhone._titleStr = text_work;
                     
                 }else if ([type isEqualToString:type_phone_fax]){
                     aPhone._typePhone = type_phone_fax;
                     aPhone._iconStr = @"btn_contacts_fax.png";
-                    aPhone._titleStr = [[LanguageUtil sharedInstance] getContent:type_phone_fax];
+                    aPhone._titleStr = text_fax;
                     
                 }else if ([type isEqualToString:type_phone_home]){
                     aPhone._typePhone = type_phone_home;
                     aPhone._iconStr = @"btn_contacts_home.png";
-                    aPhone._titleStr = [[LanguageUtil sharedInstance] getContent:type_phone_home];
+                    aPhone._titleStr = text_home;
                     
                 }else{
                     aPhone._typePhone = type_phone_mobile;
                     aPhone._iconStr = @"btn_contacts_mobile.png";
-                    aPhone._titleStr = [[LanguageUtil sharedInstance] getContent:type_phone_mobile];
+                    aPhone._titleStr = text_mobile;
                 }
                 [appDelegate._newContact._listPhone addObject: aPhone];
             }else{
-                [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Please input phone number"]
-                            duration:2.0 position:CSToastPositionCenter];
+                [self.view makeToast:pls_enter_phonenumber duration:2.0 position:CSToastPositionCenter];
             }
         }else if ([sender.currentTitle isEqualToString:@"Remove"]){
             if (tag-NUMBER_ROW_BEFORE < appDelegate._newContact._listPhone.count) {
@@ -442,7 +428,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         }
         switch (indexPath.row) {
             case ROW_CONTACT_NAME:{
-                cell.lbTitle.text = [[LanguageUtil sharedInstance] getContent:@"Fullname"];
+                cell.lbTitle.text = text_fullname;
                 cell.tfContent.text = [ContactUtils getFullnameOfContactIfExists];
                 [cell.tfContent addTarget:self
                                    action:@selector(whenTextfieldFullnameChanged:)
@@ -450,7 +436,7 @@ static UICompositeViewDescription *compositeDescription = nil;
                 break;
             }
             case ROW_CONTACT_EMAIL:{
-                cell.lbTitle.text = [[LanguageUtil sharedInstance] getContent:@"Email"];
+                cell.lbTitle.text = text_email;
                 cell.tfContent.tag = 100;
                 cell.tfContent.keyboardType = UIKeyboardTypeEmailAddress;
                 [cell.tfContent addTarget:self
@@ -466,7 +452,7 @@ static UICompositeViewDescription *compositeDescription = nil;
                 break;
             }
             case ROW_CONTACT_COMPANY:{
-                cell.lbTitle.text = [[LanguageUtil sharedInstance] getContent:@"Company"];
+                cell.lbTitle.text = text_company;
                 cell.tfContent.tag = 101;
                 [cell.tfContent addTarget:self
                                    action:@selector(whenTextfieldChanged:)
@@ -663,32 +649,10 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     if ((appDelegate._newContact._firstName == nil || [appDelegate._newContact._firstName isEqualToString:@""]) && (appDelegate._newContact._lastName == nil || [appDelegate._newContact._lastName isEqualToString:@""]))
     {
-        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Contact name can not empty!"]
-                    duration:2.0 position:CSToastPositionCenter];
+        [self.view makeToast:contact_name_not_empty duration:2.0 position:CSToastPositionCenter];
         return;
     }
     [waitingHud showInView:self.view animated:YES];
-    
-    //  Check if user input phone number into textfield but have not added to list phone ---> still add
-    /*
-    if (appDelegate._newContact._listPhone.count == 0) {
-        NewPhoneCell *cell = [_tbContents cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(NUMBER_ROW_BEFORE + appDelegate._newContact._listPhone.count) inSection:0]];
-        if (cell != nil && [cell isKindOfClass:[NewPhoneCell class]] && [cell._iconNewPhone.currentTitle isEqualToString:@"Add"]) {
-            if (![cell._tfPhone.text isEqualToString:@""]) {
-                ContactDetailObj *aPhone = [[ContactDetailObj alloc] init];
-                aPhone._iconStr = @"btn_contacts_mobile.png";
-                aPhone._titleStr = [[LanguageUtil sharedInstance] getContent:type_phone_mobile];
-                aPhone._valueStr = cell._tfPhone.text;
-                aPhone._buttonStr = @"contact_detail_icon_call.png";
-                aPhone._typePhone = type_phone_mobile;
-                [appDelegate._newContact._listPhone addObject: aPhone];
-                NSLog(@"-------%@", cell._tfPhone.text);
-            }else{
-                NSLog(@"-------EMPTY!!!!!!!");
-            }
-            
-        }
-    }   */
     
     //  Remove all phone number with value is empty
     for (int iCount=0; iCount<appDelegate._newContact._listPhone.count; iCount++) {

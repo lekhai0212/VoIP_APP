@@ -72,8 +72,7 @@
         refreshTimer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(showAndReloadContactList) userInfo:nil repeats:YES];
     }else{
         [self showAndReloadContactList];
-        
-        lbAllContacts.text = [NSString stringWithFormat:@"%@ (%d)", [[LanguageUtil sharedInstance] getContent:@"Count all contacts"], (int)tbDatas.count];
+        lbAllContacts.text = SFM(@"%@ (%d)", count_all_contacts, (int)tbDatas.count);
     }
     
     if ([LinphoneAppDelegate sharedInstance].needToReloadContactList) {
@@ -126,8 +125,8 @@
 
 - (void)whenLoadContactFinish
 {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
-                         toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
     //  clear timer
     if (refreshTimer) {
         [refreshTimer invalidate];
@@ -137,8 +136,7 @@
 }
 
 - (void)addNewContact {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
-                         toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     [[PhoneMainView instance] changeCurrentView:[NewContactViewController compositeViewDescription] push: true];
 }
@@ -158,7 +156,7 @@
     //  khong co lien he
     _lbNoContacts.font = [LinphoneAppDelegate sharedInstance].contentFontNormal;
     _lbNoContacts.textColor = UIColor.grayColor;
-    _lbNoContacts.text = [[LanguageUtil sharedInstance] getContent:@"No contacts"];
+    _lbNoContacts.text = text_no_contacts;
 }
 
 - (void)getSectionsForContactsList: (NSMutableArray *)contactList {
@@ -208,13 +206,13 @@
 
 - (NSString *)subTowString: (NSString *)str1 andString: (NSString *)str2{
     if ([str1 isEqualToString: @""] && [str2 isEqualToString: @""]) {
-        return [[LanguageUtil sharedInstance] getContent:@"Unknown"];
+        return text_unknown;
     }else if ([str1 isEqualToString: @""] && ![str2 isEqualToString: @""]){
         return str2;
     }else if (![str1 isEqualToString: @""] && [str2 isEqualToString: @""]){
         return str1;
     }else{
-        return [NSString stringWithFormat:@"%@ %@", str1, str2];
+        return SFM(@"%@ %@", str1, str2);
     }
 }
 
@@ -250,8 +248,8 @@
     
     // Tên contact
     if (contact._fullName != nil) {
-        if ([contact._fullName isEqualToString: @""]) {
-            cell.name.text = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
+        if ([AppUtils isNullOrEmpty: contact._fullName]) {
+            cell.name.text = text_unknown;
         }else{
             cell.name.text = contact._fullName;
         }
@@ -268,7 +266,7 @@
         
         if (contact._firstName != nil && ![contact._firstName isEqualToString:@""]) {
             if (![keyAvatar isEqualToString:@""]) {
-                keyAvatar = [NSString stringWithFormat:@"%@ %@", keyAvatar, [contact._firstName substringToIndex: 1]];
+                keyAvatar = SFM(@"%@ %@", keyAvatar, [contact._firstName substringToIndex: 1]);
             }else{
                 keyAvatar = [contact._firstName substringToIndex: 1];
             }
@@ -363,16 +361,16 @@
     if ([object isKindOfClass:[NSString class]])
     {
         if ([object isEqualToString:@""]) {
-            isSearching = NO;
-            lbAllContacts.text = [NSString stringWithFormat:@"Tất cả liên hệ (%d)", (int)tbDatas.count];
+            isSearching = FALSE;
+            lbAllContacts.text = SFM(@"%@ (%d)", count_all_contacts, (int)tbDatas.count);
             [_tbContacts reloadData];
         }else{
-            isSearching = YES;
+            isSearching = TRUE;
             
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                 [self searchPhoneBook: object];
                 dispatch_async(dispatch_get_main_queue(), ^(void){
-                    lbAllContacts.text = [NSString stringWithFormat:@"Tất cả liên hệ (%d)", (int)_searchResults.count];
+                    lbAllContacts.text = SFM(@"%@ (%d)", count_all_contacts, (int)_searchResults.count);
                     [_tbContacts reloadData];
                 });
             });
@@ -409,8 +407,7 @@
 
 - (void)onIconCallClicked: (UIButton *)sender
 {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] phone number = %@", __FUNCTION__, sender.currentTitle]
-                         toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] phone number = %@", __FUNCTION__, sender.currentTitle) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     if (![AppUtils isNullOrEmpty: sender.currentTitle]) {
         NSString *phoneNumber = [AppUtils removeAllSpecialInString: sender.currentTitle];

@@ -32,7 +32,7 @@
         
         lbHeader = [[UILabel alloc] init];
         lbHeader.textAlignment = NSTextAlignmentCenter;
-        lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"Choose DID"];
+        lbHeader.text = text_choose_DID;
         lbHeader.textColor = [UIColor colorWithRed:(80/255.0) green:(208/255.0) blue:(135/255.0) alpha:1.0];
         [self addSubview: lbHeader];
         [lbHeader mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -153,7 +153,7 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     if (indexPath.row == 0) {
-        cell.lbTitle.text = [[LanguageUtil sharedInstance] getContent:@"Default DID"];
+        cell.lbTitle.text = text_default;
         cell.lbDIDNumber.text = @"";
     }else{
         NSDictionary *info = [listDID objectAtIndex: indexPath.row-1];

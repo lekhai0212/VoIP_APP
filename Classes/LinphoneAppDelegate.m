@@ -417,28 +417,6 @@
 		[[UNUserNotificationCenter currentNotificationCenter] setNotificationCategories:categories];
 	}
 }
-#pragma deploymate pop
-
-void onUncaughtException(NSException* exception)
-{
-    NSString *reason = exception.reason;
-    NSString *crashContent = [NSString stringWithFormat:@"%@",[exception callStackSymbols]];
-    NSString *device = [AppUtils getDeviceNameFromModelName:[AppUtils getDeviceModel]];
-    NSString *osVersion = [AppUtils getCurrentOSVersionOfDevice];
-    NSString *appVersion = [AppUtils getCurrentVersionApplicaton];
-    NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
-    
-    id info = [exception.userInfo objectForKey:@"NSTargetObjectUserInfoKey"];
-    if (info != nil) {
-        reason = [NSString stringWithFormat:@"%@: %@", NSStringFromClass([info class]), reason];
-    }
-    
-    NSString *messageSend = [NSString stringWithFormat:@"------------------------------\nDevice: %@\nOS Version: %@\nApp version: %@\nApp bundle ID: %@\n------------------------------\nAccount ID: %@\n------------------------------\nReason: %@\n------------------------------\n%@", device, osVersion, appVersion, bundleIdentifier, USERNAME, reason, crashContent];
-    
-    NSString *totalEmail = [NSString stringWithFormat:@"mailto:%@?subject=%@&body=%@", @"lekhai0212@gmail.com", [NSString stringWithFormat:@"Report crash from %@", USERNAME], messageSend];
-    NSString *url = [totalEmail stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    [[UIApplication sharedApplication]  openURL: [NSURL URLWithString: url]];
-}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -482,11 +460,10 @@ void onUncaughtException(NSException* exception)
     UIApplication *app = [UIApplication sharedApplication];
 	UIApplicationState state = app.applicationState;
     
-    NSSetUncaughtExceptionHandler(&onUncaughtException);
-    
     //  [Khai le - 25/10/2018]: Add write logs for app
     [self setupForWriteLogFileForApp];
     [DeviceUtils setupFontSizeForDevice];
+    [ContactUtils startContactsUtil];
     
     //  Khoi tao
     webService = [[WebServices alloc] init];
@@ -532,9 +509,6 @@ void onUncaughtException(NSException* exception)
     [self setupValueForDevice];
     
     listNumber = [[NSArray alloc] initWithObjects: @"+", @"#", @"*", @"0", @"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", nil];
-    
-    //  Set default language for app if haven't setted yet
-    [[LanguageUtil sharedInstance] setCustomLanguage: key_vi];
     
     if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0")){
         UNUserNotificationCenter *notifiCenter = [UNUserNotificationCenter currentNotificationCenter];
@@ -629,18 +603,11 @@ void onUncaughtException(NSException* exception)
         // Send an alert telling user to change privacy setting in settings app
     }
     
-    //  get missed callfrom server
-    if (USERNAME != nil && ![USERNAME isEqualToString: @""]) {
-        //  [self getMissedCallFromServer];
-    }
-    
-    double currentIOS = [[[UIDevice currentDevice] systemVersion] doubleValue];
-    if (currentIOS <= 10) {
-        //  [self removeAllRecordsAudioFile];    //  T_T
-    }
-    
     //  get pbx group contact list
     [self getPBXGroupContactList];
+    
+    //  setup for Fabric
+    [Fabric with:@[[Crashlytics class]]];
     
 	return YES;
 }
@@ -1929,14 +1896,14 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             CFStringRef locLabel = ABMultiValueCopyLabelAtIndex(phones, j);
             
             NSString *phoneNumber = (__bridge NSString *)phoneNumberRef;
-            phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
+            phoneNumber = [self removeAllSpecialInString: phoneNumber];
             
             strPhone = @"";
             if (locLabel == nil) {
                 ContactDetailObj *anItem = [[ContactDetailObj alloc] init];
                 anItem._iconStr = @"btn_contacts_home.png";
                 anItem._titleStr = [[LanguageUtil sharedInstance] getContent:@"Home"];
-                anItem._valueStr = [AppUtils removeAllSpecialInString: phoneNumber];
+                anItem._valueStr = [self removeAllSpecialInString: phoneNumber];
                 anItem._buttonStr = @"contact_detail_icon_call.png";
                 anItem._typePhone = type_phone_home;
                 [result addObject: anItem];
@@ -1945,7 +1912,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                     ContactDetailObj *anItem = [[ContactDetailObj alloc] init];
                     anItem._iconStr = @"btn_contacts_home.png";
                     anItem._titleStr = [[LanguageUtil sharedInstance] getContent:@"Home"];
-                    anItem._valueStr = [AppUtils removeAllSpecialInString: phoneNumber];
+                    anItem._valueStr = [self removeAllSpecialInString: phoneNumber];
                     anItem._buttonStr = @"contact_detail_icon_call.png";
                     anItem._typePhone = type_phone_home;
                     [result addObject: anItem];
@@ -1954,7 +1921,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                     ContactDetailObj *anItem = [[ContactDetailObj alloc] init];
                     anItem._iconStr = @"btn_contacts_work.png";
                     anItem._titleStr = [[LanguageUtil sharedInstance] getContent:@"Work"];
-                    anItem._valueStr = [AppUtils removeAllSpecialInString: phoneNumber];
+                    anItem._valueStr = [self removeAllSpecialInString: phoneNumber];
                     anItem._buttonStr = @"contact_detail_icon_call.png";
                     anItem._typePhone = type_phone_work;
                     [result addObject: anItem];
@@ -1963,7 +1930,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                     ContactDetailObj *anItem = [[ContactDetailObj alloc] init];
                     anItem._iconStr = @"btn_contacts_mobile.png";
                     anItem._titleStr = [[LanguageUtil sharedInstance] getContent:@"Mobile"];
-                    anItem._valueStr = [AppUtils removeAllSpecialInString: phoneNumber];
+                    anItem._valueStr = [self removeAllSpecialInString: phoneNumber];
                     anItem._buttonStr = @"contact_detail_icon_call.png";
                     anItem._typePhone = type_phone_mobile;
                     [result addObject: anItem];
@@ -1972,7 +1939,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                     ContactDetailObj *anItem = [[ContactDetailObj alloc] init];
                     anItem._iconStr = @"btn_contacts_fax.png";
                     anItem._titleStr = [[LanguageUtil sharedInstance] getContent:@"Fax"];
-                    anItem._valueStr = [AppUtils removeAllSpecialInString: phoneNumber];
+                    anItem._valueStr = [self removeAllSpecialInString: phoneNumber];
                     anItem._buttonStr = @"contact_detail_icon_call.png";
                     anItem._typePhone = type_phone_fax;
                     [result addObject: anItem];
@@ -1981,7 +1948,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                     ContactDetailObj *anItem = [[ContactDetailObj alloc] init];
                     anItem._iconStr = @"btn_contacts_fax.png";
                     anItem._titleStr = [[LanguageUtil sharedInstance] getContent:@"Other"];
-                    anItem._valueStr = [AppUtils removeAllSpecialInString: phoneNumber];
+                    anItem._valueStr = [self removeAllSpecialInString: phoneNumber];
                     anItem._buttonStr = @"contact_detail_icon_call.png";
                     anItem._typePhone = type_phone_other;
                     [result addObject: anItem];
@@ -1989,7 +1956,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                     ContactDetailObj *anItem = [[ContactDetailObj alloc] init];
                     anItem._iconStr = @"btn_contacts_mobile.png";
                     anItem._titleStr = [[LanguageUtil sharedInstance] getContent:@"Mobile"];
-                    anItem._valueStr = [AppUtils removeAllSpecialInString: phoneNumber];
+                    anItem._valueStr = [self removeAllSpecialInString: phoneNumber];
                     anItem._buttonStr = @"contact_detail_icon_call.png";
                     anItem._typePhone = type_phone_mobile;
                     [result addObject: anItem];
@@ -2065,7 +2032,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 //                NSString *phoneNumber = personHandle.value;
 //                if (![AppUtils isNullOrEmpty: phoneNumber])
 //                {
-//                    phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
+//                    phoneNumber = [self removeAllSpecialInString: phoneNumber];
 //                    if ([AppUtils isNullOrEmpty: phoneNumber]) {
 //                        [self showSplashScreenOnView: NO];
 //                    }else{
@@ -2108,7 +2075,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 NSString *phoneNumber = personHandle.value;
                 if (![AppUtils isNullOrEmpty: phoneNumber])
                 {
-                    phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
+                    phoneNumber = [self removeAllSpecialInString: phoneNumber];
 
                     if ([AppUtils isNullOrEmpty: phoneNumber]) {
                         [self showSplashScreenOnView: NO];
@@ -2545,6 +2512,18 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             [SipUtils registerPBXAccount:username password:password ipAddress:domain port:port];
         }
     }
+}
+
+- (NSString *)removeAllSpecialInString: (NSString *)phoneString {
+    NSString *resultStr = @"";
+    for (int strCount=0; strCount<phoneString.length; strCount++) {
+        char characterChar = [phoneString characterAtIndex: strCount];
+        NSString *characterStr = [NSString stringWithFormat:@"%c", characterChar];
+        if ([listNumber containsObject: characterStr]) {
+            resultStr = [NSString stringWithFormat:@"%@%@", resultStr, characterStr];
+        }
+    }
+    return resultStr;
 }
 
 @end

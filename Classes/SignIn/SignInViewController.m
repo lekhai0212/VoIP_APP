@@ -70,17 +70,11 @@ static UICompositeViewDescription *compositeDescription = nil;
     // Do any additional setup after loading the view from its nib.
     [self setupUIForView];
     
-//    tfAccountID.text = @"nhcla150";
-//    tfPassword.text = @"f7NnFKI1Kv";
-    
-//    tfAccountID.text = @"nhcla151";
-//    tfPassword.text = @"5obr8jHH2q";
-    
     icWaiting = [[UIActivityIndicatorView alloc] init];
     icWaiting.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
     icWaiting.backgroundColor = UIColor.whiteColor;
     icWaiting.alpha = 0.5;
-    icWaiting.hidden = YES;
+    icWaiting.hidden = TRUE;
     [self.view addSubview: icWaiting];
     [icWaiting mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.bottom.right.equalTo(self.view);
@@ -116,8 +110,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (IBAction)btnSignInPress:(UIButton *)sender {
     if ([AppUtils isNullOrEmpty: tfAccountID.text] || [AppUtils isNullOrEmpty: tfPassword.text]) {
-        NSString *content = [[LanguageUtil sharedInstance] getContent:@"Please fill full information"];
-        [self.view makeToast:content duration:2.0 position:CSToastPositionCenter];
+        [self.view makeToast:pls_fill_full_info duration:2.0 position:CSToastPositionCenter];
         return;
     }
     [sender setTitleColor:[UIColor colorWithRed:(50/255.0) green:(196/255.0) blue:(124/255.0) alpha:1.0]
@@ -135,26 +128,25 @@ static UICompositeViewDescription *compositeDescription = nil;
     }else{
         sender.tag = 0;
         [sender setImage:[UIImage imageNamed:@"ic_hide_pass"] forState:UIControlStateNormal];
-        tfPassword.secureTextEntry = YES;
+        tfPassword.secureTextEntry = TRUE;
     }
 }
 
 - (void)startLogin: (UIButton *)sender {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] userName = %@, password = %@", __FUNCTION__, tfAccountID.text, tfPassword.text] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] user: %@, pass: %@", __FUNCTION__, tfAccountID.text, tfPassword.text) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     [sender setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     sender.backgroundColor = [UIColor colorWithRed:(50/255.0) green:(196/255.0) blue:(124/255.0) alpha:1.0];
     
     //  start register pbx
-    [self.view endEditing: YES];
+    [self.view endEditing: TRUE];
     icWaiting.hidden = NO;
     [icWaiting startAnimating];
     
-    NSString *total = [NSString stringWithFormat:@"%@%@%@", tfPassword.text, [LinphoneAppDelegate sharedInstance].randomKey, tfAccountID.text];
+    NSString *total = SFM(@"%@%@%@", tfPassword.text, [LinphoneAppDelegate sharedInstance].randomKey, tfAccountID.text);
     [LinphoneAppDelegate sharedInstance].hashStr = [[total MD5String] lowercaseString];
     
-    
-    NSString *params = [NSString stringWithFormat:@"username=%@", tfAccountID.text];
+    NSString *params = SFM(@"username=%@", tfAccountID.text);
     [webService callGETWebServiceWithFunction:login_func andParams:params];
 }
 
@@ -164,14 +156,14 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (BOOL)checkAccountLoginInformationReady {
     if (![tfAccountID.text isEqualToString:@""] && ![tfPassword.text isEqualToString:@""]) {
-        return YES;
+        return TRUE;
     }else{
         return NO;
     }
 }
 
 - (void)showWelcomeView {
-    [self.view endEditing: YES];
+    [self.view endEditing: TRUE];
     
     [viewWelcome mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.left.bottom.right.equalTo(self.view);
@@ -189,7 +181,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)whenTextfieldDidChange:(UITextField *)textfield {
     BOOL ready = [self checkAccountLoginInformationReady];
     if (ready) {
-        btnSignIn.enabled = YES;
+        btnSignIn.enabled = TRUE;
         btnSignIn.backgroundColor = [UIColor colorWithRed:(50/255.0) green:(196/255.0) blue:(124/255.0) alpha:1.0];
         btnSignIn.layer.borderColor = btnSignIn.backgroundColor.CGColor;
     }else{
@@ -219,7 +211,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         wImgWelcome = 300.0;
     }
     
-    imgWelcome.clipsToBounds = YES;
+    imgWelcome.clipsToBounds = TRUE;
     imgWelcome.layer.cornerRadius = wImgWelcome/2;
     [imgWelcome mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(viewWelcome.mas_centerX);
@@ -229,7 +221,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     imgWelcome.layer.cornerRadius = wImgWelcome/2;
     imgWelcome.layer.borderWidth = 5.0;
     imgWelcome.layer.borderColor = [UIColor colorWithRed:(246/255.0) green:(183/255.0) blue:(150/255.0) alpha:1.0].CGColor;
-    imgWelcome.clipsToBounds = YES;
+    imgWelcome.clipsToBounds = TRUE;
     
     float topPadding = 30.0;
     float hLogo;
@@ -386,11 +378,10 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.height.mas_equalTo(hLogo);
     }];
     
-    NSString *sloganContent = [[LanguageUtil sharedInstance] getContent:@"Dịch vụ tổng đài số hàng đầu Việt Nam.\nCung cấp dịch vụ thoại qua Internet tiên tiến nhất."];
-    CGSize textSize = [AppUtils getSizeWithText:sloganContent withFont:sloganFont andMaxWidth:(SCREEN_WIDTH-50.0)];
+    CGSize textSize = [AppUtils getSizeWithText:text_slogent withFont:sloganFont andMaxWidth:(SCREEN_WIDTH-50.0)];
     
     lbSlogan.font = sloganFont;
-    lbSlogan.text = sloganContent;
+    lbSlogan.text = text_slogent;
     lbSlogan.numberOfLines = 5;
     lbSlogan.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     [lbSlogan mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -409,13 +400,10 @@ static UICompositeViewDescription *compositeDescription = nil;
     gradient.endPoint = CGPointMake(0, 1);
     
     [btnStart.layer insertSublayer:gradient atIndex:0];
-    [btnStart setTitle:[[[LanguageUtil sharedInstance] getContent:@"Start"] uppercaseString] forState:UIControlStateNormal];
+    [btnStart setTitle:text_start forState:UIControlStateNormal];
     [btnStart setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
-//    [btnStart setTitleColor:[UIColor colorWithRed:(60/255.0) green:(75/255.0)
-//                                             blue:(102/255.0) alpha:1.0] forState:UIControlStateNormal];
     btnStart.layer.cornerRadius = 5.0;
-    btnStart.clipsToBounds = YES;
-    //  btnStart.backgroundColor = UIColor.whiteColor;
+    btnStart.clipsToBounds = TRUE;
     btnStart.backgroundColor = [UIColor colorWithRed:(154/255.0) green:(215/255.0) blue:(9/255.0) alpha:1.0];
     
     [btnStart mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -449,7 +437,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         make.width.height.mas_equalTo(50.0);
     }];
     
-    NSString *headerContent = [[LanguageUtil sharedInstance] getContent:@"Welcome! SignIn to experience."];
+    NSString *headerContent = text_welcome;
     headerContent = [headerContent stringByReplacingOccurrencesOfString:@"\\n" withString:@"\n"];
     textSize = [AppUtils getSizeWithText:headerContent withFont:headerFont andMaxWidth:(SCREEN_WIDTH - 2*padding)];
     lbHeader.text = headerContent;
@@ -470,7 +458,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         textfieldPadding = 20.0;
     }
     
-    tfAccountID.placeholder = [[LanguageUtil sharedInstance] getContent:@"Account ID"];
+    tfAccountID.placeholder = text_account;
     [tfAccountID addTarget:self
                     action:@selector(whenTextfieldDidChange:)
           forControlEvents:UIControlEventEditingChanged];
@@ -507,13 +495,13 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
     
     //  password textfield
-    tfPassword.placeholder = [[LanguageUtil sharedInstance] getContent:@"Password"];
+    tfPassword.placeholder = text_password;
     [tfPassword addTarget:self
                    action:@selector(whenTextfieldDidChange:)
          forControlEvents:UIControlEventEditingChanged];
     
     tfPassword.font = textfieldFont;
-    tfPassword.secureTextEntry = YES;
+    tfPassword.secureTextEntry = TRUE;
     tfPassword.textColor = tfAccountID.textColor;
     [tfPassword mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(tfAccountID.mas_bottom).offset(textfieldPadding);
@@ -566,7 +554,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     //  signin button
     btnSignIn.enabled = NO;
-    [btnSignIn setTitle:[[LanguageUtil sharedInstance] getContent:@"Sign In"] forState:UIControlStateNormal];
+    [btnSignIn setTitle:text_sign_in forState:UIControlStateNormal];
     btnSignIn.titleLabel.font = buttonFont;
     btnSignIn.backgroundColor = [UIColor colorWithRed:(234/255.0) green:(238/255.0) blue:(243/255.0) alpha:1.0];
     btnSignIn.layer.borderColor = [UIColor colorWithRed:(234/255.0) green:(238/255.0) blue:(243/255.0) alpha:1.0].CGColor;
@@ -582,7 +570,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     float hDot = 3.0;
     UILabel *lbDot1 = [[UILabel alloc] init];
-    lbDot1.clipsToBounds = YES;
+    lbDot1.clipsToBounds = TRUE;
     lbDot1.layer.cornerRadius = hDot/2;
     lbDot1.backgroundColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0)
                                               blue:(102/255.0) alpha:1.0];
@@ -594,7 +582,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
     
     UILabel *lbDot2 = [[UILabel alloc] init];
-    lbDot2.clipsToBounds = YES;
+    lbDot2.clipsToBounds = TRUE;
     lbDot2.layer.cornerRadius = hDot/2;
     lbDot2.backgroundColor = lbDot1.backgroundColor;
     [viewSignIn addSubview: lbDot2];
@@ -605,7 +593,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
     
     UILabel *lbDot3 = [[UILabel alloc] init];
-    lbDot3.clipsToBounds = YES;
+    lbDot3.clipsToBounds = TRUE;
     lbDot3.layer.cornerRadius = hDot/2;
     lbDot3.backgroundColor = lbDot1.backgroundColor;
     [viewSignIn addSubview: lbDot3];
@@ -638,10 +626,10 @@ static UICompositeViewDescription *compositeDescription = nil;
     switch (state) {
         case LinphoneRegistrationOk:
         {
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] state is LinphoneRegistrationOk", __FUNCTION__]
-                                 toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            [WriteLogsUtils writeLogContent:SFM(@"[%s] state is LinphoneRegistrationOk", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            
             [self clearLoginTimerIfNeed];
-            icWaiting.hidden = YES;
+            icWaiting.hidden = TRUE;
             [icWaiting stopAnimating];
             
             [[NSUserDefaults standardUserDefaults] setObject:tfAccountID.text forKey:key_login];
@@ -661,31 +649,30 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case LinphoneRegistrationNone:{
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] state is LinphoneRegistrationNone", __FUNCTION__]
-                                 toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            [WriteLogsUtils writeLogContent:SFM(@"[%s] state is LinphoneRegistrationNone", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            
             break;
         }
         case LinphoneRegistrationCleared: {
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] state is LinphoneRegistrationCleared", __FUNCTION__]
-                                 toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            [WriteLogsUtils writeLogContent:SFM(@"[%s] state is LinphoneRegistrationCleared", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            
             break;
         }
         case LinphoneRegistrationFailed:
         {
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] state is LinphoneRegistrationFailed", __FUNCTION__]
-                                 toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            [WriteLogsUtils writeLogContent:SFM(@"[%s] state is LinphoneRegistrationFailed", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
             
             [self clearLoginTimerIfNeed];
-            icWaiting.hidden = YES;
+            icWaiting.hidden = TRUE;
             [icWaiting stopAnimating];
             
-            [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check sign in information"] duration:2.0 position:CSToastPositionCenter];
+            [self.view makeToast:pls_check_signin_info duration:2.0 position:CSToastPositionCenter];
             
             break;
         }
         case LinphoneRegistrationProgress: {
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] state is LinphoneRegistrationProgress", __FUNCTION__]
-                                 toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            [WriteLogsUtils writeLogContent:SFM(@"[%s] state is LinphoneRegistrationProgress", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            
             break;
         }
         default:
@@ -694,12 +681,11 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (IBAction)btnQRCodePress:(UIButton *)sender {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
-                         toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     if ([DeviceUtils isAvailableVideo]) {
         QRCodeReader *reader = [QRCodeReader readerWithMetadataObjectTypes:@[AVMetadataObjectTypeQRCode]];
-        scanQRCodeVC = [QRCodeReaderViewController readerWithCancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] codeReader:reader startScanningAtLoad:YES showSwitchCameraButton:YES showTorchButton:YES];
+        scanQRCodeVC = [QRCodeReaderViewController readerWithCancelButtonTitle:text_cancel codeReader:reader startScanningAtLoad:TRUE showSwitchCameraButton:TRUE showTorchButton:TRUE];
         scanQRCodeVC.modalPresentationStyle = UIModalPresentationFormSheet;
         scanQRCodeVC.delegate = self;
         
@@ -712,8 +698,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         btnScanFromPhoto.layer.borderColor = btnScanFromPhoto.backgroundColor.CGColor;
         btnScanFromPhoto.layer.borderWidth = 1.0;
         
-        [btnScanFromPhoto setTitle:[[LanguageUtil sharedInstance] getContent:@"SCAN FROM PHOTO"]
-                          forState:UIControlStateNormal];
+        [btnScanFromPhoto setTitle:text_scan_from_photo forState:UIControlStateNormal];
         btnScanFromPhoto.titleLabel.font = [UIFont systemFontOfSize: 16.0];
         [btnScanFromPhoto addTarget:self
                              action:@selector(btnScanFromPhotoPressed)
@@ -724,18 +709,14 @@ static UICompositeViewDescription *compositeDescription = nil;
         [scanQRCodeVC setCompletionWithBlock:^(NSString *resultAsString) {
             
         }];
-        [self presentViewController:scanQRCodeVC animated:YES completion:NULL];
+        [self presentViewController:scanQRCodeVC animated:TRUE completion:NULL];
     }else{
-        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Can not access to your camera. Please check your permission!"] duration:3.0 position:CSToastPositionCenter];
+        [self.view makeToast:cannot_access_camera duration:3.0 position:CSToastPositionCenter];
     }
 }
 
 - (void)btnScanFromPhotoPressed {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
-                         toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-    
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
-                         toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     btnScanFromPhoto.backgroundColor = [UIColor whiteColor];
     [btnScanFromPhoto setTitleColor:[UIColor colorWithRed:(101/255.0) green:(205/255.0)
@@ -745,8 +726,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (void)choosePictureForScanQRCode {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
-                         toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     btnScanFromPhoto.backgroundColor = [UIColor colorWithRed:(101/255.0) green:(205/255.0)
                                                         blue:(70/255.0) alpha:1.0];
@@ -757,15 +737,14 @@ static UICompositeViewDescription *compositeDescription = nil;
     pickerController.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
     pickerController.allowsEditing = NO;
     pickerController.delegate = self;
-    [scanQRCodeVC presentViewController:pickerController animated:YES completion:nil];
+    [scanQRCodeVC presentViewController:pickerController animated:TRUE completion:nil];
 }
 
 #pragma mark - Image picker delegate
 - (void)readerDidCancel:(QRCodeReaderViewController *)reader {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
-                         toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
-    [self dismissViewControllerAnimated:YES completion:^{
+    [self dismissViewControllerAnimated:TRUE completion:^{
         [tfAccountID becomeFirstResponder];
     }];
 }
@@ -773,10 +752,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)reader:(QRCodeReaderViewController *)reader didScanResult:(NSString *)result {
     [reader stopScanning];
     
-    [self dismissViewControllerAnimated:YES completion:^{
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] result = %@", __FUNCTION__, result]
-                             toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-        
+    [self dismissViewControllerAnimated:TRUE completion:^{
+        [WriteLogsUtils writeLogContent:SFM(@"[%s] result: %@", __FUNCTION__, result) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
         
         icWaiting.hidden = NO;
         [icWaiting startAnimating];
@@ -786,11 +763,10 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
-                         toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
-    [picker dismissViewControllerAnimated:YES completion:^{
-        [self dismissViewControllerAnimated:YES completion:NULL];
+    [picker dismissViewControllerAnimated:TRUE completion:^{
+        [self dismissViewControllerAnimated:TRUE completion:NULL];
         NSString* type = [info objectForKey:UIImagePickerControllerMediaType];
         if ([type isEqualToString: (NSString*)kUTTypeImage] ) {
             [self hideWaitingView: NO];
@@ -801,8 +777,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (void)getQRCodeContentFromImage: (UIImage *)image {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
-                         toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     NSArray *qrcodeContent = [self detectQRCode: image];
     if (qrcodeContent != nil && qrcodeContent.count > 0) {
@@ -840,51 +815,51 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (void)checkRegistrationInfoFromQRCode: (NSString *)qrcodeResult {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] qrcodeResult = %@", __FUNCTION__, qrcodeResult]
-                         toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] qrcodeResult: %@", __FUNCTION__, qrcodeResult) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     if (![AppUtils isNullOrEmpty: qrcodeResult]) {
         if (qrcodeResult.length > 5) {
             NSString *password = [qrcodeResult substringFromIndex: 5];
-            NSString *total = [NSString stringWithFormat:@"%@%@%@", password, [LinphoneAppDelegate sharedInstance].randomKey, qrcodeResult];
+            
+            NSString *total = SFM(@"%@%@%@", password, [LinphoneAppDelegate sharedInstance].randomKey, qrcodeResult);
             [LinphoneAppDelegate sharedInstance].hashStr = [[total MD5String] lowercaseString];
             
-            NSString *params = [NSString stringWithFormat:@"hashstring=%@", qrcodeResult];
+            NSString *params = SFM(@"hashstring=%@", qrcodeResult);
             [webService callGETWebServiceWithFunction:decryptRSA_func andParams:params];
             return;
         }
     }
-    icWaiting.hidden = YES;
+    icWaiting.hidden = TRUE;
     [icWaiting stopAnimating];
     [self showDialerQRCodeNotCorrect];
 }
 
 - (void)showDialerQRCodeNotCorrect {
-    [self hideWaitingView: YES];
-    [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Can not detect QRCode. Please check again!"] duration:2.0 position:CSToastPositionCenter];
+    [self hideWaitingView: TRUE];
+    [self.view makeToast:cannot_detect_QRCode duration:2.0 position:CSToastPositionCenter];
 }
 
 - (IBAction)btnStartPress:(UIButton *)sender {
-    sender.enabled = NO;
+    sender.enabled = FALSE;
     [sender setTitleColor:[UIColor colorWithRed:(60/255.0) green:(198/255.0) blue:(116/255.0) alpha:1.0] forState:UIControlStateNormal];
-    [self performSelector:@selector(goToLoginScreen:) withObject:sender afterDelay:0.15];
+    [self performSelector:@selector(goToLoginScreen:) withObject:sender afterDelay:0.1];
 }
 
 - (void)goToLoginScreen: (UIButton *)sender {
     [tfAccountID becomeFirstResponder];
     
-    sender.enabled = YES;
+    sender.enabled = TRUE;
     [sender setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
 //    [sender setTitleColor:[UIColor colorWithRed:(60/255.0) green:(75/255.0)
 //                                           blue:(102/255.0) alpha:1.0] forState:UIControlStateNormal];
     
     BOOL ready = [self checkAccountLoginInformationReady];
     if (ready) {
-        btnSignIn.enabled = YES;
+        btnSignIn.enabled = TRUE;
         btnSignIn.backgroundColor = [UIColor colorWithRed:(50/255.0) green:(196/255.0) blue:(124/255.0) alpha:1.0];
         btnSignIn.layer.borderColor = btnSignIn.backgroundColor.CGColor;
     }else{
-        btnSignIn.enabled = NO;
+        btnSignIn.enabled = FALSE;
         btnSignIn.backgroundColor = [UIColor colorWithRed:(234/255.0) green:(238/255.0) blue:(243/255.0) alpha:1.0];
         btnSignIn.layer.borderColor = btnSignIn.backgroundColor.CGColor;
     }
@@ -912,7 +887,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:attachment];
     
-    NSString *content = [NSString stringWithFormat:@" %@", [[LanguageUtil sharedInstance] getContent:@"Or sign in with QRCode"]];
+    NSString *content = SFM(@" %@", or_sign_in_with_QRCode);
     NSMutableAttributedString *contentString = [[NSMutableAttributedString alloc] initWithString:content];
     [contentString addAttribute:NSFontAttributeName value:textFont range:NSMakeRange(0, contentString.length)];
     [contentString addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0] range:NSMakeRange(0, contentString.length)];
@@ -926,7 +901,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)hideWaitingView: (BOOL)hide {
     if (hide) {
         [icWaiting stopAnimating];
-        icWaiting.hidden = YES;
+        icWaiting.hidden = TRUE;
     }else{
         [icWaiting startAnimating];
         icWaiting.hidden = NO;
@@ -937,7 +912,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     domain = [info objectForKey:@"domain"];
     port = [info objectForKey:@"port"];
     if ([port isKindOfClass:[NSNumber class]]) {
-        port = [NSString stringWithFormat:@"%d", [port intValue]];
+        port = SFM(@"%d", [port intValue]);
     }
     NSString *userName = [info objectForKey:@"username"];
     NSString *password = [info objectForKey:@"password"];
@@ -948,7 +923,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         [self startTimerToCheckRegisterSIP];
         [SipUtils registerPBXAccount:userName password:password ipAddress:domain port:port];
     }else{
-        [self hideWaitingView: YES];
+        [self hideWaitingView: TRUE];
         [self showDialerQRCodeNotCorrect];
     }
 }
@@ -973,7 +948,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     [self clearLoginTimerIfNeed];
     
-    icWaiting.hidden = YES;
+    icWaiting.hidden = TRUE;
     [icWaiting stopAnimating];
     
     [self.view makeToast:@"Không thể đăng nhập. Vui lòng kiểm tra thông tin tài khoản!" duration:2.0 position:CSToastPositionCenter];
@@ -983,9 +958,9 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)failedToCallWebService:(NSString *)link andError:(id)error
 {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] link: %@.\nResponse data: %@", __FUNCTION__, link, @[error]] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] link: %@, error: %@", __FUNCTION__, link, @[error]) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
-    [self hideWaitingView: YES];
+    [self hideWaitingView: TRUE];
     if ([link isEqualToString: login_func]) {
         if ([error isKindOfClass:[NSDictionary class]]) {
             [self.view makeToast:@"Sai tên đăng nhập hoặc mật khẩu"
@@ -1000,14 +975,14 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)successfulToCallWebService:(NSString *)link withData:(NSDictionary *)data
 {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] link: %@.\nResponse data: %@", __FUNCTION__, link, @[data]] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] link: %@, data: %@", __FUNCTION__, link, @[data]) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     if ([link isEqualToString: login_func]) {
         if (data != nil && [data isKindOfClass:[NSDictionary class]]) {
             domain = [data objectForKey:@"domain"];
             port = [data objectForKey:@"port"];
             if ([port isKindOfClass:[NSNumber class]]) {
-                port = [NSString stringWithFormat:@"%d", [port intValue]];
+                port = SFM(@"%d", [port intValue]);
             }
             
             [self startTimerToCheckRegisterSIP];
@@ -1018,7 +993,7 @@ static UICompositeViewDescription *compositeDescription = nil;
             [self processingWithQRCodeInfo: data];
         }
     }else{
-        [self hideWaitingView: YES];
+        [self hideWaitingView: TRUE];
     }
 }
 

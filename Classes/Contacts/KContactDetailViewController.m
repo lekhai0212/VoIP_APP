@@ -286,15 +286,15 @@ static UICompositeViewDescription *compositeDescription = nil;
         
         if (indexPath.row == detailsContact._listPhone.count) {
             if (detailsContact._company != nil && ![detailsContact._company isEqualToString:@""]) {
-                cell.lbTitle.text = [[LanguageUtil sharedInstance] getContent:@"Company"];
+                cell.lbTitle.text = text_company;
                 cell.lbValue.text = detailsContact._company;
             }else if (detailsContact._email != nil && ![detailsContact._email isEqualToString:@""]){
-                cell.lbTitle.text = [[LanguageUtil sharedInstance] getContent:@"Email"];
+                cell.lbTitle.text = text_email;
                 cell.lbValue.text = detailsContact._email;
             }
         }else if (indexPath.row == detailsContact._listPhone.count + 1){
             if (detailsContact._email != nil && ![detailsContact._email isEqualToString:@""]){
-                cell.lbTitle.text = [[LanguageUtil sharedInstance] getContent:@"Email"];
+                cell.lbTitle.text = text_email;
                 cell.lbValue.text = detailsContact._email;
             }
         }
@@ -340,8 +340,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         }
         return;
     }
-    [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"The phone number can not empty"]
-                duration:2.0 position:CSToastPositionCenter];
+    [self.view makeToast:text_phone_empty duration:2.0 position:CSToastPositionCenter];
 }
 
 - (void)updateContactListAfterDeleteContact: (ContactObject *)contact {

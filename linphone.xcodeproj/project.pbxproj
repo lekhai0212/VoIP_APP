@@ -84,8 +84,6 @@
 		1599BB1821B14E9600A7903D /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 1599BB1121B14E9000A7903D /* NSData+Base64.m */; };
 		1599BB1921B14E9600A7903D /* NSData+CommonCrypto.m in Sources */ = {isa = PBXBuildFile; fileRef = 1599BB1321B14E9200A7903D /* NSData+CommonCrypto.m */; };
 		1599BDAE2236146500B6FC12 /* videocall_default_mini.png in Resources */ = {isa = PBXBuildFile; fileRef = 1599BDA72236146400B6FC12 /* videocall_default_mini.png */; };
-		159E0871217984BD0056E2BB /* RegisterPBXWithPhoneView.m in Sources */ = {isa = PBXBuildFile; fileRef = 159E0870217984BD0056E2BB /* RegisterPBXWithPhoneView.m */; };
-		159E0879217984F00056E2BB /* RegisterPBXWithPhoneView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 159E0878217984F00056E2BB /* RegisterPBXWithPhoneView.xib */; };
 		159E08842179E9130056E2BB /* ic_not_check.png in Resources */ = {isa = PBXBuildFile; fileRef = 159E08822179E9110056E2BB /* ic_not_check.png */; };
 		159E08852179E9130056E2BB /* ic_checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 159E08832179E9120056E2BB /* ic_checked.png */; };
 		15A2B8A522325F6F00DA6342 /* icon_acc.png in Resources */ = {isa = PBXBuildFile; fileRef = 15A2B89822325F5900DA6342 /* icon_acc.png */; };
@@ -405,8 +403,6 @@
 		841B359C2191F26D0019BD45 /* ic-pause-active.png in Resources */ = {isa = PBXBuildFile; fileRef = 841B35992191F26B0019BD45 /* ic-pause-active.png */; };
 		841B359D2191F26D0019BD45 /* ic-pause-default.png in Resources */ = {isa = PBXBuildFile; fileRef = 841B359A2191F26C0019BD45 /* ic-pause-default.png */; };
 		841B359E2191F26D0019BD45 /* button-endcall.png in Resources */ = {isa = PBXBuildFile; fileRef = 841B359B2191F26D0019BD45 /* button-endcall.png */; };
-		841D338C216112ED00FFCD72 /* ManagerPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 841D338A216112ED00FFCD72 /* ManagerPasswordViewController.m */; };
-		841D338D216112ED00FFCD72 /* ManagerPasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 841D338B216112ED00FFCD72 /* ManagerPasswordViewController.xib */; };
 		841EAEEF224D2B260028CAF9 /* ipad_menu_dialer_def.png in Resources */ = {isa = PBXBuildFile; fileRef = 841EAEE7224D2B220028CAF9 /* ipad_menu_dialer_def.png */; };
 		841EAEF0224D2B260028CAF9 /* ipad_menu_contacts_act.png in Resources */ = {isa = PBXBuildFile; fileRef = 841EAEE8224D2B220028CAF9 /* ipad_menu_contacts_act.png */; };
 		841EAEF1224D2B260028CAF9 /* ipad_menu_dialer_act.png in Resources */ = {isa = PBXBuildFile; fileRef = 841EAEE9224D2B230028CAF9 /* ipad_menu_dialer_act.png */; };
@@ -446,8 +442,6 @@
 		843ED6611FB658F9005FE1C1 /* MoreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 843ED65F1FB658F9005FE1C1 /* MoreViewController.xib */; };
 		843ED6651FB65989005FE1C1 /* MenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 843ED6631FB65989005FE1C1 /* MenuCell.m */; };
 		843ED6661FB65989005FE1C1 /* MenuCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 843ED6641FB65989005FE1C1 /* MenuCell.xib */; };
-		843ED6701FB669B1005FE1C1 /* AccountSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 843ED66E1FB669B1005FE1C1 /* AccountSettingsViewController.m */; };
-		843ED6711FB669B1005FE1C1 /* AccountSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 843ED66F1FB669B1005FE1C1 /* AccountSettingsViewController.xib */; };
 		843ED6751FB66A36005FE1C1 /* SettingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 843ED6731FB66A36005FE1C1 /* SettingCell.m */; };
 		843ED6761FB66A36005FE1C1 /* SettingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 843ED6741FB66A36005FE1C1 /* SettingCell.xib */; };
 		843ED6831FB66BBC005FE1C1 /* CallnexSwitchButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 843ED6821FB66BBC005FE1C1 /* CallnexSwitchButton.m */; };
@@ -478,8 +472,6 @@
 		846B716920E240410019AD41 /* SipUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 846B716120E240400019AD41 /* SipUtils.m */; };
 		846C56A722494453006BF2FA /* ic_record.png in Resources */ = {isa = PBXBuildFile; fileRef = 846C56A022494452006BF2FA /* ic_record.png */; };
 		84767D6321664C2900561A85 /* ic_call_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 84767D6221664C2900561A85 /* ic_call_back.png */; };
-		8482CE2A2115554000E26650 /* PBXSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8482CE282115554000E26650 /* PBXSettingViewController.m */; };
-		8482CE2B2115554000E26650 /* PBXSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8482CE292115554000E26650 /* PBXSettingViewController.xib */; };
 		848725B91FC9C6AA008F4BE8 /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 848725B61FC9C6AA008F4BE8 /* GTMNSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		848725BA1FC9C6AA008F4BE8 /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 848725B81FC9C6AA008F4BE8 /* NSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		848725C41FC9C6F9008F4BE8 /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 848725C31FC9C6F9008F4BE8 /* SFHFKeychainUtils.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -677,10 +669,6 @@
 		84EA0AE21FE9243000C3C78E /* ringbacktone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 84EA0ADB1FE9243000C3C78E /* ringbacktone.mp3 */; };
 		84ECF9A821666C840067B4B6 /* decline_call_def.png in Resources */ = {isa = PBXBuildFile; fileRef = 84ECF9A021666C810067B4B6 /* decline_call_def.png */; };
 		84ECF9A921666C840067B4B6 /* decline_call_over.png in Resources */ = {isa = PBXBuildFile; fileRef = 84ECF9A721666C820067B4B6 /* decline_call_over.png */; };
-		84EDEE421FB7121C00FF665C /* KSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EDEE401FB7121C00FF665C /* KSettingViewController.m */; };
-		84EDEE431FB7121C00FF665C /* KSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84EDEE411FB7121C00FF665C /* KSettingViewController.xib */; };
-		84EDEE4D1FB712F200FF665C /* LanguageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EDEE481FB712F200FF665C /* LanguageViewController.m */; };
-		84EDEE4E1FB712F200FF665C /* LanguageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84EDEE491FB712F200FF665C /* LanguageViewController.xib */; };
 		84EDEE531FB7136200FF665C /* LanguageObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EDEE521FB7136200FF665C /* LanguageObject.m */; };
 		84EDEE571FB7137200FF665C /* LanguageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EDEE551FB7137200FF665C /* LanguageCell.m */; };
 		84EDEE581FB7137200FF665C /* LanguageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84EDEE561FB7137200FF665C /* LanguageCell.xib */; };
@@ -1033,9 +1021,6 @@
 		1599BB1421B14E9400A7903D /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Base64.h"; path = "Classes/Utils/AESCrypt/NSString+Base64.h"; sourceTree = SOURCE_ROOT; };
 		1599BB1521B14E9500A7903D /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "Classes/Utils/AESCrypt/NSData+Base64.h"; sourceTree = SOURCE_ROOT; };
 		1599BDA72236146400B6FC12 /* videocall_default_mini.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = videocall_default_mini.png; sourceTree = "<group>"; };
-		159E086F217984BD0056E2BB /* RegisterPBXWithPhoneView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RegisterPBXWithPhoneView.h; path = AppUI/RegisterPBXWithPhoneView.h; sourceTree = "<group>"; };
-		159E0870217984BD0056E2BB /* RegisterPBXWithPhoneView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RegisterPBXWithPhoneView.m; path = AppUI/RegisterPBXWithPhoneView.m; sourceTree = "<group>"; };
-		159E0878217984F00056E2BB /* RegisterPBXWithPhoneView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = RegisterPBXWithPhoneView.xib; path = AppUI/RegisterPBXWithPhoneView.xib; sourceTree = "<group>"; };
 		159E08822179E9110056E2BB /* ic_not_check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_not_check.png; sourceTree = "<group>"; };
 		159E08832179E9120056E2BB /* ic_checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_checked.png; sourceTree = "<group>"; };
 		15A2B89822325F5900DA6342 /* icon_acc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_acc.png; sourceTree = "<group>"; };
@@ -1448,9 +1433,6 @@
 		841B35992191F26B0019BD45 /* ic-pause-active.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic-pause-active.png"; sourceTree = "<group>"; };
 		841B359A2191F26C0019BD45 /* ic-pause-default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic-pause-default.png"; sourceTree = "<group>"; };
 		841B359B2191F26D0019BD45 /* button-endcall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-endcall.png"; sourceTree = "<group>"; };
-		841D3389216112ED00FFCD72 /* ManagerPasswordViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ManagerPasswordViewController.h; path = More/ManagerPasswordViewController.h; sourceTree = "<group>"; };
-		841D338A216112ED00FFCD72 /* ManagerPasswordViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ManagerPasswordViewController.m; path = More/ManagerPasswordViewController.m; sourceTree = "<group>"; };
-		841D338B216112ED00FFCD72 /* ManagerPasswordViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ManagerPasswordViewController.xib; path = More/ManagerPasswordViewController.xib; sourceTree = "<group>"; };
 		841EAEE7224D2B220028CAF9 /* ipad_menu_dialer_def.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ipad_menu_dialer_def.png; sourceTree = "<group>"; };
 		841EAEE8224D2B220028CAF9 /* ipad_menu_contacts_act.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ipad_menu_contacts_act.png; sourceTree = "<group>"; };
 		841EAEE9224D2B230028CAF9 /* ipad_menu_dialer_act.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ipad_menu_dialer_act.png; sourceTree = "<group>"; };
@@ -1497,9 +1479,6 @@
 		843ED6621FB65989005FE1C1 /* MenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MenuCell.h; path = AppUI/MenuCell.h; sourceTree = "<group>"; };
 		843ED6631FB65989005FE1C1 /* MenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MenuCell.m; path = AppUI/MenuCell.m; sourceTree = "<group>"; };
 		843ED6641FB65989005FE1C1 /* MenuCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MenuCell.xib; path = AppUI/MenuCell.xib; sourceTree = "<group>"; };
-		843ED66D1FB669B1005FE1C1 /* AccountSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AccountSettingsViewController.h; path = More/AccountSettingsViewController.h; sourceTree = "<group>"; };
-		843ED66E1FB669B1005FE1C1 /* AccountSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AccountSettingsViewController.m; path = More/AccountSettingsViewController.m; sourceTree = "<group>"; };
-		843ED66F1FB669B1005FE1C1 /* AccountSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AccountSettingsViewController.xib; path = More/AccountSettingsViewController.xib; sourceTree = "<group>"; };
 		843ED6721FB66A36005FE1C1 /* SettingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingCell.h; path = AppUI/SettingCell.h; sourceTree = "<group>"; };
 		843ED6731FB66A36005FE1C1 /* SettingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingCell.m; path = AppUI/SettingCell.m; sourceTree = "<group>"; };
 		843ED6741FB66A36005FE1C1 /* SettingCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SettingCell.xib; path = AppUI/SettingCell.xib; sourceTree = "<group>"; };
@@ -1541,9 +1520,6 @@
 		846B716820E240410019AD41 /* SipUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SipUtils.h; path = AppObjects/SipUtils.h; sourceTree = "<group>"; };
 		846C56A022494452006BF2FA /* ic_record.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_record.png; sourceTree = "<group>"; };
 		84767D6221664C2900561A85 /* ic_call_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_call_back.png; sourceTree = "<group>"; };
-		8482CE272115554000E26650 /* PBXSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PBXSettingViewController.h; path = More/PBXSettingViewController.h; sourceTree = "<group>"; };
-		8482CE282115554000E26650 /* PBXSettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PBXSettingViewController.m; path = More/PBXSettingViewController.m; sourceTree = "<group>"; };
-		8482CE292115554000E26650 /* PBXSettingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = PBXSettingViewController.xib; path = More/PBXSettingViewController.xib; sourceTree = "<group>"; };
 		848725B51FC9C6AA008F4BE8 /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GTMNSString+HTML.h"; path = "MWFeedParser/Classes/GTMNSString+HTML.h"; sourceTree = "<group>"; };
 		848725B61FC9C6AA008F4BE8 /* GTMNSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GTMNSString+HTML.m"; path = "MWFeedParser/Classes/GTMNSString+HTML.m"; sourceTree = "<group>"; };
 		848725B71FC9C6AA008F4BE8 /* NSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+HTML.h"; path = "MWFeedParser/Classes/NSString+HTML.h"; sourceTree = "<group>"; };
@@ -1848,12 +1824,6 @@
 		84EA0ADB1FE9243000C3C78E /* ringbacktone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ringbacktone.mp3; sourceTree = "<group>"; };
 		84ECF9A021666C810067B4B6 /* decline_call_def.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = decline_call_def.png; sourceTree = "<group>"; };
 		84ECF9A721666C820067B4B6 /* decline_call_over.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = decline_call_over.png; sourceTree = "<group>"; };
-		84EDEE3F1FB7121C00FF665C /* KSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KSettingViewController.h; path = More/KSettingViewController.h; sourceTree = "<group>"; };
-		84EDEE401FB7121C00FF665C /* KSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KSettingViewController.m; path = More/KSettingViewController.m; sourceTree = "<group>"; };
-		84EDEE411FB7121C00FF665C /* KSettingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = KSettingViewController.xib; path = More/KSettingViewController.xib; sourceTree = "<group>"; };
-		84EDEE471FB712F200FF665C /* LanguageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LanguageViewController.h; path = More/LanguageViewController.h; sourceTree = "<group>"; };
-		84EDEE481FB712F200FF665C /* LanguageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LanguageViewController.m; path = More/LanguageViewController.m; sourceTree = "<group>"; };
-		84EDEE491FB712F200FF665C /* LanguageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LanguageViewController.xib; path = More/LanguageViewController.xib; sourceTree = "<group>"; };
 		84EDEE511FB7136200FF665C /* LanguageObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LanguageObject.h; path = AppObjects/LanguageObject.h; sourceTree = "<group>"; };
 		84EDEE521FB7136200FF665C /* LanguageObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LanguageObject.m; path = AppObjects/LanguageObject.m; sourceTree = "<group>"; };
 		84EDEE541FB7137200FF665C /* LanguageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LanguageCell.h; path = AppUI/LanguageCell.h; sourceTree = "<group>"; };
@@ -3238,21 +3208,6 @@
 				15D21BE12176E6FF00FEBED2 /* EditProfileViewController.h */,
 				15D21BE22176E6FF00FEBED2 /* EditProfileViewController.m */,
 				15D21BE32176E70000FEBED2 /* EditProfileViewController.xib */,
-				843ED66D1FB669B1005FE1C1 /* AccountSettingsViewController.h */,
-				843ED66E1FB669B1005FE1C1 /* AccountSettingsViewController.m */,
-				843ED66F1FB669B1005FE1C1 /* AccountSettingsViewController.xib */,
-				8482CE272115554000E26650 /* PBXSettingViewController.h */,
-				8482CE282115554000E26650 /* PBXSettingViewController.m */,
-				8482CE292115554000E26650 /* PBXSettingViewController.xib */,
-				841D3389216112ED00FFCD72 /* ManagerPasswordViewController.h */,
-				841D338A216112ED00FFCD72 /* ManagerPasswordViewController.m */,
-				841D338B216112ED00FFCD72 /* ManagerPasswordViewController.xib */,
-				84EDEE3F1FB7121C00FF665C /* KSettingViewController.h */,
-				84EDEE401FB7121C00FF665C /* KSettingViewController.m */,
-				84EDEE411FB7121C00FF665C /* KSettingViewController.xib */,
-				84EDEE471FB712F200FF665C /* LanguageViewController.h */,
-				84EDEE481FB712F200FF665C /* LanguageViewController.m */,
-				84EDEE491FB712F200FF665C /* LanguageViewController.xib */,
 				84C4435A1FBE00B90015854C /* IntroduceViewController.h */,
 				84C4435B1FBE00B90015854C /* IntroduceViewController.m */,
 				84C4435C1FBE00B90015854C /* IntroduceViewController.xib */,
@@ -3503,9 +3458,6 @@
 				15857BFA216DEC0000DB5237 /* UIContactPhoneCell.h */,
 				15857BFB216DEC0000DB5237 /* UIContactPhoneCell.m */,
 				15857BFC216DEC0000DB5237 /* UIContactPhoneCell.xib */,
-				159E086F217984BD0056E2BB /* RegisterPBXWithPhoneView.h */,
-				159E0870217984BD0056E2BB /* RegisterPBXWithPhoneView.m */,
-				159E0878217984F00056E2BB /* RegisterPBXWithPhoneView.xib */,
 				841B358E2191F1360019BD45 /* ConferenceTableViewCell.h */,
 				841B358F2191F1360019BD45 /* ConferenceTableViewCell.m */,
 				841B35902191F1360019BD45 /* ConferenceTableViewCell.xib */,
@@ -4366,7 +4318,6 @@
 				84D2320F22350A720015335B /* numpad_zero_hover.png in Resources */,
 				15CA91052248EFB600E24FC0 /* RecordsCallViewController.xib in Resources */,
 				639E9CB01C0DB83000019A75 /* SideMenuView.xib in Resources */,
-				843ED6711FB669B1005FE1C1 /* AccountSettingsViewController.xib in Resources */,
 				841EAEF3224D2B260028CAF9 /* ipad_menu_history_act.png in Resources */,
 				84B4F0EC21E8CDA500591C50 /* ic_phonebook_bottom_bar_def@2x.png in Resources */,
 				154E400B217440FD0030A6B8 /* no_avatar.png in Resources */,
@@ -4545,7 +4496,6 @@
 				841B359E2191F26D0019BD45 /* button-endcall.png in Resources */,
 				840E964E22371CF90040CDCC /* more_policy.png in Resources */,
 				84CE056F228DAED800CC0F2A /* sort-za.png in Resources */,
-				159E0879217984F00056E2BB /* RegisterPBXWithPhoneView.xib in Resources */,
 				842DEC441FC478F300E7F74D /* UIMiniKeypad.xib in Resources */,
 				15CAD27322436CE1007F43C5 /* speaker_bluetooth_normal.png in Resources */,
 				84FEC5CA22394F0200E6A0F5 /* ChooseDIDCell.xib in Resources */,
@@ -4558,13 +4508,11 @@
 				84B4F0F221E8D86E00591C50 /* ic_more_bottom_bar_def@3x.png in Resources */,
 				84485C5422387DEE00DFB862 /* keypad_normal.png in Resources */,
 				D38187AD15FE340100C3EDCA /* ChatConversationView.xib in Resources */,
-				8482CE2B2115554000E26650 /* PBXSettingViewController.xib in Resources */,
 				84F81BDD21EF8476009629C9 /* ic_pause_call_white.png in Resources */,
 				D38187B915FE342200C3EDCA /* ContactDetailsView.xib in Resources */,
 				633FEE921D3CD55A0014B822 /* menu.png in Resources */,
 				84D2320322350A720015335B /* numpad_zero_default.png in Resources */,
 				840E96542237263E0040CDCC /* mute_enable.png in Resources */,
-				84EDEE431FB7121C00FF665C /* KSettingViewController.xib in Resources */,
 				1508C757223FB10A000ECA9A /* ic_back_act.png in Resources */,
 				1599BDAE2236146500B6FC12 /* videocall_default_mini.png in Resources */,
 				15A64DA1216C8BC700D194BD /* InfoForNewContactTableCell.xib in Resources */,
@@ -4590,7 +4538,6 @@
 				639E9CA61C0DB7F200019A75 /* UIChatCreateCell.xib in Resources */,
 				F0642EF119DAC891009DB336 /* MainStoryboard.storyboard in Resources */,
 				840E964822371CF90040CDCC /* more_call_settings.png in Resources */,
-				84EDEE4E1FB712F200FF665C /* LanguageViewController.xib in Resources */,
 				84D2320922350A720015335B /* numpad_four_default.png in Resources */,
 				15E01DBC2182BC3700C0A40F /* AboutViewController.xib in Resources */,
 				84D2321B22350AD70015335B /* call_hover.png in Resources */,
@@ -4637,7 +4584,6 @@
 				84D2320722350A720015335B /* numpad_nine_hover.png in Resources */,
 				841EAEF1224D2B260028CAF9 /* ipad_menu_dialer_act.png in Resources */,
 				631348321B6FA53300C6BDCB /* rootca.pem in Resources */,
-				841D338D216112ED00FFCD72 /* ManagerPasswordViewController.xib in Resources */,
 				84D2320C22350A720015335B /* numpad_clear_hover.png in Resources */,
 				15857C0A216E136500DB5237 /* TypePhoneCell.xib in Resources */,
 				845A13321FE2C70300640B51 /* PBXContactTableCell.xib in Resources */,
@@ -4744,16 +4690,17 @@
 		};
 		842E03DE1FFCD48200BA16BD /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n";
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" cb9eb31586d71f1504f5234d010f4bc83bc32124 ada121267d45900d0c7171e7cf4dfb59e70742d799831a1b98ff5415fe794f47\n";
 		};
 		9565A24A2572B0B3069E2B50 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4834,7 +4781,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8482CE2A2115554000E26650 /* PBXSettingViewController.m in Sources */,
 				15857BFD216DEC0000DB5237 /* UIContactPhoneCell.m in Sources */,
 				63B81A0F1B57DA33009604A6 /* TPKeyboardAvoidingTableView.m in Sources */,
 				1556A8D321817BFE002E8D26 /* NgnFileUtils.m in Sources */,
@@ -4862,14 +4808,12 @@
 				2248E90E12F7E4CF00220D9C /* UIDigitButton.m in Sources */,
 				84E286C11FC9E1AC009CBA27 /* UIImageView+WebCache.m in Sources */,
 				633756391B67BAF400E21BAD /* SideMenuTableView.m in Sources */,
-				841D338C216112ED00FFCD72 /* ManagerPasswordViewController.m in Sources */,
 				2214EB7A12F846B1002A5394 /* UICallButton.m in Sources */,
 				84C4438F1FBE105F0015854C /* NewPhoneCell.m in Sources */,
 				84D032181FB52E7A002D2524 /* AllContactsViewController.m in Sources */,
 				84EFFE171FF3E6B60085A9F4 /* DGActivityIndicatorThreeDotsAnimation.m in Sources */,
 				84E067141FBE63E300C49F66 /* PBXContact.m in Sources */,
 				6352A5751BE0D4B800594C1C /* CallSideMenuView.m in Sources */,
-				159E0871217984BD0056E2BB /* RegisterPBXWithPhoneView.m in Sources */,
 				84E286C51FC9E1AC009CBA27 /* UIButton+WebCache.m in Sources */,
 				2214EB8912F84EBB002A5394 /* UIHangUpButton.m in Sources */,
 				630CF5571AF7CE1500539F7A /* UITextField+DoneButton.m in Sources */,
@@ -4969,7 +4913,6 @@
 				D35E7597159460580066B1C1 /* ChatsListView.m in Sources */,
 				84EFFE1B1FF3E6B60085A9F4 /* DGActivityIndicatorBallClipRotateMultipleAnimation.m in Sources */,
 				15ABD96B224B60A7002902B6 /* RecordsFileListView.m in Sources */,
-				84EDEE4D1FB712F200FF665C /* LanguageViewController.m in Sources */,
 				D35E759F159460B70066B1C1 /* SettingsView.m in Sources */,
 				84AEA9241FC4FD5500DAA68A /* EditContactViewController.m in Sources */,
 				63B81A101B57DA33009604A6 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
@@ -5059,7 +5002,6 @@
 				D3807FC115C28940005BE9BC /* DCRoundSwitchKnobLayer.m in Sources */,
 				6306440E1BECB08500134C72 /* FirstLoginView.m in Sources */,
 				84C1E2601FAEBE4B00EED0B9 /* FMDatabaseAdditions.m in Sources */,
-				843ED6701FB669B1005FE1C1 /* AccountSettingsViewController.m in Sources */,
 				15EE0A66223A517000B69344 /* HistoryCallDetailTableViewCell.m in Sources */,
 				84EFFE0D1FF3E6B60085A9F4 /* DGActivityIndicatorLineScalePartyAnimation.m in Sources */,
 				84E286C81FC9E1AC009CBA27 /* SDImageCache.m in Sources */,
@@ -5093,7 +5035,6 @@
 				84E286CE1FC9E1AC009CBA27 /* UIImage+GIF.m in Sources */,
 				84C1E2401FAEBB5300EED0B9 /* JSONKit.m in Sources */,
 				84C1E2611FAEBE4B00EED0B9 /* FMDatabasePool.m in Sources */,
-				84EDEE421FB7121C00FF665C /* KSettingViewController.m in Sources */,
 				84BCC9E51FC1E162001F26FE /* PECropRectView.m in Sources */,
 				84EFFE111FF3E6B60085A9F4 /* DGActivityIndicatorNineDotsAnimation.m in Sources */,
 				1599BB1721B14E9600A7903D /* AESCrypt.m in Sources */,
@@ -5905,7 +5846,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhanhoa.cloudcall;
 				PRODUCT_NAME = linphone;
 				PROVISIONING_PROFILE = "f067149d-95bc-414f-9c08-25eec8e1eb4b";
-				PROVISIONING_PROFILE_SPECIFIER = "CloudCall Distribution";
+				PROVISIONING_PROFILE_SPECIFIER = "CloudCall Adhoc";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "$(inherited)";

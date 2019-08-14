@@ -8,11 +8,17 @@
 #import "ContactUtils.h"
 #import "ContactDetailObj.h"
 
+LinphoneAppDelegate *contactUtilAppDel;
+
 @implementation ContactUtils
+
++ (void)startContactsUtil {
+    contactUtilAppDel = (LinphoneAppDelegate *)[[UIApplication sharedApplication] delegate];
+}
 
 + (PhoneObject *)getContactPhoneObjectWithNumber: (NSString *)number {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"number = %@", number];
-    NSArray *filter = [[LinphoneAppDelegate sharedInstance].listInfoPhoneNumber filteredArrayUsingPredicate: predicate];
+    NSArray *filter = [contactUtilAppDel.listInfoPhoneNumber filteredArrayUsingPredicate: predicate];
     if (filter.count > 0) {
         for (int i=0; i<filter.count; i++) {
             PhoneObject *item = [filter objectAtIndex: i];
@@ -93,7 +99,7 @@
 
 + (ContactObject *)getContactWithId: (int)idContact {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"_id_contact = %d", idContact];
-    NSArray *filter = [[LinphoneAppDelegate sharedInstance].listContacts filteredArrayUsingPredicate: predicate];
+    NSArray *filter = [contactUtilAppDel.listContacts filteredArrayUsingPredicate: predicate];
     if (filter.count > 0) {
         return [filter objectAtIndex: 0];
     }
@@ -102,7 +108,7 @@
 
 + (PBXContact *)getPBXContactWithExtension: (NSString *)ext {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"_number = %@", ext];
-    NSArray *filter = [[LinphoneAppDelegate sharedInstance].pbxContacts filteredArrayUsingPredicate: predicate];
+    NSArray *filter = [contactUtilAppDel.pbxContacts filteredArrayUsingPredicate: predicate];
     if (filter.count > 0) {
         return [filter objectAtIndex: 0];
     }
@@ -195,43 +201,42 @@
 
 + (void)addNewContacts
 {
-    LinphoneAppDelegate *appDelegate = [LinphoneAppDelegate sharedInstance];
-    NSString *convertName = [AppUtils convertUTF8CharacterToCharacter: appDelegate._newContact._firstName];
+    NSString *convertName = [AppUtils convertUTF8CharacterToCharacter: contactUtilAppDel._newContact._firstName];
     NSString *nameForSearch = [AppUtils getNameForSearchOfConvertName:convertName];
-    appDelegate._newContact._nameForSearch = nameForSearch;
+    contactUtilAppDel._newContact._nameForSearch = nameForSearch;
     
     
-    if (appDelegate._dataCrop != nil) {
-        if ([appDelegate._dataCrop respondsToSelector:@selector(base64EncodedStringWithOptions:)]) {
+    if (contactUtilAppDel._dataCrop != nil) {
+        if ([contactUtilAppDel._dataCrop respondsToSelector:@selector(base64EncodedStringWithOptions:)]) {
             // iOS 7+
-            appDelegate._newContact._avatar = [appDelegate._dataCrop base64EncodedStringWithOptions: 0];
+            contactUtilAppDel._newContact._avatar = [contactUtilAppDel._dataCrop base64EncodedStringWithOptions: 0];
         } else {
             // pre iOS7
-            appDelegate._newContact._avatar = [appDelegate._dataCrop base64Encoding];
+            contactUtilAppDel._newContact._avatar = [contactUtilAppDel._dataCrop base64Encoding];
         }
     }else{
-        appDelegate._newContact._avatar = @"";
+        contactUtilAppDel._newContact._avatar = @"";
     }
     
     ABRecordRef aRecord = ABPersonCreate();
     CFErrorRef  anError = NULL;
     
     // Lưu thông tin
-    ABRecordSetValue(aRecord, kABPersonFirstNameProperty, (__bridge CFTypeRef)(appDelegate._newContact._firstName), &anError);
-    ABRecordSetValue(aRecord, kABPersonLastNameProperty, (__bridge CFTypeRef)(appDelegate._newContact._lastName), &anError);
-    ABRecordSetValue(aRecord, kABPersonOrganizationProperty, (__bridge CFTypeRef)(appDelegate._newContact._company), &anError);
-    ABRecordSetValue(aRecord, kABPersonFirstNamePhoneticProperty, (__bridge CFTypeRef)(appDelegate._newContact._sipPhone), &anError);
+    ABRecordSetValue(aRecord, kABPersonFirstNameProperty, (__bridge CFTypeRef)(contactUtilAppDel._newContact._firstName), &anError);
+    ABRecordSetValue(aRecord, kABPersonLastNameProperty, (__bridge CFTypeRef)(contactUtilAppDel._newContact._lastName), &anError);
+    ABRecordSetValue(aRecord, kABPersonOrganizationProperty, (__bridge CFTypeRef)(contactUtilAppDel._newContact._company), &anError);
+    ABRecordSetValue(aRecord, kABPersonFirstNamePhoneticProperty, (__bridge CFTypeRef)(contactUtilAppDel._newContact._sipPhone), &anError);
     
-    if (appDelegate._newContact._email == nil) {
-        appDelegate._newContact._email = @"";
+    if (contactUtilAppDel._newContact._email == nil) {
+        contactUtilAppDel._newContact._email = @"";
     }
     
     ABMutableMultiValueRef email = ABMultiValueCreateMutable(kABMultiStringPropertyType);
-    ABMultiValueAddValueAndLabel(email, (__bridge CFTypeRef)(appDelegate._newContact._email), CFSTR("email"), NULL);
+    ABMultiValueAddValueAndLabel(email, (__bridge CFTypeRef)(contactUtilAppDel._newContact._email), CFSTR("email"), NULL);
     ABRecordSetValue(aRecord, kABPersonEmailProperty, email, &anError);
     
-    if (appDelegate._dataCrop != nil) {
-        CFDataRef cfdata = CFDataCreate(NULL,[appDelegate._dataCrop bytes], [appDelegate._dataCrop length]);
+    if (contactUtilAppDel._dataCrop != nil) {
+        CFDataRef cfdata = CFDataCreate(NULL,[contactUtilAppDel._dataCrop bytes], [contactUtilAppDel._dataCrop length]);
         ABPersonSetImageData(aRecord, cfdata, &anError);
     }
     
@@ -239,8 +244,8 @@
     NSMutableArray *listPhone = [[NSMutableArray alloc] init];
     ABMutableMultiValueRef multiPhone = ABMultiValueCreateMutable(kABMultiStringPropertyType);
     
-    for (int iCount=0; iCount<appDelegate._newContact._listPhone.count; iCount++) {
-        ContactDetailObj *aPhone = [appDelegate._newContact._listPhone objectAtIndex: iCount];
+    for (int iCount=0; iCount<contactUtilAppDel._newContact._listPhone.count; iCount++) {
+        ContactDetailObj *aPhone = [contactUtilAppDel._newContact._listPhone objectAtIndex: iCount];
         if ([AppUtils isNullOrEmpty: aPhone._valueStr]) {
             continue;
         }
@@ -318,14 +323,14 @@
 + (NSString *)getFullnameOfContactIfExists {
     NSString *fullname = @"";
     
-    if ([LinphoneAppDelegate sharedInstance]._newContact._firstName != nil && [LinphoneAppDelegate sharedInstance]._newContact._lastName != nil) {
-        fullname = [NSString stringWithFormat:@"%@ %@", [LinphoneAppDelegate sharedInstance]._newContact._lastName, [LinphoneAppDelegate sharedInstance]._newContact._firstName];
+    if (contactUtilAppDel._newContact._firstName != nil && contactUtilAppDel._newContact._lastName != nil) {
+        fullname = [NSString stringWithFormat:@"%@ %@", contactUtilAppDel._newContact._lastName, contactUtilAppDel._newContact._firstName];
         
-    }else if ([LinphoneAppDelegate sharedInstance]._newContact._firstName != nil && [LinphoneAppDelegate sharedInstance]._newContact._lastName == nil){
-        fullname = [LinphoneAppDelegate sharedInstance]._newContact._firstName;
+    }else if (contactUtilAppDel._newContact._firstName != nil && contactUtilAppDel._newContact._lastName == nil){
+        fullname = contactUtilAppDel._newContact._firstName;
         
-    }else if ([LinphoneAppDelegate sharedInstance]._newContact._firstName == nil && [LinphoneAppDelegate sharedInstance]._newContact._lastName != nil){
-        fullname = [LinphoneAppDelegate sharedInstance]._newContact._lastName;
+    }else if (contactUtilAppDel._newContact._firstName == nil && contactUtilAppDel._newContact._lastName != nil){
+        fullname = contactUtilAppDel._newContact._lastName;
     }
     return fullname;
 }

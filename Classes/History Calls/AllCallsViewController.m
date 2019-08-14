@@ -43,6 +43,7 @@
     _lbNoCalls.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:20.0];
     _lbNoCalls.textColor = UIColor.grayColor;
     _lbNoCalls.textAlignment = NSTextAlignmentCenter;
+    _lbNoCalls.text = text_no_calls;
     [_lbNoCalls mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.bottom.right.equalTo(self.view);
     }];
@@ -61,7 +62,6 @@
     
     [WriteLogsUtils writeForGoToScreen:@"AllCallsViewController"];
     
-    [self showContentWithCurrentLanguage];
     [self getHistoryCallForUser];
     
     _tbListCalls.hidden = YES;
@@ -99,8 +99,7 @@
 
 - (void)getHistoryCallForUser
 {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
-                         toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         if (listCalls == nil) {
@@ -128,10 +127,6 @@
     });
 }
 
-- (void)showContentWithCurrentLanguage {
-    _lbNoCalls.text = [[LanguageUtil sharedInstance] getContent:@"No call in your history"];
-}
-
 //  Click trên button Edit
 - (void)beginEditHistoryView {
     isDeleted = true;
@@ -140,8 +135,7 @@
 
 //  Get lại danh sách các cuộc gọi sau khi xoá
 - (void)reGetListCallsForHistory {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
-                         toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     [listCalls removeAllObjects];
     [listCalls addObjectsFromArray:[NSDatabase getHistoryCallListOfUser:USERNAME isMissed:false]];
@@ -179,7 +173,7 @@
         if (![AppUtils isNullOrEmpty: groupName]) {
             cell._lbName.text = groupName;
         }else{
-            cell._lbName.text = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
+            cell._lbName.text = text_unknown;
         }
     }else{
         cell._lbName.text = aCall._phoneName;
@@ -235,7 +229,7 @@
     
     //  get missed call
     if (aCall.newMissedCall > 0) {
-        NSString *strMissed = [NSString stringWithFormat:@"%d", aCall.newMissedCall];
+        NSString *strMissed = SFM(@"%d", aCall.newMissedCall);
         if (aCall.newMissedCall > 5) {
             strMissed = @"+5";
         }
@@ -309,11 +303,11 @@
     NSString *currentDate = [[listCalls objectAtIndex: section] valueForKey:@"title"];
     NSString *today = [AppUtils checkTodayForHistoryCall: currentDate];
     if ([today isEqualToString: @"Today"]) {
-        titleHeader =  [[LanguageUtil sharedInstance] getContent:@"TODAY"];
+        titleHeader =  text_today;
     }else{
         NSString *yesterday = [AppUtils checkYesterdayForHistoryCall:currentDate];
         if ([yesterday isEqualToString:@"Yesterday"]) {
-            titleHeader =  [[LanguageUtil sharedInstance] getContent:@"YESTERDAY"];
+            titleHeader =  text_yesterday;
         }else{
             titleHeader = [currentDate stringByReplacingOccurrencesOfString:@"-" withString:@"/"];
         }
@@ -364,12 +358,11 @@
         }
         return;
     }
-    [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"The phone number can not empty"] duration:2.0 position:CSToastPositionCenter];
+    [self.view makeToast:text_phone_empty duration:2.0 position:CSToastPositionCenter];
 }
 
 - (void)deleteHistoryCallsPressed: (NSNotification *)notif {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
-                         toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     NSNumber *object = [notif object];
     if ([object isKindOfClass:[NSNumber class]]) {

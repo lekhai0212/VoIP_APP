@@ -144,7 +144,7 @@ static UICompositeViewDescription *compositeDescription = nil;
             if (![AppUtils isNullOrEmpty: fullName]) {
                 _lbName.text = fullName;
             }else{
-                _lbName.text = [localization localizedStringForKey: @"Unknown"];
+                _lbName.text = text_unknown;
             }
         }else{
             _lbName.text = contact.name;

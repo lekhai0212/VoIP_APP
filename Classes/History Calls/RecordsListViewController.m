@@ -371,7 +371,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     if ([MFMailComposeViewController canSendMail]) {
         BOOL networkReady = [DeviceUtils checkNetworkAvailable];
         if (!networkReady) {
-            [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
+            [self.view makeToast:text_check_network duration:2.0 position:CSToastPositionCenter];
             return;
         }
         

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -73,7 +73,7 @@
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="logo_transparent.png" id="yhv-yL-2EO">
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_transparent.png" id="yhv-yL-2EO">
                                     <rect key="frame" x="8" y="5" width="61" height="25"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </imageView>
@@ -219,7 +219,6 @@
                                     <state key="normal" image="numpad_seven_default.png">
                                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </state>
-                                    <state key="highlighted" image="numpad_over_background"/>
                                     <connections>
                                         <action selector="_btnNumberPressed:" destination="-1" eventType="touchUpInside" id="0Fp-vq-3b2"/>
                                         <outlet property="addressField" destination="4" id="246"/>
@@ -297,7 +296,6 @@
                                     <state key="normal" image="numpad_hash_default.png">
                                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </state>
-                                    <state key="highlighted" image="numpad_sharp_hover"/>
                                     <connections>
                                         <action selector="_btnNumberPressed:" destination="-1" eventType="touchUpInside" id="dmm-ev-xUp"/>
                                         <outlet property="addressField" destination="4" id="251"/>
@@ -337,7 +335,6 @@
                                     <state key="normal" image="numpad_clear.png">
                                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </state>
-                                    <state key="highlighted" image="backspace_hover_1"/>
                                     <connections>
                                         <action selector="onBackspaceClick:" destination="-1" eventType="touchUpInside" id="sWE-Ch-kAr"/>
                                     </connections>
@@ -352,13 +349,12 @@
             <color key="backgroundColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="-685" y="-965"/>
+            <point key="canvasLocation" x="-992.75362318840587" y="-646.20535714285711"/>
         </view>
     </objects>
     <resources>
         <image name="background_header.jpg" width="1028" height="180"/>
-        <image name="backspace-green.png" width="200" height="200"/>
-        <image name="backspace_hover_1" width="241" height="149"/>
+        <image name="backspace-green.png" width="150" height="150"/>
         <image name="call_default.png" width="201" height="201"/>
         <image name="call_hover.png" width="201" height="201"/>
         <image name="logo_transparent.png" width="1216" height="573"/>
@@ -374,9 +370,7 @@
         <image name="numpad_nine_hover" width="241" height="149"/>
         <image name="numpad_one_default.png" width="261" height="261"/>
         <image name="numpad_one_hover" width="241" height="149"/>
-        <image name="numpad_over_background" width="16" height="16"/>
         <image name="numpad_seven_default.png" width="261" height="261"/>
-        <image name="numpad_sharp_hover" width="241" height="141"/>
         <image name="numpad_six_default.png" width="261" height="261"/>
         <image name="numpad_six_hover" width="241" height="149"/>
         <image name="numpad_star_default.png" width="261" height="261"/>

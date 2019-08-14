@@ -188,7 +188,7 @@
     
     hPicker = 200.0;
     
-    lbStartTime.text = @"Ngày bắt đầu";
+    lbStartTime.text = text_start_date;
     lbStartTime.textColor = [UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0];
     lbStartTime.font = [LinphoneAppDelegate sharedInstance].headerFontNormal;
     [lbStartTime mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -198,7 +198,7 @@
         make.height.mas_equalTo(hTextfield);
     }];
     
-    tfStartTime.placeholder = @"--Chọn thời gian--";
+    tfStartTime.placeholder = SFM(@"--%@--", text_choose_time);
     tfStartTime.textColor = lbStartTime.textColor;
     tfStartTime.font = [LinphoneAppDelegate sharedInstance].headerFontNormal;
     [tfStartTime mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -255,7 +255,7 @@
         make.top.left.bottom.right.equalTo(tfStartTime);
     }];
     
-    lbEndTime.text = @"Ngày kết thúc";
+    lbEndTime.text = text_end_date;
     lbEndTime.textColor = lbStartTime.textColor;
     lbEndTime.font = lbStartTime.font;
     [lbEndTime mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -264,7 +264,7 @@
         make.height.mas_equalTo(hTextfield);
     }];
     
-    tfEndTime.placeholder = @"--Chọn thời gian--";
+    tfEndTime.placeholder = SFM(@"--%@--", text_choose_time);
     tfEndTime.textColor = tfStartTime.textColor;
     tfEndTime.font = tfStartTime.font;
     [tfEndTime mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -282,7 +282,7 @@
         make.top.left.bottom.right.equalTo(tfEndTime);
     }];
     
-    [btnSearch setTitle:[[LanguageUtil sharedInstance] getContent:@"Search"] forState:UIControlStateNormal];
+    [btnSearch setTitle:text_search forState:UIControlStateNormal];
     btnSearch.titleLabel.font = [LinphoneAppDelegate sharedInstance].headerFontNormal;
     [btnSearch setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     btnSearch.backgroundColor = [UIColor colorWithRed:(101/255.0) green:(205/255.0)
@@ -294,7 +294,7 @@
         make.height.mas_equalTo(hTextfield);
     }];
     
-    [btnListFiles setTitle:@"Danh sách đã lưu" forState:UIControlStateNormal];
+    [btnListFiles setTitle:text_saved_list forState:UIControlStateNormal];
     btnListFiles.titleLabel.font = [LinphoneAppDelegate sharedInstance].headerFontNormal;
     [btnListFiles setTitleColor:UIColor.darkGrayColor forState:UIControlStateNormal];
     btnListFiles.backgroundColor = [UIColor colorWithRed:(235/255.0) green:(235/255.0)
@@ -310,7 +310,7 @@
                                                 blue:(235/255.0) alpha:1.0];
     lbNoData.textColor = UIColor.darkGrayColor;
     lbNoData.font = [LinphoneAppDelegate sharedInstance].headerFontNormal;
-    lbNoData.text = @"Chưa có dữ liệu";
+    lbNoData.text = text_no_data;
     [lbNoData mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view).offset(padding);
         make.right.equalTo(self.view).offset(-padding);
@@ -352,15 +352,15 @@
 }
 
 - (void)addActionForToolbarView {
-    UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithTitle:@"Chọn" style:UIBarButtonItemStyleBordered target:self action:@selector(showSelectedDate)];
+    UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithTitle:text_choose style:UIBarButtonItemStyleBordered target:self action:@selector(showSelectedDate)];
     
     UIBarButtonItem *space = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
-    UIBarButtonItem *todayBtn = [[UIBarButtonItem alloc]initWithTitle:@"HÔM NAY" style:UIBarButtonItemStyleBordered target:self action:@selector(showTodayDate)];
+    UIBarButtonItem *todayBtn = [[UIBarButtonItem alloc]initWithTitle:[text_today uppercaseString] style:UIBarButtonItemStyleBordered target:self action:@selector(showTodayDate)];
     
     UIBarButtonItem *space1 = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
-    UIBarButtonItem *cancelBtn = [[UIBarButtonItem alloc]initWithTitle:@"Đóng" style:UIBarButtonItemStyleBordered target:self action:@selector(closeDatePicker)];
+    UIBarButtonItem *cancelBtn = [[UIBarButtonItem alloc]initWithTitle:text_close style:UIBarButtonItemStyleBordered target:self action:@selector(closeDatePicker)];
     
     [toolBar setItems:[NSArray arrayWithObjects:cancelBtn, space1, todayBtn,space,doneBtn, nil]];
 }
@@ -554,10 +554,10 @@
         if (![name isEqualToString: cell._lbPhone.text]) {
             cell._lbName.text = name;
         }else{
-            cell._lbName.text = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
+            cell._lbName.text = text_unknown;
         }
     }else{
-        cell._lbName.text = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
+        cell._lbName.text = text_unknown;
     }
     cell.lbMissed.hidden = YES;
     cell._cbDelete.hidden = YES;

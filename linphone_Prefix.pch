@@ -36,3 +36,6 @@
 #import "NgnFileUtils.h"
 #import "ContactUtils.h"
 #import "LanguageUtil.h"
+
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>

@@ -10,6 +10,8 @@
 #ifndef AppStrings_h
 #define AppStrings_h
 
+#define SFM(format, ...) [NSString stringWithFormat:(format), ##__VA_ARGS__]
+
 #define idSyncPBX           @"keySyncPBX"
 
 #define SILENCE_RINGTONE    @"silence.mp3"
@@ -322,5 +324,121 @@
 #define sort_pbx        @"sort_pbx"
 
 #define switch_dnd      @"switch_dnd"
+
+
+
+
+
+
+
+
+
+#define text_online     @"Sẵn sàng"
+#define text_offline    @"Chưa kết nối"
+#define text_connecting @"Đang kết nối"
+#define text_disabled   @"Không làm phiền"
+#define text_no_network @"Không internet"
+
+#define text_all_call           @"Tất cả"
+#define text_missed_call        @"Gọi nhỡ"
+#define text_record_call        @"Ghi âm"
+#define text_no_calls           @"Không có cuộc gọi"
+#define text_no_missed_calls    @"Không có cuộc gọi nhỡ"
+#define text_unknown            @"Không xác định"
+#define text_today              @"Hôm nay"
+#define text_yesterday          @"Hôm qua"
+#define text_call_details       @"Chi tiết cuộc gọi"
+#define text_delete             @"Xóa"
+#define text_no                 @"Không"
+#define text_search             @"Tìm kiếm"
+#define text_saved_list         @"Danh sách đã lưu"
+#define text_no_data            @"Chưa có dữ liệu"
+#define text_choose             @"Chọn"
+#define text_close              @"Đóng"
+#define text_start_date         @"Ngày bắt đầu"
+#define text_end_date           @"Ngày kết thúc"
+#define text_choose_time        @"Chọn thời gian"
+#define text_all_contacts       @"Danh bạ máy"
+#define text_pbx_contacts       @"Nội bộ"
+#define text_pbx_groups         @"Nhóm nội bộ"
+#define text_no_contacts        @"Không có liên hệ"
+
+
+#define text_check_network      @"Vui lòng kiểm tra kết nối mạng của bạn!"
+#define text_phone_empty        @"Số điện thoại không được rỗng!"
+#define confirm_delete_history  @"Bạn có muốn xoá lịch sử cuộc gọi?"
+#define search_name_or_phone    @"Tìm tên hoặc số điện thoại"
+#define count_all_contacts      @"Tất cả liên hệ"
+
+#define contact_name_not_empty  @"Tên liên hệ không được rỗng!"
+#define pls_enter_phonenumber   @"Vui lòng nhập số điện thoại"
+#define pls_fill_full_info      @"Vui lòng nhập đầy đủ thông tin"
+#define pls_check_signin_info   @"Vui lòng kiểm tra thông tin đăng nhập"
+#define text_slogent            @"Dịch vụ tổng đài số hàng đầu Việt Nam.\nCung cấp dịch vụ thoại qua Internet tiên tiến nhất."
+#define text_welcome            @"Xin chào!\nĐăng nhập để trải nghiệm."
+#define cannot_access_camera    @"Không thể truy cập camera. Vui lòng kiểm tra lại quyền của ứng dụng!"
+#define cannot_detect_QRCode    @"Không thể kiểm tra QRCode. Vui lòng kiểm tra lại!"
+#define or_sign_in_with_QRCode  @"Hoặc đăng nhập với mã QR"
+#define text_confirm_sign_out   @"Do you want to sign out?"
+#define text_faild_try_later    @"Thất bại. Vui lòng thử lại sau!"
+#define avatar_was_removed      @"Ảnh đại diện đã được xoá"
+#define avatar_was_uploaded     @"Ảnh đại diện đã được cập nhật"
+#define text_newest_version     @"Bạn đang sử dụng phiên bản mới nhất.\nXin cảm ơn!"
+
+#define text_start              @"Bắt đầu"
+#define text_account            @"Tài khoản"
+#define text_password           @"Mật khẩu"
+#define text_sign_in            @"Đăng nhập"
+#define text_cancel             @"Hủy bỏ"
+#define text_scan_from_photo    @"QUÉT ẢNH CÓ SẴN"
+
+#define text_choose_DID         @"Chọn số gọi ra"
+#define text_default            @"Mặc định"
+#define text_phonenumber        @"Số điện thoại"
+#define text_on                 @"Bật"
+#define text_off                @"Tắt"
+#define text_setup              @"Cài đặt"
+#define text_crop_picture       @"Cắt hình ảnh"
+#define text_save               @"Lưu"
+#define text_sync_contacts      @"Đồng bộ"
+#define text_successful         @"Thành công"
+#define text_company            @"Công ty"
+#define text_email              @"Email"
+#define text_mobile             @"Di động"
+#define text_work               @"Công ty"
+#define text_home               @"Nhà"
+#define text_fax                @"Fax"
+#define text_other              @"Khác"
+#define text_options            @"Tùy chọn"
+#define text_gallery            @"Thư viện"
+#define text_camera             @"Chụp ảnh"
+#define text_remove_avatar      @"Hủy ảnh đại diệnảnh"
+#define text_add_contact        @"Thêm liên hệ"
+#define text_fullname           @"Họ tên"
+#define text_edit_contact       @"Chỉnh sửa liên hệ"
+#define text_do_not_disturb     @"Không làm phiền"
+#define text_choose_ringtone    @"Chọn nhạc chuông"
+#define text_call_settings      @"Cài đặt cuộc gọi"
+#define text_app_info           @"Thông tin ứng dụng"
+#define text_send_reports       @"Gửi reports"
+#define text_sign_out           @"Đăng xuất"
+#define text_privacy_policy     @"Chính sách bảo mật"
+#define text_introduction       @"Giới thiệu"
+#define text_silent             @"Im lặng"
+
+#define text_edit_profile       @"Cập nhật hồ sơ"
+#define text_account_name       @"Tên tài khoản"
+#define text_check_for_update   @"Kiểm tra cập nhật"
+#define text_version            @"Phiên bản"
+#define text_release_date       @"Ngày phát hành"
+#define text_update             @"Cập nhật"
+#define text_send_logs          @"Gửi nhật ký ứng dụng"
+#define text_send               @"Gửi"
+
+#define text_can_not_send_email             @"Không thể gửi email. Vui lòng kiểm tra lại tài khoản email của bạn!"
+#define text_can_not_send_email_check_later @"Không thể gửi email. Vui lòng thử lại sau!"
+#define text_email_was_sent                 @"Email của bạn đã được gửi. Xin cảm ơn!"
+
+
 
 #endif /* AppStrings_h */

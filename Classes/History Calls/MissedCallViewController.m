@@ -41,6 +41,7 @@
     _lbNoCalls.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:20.0];
     _lbNoCalls.textColor = UIColor.grayColor;
     _lbNoCalls.textAlignment = NSTextAlignmentCenter;
+    _lbNoCalls.text = text_no_missed_calls;
     [_lbNoCalls mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.bottom.right.equalTo(self.view);
     }];
@@ -58,8 +59,6 @@
     [super viewWillAppear:animated];
     
     [WriteLogsUtils writeForGoToScreen:@"MissedCallViewController"];
-    
-    [self showContentWithCurrentMessage];
     
     isDeleted = false;
     
@@ -119,10 +118,6 @@
             }
         });
     });
-}
-
-- (void)showContentWithCurrentMessage {
-    _lbNoCalls.text = [[LanguageUtil sharedInstance] getContent:@"No missed call in your history"];
 }
 
 //  Click trên button Edit
@@ -187,7 +182,7 @@
         if (![AppUtils isNullOrEmpty: groupName]) {
             cell._lbName.text = groupName;
         }else{
-            cell._lbName.text = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
+            cell._lbName.text = text_unknown;
         }
     }else{
         cell._lbName.text = aCall._phoneName;
@@ -325,11 +320,11 @@
     NSString *currentDate = [[listCalls objectAtIndex: section] valueForKey:@"title"];
     NSString *today = [AppUtils checkTodayForHistoryCall: currentDate];
     if ([today isEqualToString: @"Today"]) {
-        titleHeader =  [[LanguageUtil sharedInstance] getContent:@"TODAY"];
+        titleHeader =  text_today;
     }else{
         NSString *yesterday = [AppUtils checkYesterdayForHistoryCall:currentDate];
         if ([yesterday isEqualToString:@"Yesterday"]) {
-            titleHeader =  [[LanguageUtil sharedInstance] getContent:@"YESTERDAY"];
+            titleHeader =  text_yesterday;
         }else{
             titleHeader = currentDate;
         }
@@ -377,8 +372,7 @@
         }
         return;
     }
-    [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"The phone number can not empty"]
-                duration:2.0 position:CSToastPositionCenter];
+    [self.view makeToast:text_phone_empty duration:2.0 position:CSToastPositionCenter];
 }
 
 - (void)deleteHistoryCallsPressed: (NSNotification *)notif

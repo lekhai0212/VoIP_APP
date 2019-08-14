@@ -55,9 +55,9 @@ static UICompositeViewDescription *compositeDescription = nil;
     [WriteLogsUtils clearLogFilesAfterExpireTime: DAY_FOR_LOGS*24*3600];
     
     icSend.enabled = NO;
-    lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"Send logs"];
-    [icSend setTitle:[[LanguageUtil sharedInstance] getContent:@"Send"] forState:UIControlStateNormal];
-    [icSend setTitle:[[LanguageUtil sharedInstance] getContent:@"Send"] forState:UIControlStateDisabled];
+    lbHeader.text = text_send_logs;
+    [icSend setTitle:text_send forState:UIControlStateNormal];
+    [icSend setTitle:text_send forState:UIControlStateDisabled];
     
     if (listSelect == nil) {
         listSelect = [[NSMutableArray alloc] init];
@@ -91,7 +91,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     if ([MFMailComposeViewController canSendMail]) {
         BOOL networkReady = [DeviceUtils checkNetworkAvailable];
         if (!networkReady) {
-            [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
+            [self.view makeToast:text_check_network duration:2.0 position:CSToastPositionCenter];
             return;
         }
         
@@ -122,7 +122,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         
         [self presentViewController:mc animated:YES completion:NULL];
     }else{
-        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Can not send email. Please check your email account again!"] duration:3.0 position:CSToastPositionCenter];
+        [self.view makeToast:text_can_not_send_email duration:3.0 position:CSToastPositionCenter];
     }
 }
 
@@ -230,9 +230,9 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
 {
     if (error) {
-        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Can not send email. Please check later!"] duration:4.0 position:CSToastPositionCenter];
+        [self.view makeToast:text_can_not_send_email_check_later duration:4.0 position:CSToastPositionCenter];
     }else{
-        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Your email was sent. Thank you!"] duration:4.0 position:CSToastPositionCenter];
+        [self.view makeToast:text_email_was_sent duration:4.0 position:CSToastPositionCenter];
     }
     [self performSelector:@selector(goBack) withObject:nil afterDelay:2.0];
 }

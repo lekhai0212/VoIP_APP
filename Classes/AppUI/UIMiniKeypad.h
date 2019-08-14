@@ -34,4 +34,5 @@
 @property (weak, nonatomic) IBOutlet UILabel *lbSepa456;
 @property (weak, nonatomic) IBOutlet UILabel *lbSepa789;
 
+- (IBAction)icHangupCallClick:(UIButton *)sender;
 @end

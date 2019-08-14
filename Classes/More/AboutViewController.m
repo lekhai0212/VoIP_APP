@@ -47,10 +47,10 @@ static UICompositeViewDescription *compositeDescription = nil;
     [WriteLogsUtils writeForGoToScreen:@"AboutViewController"];
     
     linkToAppStore = @"";
-    lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"App information"];
-    [btnCheckForUpdate setTitle:[[LanguageUtil sharedInstance] getContent:@"Check for update"] forState:UIControlStateNormal];
+    lbHeader.text = text_app_info;
+    [btnCheckForUpdate setTitle:text_check_for_update forState:UIControlStateNormal];
     
-    NSString *str = [NSString stringWithFormat:@"%@: %@\n%@: %@", [[LanguageUtil sharedInstance] getContent:@"Version"], [AppUtils getAppVersionWithBuildVersion: YES], [[LanguageUtil sharedInstance] getContent:@"Release date"], [AppUtils getBuildDate]];
+    NSString *str = SFM(@"%@: %@\n%@: %@", text_version, [AppUtils getAppVersionWithBuildVersion: TRUE], text_release_date, [AppUtils getBuildDate]);
     lbVersion.text = str;
 }
 
@@ -65,20 +65,20 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (IBAction)btnCheckForUpdatePress:(UIButton *)sender {
     if (![DeviceUtils checkNetworkAvailable]) {
-        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"] duration:1.5 position:CSToastPositionBottom style:nil];
+        [self.view makeToast:text_check_network duration:1.5 position:CSToastPositionBottom style:nil];
         return;
     }
     
     //  Add new by Khai Le on 23/03/2018
     linkToAppStore = [self checkNewVersionOnAppStore];
     if (![AppUtils isNullOrEmpty: linkToAppStore] && ![AppUtils isNullOrEmpty: appStoreVersion]) {
-        NSString *content = [NSString stringWithFormat:[[LanguageUtil sharedInstance] getContent:@"Current version on App Store is %@. Do you want to update right now?"], appStoreVersion];
+        NSString *content = SFM(@"Phiên bản hiện tại trên App Store là %@. Bạn có muốn cập nhật không?", appStoreVersion);
         
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:[[[NSBundle mainBundle] localizedInfoDictionary] objectForKey:@"CFBundleDisplayName"] message:content delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Close"] otherButtonTitles:[[LanguageUtil sharedInstance] getContent:@"Update"], nil];
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:[[[NSBundle mainBundle] localizedInfoDictionary] objectForKey:@"CFBundleDisplayName"] message:content delegate:self cancelButtonTitle:text_close otherButtonTitles:text_update, nil];
         alert.tag = 2;
         [alert show];
     }else{
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:[[[NSBundle mainBundle] localizedInfoDictionary] objectForKey:@"CFBundleDisplayName"] message:[[LanguageUtil sharedInstance] getContent:@"You are the newest version!"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Close"] otherButtonTitles:nil, nil];
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:[[[NSBundle mainBundle] localizedInfoDictionary] objectForKey:@"CFBundleDisplayName"] message:text_newest_version delegate:self cancelButtonTitle:text_close otherButtonTitles:nil, nil];
         [alert show];
     }
     return;

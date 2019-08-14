@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -374,7 +374,7 @@
                                             <rect key="frame" x="281" y="0.0" width="94" height="63"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
                                             <accessibility key="accessibilityConfiguration" label="Hangup"/>
-                                            <state key="normal" image="footer_chat_default.png" backgroundImage="color_C.png">
+                                            <state key="normal" image="footer_chat_default.png">
                                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </state>
                                             <state key="highlighted" backgroundImage="color_A.png"/>
@@ -386,7 +386,7 @@
                                             <rect key="frame" x="331" y="1" width="22" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" tag="71" contentMode="scaleAspectFit" image="history_chat_indicator.png" id="nPO-PM-4zJ" userLabel="chatNotificationImage">
+                                                <imageView userInteractionEnabled="NO" tag="71" contentMode="scaleAspectFit" id="nPO-PM-4zJ" userLabel="chatNotificationImage">
                                                     <rect key="frame" x="0.0" y="0.0" width="21" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
@@ -1157,7 +1157,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="46" height="63"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
                                             <accessibility key="accessibilityConfiguration" label="Back"/>
-                                            <state key="normal" image="footer_dialer_default.png" backgroundImage="color_C.png">
+                                            <state key="normal" image="footer_dialer_default.png">
                                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </state>
                                             <state key="disabled" image="footer_dialer_disabled.png"/>
@@ -1177,7 +1177,7 @@
                                             <rect key="frame" x="139" y="0.0" width="48" height="63"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
                                             <accessibility key="accessibilityConfiguration" label="Hangup"/>
-                                            <state key="normal" image="footer_chat_default.png" backgroundImage="color_C.png">
+                                            <state key="normal" image="footer_chat_default.png">
                                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </state>
                                             <state key="highlighted" backgroundImage="color_A.png"/>
@@ -1189,7 +1189,7 @@
                                             <rect key="frame" x="157" y="2" width="12" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" tag="71" contentMode="scaleAspectFit" image="history_chat_indicator.png" id="7ZF-Ch-AL1" userLabel="chatNotificationImage">
+                                                <imageView userInteractionEnabled="NO" tag="71" contentMode="scaleAspectFit" id="7ZF-Ch-AL1" userLabel="chatNotificationImage">
                                                     <rect key="frame" x="0.0" y="0.0" width="21" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
@@ -4129,7 +4129,7 @@ wgACpscAAAAAAAAEAQAAAAAAAABZAAAAAAAAAAAAAAAAAAKmyQ
         </image>
         <image name="call-bg.png" width="1028" height="1828"/>
         <image name="call_hangup_default.png" width="42" height="36"/>
-        <image name="cam_normal.png" width="204" height="204"/>
+        <image name="cam_normal.png" width="102" height="102"/>
         <image name="camera_default.png" width="33" height="19"/>
         <image name="camera_disabled.png" width="33" height="19"/>
         <image name="camera_selected.png" width="33" height="19"/>
@@ -4137,7 +4137,6 @@ wgACpscAAAAAAAAEAQAAAAAAAABZAAAAAAAAAAAAAAAAAAKmyQ
         <image name="camera_switch_disabled.png" width="52" height="51"/>
         <image name="camera_switch_over.png" width="52" height="51"/>
         <image name="color_A.png" width="2" height="2"/>
-        <image name="color_C.png" width="2" height="2"/>
         <image name="color_D.png" width="2" height="2"/>
         <image name="color_E.png" width="2" height="2"/>
         <image name="color_F.png" width="2" height="2"/>
@@ -4148,13 +4147,12 @@ wgACpscAAAAAAAAEAQAAAAAAAABZAAAAAAAAAAAAAAAAAAKmyQ
         <image name="footer_chat_default.png" width="27" height="27"/>
         <image name="footer_dialer_default.png" width="27" height="27"/>
         <image name="footer_dialer_disabled.png" width="27" height="27"/>
-        <image name="history_chat_indicator.png" width="14" height="13"/>
-        <image name="hold_normal.png" width="204" height="204"/>
-        <image name="keypad_normal.png" width="204" height="204"/>
+        <image name="hold_normal.png" width="102" height="102"/>
+        <image name="keypad_normal.png" width="102" height="102"/>
         <image name="micro_default.png" width="29" height="37"/>
         <image name="micro_disabled.png" width="29" height="37"/>
         <image name="micro_selected.png" width="29" height="37"/>
-        <image name="mute_normal.png" width="204" height="204"/>
+        <image name="mute_normal.png" width="102" height="102"/>
         <image name="no_avatar.png" width="201" height="201"/>
         <image name="numpad_0_default.png" width="53" height="49"/>
         <image name="numpad_0_over.png" width="53" height="49"/>
@@ -4207,9 +4205,9 @@ wgACpscAAAAAAAAEAQAAAAAAAABZAAAAAAAAAAAAAAAAAAKmyQ
         <image name="routes_selected.png" width="37" height="25"/>
         <image name="speaker_default.png" width="27" height="26"/>
         <image name="speaker_disabled.png" width="27" height="26"/>
-        <image name="speaker_normal.png" width="204" height="204"/>
+        <image name="speaker_normal.png" width="102" height="102"/>
         <image name="speaker_selected.png" width="27" height="26"/>
-        <image name="switchcam_normal.png" width="204" height="204"/>
+        <image name="switchcam_normal.png" width="102" height="102"/>
         <image name="waiting_time.png" width="60" height="72"/>
     </resources>
 </document>

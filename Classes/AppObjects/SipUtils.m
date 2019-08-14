@@ -239,21 +239,19 @@
     {
         BOOL networkReady = [DeviceUtils checkNetworkAvailable];
         if (!networkReady) {
-            NSString *content = [[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"];
-            [[LinphoneAppDelegate sharedInstance].window makeToast:content duration:2.0 position:CSToastPositionCenter];
-            
-            return NO;
+            [[LinphoneAppDelegate sharedInstance].window makeToast:text_check_network duration:2.0 position:CSToastPositionCenter];
+            return FALSE;
         }
         
         if ([phoneNumber isEqualToString: USERNAME]) {
             NSString *content = [[LanguageUtil sharedInstance] getContent:@"Can not make call with yourself"];
             [[LinphoneAppDelegate sharedInstance].window makeToast:content duration:2.0 position:CSToastPositionCenter];
-            return NO;
+            return FALSE;
         }
         
         LinphoneAddress *addr = linphone_core_interpret_url(LC, phoneNumber.UTF8String);
         if (!addr) {
-            return NO;
+            return FALSE;
         }
         
         [LinphoneManager.instance call:addr];
@@ -266,12 +264,12 @@
         }
         [[PhoneMainView instance] changeCurrentView:[OutgoingCallViewController compositeViewDescription] push:TRUE];
         
-        return YES;
+        return TRUE;
     }else{
         NSString *content = [[LanguageUtil sharedInstance] getContent:@"Phone number can not empty!"];
         [[LinphoneAppDelegate sharedInstance].window makeToast:content duration:2.0 position:CSToastPositionCenter];
     }
-    return NO;
+    return FALSE;
 }
 
 + (void)makeAudioCallWithPhoneNumber: (NSString *)phoneNumber
@@ -410,7 +408,7 @@
 }
 
 + (NSString *)displayNameForAddress:(const LinphoneAddress *)addr {
-    NSString *ret = [[LanguageUtil sharedInstance] getContent:@"Unknown"];
+    NSString *ret = text_unknown;
     const char *lDisplayName = linphone_address_get_display_name(addr);
     const char *lUserName = linphone_address_get_username(addr);
     if (lDisplayName) {

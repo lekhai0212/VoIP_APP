@@ -512,8 +512,7 @@
         }
         return;
     }
-    [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"The phone number can not empty"]
-                duration:2.0 position:CSToastPositionCenter];
+    [self.view makeToast:text_phone_empty duration:2.0 position:CSToastPositionCenter];
 }
 
 - (void)afterFinishGetPBXContactsList: (NSNotification *)notif
@@ -547,7 +546,7 @@
     
     NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:attachment];
     
-    NSString *content = [NSString stringWithFormat:@"  %@", [[LanguageUtil sharedInstance] getContent:@"Sync contacts"]];
+    NSString *content = [NSString stringWithFormat:@"  %@", text_sync_contacts];
     NSMutableAttributedString *contentString = [[NSMutableAttributedString alloc] initWithString:content];
     [contentString addAttribute:NSFontAttributeName value:textFont range:NSMakeRange(0, contentString.length)];
     [contentString addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0] range:NSMakeRange(0, contentString.length)];
@@ -834,7 +833,7 @@
     [self hideWaitingView: YES];
     [_tbContacts reloadData];
     
-    [[LinphoneAppDelegate sharedInstance].window makeToast:[[LanguageUtil sharedInstance] getContent:@"Successful"] duration:2.0 position:CSToastPositionCenter];
+    [[LinphoneAppDelegate sharedInstance].window makeToast:text_successful duration:2.0 position:CSToastPositionCenter];
 }
 
 @end

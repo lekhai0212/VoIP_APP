@@ -46,7 +46,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     [WriteLogsUtils writeForGoToScreen:@"IntroduceViewController"];
     
-    _lbIntroduce.text = [[LanguageUtil sharedInstance] getContent:@"Introduction"];
+    _lbIntroduce.text = text_introduction;
 }
 
 - (void)viewDidAppear:(BOOL)animated {

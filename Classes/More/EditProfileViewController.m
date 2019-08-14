@@ -58,8 +58,8 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     accountID = [SipUtils getAccountIdOfDefaultProxyConfig];
     
-    lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"Edit profile"];
-    tfAccountName.placeholder = [[LanguageUtil sharedInstance] getContent:@"Account name"];
+    lbHeader.text = text_edit_profile;
+    tfAccountName.placeholder = text_account_name;
     
     if (![AppUtils isNullOrEmpty: accountID]) {
         NSString *pbxKeyName = [NSString stringWithFormat:@"%@_%@", @"pbxName", accountID];
@@ -98,18 +98,11 @@ static UICompositeViewDescription *compositeDescription = nil;
     [self.view endEditing: YES];
     
     if (myAvatar != nil && ![myAvatar isEqualToString:@""]) {
-        UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Options"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles:
-                                          [[LanguageUtil sharedInstance] getContent:@"Gallery"],
-                                          [[LanguageUtil sharedInstance] getContent:@"Camera"],
-                                          [[LanguageUtil sharedInstance] getContent:@"Remove Avatar"],
-                                          nil];
+        UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:text_options delegate:self cancelButtonTitle:text_cancel destructiveButtonTitle:nil otherButtonTitles: text_gallery, text_gallery, text_remove_avatar, nil];
         popupAddContact.tag = 100;
         [popupAddContact showInView:self.view];
     }else{
-        UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:[[LanguageUtil sharedInstance] getContent:@"Options"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"] destructiveButtonTitle:nil otherButtonTitles:
-                                          [[LanguageUtil sharedInstance] getContent:@"Gallery"],
-                                          [[LanguageUtil sharedInstance] getContent:@"Camera"],
-                                          nil];
+        UIActionSheet *popupAddContact = [[UIActionSheet alloc] initWithTitle:text_options delegate:self cancelButtonTitle:text_cancel destructiveButtonTitle:nil otherButtonTitles: text_gallery, text_camera, nil];
         popupAddContact.tag = 101;
         [popupAddContact showInView:self.view];
     }
@@ -123,7 +116,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     [self.view endEditing: YES];
     
     if ([LinphoneManager instance].connectivity == none){
-        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Please check your internet connection!"] duration:2.0 position:CSToastPositionCenter];
+        [self.view makeToast:text_check_network duration:2.0 position:CSToastPositionCenter];
         return;
     }
     
@@ -221,8 +214,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     //  cancel button
     btnCancel.titleLabel.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
-    [btnCancel setTitle:[[LanguageUtil sharedInstance] getContent:@"Cancel"]
-               forState:UIControlStateNormal];
+    [btnCancel setTitle:text_cancel forState:UIControlStateNormal];
     btnCancel.backgroundColor = [UIColor colorWithRed:(250/255.0) green:(80/255.0)
                                                  blue:(80/255.0) alpha:1.0];
     [btnCancel setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
@@ -237,8 +229,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     }];
     
     btnSave.titleLabel.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:18.0];
-    [btnSave setTitle:[[LanguageUtil sharedInstance] getContent:@"Save"]
-             forState:UIControlStateNormal];
+    [btnSave setTitle:text_save forState:UIControlStateNormal];
     [btnSave setBackgroundImage:[UIImage imageNamed:@"bg_button.png"]
                        forState:UIControlStateNormal];
     [btnSave setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
@@ -400,12 +391,12 @@ static UICompositeViewDescription *compositeDescription = nil;
                 [icWaiting stopAnimating];
                 
                 if (uploadSession.uploadError != nil) {
-                    [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Failed. Please try later!"] duration:2.0 position:CSToastPositionCenter];
+                    [self.view makeToast:text_faild_try_later duration:2.0 position:CSToastPositionCenter];
                 }else{
                     if (isRemoveAvatar) {
-                        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Your avatar has been removed"] duration:2.0 position:CSToastPositionCenter];
+                        [self.view makeToast:avatar_was_removed duration:2.0 position:CSToastPositionCenter];
                     }else{
-                        [self.view makeToast:[[LanguageUtil sharedInstance] getContent:@"Your avatar has been uploaded"] duration:2.0 position:CSToastPositionCenter];
+                        [self.view makeToast:avatar_was_uploaded duration:2.0 position:CSToastPositionCenter];
                     }
                     
                     //  save avatar to get from local

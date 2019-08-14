@@ -411,12 +411,11 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
 - (void)showContentWithCurrentLanguage
 {
     if (IS_IPHONE || IS_IPOD) {
-        _lbHeader.text = [[LanguageUtil sharedInstance] getContent:@"Crop picture"];
+        _lbHeader.text = text_crop_picture;
     }else{
-        self.title = [[LanguageUtil sharedInstance] getContent:@"Crop picture"];
+        self.title = text_crop_picture;
     }
-    [_btnSave setTitle:[[LanguageUtil sharedInstance] getContent:@"Save"]
-              forState:UIControlStateNormal];
+    [_btnSave setTitle:text_save forState:UIControlStateNormal];
 }
 
 

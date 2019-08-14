@@ -21,7 +21,7 @@
         self.layer.cornerRadius = 12.0;
         
         btnClose = [[UIButton alloc] init];
-        [btnClose setTitle:[[LanguageUtil sharedInstance] getContent:@"Close"] forState:UIControlStateNormal];
+        [btnClose setTitle:text_close forState:UIControlStateNormal];
         btnClose.titleLabel.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightRegular];
         [btnClose setTitleColor:UIColor.redColor forState:UIControlStateNormal];
         [btnClose addTarget:self
@@ -35,7 +35,7 @@
         }];
         
         btnSet = [[UIButton alloc] init];
-        [btnSet setTitle:[[LanguageUtil sharedInstance] getContent:@"Setup"] forState:UIControlStateNormal];
+        [btnSet setTitle:text_setup forState:UIControlStateNormal];
         btnSet.titleLabel.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightSemibold];
         [btnSet setTitleColor:[UIColor colorWithRed:(101/255.0) green:(205/255.0)
                                                blue:(70/255.0) alpha:1.0]
