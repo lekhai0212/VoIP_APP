@@ -92,8 +92,7 @@
 
 - (void)getMissedHistoryCallForUser
 {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
-                         toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         if (listCalls == nil) {
@@ -143,8 +142,7 @@
 //  Get lại danh sách các cuộc gọi sau khi xoá
 - (void)reGetListCallsForHistory
 {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
-                         toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     [listCalls removeAllObjects];
     [listCalls addObjectsFromArray:[NSDatabase getHistoryCallListOfUser: USERNAME isMissed: true]];
@@ -238,7 +236,7 @@
     
     //  get missed call
     if (aCall.newMissedCall > 0) {
-        NSString *strMissed = [NSString stringWithFormat:@"%d", aCall.newMissedCall];
+        NSString *strMissed = SFM(@"%d", aCall.newMissedCall);
         if (aCall.newMissedCall > 5) {
             strMissed = @"+5";
         }
@@ -352,8 +350,7 @@
 
 - (void)btnCallOnCellPressed: (UIButton *)sender
 {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] phone number = %@", __FUNCTION__, sender.currentTitle]
-                         toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] number: %@", __FUNCTION__, sender.currentTitle) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     if (![AppUtils isNullOrEmpty: sender.currentTitle]) {
         NSString *phoneNumber = [AppUtils removeAllSpecialInString: sender.currentTitle];
@@ -377,8 +374,7 @@
 
 - (void)deleteHistoryCallsPressed: (NSNotification *)notif
 {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] ", __FUNCTION__]
-                         toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     NSNumber *object = [notif object];
     if ([object isKindOfClass:[NSNumber class]]) {

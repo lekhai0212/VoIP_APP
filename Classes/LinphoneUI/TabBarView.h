@@ -46,6 +46,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnContactsIpad;
 @property (weak, nonatomic) IBOutlet UIButton *btnMoreIpad;
 @property (weak, nonatomic) IBOutlet UILabel *lbMenuTopSepa;
+@property (weak, nonatomic) IBOutlet UILabel *lbVersionUpdate;
 
 - (IBAction)btnDialerIpadPress:(UIButton *)sender;
 - (IBAction)btnCallHistoryIpadPress:(UIButton *)sender;

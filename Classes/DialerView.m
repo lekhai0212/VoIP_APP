@@ -108,7 +108,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     NSString *server = [[NSUserDefaults standardUserDefaults] objectForKey:PBX_SERVER];
     NSString *port = [[NSUserDefaults standardUserDefaults] objectForKey:PBX_PORT];
     if (![AppUtils isNullOrEmpty: server] && ![AppUtils isNullOrEmpty: port]) {
-        NSString *fabricInfo = [NSString stringWithFormat:@"%@ - %@:%@", USERNAME, server, port];
+        NSString *fabricInfo = SFM(@"%@ - %@:%@", USERNAME, server, port);
         [[Crashlytics sharedInstance] setUserName:fabricInfo];
     }else{
         [[Crashlytics sharedInstance] setUserName:USERNAME];
@@ -117,7 +117,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     //  variable for num login
     numTryToLogin = 0;
     
-    NSString *total = [NSString stringWithFormat:@"%@%@%@", PASSWORD, [LinphoneAppDelegate sharedInstance].randomKey, USERNAME];
+    NSString *total = SFM(@"%@%@%@", PASSWORD, [LinphoneAppDelegate sharedInstance].randomKey, USERNAME);
     [LinphoneAppDelegate sharedInstance].hashStr = [[total MD5String] lowercaseString];
     
     if ([LinphoneAppDelegate sharedInstance].supportVideoCall) {
@@ -338,7 +338,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (IBAction)btnVideoCallPress:(UIButton *)sender {
     if (_addressField.text.length > 0) {
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] With _addressField.text = %@", __FUNCTION__, _addressField.text] toFilePath:appDelegate.logFilePath];
+        [WriteLogsUtils writeLogContent:SFM(@"[%s] number: %@", __FUNCTION__, _addressField.text) toFilePath:appDelegate.logFilePath];
+        
         [self setupFrameForSearchResultWithExistsData: NO];
         icClear.hidden = NO;
         
@@ -382,14 +383,14 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (void)onBackspaceLongClick:(id)sender {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:appDelegate.logFilePath];
     
     [self hideSearchView];
     [self setupFrameForSearchResultWithExistsData: NO];
 }
 
 - (void)onZeroLongClick:(id)sender {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:appDelegate.logFilePath];
     
 	// replace last character with a '+'
 	NSString *newAddress =
@@ -399,7 +400,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (void)onOneLongClick:(id)sender {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:appDelegate.logFilePath];
     
 	LinphoneManager *lm = LinphoneManager.instance;
 	NSString *voiceMail = [lm lpConfigStringForKey:@"voice_mail_uri"];
@@ -433,7 +434,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         [self setupFrameForSearchResultWithExistsData: NO];
         icClear.hidden = NO;
         
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] With _addressField.text = %@", __FUNCTION__, _addressField.text] toFilePath:appDelegate.logFilePath];
+        [WriteLogsUtils writeLogContent:SFM(@"[%s] number: %@", __FUNCTION__, _addressField.text) toFilePath:appDelegate.logFilePath];
         
         [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:IS_VIDEO_CALL_KEY];
         [[NSUserDefaults standardUserDefaults] synchronize];
@@ -454,7 +455,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (IBAction)icClearClick:(UIButton *)sender {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:appDelegate.logFilePath];
     
     if (_addressField.text.length > 0) {
         _addressField.text = [_addressField.text substringToIndex:[_addressField.text length] - 1];
@@ -486,7 +487,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         
         if ([phoneNumber hasPrefix:@"84"]) {
             phoneNumber = [phoneNumber substringFromIndex:2];
-            phoneNumber = [NSString stringWithFormat:@"0%@", phoneNumber];
+            phoneNumber = SFM(@"0%@", phoneNumber);
         }
         phoneNumber = [AppUtils removeAllSpecialInString: phoneNumber];
         
@@ -498,11 +499,10 @@ static UICompositeViewDescription *compositeDescription = nil;
 #pragma mark - Khai Le Functions
 
 - (void)networkDown {
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:appDelegate.logFilePath];
     if ([DeviceUtils checkNetworkAvailable]) {
         return;
     }
-    
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
     
     _lbStatus.text = text_no_network;
     _lbStatus.textColor = UIColor.orangeColor;
@@ -510,7 +510,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)searchPhoneBookWithThread {
     if (!appDelegate.contactLoaded) {
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Contacts list have not loaded successful. Please wait for a momment", __FUNCTION__] toFilePath:appDelegate.logFilePath];
+        [WriteLogsUtils writeLogContent:SFM(@"[%s] >>>>>>>>>>>>>>>>>>>>WARNING<<<<<<<<<<<<<<<<<<\nContacts list have not loaded successful. Please wait for a momment", __FUNCTION__) toFilePath:appDelegate.logFilePath];
+        
         return;
     }
     
@@ -542,7 +543,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 // Search duoc danh sach
 - (void)searchContactDone
 {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:appDelegate.logFilePath];
     
     if (_addressField.text.length > 0) {
         //  [khai le - 02/11/2018]
@@ -574,14 +575,12 @@ static UICompositeViewDescription *compositeDescription = nil;
         lbPhone.text = contact.number;
         
         if (searchArr.count > 1) {
-            [btnSearchNum setTitle:[NSString stringWithFormat:@"(%d)", (int)listPhoneSearched.count]
-                          forState:UIControlStateNormal];
+            [btnSearchNum setTitle:SFM(@"(%d)", (int)listPhoneSearched.count) forState:UIControlStateNormal];
             btnSearchNum.enabled = YES;
         }else{
             [btnSearchNum setTitle:@"" forState:UIControlStateNormal];
             btnSearchNum.enabled = NO;
         }
-        
     }
 }
 
@@ -625,7 +624,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)enableNAT
 {
     return;
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:appDelegate.logFilePath];
     
     LinphoneNatPolicy *LNP = linphone_core_get_nat_policy(LC);
     linphone_nat_policy_enable_ice(LNP, FALSE);
@@ -932,7 +931,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 #pragma mark - Call Button Delegate
 - (void)textfieldAddressChanged:(NSString *)number {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] number = %@", __FUNCTION__, number] toFilePath:appDelegate.logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] number: %@", __FUNCTION__, number) toFilePath:appDelegate.logFilePath];
     
     [self searchPhoneBookWithThread];
 }
@@ -946,8 +945,6 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)registrationUpdate:(LinphoneRegistrationState)state forProxy:(LinphoneProxyConfig *)proxy message:(NSString *)message
 {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Dialer: state registration is %d", __FUNCTION__, state] toFilePath:appDelegate.logFilePath];
-    
     switch (state) {
         case LinphoneRegistrationOk: {
             _lbStatus.textColor = UIColor.greenColor;
@@ -961,8 +958,6 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case LinphoneRegistrationFailed: {
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] state is LinphoneRegistrationFailed, numTryToLogin = %d ", __FUNCTION__, numTryToLogin] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-            
             if (numTryToLogin < MAX_TIME_FOR_LOGIN) {
                 numTryToLogin++;
                
@@ -1010,10 +1005,10 @@ static UICompositeViewDescription *compositeDescription = nil;
     AccountState curState = [SipUtils getStateOfDefaultProxyConfig];
     if (curState == eAccountNone) {
         _lbAccount.text = @"";
-        _lbStatus.text = [[LanguageUtil sharedInstance] getContent:@"No account"];
+        _lbStatus.text = text_no_account;
         _lbStatus.textColor = UIColor.orangeColor;
         
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] NONE ACCOUNT", __FUNCTION__] toFilePath:appDelegate.logFilePath];
+        [WriteLogsUtils writeLogContent:SFM(@"[%s] NONE ACCOUNT", __FUNCTION__) toFilePath:appDelegate.logFilePath];
     }else {
         NSString *accountID = [SipUtils getExtensionOfDefaultProxyConfig];
         _lbAccount.text = accountID;
@@ -1021,7 +1016,8 @@ static UICompositeViewDescription *compositeDescription = nil;
             _lbStatus.text = text_disabled;
             _lbStatus.textColor = UIColor.orangeColor;
             
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] AccountId = %@, state is OFF", __FUNCTION__, accountID] toFilePath:appDelegate.logFilePath];
+            [WriteLogsUtils writeLogContent:SFM(@"[%s] AccountID: %@, state is OFF", __FUNCTION__, accountID) toFilePath:appDelegate.logFilePath];
+            
         }else{
             LinphoneRegistrationState state = [SipUtils getRegistrationStateOfDefaultProxyConfig];
             if (state == LinphoneRegistrationOk) {
@@ -1033,7 +1029,7 @@ static UICompositeViewDescription *compositeDescription = nil;
                 _lbStatus.text = text_offline;
             }
             
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] AccountId = %@, state is ON", __FUNCTION__, accountID] toFilePath:appDelegate.logFilePath];
+            [WriteLogsUtils writeLogContent:SFM(@"[%s] AccountID: %@, state is ON", __FUNCTION__, accountID) toFilePath:appDelegate.logFilePath];
         }
     }
 }
@@ -1060,18 +1056,16 @@ static UICompositeViewDescription *compositeDescription = nil;
         [self checkAccountForApp];
     }
     
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] internetStatus = %d", __FUNCTION__, internetStatus] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] internet status: %d", __FUNCTION__, internetStatus) toFilePath:appDelegate.logFilePath];
 }
 
 - (void)whenTappedOnStatusAccount {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:appDelegate.logFilePath];
     
     if ([LinphoneManager instance].connectivity == none){
         [self.view makeToast:text_check_network duration:2.0 position:CSToastPositionCenter];
         return;
     }
-    
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"Call %@", @"refreshRegisters"] toFilePath:appDelegate.logFilePath];
     [LinphoneManager.instance refreshRegisters];
 }
 
@@ -1097,7 +1091,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (void)selectContactFromSearchPopup:(NSString *)phoneNumber {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] phoneNumber = %@", __FUNCTION__, phoneNumber] toFilePath:appDelegate.logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] phoneNumber: %@", __FUNCTION__, phoneNumber) toFilePath:appDelegate.logFilePath];
     
     _addressField.text = phoneNumber;
     [self setupFrameForSearchResultWithExistsData: NO];
@@ -1201,7 +1195,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (void)selecteFirstContactForSearch {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:appDelegate.logFilePath];
     
     if (listPhoneSearched.count > 0) {
         PhoneObject *contact = [listPhoneSearched firstObject];
@@ -1212,7 +1206,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (void)showSearchPopupContact {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:appDelegate.logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:appDelegate.logFilePath];
     
     float totalHeight = listPhoneSearched.count * 60.0;
     if (totalHeight > SCREEN_HEIGHT - 70.0*2) {
@@ -1238,15 +1232,11 @@ static UICompositeViewDescription *compositeDescription = nil;
 #pragma mark - Webservice delegate
 - (void)failedToCallWebService:(NSString *)link andError:(NSString *)error
 {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Result for %@:\nResponse data: %@\n", __FUNCTION__, link, error] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] link: %@, error: %@", __FUNCTION__, link, @[error]) toFilePath:appDelegate.logFilePath];
 }
 
 - (void)successfulToCallWebService:(NSString *)link withData:(NSDictionary *)data {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Result for %@:\nResponse data: %@\n", __FUNCTION__, link, @[data]] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-    
-    if ([link isEqualToString: get_didlist_func]){
-        NSLog(@"%@", data);
-    }
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] link: %@, data: %@", __FUNCTION__, link, @[data]) toFilePath:appDelegate.logFilePath];
 }
 
 -(void)receivedResponeCode:(NSString *)link withCode:(int)responeCode {

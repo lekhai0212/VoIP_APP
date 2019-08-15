@@ -207,7 +207,7 @@
                     [[NSUserDefaults standardUserDefaults] removeObjectForKey:UserActivity];
                     [[NSUserDefaults standardUserDefaults] synchronize];
                     
-                    [self.window makeToast:[[LanguageUtil sharedInstance] getContent:@"You have not signed your account yet"] duration:3.0 position:CSToastPositionCenter];
+                    [self.window makeToast:text_not_signed duration:3.0 position:CSToastPositionCenter];
                     [self performSelector:@selector(hideSplashScreen) withObject:nil afterDelay:3.0];
                     
                     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"Call with UserActivity phone number = %@, but have not signed with any account", phoneNumber] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
@@ -218,7 +218,7 @@
                 {
                     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"Call with UserActivity phone number = %@, but current account was off", phoneNumber] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
                     
-                    UIAlertView *alertAcc = [[UIAlertView alloc] initWithTitle:nil message:[[LanguageUtil sharedInstance] getContent:@"Your account was turned off. Do you want to enable and call?"] delegate:self cancelButtonTitle:[[LanguageUtil sharedInstance] getContent:@"No"] otherButtonTitles: [[LanguageUtil sharedInstance] getContent:@"Yes"], nil];
+                    UIAlertView *alertAcc = [[UIAlertView alloc] initWithTitle:nil message:text_acc_turn_off delegate:self cancelButtonTitle:text_no otherButtonTitles: text_yes, nil];
                     alertAcc.delegate = self;
                     alertAcc.tag = 100;
                     [alertAcc show];
@@ -447,7 +447,7 @@
     [AppUtils setupFirstValueForSortContact];
     
     //  nhcla154 - rzfpGFlsEx
-    NSString *str = [NSString stringWithFormat:@"%@: %@\n%@: %@", [[LanguageUtil sharedInstance] getContent:@"Version"], [AppUtils getAppVersionWithBuildVersion: YES], [[LanguageUtil sharedInstance] getContent:@"Release date"], [AppUtils getBuildDate]];
+    NSString *str = [NSString stringWithFormat:@"%@: %@\n%@: %@", text_version, [AppUtils getAppVersionWithBuildVersion: YES], text_release_date, [AppUtils getBuildDate]];
     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"\nApp's version is %@", str] toFilePath:logFilePath];
     
     //  set default ringtone if have not yet
@@ -1902,7 +1902,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             if (locLabel == nil) {
                 ContactDetailObj *anItem = [[ContactDetailObj alloc] init];
                 anItem._iconStr = @"btn_contacts_home.png";
-                anItem._titleStr = [[LanguageUtil sharedInstance] getContent:@"Home"];
+                anItem._titleStr = text_home;
                 anItem._valueStr = [self removeAllSpecialInString: phoneNumber];
                 anItem._buttonStr = @"contact_detail_icon_call.png";
                 anItem._typePhone = type_phone_home;
@@ -1911,7 +1911,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 if (CFStringCompare(locLabel, kABHomeLabel, 0) == kCFCompareEqualTo) {
                     ContactDetailObj *anItem = [[ContactDetailObj alloc] init];
                     anItem._iconStr = @"btn_contacts_home.png";
-                    anItem._titleStr = [[LanguageUtil sharedInstance] getContent:@"Home"];
+                    anItem._titleStr = text_home;
                     anItem._valueStr = [self removeAllSpecialInString: phoneNumber];
                     anItem._buttonStr = @"contact_detail_icon_call.png";
                     anItem._typePhone = type_phone_home;
@@ -1920,7 +1920,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 {
                     ContactDetailObj *anItem = [[ContactDetailObj alloc] init];
                     anItem._iconStr = @"btn_contacts_work.png";
-                    anItem._titleStr = [[LanguageUtil sharedInstance] getContent:@"Work"];
+                    anItem._titleStr = text_work;
                     anItem._valueStr = [self removeAllSpecialInString: phoneNumber];
                     anItem._buttonStr = @"contact_detail_icon_call.png";
                     anItem._typePhone = type_phone_work;
@@ -1929,7 +1929,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 {
                     ContactDetailObj *anItem = [[ContactDetailObj alloc] init];
                     anItem._iconStr = @"btn_contacts_mobile.png";
-                    anItem._titleStr = [[LanguageUtil sharedInstance] getContent:@"Mobile"];
+                    anItem._titleStr = text_mobile;
                     anItem._valueStr = [self removeAllSpecialInString: phoneNumber];
                     anItem._buttonStr = @"contact_detail_icon_call.png";
                     anItem._typePhone = type_phone_mobile;
@@ -1938,7 +1938,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 {
                     ContactDetailObj *anItem = [[ContactDetailObj alloc] init];
                     anItem._iconStr = @"btn_contacts_fax.png";
-                    anItem._titleStr = [[LanguageUtil sharedInstance] getContent:@"Fax"];
+                    anItem._titleStr = text_fax;
                     anItem._valueStr = [self removeAllSpecialInString: phoneNumber];
                     anItem._buttonStr = @"contact_detail_icon_call.png";
                     anItem._typePhone = type_phone_fax;
@@ -1947,7 +1947,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 {
                     ContactDetailObj *anItem = [[ContactDetailObj alloc] init];
                     anItem._iconStr = @"btn_contacts_fax.png";
-                    anItem._titleStr = [[LanguageUtil sharedInstance] getContent:@"Other"];
+                    anItem._titleStr = text_other;
                     anItem._valueStr = [self removeAllSpecialInString: phoneNumber];
                     anItem._buttonStr = @"contact_detail_icon_call.png";
                     anItem._typePhone = type_phone_other;
@@ -1955,7 +1955,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 }else{
                     ContactDetailObj *anItem = [[ContactDetailObj alloc] init];
                     anItem._iconStr = @"btn_contacts_mobile.png";
-                    anItem._titleStr = [[LanguageUtil sharedInstance] getContent:@"Mobile"];
+                    anItem._titleStr = text_mobile;
                     anItem._valueStr = [self removeAllSpecialInString: phoneNumber];
                     anItem._buttonStr = @"contact_detail_icon_call.png";
                     anItem._typePhone = type_phone_mobile;
@@ -2175,8 +2175,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         _updateTokenSuccess = false;
         
     }else if ([link isEqualToString: get_didlist_func]) {
-        [self.window makeToast:[[LanguageUtil sharedInstance] getContent:@"Can not get DID list"]
-                      duration:2.0 position:CSToastPositionCenter];
+        [self.window makeToast:get_did_list_fail duration:2.0 position:CSToastPositionCenter];
         [self showPopupToChooseDID: @[]];
     }else if ([link isEqualToString: get_missedcall_func]) {
         NSLog(@"Can not get missed call");
@@ -2384,7 +2383,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     
     NSString *myExt = [SipUtils getAccountIdOfDefaultProxyConfig];
     if (![AppUtils isNullOrEmpty: myExt] && [myExt isEqualToString: phoneForCall]) {
-        [self.window makeToast:[[LanguageUtil sharedInstance] getContent:@"Can not make call with yourself!"] duration:2.0 position:CSToastPositionCenter];
+        [self.window makeToast:cant_make_call_yourself duration:2.0 position:CSToastPositionCenter];
         return;
     }
     

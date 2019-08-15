@@ -133,11 +133,11 @@ static UICompositeViewDescription *compositeDescription = nil;
     // Check section
     [listHistoryCalls removeAllObjects];
     if ([AppUtils isNullOrEmpty: onDate]) {
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Get all list call with phone number %@", __FUNCTION__, phoneNumber] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+        [WriteLogsUtils writeLogContent:SFM(@">>>>>>>>>>>>>>> GET ALL LIST CALL WITH PHONE: %@", phoneNumber) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
         
         [listHistoryCalls addObjectsFromArray: [NSDatabase getAllListCallOfMe:USERNAME withPhoneNumber:phoneNumber]];
     }else{
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Get all list call with phone number %@, on date %@", __FUNCTION__, phoneNumber, onDate] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+        [WriteLogsUtils writeLogContent:SFM(@">>>>>>>>>>>>>>> GET ALL LIST CALL WITH PHONE: %@, ON DATE: %@", phoneNumber, onDate) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
         
         [listHistoryCalls addObjectsFromArray: [NSDatabase getAllCallOfMe:USERNAME withPhone:phoneNumber onDate:onDate onlyMissedCall: onlyMissedCall]];
     }
@@ -329,16 +329,16 @@ static UICompositeViewDescription *compositeDescription = nil;
         }
         
         if ([aCall._status isEqualToString: aborted_call]){
-            cell.lbCallState.text = [NSString stringWithFormat:@"Hủy bỏ"];
+            cell.lbCallState.text = @"Hủy bỏ";
             
         }else if ([aCall._status isEqualToString: declined_call]){
-            cell.lbCallState.text = [NSString stringWithFormat:@"Bị từ chối"];
+            cell.lbCallState.text = @"Bị từ chối";
             
         }else if ([aCall._status isEqualToString: missed_call]){
-            cell.lbCallState.text = [NSString stringWithFormat:@"Cuộc gọi nhỡ"];
+            cell.lbCallState.text = @"Cuộc gọi nhỡ";
             
         }else if ([aCall._status isEqualToString: success_call]){
-            cell.lbCallState.text = [NSString stringWithFormat:@"Đã kết nối"];
+            cell.lbCallState.text = @"Đã kết nối";
             
         }else{
             cell.lbCallState.text = @"";
@@ -378,30 +378,30 @@ static UICompositeViewDescription *compositeDescription = nil;
         if ([aCall._status isEqualToString: aborted_call])
         {
             if (aCall.typeCall == AUDIO_CALL_TYPE) {
-                cell.lbState.text = [NSString stringWithFormat:@"Cuộc gọi thoại bị huỷ bỏ"];
+                cell.lbState.text = @"Cuộc gọi thoại bị huỷ bỏ";
             }else{
-                cell.lbState.text = [NSString stringWithFormat:@"Cuộc gọi video bị huỷ bỏ"];
+                cell.lbState.text = @"Cuộc gọi video bị huỷ bỏ";
             }
             
         }else if ([aCall._status isEqualToString: declined_call]){
             if (aCall.typeCall == AUDIO_CALL_TYPE) {
-                cell.lbState.text = [NSString stringWithFormat:@"Cuộc gọi thoại bị từ chối"];
+                cell.lbState.text = @"Cuộc gọi thoại bị từ chối";
             }else{
-                cell.lbState.text = [NSString stringWithFormat:@"Cuộc gọi video bị từ chối"];
+                cell.lbState.text = @"Cuộc gọi video bị từ chối";
             }
             
         }else if ([aCall._status isEqualToString: missed_call]){
             if (aCall.typeCall == AUDIO_CALL_TYPE) {
-                cell.lbState.text = [NSString stringWithFormat:@"Cuộc gọi thoại nhỡ"];
+                cell.lbState.text = @"Cuộc gọi thoại nhỡ";
             }else{
-                cell.lbState.text = [NSString stringWithFormat:@"Cuộc gọi video nhỡ"];
+                cell.lbState.text = @"Cuộc gọi video nhỡ";
             }
             
         }else if ([aCall._status isEqualToString: success_call]){
             if (aCall.typeCall == AUDIO_CALL_TYPE) {
-                cell.lbState.text = [NSString stringWithFormat:@"Cuộc gọi thoại"];
+                cell.lbState.text = @"Cuộc gọi thoại";
             }else{
-                cell.lbState.text = [NSString stringWithFormat:@"Cuộc gọi video"];
+                cell.lbState.text = @"Cuộc gọi video";
             }
             
         }else{
@@ -458,7 +458,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (IBAction)iconAudioClick:(UIButton *)sender {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
      
     [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:IS_VIDEO_CALL_KEY];
     [[NSUserDefaults standardUserDefaults] synchronize];
@@ -468,7 +468,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (IBAction)iconVideoClick:(UIButton *)sender {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:IS_VIDEO_CALL_KEY];
     [[NSUserDefaults standardUserDefaults] synchronize];
@@ -479,7 +479,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 #pragma mark - Alertview delegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-     [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] alertView.tag = %d,  buttonIndex = %d", __FUNCTION__, (int)alertView.tag, (int)buttonIndex] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] tag: %d, buttonIndex: %d", __FUNCTION__, (int)alertView.tag, (int)buttonIndex) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     if (buttonIndex == 1) {
         [NSDatabase deleteCallHistoryOfRemote:phoneNumber onDate:onDate ofAccount:USERNAME];

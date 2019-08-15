@@ -735,8 +735,7 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 
 - (NSString *)createDirectory {
     NSString *appFolderPath = [[NSBundle mainBundle] resourcePath];
-    NSString *path = [NSString stringWithFormat:@"%@/%@", appFolderPath, @"test.mp3"];
-    NSLog(@"%@", path);
+    NSString *path = SFM(@"%@/%@", appFolderPath, @"test.mp3");
     return path;
 }
 
@@ -1128,15 +1127,13 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 #pragma mark - My Functions
 
 - (void)setQualityForFirstTime {
-    NSString *qualityValue = [[LanguageUtil sharedInstance] getContent:@"Good"];
-    NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Quality"], qualityValue];
+    NSString *qualityValue = text_good;
+    NSString *quality = SFM(@"%@: %@", text_quality, qualityValue);
     NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString: quality];
     [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, quality.length)];
     [attr addAttribute:NSForegroundColorAttributeName value:UIColor.greenColor range:NSMakeRange(quality.length-qualityValue.length, qualityValue.length)];
     _lbQuality.attributedText = attr;
 }
-
-
 
 - (void)changeCamera {
     CABasicAnimation *animationView = [CABasicAnimation animationWithKeyPath:@"transform"];
@@ -1587,64 +1584,42 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
     if (IS_IPHONE || IS_IPOD) {
         NSString *deviceMode = [DeviceUtils getModelsOfCurrentDevice];
         
-        if ([DeviceUtils isPortraitMode]) {
-            if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE])
-            {
-                //  Screen width: 320.000000 - Screen height: 667.000000
-                wAvatar = 110.0;
-                wEndIcon = 60.0;
-                wSmallIcon = 45.0;
-                marginQuality = 30.0;
-                marginIcon = 10.0;
-                marginPhone = 20.0;
-                
-            }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
-            {
-                wAvatar = 130.0;
-                wEndIcon = 70.0;
-                wSmallIcon = 55.0;
-                marginIcon = 10.0;
-                
-            }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
-            {
-                wAvatar = 150.0;
-                wEndIcon = 75.0;
-                wSmallIcon = 58.0;
-                marginIcon = 12.0;
-                
-            }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2] || [deviceMode isEqualToString: simulator]){
-                //  Screen width: 375.000000 - Screen height: 812.000000
-                wAvatar = 150.0;
-                wEndIcon = 75.0;
-                wSmallIcon = 58.0;
-                marginIcon = 12.0;
-            }else{
-                //  Screen width: 375.000000 - Screen height: 812.000000
-                wAvatar = 150.0;
-                wEndIcon = 75.0;
-                wSmallIcon = 58.0;
-                marginIcon = 12.0;
-            }
-        }else{
+        if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE])
+        {
             //  Screen width: 320.000000 - Screen height: 667.000000
-            wAvatar = 100.0;
+            wAvatar = 110.0;
+            wEndIcon = 60.0;
+            wSmallIcon = 50.0;
+            marginQuality = 30.0;
+            marginIcon = 10.0;
+            marginPhone = 20.0;
+            
+        }else if ([deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
+        {
+            wAvatar = 130.0;
             wEndIcon = 70.0;
             wSmallIcon = 55.0;
-            marginQuality = 5.0;
-            marginIcon = 20.0;
-            marginPhone = 10.0;
-            marginBottom = 20.0;
-            paddingAvatar = 30.0;
+            marginIcon = 10.0;
             
-            if ([deviceMode isEqualToString: Iphone5_1] || [deviceMode isEqualToString: Iphone5_2] || [deviceMode isEqualToString: Iphone5c_1] || [deviceMode isEqualToString: Iphone5c_2] || [deviceMode isEqualToString: Iphone5s_1] || [deviceMode isEqualToString: Iphone5s_2] || [deviceMode isEqualToString: IphoneSE] || [deviceMode isEqualToString: Iphone6] || [deviceMode isEqualToString: Iphone6s] || [deviceMode isEqualToString: Iphone7_1] || [deviceMode isEqualToString: Iphone7_2] || [deviceMode isEqualToString: Iphone8_1] || [deviceMode isEqualToString: Iphone8_2])
-            {
-                //  Screen width: 320.000000 - Screen height: 667.000000
-                marginBottom = 5.0;
-                wAvatar = 100.0;
-                wEndIcon = 65.0;
-                wSmallIcon = 55.0;
-                paddingAvatar = 45.0;
-            }
+        }else if ([deviceMode isEqualToString: Iphone6_Plus] || [deviceMode isEqualToString: Iphone6s_Plus] || [deviceMode isEqualToString: Iphone7_Plus1] || [deviceMode isEqualToString: Iphone7_Plus2] || [deviceMode isEqualToString: Iphone8_Plus1] || [deviceMode isEqualToString: Iphone8_Plus2])
+        {
+            wAvatar = 150.0;
+            wEndIcon = 75.0;
+            wSmallIcon = 58.0;
+            marginIcon = 12.0;
+            
+        }else if ([deviceMode isEqualToString: IphoneX_1] || [deviceMode isEqualToString: IphoneX_2] || [deviceMode isEqualToString: IphoneXR] || [deviceMode isEqualToString: IphoneXS] || [deviceMode isEqualToString: IphoneXS_Max1] || [deviceMode isEqualToString: IphoneXS_Max2] || [deviceMode isEqualToString: simulator]){
+            //  Screen width: 375.000000 - Screen height: 812.000000
+            wAvatar = 150.0;
+            wEndIcon = 75.0;
+            wSmallIcon = 58.0;
+            marginIcon = 12.0;
+        }else{
+            //  Screen width: 375.000000 - Screen height: 812.000000
+            wAvatar = 150.0;
+            wEndIcon = 75.0;
+            wSmallIcon = 58.0;
+            marginIcon = 12.0;
         }
     }else{
         wAvatar = 180.0;
@@ -1705,7 +1680,7 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
 - (void)showOptionChooseRouteOutputForCall {
     UIAlertController * alertViewController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    UIAlertAction* hideAction = [UIAlertAction actionWithTitle:[[LanguageUtil sharedInstance] getContent:@"Hide"] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){}];
+    UIAlertAction* hideAction = [UIAlertAction actionWithTitle:text_hide style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){}];
     [hideAction setValue:UIColor.redColor forKey:@"titleTextColor"];
     [alertViewController addAction: hideAction];
     
@@ -1768,7 +1743,7 @@ static void hideSpinner(LinphoneCall *call, void *user_data) {
             break;
         }
         case 2:{
-            cell.lbContent.text = [[LanguageUtil sharedInstance] getContent:@"Speaker"];
+            cell.lbContent.text = text_speaker;
             cell.imgType.image = [UIImage imageNamed:@"route_speaker"];
             cell.imgType.hidden = NO;
             if (routeType == eSpeaker) {

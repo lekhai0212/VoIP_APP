@@ -95,7 +95,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     _btnSpeaker.selected = NO;
     _btnMute.selected = NO;
     
-    _lbCallState.text = [[LanguageUtil sharedInstance] getContent:@"Calling"];
+    _lbCallState.text = text_calling;
     
     // basic setup
     PulsingHaloLayer *layer = [PulsingHaloLayer layer];
@@ -168,7 +168,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (IBAction)_btnEndCallPressed:(UIButton *)sender {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     [LinphoneAppDelegate sharedInstance]._meEnded = YES;
     
@@ -182,7 +182,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 #pragma mark - My functions
 
 - (void)setPhoneNumberForView: (NSString *)phoneNumber {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] phoneNumber = %@", __FUNCTION__, phoneNumber] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] number: %@", __FUNCTION__, phoneNumber) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
     _phoneNumber = phoneNumber;
 }
 
@@ -331,38 +332,40 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)callUpdate:(LinphoneCall *)call state:(LinphoneCallState)state animated:(BOOL)animated
 {
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
     // Fake call update
     if (call == NULL) {
         return;
     }
     switch (state) {
         case LinphoneCallIncomingReceived:{
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] call state is LinphoneCallIncomingReceived", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            [WriteLogsUtils writeLogContent:SFM(@"[%s] call state: IncomingReceived", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
             break;
         }
         case LinphoneCallOutgoingInit:{
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] call state is LinphoneCallOutgoingInit", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            [WriteLogsUtils writeLogContent:SFM(@"[%s] call state: OutgoingInit", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
             
-            _lbCallState.text = [[LanguageUtil sharedInstance] getContent:@"Calling"];
+            _lbCallState.text = text_calling;
             break;
         }
         case LinphoneCallOutgoingRinging:{
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] call state is LinphoneCallOutgoingRinging", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            [WriteLogsUtils writeLogContent:SFM(@"[%s] call state: OutgoingRinging", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
             
-            _lbCallState.text = [[LanguageUtil sharedInstance] getContent:@"Ringing"];
+            _lbCallState.text = text_ringing;
             break;
         }
         case LinphoneCallOutgoingEarlyMedia:{
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] call state is LinphoneCallOutgoingEarlyMedia", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            [WriteLogsUtils writeLogContent:SFM(@"[%s] call state: OutgoingEarlyMedia", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
             
-            _lbCallState.text = [[LanguageUtil sharedInstance] getContent:@"Calling"];
+            _lbCallState.text = text_calling;
             break;
         }
         case LinphoneCallOutgoingProgress:{
-            _btnEndCall.enabled = YES;
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] call state is LinphoneCallOutgoingProgress", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            [WriteLogsUtils writeLogContent:SFM(@"[%s] call state: OutgoingProgress", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
             
-            _lbCallState.text = [[LanguageUtil sharedInstance] getContent:@"Calling"];
+            _btnEndCall.enabled = YES;
+            _lbCallState.text = text_calling;
             
             //  [Khai Le -14/02/2019]
             if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max && call &&
@@ -381,8 +384,9 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case LinphoneCallConnected:{
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] call state is LinphoneCallConnected", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-            _lbCallState.text = [[LanguageUtil sharedInstance] getContent:@"Connected"];
+            [WriteLogsUtils writeLogContent:SFM(@"[%s] call state: Connected", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            
+            _lbCallState.text = text_connected;
             
             //  [Khai Le - 14/02/2019]
             if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max && call) {
@@ -398,7 +402,7 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case LinphoneCallStreamsRunning: {
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] call state is LinphoneCallStreamsRunning", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            [WriteLogsUtils writeLogContent:SFM(@"[%s] call state: StreamsRunning", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
             
             //  [Khai Le - 14/02/2019]
             if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max && call) {
@@ -422,47 +426,50 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case LinphoneCallUpdatedByRemote: {
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] call state is LinphoneCallUpdatedByRemote", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            [WriteLogsUtils writeLogContent:SFM(@"[%s] call state: UpdatedByRemote", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            
             _lbCallState.text = @"Updated By Remote";
             break;
         }
         case LinphoneCallPausing: {
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] call state is LinphoneCallPausing", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            [WriteLogsUtils writeLogContent:SFM(@"[%s] call state: Pausing", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            
             break;
         }
         case LinphoneCallPaused:{
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] call state is LinphoneCallPaused", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            [WriteLogsUtils writeLogContent:SFM(@"[%s] call state: Paused", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            
             break;
         }
         case LinphoneCallPausedByRemote:
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] call state is LinphoneCallPausedByRemote", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            [WriteLogsUtils writeLogContent:SFM(@"[%s] call state: PausedByRemote", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            
             break;
         case LinphoneCallEnd:{
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] call state is LinphoneCallEnd", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            [WriteLogsUtils writeLogContent:SFM(@"[%s] call state: CallEnd", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
             
-            _lbCallState.text = [[LanguageUtil sharedInstance] getContent:@"Terminated"];
+            _lbCallState.text = text_terminated;
             break;
         }
         case LinphoneCallError:{
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] call state is LinphoneCallError", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+            [WriteLogsUtils writeLogContent:SFM(@"[%s] call state: CallError", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
             
             LinphoneReason reason = linphone_call_get_reason(call);
             switch (reason) {
                 case LinphoneReasonNotFound:
-                    NSLog(@"123");
                     break;
                 case LinphoneReasonBusy:{
                     int count = linphone_core_get_calls_nb([LinphoneManager getLc]);
                     if (count > 0) {
                         [[PhoneMainView instance] popToView:CallView.compositeViewDescription];
                     }{
-                        NSString *reason = [NSString stringWithFormat:@"%@ %@", userName, [[LanguageUtil sharedInstance] getContent:@"Busy"]];
+                        NSString *reason = SFM(@"%@ %@", userName, text_user_busy);
                         _lbCallState.text = reason;
                     }
                     break;
                 }
                 default:
-                    _lbCallState.text = [[LanguageUtil sharedInstance] getContent:@"Terminated"];
+                    _lbCallState.text = text_terminated;
                     break;
             }
             break;
@@ -507,7 +514,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)showOptionChooseRouteOutputForCall {
     UIAlertController * alertViewController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    UIAlertAction* hideAction = [UIAlertAction actionWithTitle:[[LanguageUtil sharedInstance] getContent:@"Hide"] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){}];
+    UIAlertAction* hideAction = [UIAlertAction actionWithTitle:text_hide style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){}];
     [hideAction setValue:UIColor.redColor forKey:@"titleTextColor"];
     [alertViewController addAction: hideAction];
     
@@ -566,7 +573,7 @@ static UICompositeViewDescription *compositeDescription = nil;
             break;
         }
         case 2:{
-            cell.lbContent.text = [[LanguageUtil sharedInstance] getContent:@"Speaker"];
+            cell.lbContent.text = text_speaker;
             cell.imgType.image = [UIImage imageNamed:@"route_speaker"];
             cell.imgType.hidden = NO;
             if (routeType == eSpeaker) {

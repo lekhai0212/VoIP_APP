@@ -106,12 +106,10 @@
     id object = [notif object];
     if ([object isKindOfClass:[NSString class]])
     {
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"%s search value = %@", __FUNCTION__, object] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-        
         if ([object isEqualToString:@""]) {
             isSearching = NO;
             [tbGroup reloadData];
-            tbHeader.lbTitle.text = [NSString stringWithFormat:@"Tổng cộng %d nhóm", (int)listData.count];
+            tbHeader.lbTitle.text = SFM(@"Tổng cộng %d nhóm", (int)listData.count);
             
         }else{
             isSearching = YES;
@@ -119,8 +117,7 @@
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                 [self startSearchPBXGroupsWithContent: object];
                 dispatch_async(dispatch_get_main_queue(), ^(void){
-                    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"%s Finished search contact with value = %@", __FUNCTION__, object] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-                    tbHeader.lbTitle.text = [NSString stringWithFormat:@"Tổng cộng %d nhóm", (int)listSearch.count];
+                    tbHeader.lbTitle.text = SFM(@"Tổng cộng %d nhóm", (int)listSearch.count);
                     [tbGroup reloadData];
                 });
             });
@@ -129,7 +126,7 @@
 }
 
 - (void)startSearchPBXGroupsWithContent: (NSString *)content {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] search group = %@", __FUNCTION__, content] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] content: %@", __FUNCTION__, content) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     [listSearch removeAllObjects];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"queue CONTAINS[cd] %@ OR queuename CONTAINS[cd] %@ ", content, content];
@@ -143,7 +140,7 @@
     icWaiting.hidden = FALSE;
     [icWaiting startAnimating];
     
-    NSString *params = [NSString stringWithFormat:@"username=%@", USERNAME];
+    NSString *params = SFM(@"username=%@", USERNAME);
     [webService callGETWebServiceWithFunction:GetServerGroup andParams:params];
 }
 
@@ -262,14 +259,14 @@
         if (listData.count == 0) {
             tbHeader.lbTitle.text = @"Chưa có danh sách nhóm";
         }else{
-            tbHeader.lbTitle.text = [NSString stringWithFormat:@"Tổng cộng %d nhóm", (int)listData.count];
+            tbHeader.lbTitle.text = SFM(@"Tổng cộng %d nhóm", (int)listData.count);
         }
     }
     [tbGroup reloadData];
 }
 
 - (void)clickOnIconCall: (UIButton *)sender {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] num = %@", __FUNCTION__, sender.currentTitle] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] number: %@", __FUNCTION__, sender.currentTitle) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     NSString *num = sender.currentTitle;
     if (![AppUtils isNullOrEmpty: num]) {
@@ -349,7 +346,7 @@
 }
 
 - (void)callGroup: (UIButton *)sender {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] queue = %@", __FUNCTION__, sender.currentTitle] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] queue: %@", __FUNCTION__, sender.currentTitle) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     NSString *queue = sender.currentTitle;
     queue = [AppUtils removeAllSpecialInString: queue];
@@ -369,14 +366,16 @@
 
 - (void)failedToCallWebService:(NSString *)link andError:(id)error
 {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] link: %@.\nResponse data: %@", __FUNCTION__, link, @[error]] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] link: %@, error: %@", __FUNCTION__, link, @[error]) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
     icWaiting.hidden = TRUE;
     [icWaiting stopAnimating];
 }
 
 - (void)successfulToCallWebService:(NSString *)link withData:(NSDictionary *)data
 {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] link: %@.\nResponse data: %@", __FUNCTION__, link, @[data]] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] link: %@, data: %@", __FUNCTION__, link, @[data]) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
     icWaiting.hidden = TRUE;
     [icWaiting stopAnimating];
     
@@ -496,7 +495,7 @@
     }];
     int membersCount = [self getNumRowsForSection: section];
     if (membersCount > 0) {
-        lbCount.text = [NSString stringWithFormat:@"%d thành viên", membersCount];
+        lbCount.text = SFM(@"%d thành viên", membersCount);
     }else{
         lbCount.text = @"Chưa có thành viên";
     }

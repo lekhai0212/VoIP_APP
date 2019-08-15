@@ -237,7 +237,6 @@
 #define finishGetPBXContacts    @"finishGetPBXContacts"
 #define deleteHistoryCallsChoosed           @"deleteHistoryCallsChoosed"
 
-#define addNewContactInContactView          @"addNewContactInContactView"
 #define k11ReloadAfterDeleteAllCall         @"k11ReloadAfterDeleteAllCall"
 #define updateNumberHistoryCallRemove       @"updateNumberHistoryCallRemove"
 #define k11SendMailAfterSaveConversation    @"k11SendMailAfterSaveConversation"
@@ -350,6 +349,7 @@
 #define text_call_details       @"Chi tiết cuộc gọi"
 #define text_delete             @"Xóa"
 #define text_no                 @"Không"
+#define text_yes                @"Có"
 #define text_search             @"Tìm kiếm"
 #define text_saved_list         @"Danh sách đã lưu"
 #define text_no_data            @"Chưa có dữ liệu"
@@ -425,6 +425,7 @@
 #define text_privacy_policy     @"Chính sách bảo mật"
 #define text_introduction       @"Giới thiệu"
 #define text_silent             @"Im lặng"
+#define text_hide               @"Ẩn"
 
 #define text_edit_profile       @"Cập nhật hồ sơ"
 #define text_account_name       @"Tên tài khoản"
@@ -439,6 +440,43 @@
 #define text_can_not_send_email_check_later @"Không thể gửi email. Vui lòng thử lại sau!"
 #define text_email_was_sent                 @"Email của bạn đã được gửi. Xin cảm ơn!"
 
+#define text_calling            @"Đang gọi..."
+#define text_ringing            @"Đang đổ chuông..."
+#define text_user_busy          @"Người dùng đang bận"
+#define text_terminated         @"Cuộc gọi kết thúc"
+#define text_connected          @"Đã kết nối"
+
+#define text_mute               @"Tắt tiếng"
+#define text_keypad             @"Bàn phím"
+#define text_speaker            @"Loa ngoài"
+#define text_add_call           @"Thêm cuộc gọi"
+#define text_hold_call          @"Giữ cuộc gọi"
+#define text_transfer           @"Chuyển cuộc gọi"
+
+#define text_quality            @"Chất lượng"
+#define text_good               @"Tốt"
+#define text_average            @"Trung bình"
+#define text_low                @"Thấp"
+#define text_very_low           @"Yếu"
+#define text_worse              @"Kém"
+
+#define text_no_account         @"Không có tài khoản"
+#define text_not_signed         @"Bạn chưa đăng nhập tài khoản"
+#define text_acc_turn_off       @"Tài khoản của bạn đã bị tắt. Bạn có muốn mở lại và gọi?"
+#define cant_make_call_yourself @"Không thể gọi cho chính bạn!"
+#define get_did_list_fail       @"Không thể lấy danh sách đầu số"
+#define text_hotline            @"Hotline"
+
+#define text_or                 @"hoặc"
+#define text_and                @"và"
+#define text_others             @"người khác"
+#define text_sec                @"giây"
+#define text_hours              @"giờ"
+#define text_hour               @"giờ"
+#define text_minutes            @"phút"
+#define text_minute             @"phút"
+
+#define cant_make_call_check_signin     @"Không thể gọi lúc này. Có lẽ bạn chưa đăng nhập tài khoản!"
 
 
 #endif /* AppStrings_h */

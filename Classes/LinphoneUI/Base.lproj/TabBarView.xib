@@ -23,6 +23,7 @@
                 <outlet property="landscapeView" destination="ni3-kk-RmM" id="gdj-Ib-y4f"/>
                 <outlet property="lbMenuTopSepa" destination="Va4-Yr-Hm9" id="yug-iU-aHA"/>
                 <outlet property="lbTopSepa" destination="pbS-Ee-QT9" id="Ba0-cD-hso"/>
+                <outlet property="lbVersionUpdate" destination="g7k-6K-QZp" id="o3I-d4-Yba"/>
                 <outlet property="moreButton" destination="eGH-eO-Ju9" id="u68-Bb-fIL"/>
                 <outlet property="portraitView" destination="3" id="43"/>
                 <outlet property="view" destination="3" id="14"/>
@@ -104,6 +105,14 @@
                         <action selector="onMoreClick:" destination="-1" eventType="touchUpInside" id="4eu-VP-SwD"/>
                     </connections>
                 </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="g7k-6K-QZp">
+                    <rect key="frame" x="300" y="5" width="19" height="19"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
                 <view contentMode="scaleToFill" id="8tj-p5-25b">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="42"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

@@ -9,10 +9,7 @@
 #import "AllContactsViewController.h"
 #import "ContactsViewController.h"
 #import "KContactDetailViewController.h"
-#import "NewContactViewController.h"
 #import "UIImage+GKContact.h"
-//  #import "NSDBCallnex.h"
-
 #import "NSData+Base64.h"
 #import "ContactCell.h"
 #import "ContactObject.h"
@@ -83,10 +80,6 @@
     //  notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(whenLoadContactFinish)
                                                  name:finishLoadContacts object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addNewContact)
-                                                 name:addNewContactInContactView object:nil];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startSearchContactWithValue:)
                                                  name:searchContactWithValue object:nil];
     //  ---------
@@ -133,12 +126,6 @@
         refreshTimer = nil;
     }
     [self showAndReloadContactList];
-}
-
-- (void)addNewContact {
-    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-    
-    [[PhoneMainView instance] changeCurrentView:[NewContactViewController compositeViewDescription] push: true];
 }
 
 - (void)autoLayoutForView {

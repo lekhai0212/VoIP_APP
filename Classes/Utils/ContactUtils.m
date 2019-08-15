@@ -60,7 +60,7 @@ LinphoneAppDelegate *contactUtilAppDel;
         
         phone = [searchs lastObject];
         
-        NSString *strOR = [NSString stringWithFormat:@" %@ ", [[LanguageUtil sharedInstance] getContent:@"or"]];
+        NSString *strOR = [NSString stringWithFormat:@" %@ ", text_or];
         [attrResult appendAttributedString:[[NSAttributedString alloc] initWithString: strOR]];
         
         NSMutableAttributedString *secondAttr = [[NSMutableAttributedString alloc] initWithString: phone.name];
@@ -76,13 +76,13 @@ LinphoneAppDelegate *contactUtilAppDel;
         [str1 addAttribute: NSFontAttributeName value: font range: NSMakeRange(0, phone.name.length)];
         [attrResult appendAttributedString:str1];
         
-        NSString *strAND = [NSString stringWithFormat:@" %@ ", [[LanguageUtil sharedInstance] getContent:@"and"]];
+        NSString *strAND = [NSString stringWithFormat:@" %@ ", text_and];
         NSMutableAttributedString * attrAnd = [[NSMutableAttributedString alloc] initWithString:strAND];
         [attrAnd addAttribute: NSFontAttributeName value: [UIFont fontWithName:MYRIADPRO_REGULAR size:16.0]
                         range: NSMakeRange(0, strAND.length)];
         [attrResult appendAttributedString:attrAnd];
         
-        NSString *strOthers = [NSString stringWithFormat:@"%d %@", (int)searchs.count-1, [[LanguageUtil sharedInstance] getContent:@"others"]];
+        NSString *strOthers = [NSString stringWithFormat:@"%d %@", (int)searchs.count-1, text_others];
         NSMutableAttributedString * str2 = [[NSMutableAttributedString alloc] initWithString:strOthers];
         [str2 addAttribute: NSLinkAttributeName value: @"others" range: NSMakeRange(0, strOthers.length)];
         [str2 addAttribute:NSUnderlineStyleAttributeName value:@(NSUnderlineStyleNone) range:NSMakeRange(0, strOthers.length)];

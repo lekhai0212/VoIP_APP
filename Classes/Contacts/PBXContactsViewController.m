@@ -7,7 +7,6 @@
 //
 
 #import "PBXContactsViewController.h"
-#import "NewContactViewController.h"
 #import "JSONKit.h"
 #import "PBXContact.h"
 #import "PBXContactTableCell.h"
@@ -90,8 +89,6 @@
             NSArray *contacts = [[LinphoneAppDelegate sharedInstance] getPBXContactPhone:[pbxId intValue]];
             [pbxList addObjectsFromArray: contacts];
             
-            [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"Get PBX contacts with id = %d with list = %lu items", [pbxId intValue], (unsigned long)pbxList.count] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-            
             if (pbxList.count > 0) {
                 _tbContacts.hidden = NO;
                 [_tbContacts reloadData];
@@ -105,11 +102,7 @@
         if ([LinphoneAppDelegate sharedInstance].pbxContacts != nil) {
             [pbxList addObjectsFromArray: [[LinphoneAppDelegate sharedInstance].pbxContacts copy]];
         }
-        
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"List pbx contact count: %lu", (unsigned long)pbxList.count]
-                             toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-        pbxHeaderView.lbTitle.text = [NSString stringWithFormat:@"Tất cả liên hện (%d)", (int)pbxList.count];
-        
+        pbxHeaderView.lbTitle.text = SFM(@"Tất cả liên hện (%d)", (int)pbxList.count);
         if (pbxList.count > 0) {
             [_tbContacts reloadData];
         }
@@ -151,10 +144,10 @@
         pbxHeaderView.btnSync.enabled = NO;
         [self hideWaitingView: NO];
         
-        NSString *params = [NSString stringWithFormat:@"username=%@", USERNAME];
+        NSString *params = SFM(@"username=%@", USERNAME);
         [webService callGETWebServiceWithFunction:get_contacts_func andParams:params];
         
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, params] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+        [WriteLogsUtils writeLogContent:SFM(@"[%s] params: %@", __FUNCTION__, params) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     }
 }
 
@@ -367,14 +360,11 @@
 - (void)startSearchContactWithValue: (NSNotification *)notif {
     
     id object = [notif object];
-    if ([object isKindOfClass:[NSString class]])
-    {
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"%s search value = %@", __FUNCTION__, object] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-        
+    if ([object isKindOfClass:[NSString class]]) {
         if ([object isEqualToString:@""]) {
             isSearching = NO;
             [_tbContacts reloadData];
-            pbxHeaderView.lbTitle.text = [NSString stringWithFormat:@"Tất cả liên hệ (%d)", (int)pbxList.count];
+            pbxHeaderView.lbTitle.text = SFM(@"Tất cả liên hệ (%d)", (int)pbxList.count);
             
         }else{
             isSearching = YES;
@@ -382,9 +372,7 @@
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                 [self startSearchPBXContactsWithContent: object];
                 dispatch_async(dispatch_get_main_queue(), ^(void){
-                    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"%s Finished search contact with value = %@", __FUNCTION__, object] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-                    pbxHeaderView.lbTitle.text = [NSString stringWithFormat:@"Tất cả liên hệ (%d)", (int)listSearch.count];
-                    
+                    pbxHeaderView.lbTitle.text = SFM(@"Tất cả liên hệ (%d)", (int)listSearch.count);
                     [_tbContacts reloadData];
                 });
             });
@@ -393,7 +381,7 @@
 }
 
 - (void)startSearchPBXContactsWithContent: (NSString *)content {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] search contact = %@", __FUNCTION__, content] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] search: %@", __FUNCTION__, content) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     [listSearch removeAllObjects];
     
@@ -492,8 +480,7 @@
 
 - (void)onIconCallClicked: (UIButton *)sender
 {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] phone number = %@", __FUNCTION__, sender.currentTitle]
-                         toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] number: %@", __FUNCTION__, sender.currentTitle) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     if (![AppUtils isNullOrEmpty: sender.currentTitle]) {
         NSString *phoneNumber = [AppUtils removeAllSpecialInString: sender.currentTitle];
@@ -517,8 +504,7 @@
 
 - (void)afterFinishGetPBXContactsList: (NSNotification *)notif
 {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
-                         toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     id object = [notif object];
     if ([object isKindOfClass:[NSNumber class]]) {
@@ -529,8 +515,6 @@
         if ([LinphoneAppDelegate sharedInstance].pbxContacts != nil) {
             [pbxList addObjectsFromArray:[[LinphoneAppDelegate sharedInstance].pbxContacts copy]];
         }
-        
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] pbxContacts count = %lu contacts", __FUNCTION__, (unsigned long)pbxList.count] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
         
         if (pbxList.count > 0) {
             [_tbContacts reloadData];
@@ -546,7 +530,7 @@
     
     NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:attachment];
     
-    NSString *content = [NSString stringWithFormat:@"  %@", text_sync_contacts];
+    NSString *content = SFM(@"  %@", text_sync_contacts);
     NSMutableAttributedString *contentString = [[NSMutableAttributedString alloc] initWithString:content];
     [contentString addAttribute:NSFontAttributeName value:textFont range:NSMakeRange(0, contentString.length)];
     [contentString addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:(60/255.0) green:(75/255.0) blue:(102/255.0) alpha:1.0] range:NSMakeRange(0, contentString.length)];
@@ -582,13 +566,14 @@
 #pragma mark - Webservice delegate
 - (void)failedToCallWebService:(NSString *)link andError:(NSString *)error
 {
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] link: %@, error: %@", __FUNCTION__, link, @[error]) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
     pbxHeaderView.btnSync.enabled = YES;
     [self hideWaitingView: YES];
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Result for %@:\nResponse data: %@\n", __FUNCTION__, link, error] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
 }
 
 - (void)successfulToCallWebService:(NSString *)link withData:(NSDictionary *)data {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Result for %@:\nResponse data: %@\n", __FUNCTION__, link, @[data]] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] link: %@, data: %@", __FUNCTION__, link, @[data]) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     if ([link isEqualToString: get_contacts_func]){
         if (data != nil && [data isKindOfClass:[NSArray class]]) {
@@ -607,7 +592,7 @@
 //  Xử lý pbx contacts trả về
 - (void)whenStartSyncPBXContacts: (NSArray *)data
 {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         [self savePBXContactInPhoneBook: data];
@@ -620,8 +605,7 @@
 
 - (void)savePBXContactInPhoneBook: (NSArray *)pbxData
 {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__]
-                         toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     NSString *pbxContactName = @"";
     
@@ -822,13 +806,13 @@
 //  Thông báo kết thúc sync contacts
 - (void)syncContactsSuccessfully
 {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     [pbxList removeAllObjects];
     if ([LinphoneAppDelegate sharedInstance].pbxContacts != nil) {
         [pbxList addObjectsFromArray:[[LinphoneAppDelegate sharedInstance].pbxContacts copy]];
     }
-    pbxHeaderView.lbTitle.text = [NSString stringWithFormat:@"Tất cả liên hện (%d)", (int)pbxList.count];
+    pbxHeaderView.lbTitle.text = SFM(@"Tất cả liên hện (%d)", (int)pbxList.count);
     pbxHeaderView.btnSync.enabled = YES;
     [self hideWaitingView: YES];
     [_tbContacts reloadData];

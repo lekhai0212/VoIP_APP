@@ -226,8 +226,7 @@
 {
     AccountState curState = [SipUtils getStateOfDefaultProxyConfig];
     if (curState != eAccountOn) {
-        NSString *content = [[LanguageUtil sharedInstance] getContent:@"Can not make call now. Perhaps you have not signed your account yet!"];
-        [[LinphoneAppDelegate sharedInstance].window makeToast:content duration:3.0 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:cant_make_call_check_signin duration:3.0 position:CSToastPositionCenter];
         
         return NO;
     }
@@ -244,8 +243,7 @@
         }
         
         if ([phoneNumber isEqualToString: USERNAME]) {
-            NSString *content = [[LanguageUtil sharedInstance] getContent:@"Can not make call with yourself"];
-            [[LinphoneAppDelegate sharedInstance].window makeToast:content duration:2.0 position:CSToastPositionCenter];
+            [[LinphoneAppDelegate sharedInstance].window makeToast:cant_make_call_yourself duration:2.0 position:CSToastPositionCenter];
             return FALSE;
         }
         
@@ -266,8 +264,7 @@
         
         return TRUE;
     }else{
-        NSString *content = [[LanguageUtil sharedInstance] getContent:@"Phone number can not empty!"];
-        [[LinphoneAppDelegate sharedInstance].window makeToast:content duration:2.0 position:CSToastPositionCenter];
+        [[LinphoneAppDelegate sharedInstance].window makeToast:text_phone_empty duration:2.0 position:CSToastPositionCenter];
     }
     return FALSE;
 }
@@ -428,16 +425,16 @@
         //  Hide call quality value if have not connected yet
         return nil;
     }else if(quality < 1) {
-        NSString *qualityValue = [[LanguageUtil sharedInstance] getContent:@"Worse"];
-        NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Quality"], qualityValue];
+        NSString *qualityValue = text_worse;
+        NSString *quality = [NSString stringWithFormat:@"%@: %@", text_quality, qualityValue];
         NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString: quality];
         [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, quality.length)];
         [attr addAttribute:NSForegroundColorAttributeName value:UIColor.redColor range:NSMakeRange(quality.length-qualityValue.length, qualityValue.length)];
         
         return attr;
     } else if (quality < 2) {
-        NSString *qualityValue = [[LanguageUtil sharedInstance] getContent:@"Very low"];
-        NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Quality"], qualityValue];
+        NSString *qualityValue = text_very_low;
+        NSString *quality = [NSString stringWithFormat:@"%@: %@", text_quality, qualityValue];
         NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString: quality];
         [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, quality.length)];
         [attr addAttribute:NSForegroundColorAttributeName value:UIColor.redColor range:NSMakeRange(quality.length-qualityValue.length, qualityValue.length)];
@@ -445,8 +442,8 @@
         return attr;
         
     } else if (quality < 3) {
-        NSString *qualityValue = [[LanguageUtil sharedInstance] getContent:@"Low"];
-        NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Quality"], qualityValue];
+        NSString *qualityValue = text_low;
+        NSString *quality = [NSString stringWithFormat:@"%@: %@", text_quality, qualityValue];
         NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString: quality];
         [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, quality.length)];
         [attr addAttribute:NSForegroundColorAttributeName value:UIColor.orangeColor range:NSMakeRange(quality.length-qualityValue.length, qualityValue.length)];
@@ -454,8 +451,8 @@
         return attr;
         
     } else if(quality < 4){
-        NSString *qualityValue = [[LanguageUtil sharedInstance] getContent:@"Average"];
-        NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Quality"], qualityValue];
+        NSString *qualityValue = text_average;
+        NSString *quality = [NSString stringWithFormat:@"%@: %@", text_quality, qualityValue];
         NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString: quality];
         [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, quality.length)];
         [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(quality.length-qualityValue.length, qualityValue.length)];
@@ -463,8 +460,8 @@
         return attr;
         
     } else{
-        NSString *qualityValue = [[LanguageUtil sharedInstance] getContent:@"Good"];
-        NSString *quality = [NSString stringWithFormat:@"%@: %@", [[LanguageUtil sharedInstance] getContent:@"Quality"], qualityValue];
+        NSString *qualityValue = text_good;
+        NSString *quality = [NSString stringWithFormat:@"%@: %@", text_quality, qualityValue];
         NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString: quality];
         [attr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, quality.length)];
         [attr addAttribute:NSForegroundColorAttributeName value:UIColor.greenColor range:NSMakeRange(quality.length-qualityValue.length, qualityValue.length)];

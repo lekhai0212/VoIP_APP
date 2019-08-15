@@ -846,13 +846,17 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (void)goToLoginScreen: (UIButton *)sender {
-    [tfAccountID becomeFirstResponder];
+    NSString *accountID = [[NSUserDefaults standardUserDefaults] objectForKey:key_login];
+    if (![AppUtils isNullOrEmpty: accountID]) {
+        tfAccountID.text = accountID;
+        [tfPassword becomeFirstResponder];
+    }else{
+        [tfAccountID becomeFirstResponder];
+    }
     
     sender.enabled = TRUE;
     [sender setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
-//    [sender setTitleColor:[UIColor colorWithRed:(60/255.0) green:(75/255.0)
-//                                           blue:(102/255.0) alpha:1.0] forState:UIControlStateNormal];
-    
+
     BOOL ready = [self checkAccountLoginInformationReady];
     if (ready) {
         btnSignIn.enabled = TRUE;

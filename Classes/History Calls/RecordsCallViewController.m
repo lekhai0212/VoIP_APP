@@ -129,10 +129,10 @@
         long dateFromInterval = [startDate timeIntervalSince1970];
         long dateToInterval = [endDate timeIntervalSince1970];
         
-        NSString *params = [NSString stringWithFormat:@"username=%@&datefrom=%ld&dateto=%ld&as=%d", USERNAME, dateFromInterval, dateToInterval, 1];
+        NSString *params = SFM(@"username=%@&datefrom=%ld&dateto=%ld&as=%d", USERNAME, dateFromInterval, dateToInterval, 1);
         [webService callGETWebServiceWithFunction:get_list_record_file andParams:params];
         
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, params] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+        [WriteLogsUtils writeLogContent:SFM(@"[%s] params: %@", __FUNCTION__, params) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     }
 }
 
@@ -409,10 +409,10 @@
                 [icWaiting startAnimating];
                 icWaiting.hidden = NO;
                 
-                NSString *params = [NSString stringWithFormat:@"username=%@&userfield=%@", USERNAME, userfield];
+                NSString *params = SFM(@"username=%@&userfield=%@", USERNAME, userfield);
                 [webService callGETWebServiceWithFunction:get_file_record andParams:params];
                 
-                [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, params] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+                [WriteLogsUtils writeLogContent:SFM(@"[%s] params: %@", __FUNCTION__, params) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
             }else{
                 [self openAudioRecordFileWithName: recordFile];
             }
@@ -423,7 +423,7 @@
 - (void)openAudioRecordFileWithName: (NSString *)filename {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *url = [paths objectAtIndex:0];
-    NSString *localFile = [NSString stringWithFormat:@"%@/%@/%@", url, recordsFolderName, filename];
+    NSString *localFile = SFM(@"%@/%@/%@", url, recordsFolderName, filename);
     NSURL *audioURL = [NSURL fileURLWithPath: localFile];
     //init player
     AVPlayer *player = [AVPlayer playerWithURL: audioURL];
@@ -439,7 +439,8 @@
 #pragma mark - webservice delegate
 - (void)failedToCallWebService:(NSString *)link andError:(NSString *)error
 {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Result for %@:\nResponse data: %@\n", __FUNCTION__, link, error] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] link: %@, error: %@", __FUNCTION__, link, @[error]) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
     [icWaiting stopAnimating];
     icWaiting.hidden = YES;
     
@@ -451,7 +452,8 @@
 }
 
 - (void)successfulToCallWebService:(NSString *)link withData:(NSDictionary *)data {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Result for %@:\nResponse data: %@\n", __FUNCTION__, link, @[data]] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] link: %@, data: %@", __FUNCTION__, link, @[data]) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
     [icWaiting stopAnimating];
     icWaiting.hidden = YES;
     
@@ -490,7 +492,7 @@
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *url = [paths objectAtIndex:0];
         
-        NSString *filePath = [NSString stringWithFormat:@"%@/%@/%@", url, recordsFolderName, recordFile];
+        NSString *filePath = SFM(@"%@/%@/%@", url, recordsFolderName, recordFile);
         BOOL success = [audioData writeToFile:filePath atomically:YES];
         if (success) {
             [self openAudioRecordFileWithName: recordFile];

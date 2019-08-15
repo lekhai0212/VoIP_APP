@@ -793,10 +793,10 @@
     NSDate *date = [NSDate dateWithTimeIntervalSince1970: timeInterval];
     NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar];
     if ([calendar isDateInToday:date]) {
-        return [[LanguageUtil sharedInstance] getContent:@"Today"];
+        return text_today;
         
     } else if ([calendar isDateInYesterday:date]) {
-        return [[LanguageUtil sharedInstance] getContent:@"Yesterday"];
+        return text_yesterday;
         
     } else {
         NSString *formattedDateString = [dateFormatter stringFromDate:date];
@@ -846,7 +846,7 @@
     
     NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:attachment];
     
-    NSString *content = [NSString stringWithFormat:@" %@ %@", [[LanguageUtil sharedInstance] getContent:@"Version"], [AppUtils getAppVersionWithBuildVersion: NO]];
+    NSString *content = [NSString stringWithFormat:@" %@ %@", text_version, [AppUtils getAppVersionWithBuildVersion: NO]];
     NSMutableAttributedString *contentString = [[NSMutableAttributedString alloc] initWithString:content];
     
     NSMutableAttributedString *verString = [[NSMutableAttributedString alloc] initWithAttributedString: attachmentString];
@@ -893,7 +893,6 @@
 + (NSString *)getBuildDate
 {
     NSString *dateStr = [NSString stringWithFormat:@"%@ %@", [NSString stringWithUTF8String:__DATE__], [NSString stringWithUTF8String:__TIME__]];
-    
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"LLL d yyyy HH:mm:ss"];
     dateFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
@@ -901,8 +900,9 @@
     
     NSTimeInterval time = [date1 timeIntervalSince1970];
     NSString *dateResult = [AppUtils stringDateFromInterval: time];
-    NSString *timeResult = [AppUtils stringTimeFromInterval: time];
-    return [NSString stringWithFormat:@"%@ %@", dateResult, timeResult];
+    //  NSString *timeResult = [AppUtils stringTimeFromInterval: time];
+    //  return [NSString stringWithFormat:@"%@ %@", dateResult, timeResult];
+    return [NSString stringWithFormat:@"%@", dateResult];
 }
 
 +(NSDateFormatter*) historyEventDate{
@@ -934,7 +934,7 @@
 + (NSString *)convertDurtationToString: (long)duration
 {
     if (duration == 0) {
-        return [NSString stringWithFormat:@"0 %@", [[LanguageUtil sharedInstance] getContent:@"sec"]];
+        return [NSString stringWithFormat:@"0 %@", text_sec];
     }
     int hour = (int)(duration/3600);
     int minutes = (int)((duration - hour*3600)/60);
@@ -942,34 +942,22 @@
     
     NSString *result = @"";
     if (hour > 0) {
-        if (hour == 1) {
-            result = [NSString stringWithFormat:@"%ld %@", (long)hour, [[LanguageUtil sharedInstance] getContent:@"hour"]];
-        }else{
-            result = [NSString stringWithFormat:@"%ld %@", (long)hour, [[LanguageUtil sharedInstance] getContent:@"hours"]];
-        }
+        result = [NSString stringWithFormat:@"%ld %@", (long)hour, text_hour];
     }
     
     if (minutes > 0) {
         if (![result isEqualToString:@""]) {
-            if (minutes == 1) {
-                result = [NSString stringWithFormat:@"%@ %d %@", result, minutes, [[LanguageUtil sharedInstance] getContent:@"minute"]];
-            }else{
-                result = [NSString stringWithFormat:@"%@ %d %@", result, minutes, [[LanguageUtil sharedInstance] getContent:@"minutes"]];
-            }
+            result = [NSString stringWithFormat:@"%@ %d %@", result, minutes, text_minute];
         }else{
-            if (minutes == 1) {
-                result = [NSString stringWithFormat:@"%d %@", minutes, [[LanguageUtil sharedInstance] getContent:@"minute"]];
-            }else{
-                result = [NSString stringWithFormat:@"%d %@", minutes, [[LanguageUtil sharedInstance] getContent:@"minutes"]];
-            }
+            result = [NSString stringWithFormat:@"%d %@", minutes, text_minute];
         }
     }
     
     if (seconds > 0) {
         if (![result isEqualToString:@""]) {
-            result = [NSString stringWithFormat:@"%@ %d %@", result, seconds, [[LanguageUtil sharedInstance] getContent:@"sec"]];
+            result = [NSString stringWithFormat:@"%@ %d %@", result, seconds, text_sec];
         }else{
-            result = [NSString stringWithFormat:@"%d %@", seconds, [[LanguageUtil sharedInstance] getContent:@"sec"]];
+            result = [NSString stringWithFormat:@"%d %@", seconds, text_sec];
         }
     }
     return result;

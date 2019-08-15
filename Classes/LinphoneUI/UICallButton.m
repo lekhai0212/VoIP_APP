@@ -73,7 +73,7 @@
         if (![phoneNumber isEqualToString: @""])
         {
             if ([phoneNumber isEqualToString: hotline]) {
-                addressField.text = [[LanguageUtil sharedInstance] getContent:@"Hotline"];
+                addressField.text = text_hotline;
             }else{
                 addressField.text = phoneNumber;
             }
@@ -111,35 +111,12 @@
         }
     }
     
-    //  [SipUtils makeVideoCallWithPhoneNumber: address];
-    /*
-    BOOL success = [SipUtils makeCallWithPhoneNumber: address];
-    if (!success) {
-        [[LanguageUtil sharedInstance] getContent:@"Can not make call now. Perhaps you have not signed your account yet!"];
-        return;
-    }   */
-    
-//    if ([address length] > 0) {
-//        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"\n%s -> %@ make call to %@", __FUNCTION__, USERNAME, address] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-//
-//        LinphoneAddress *addr = [LinphoneUtils normalizeSipOrPhoneAddress:address];
-//        [LinphoneManager.instance call:addr];
-//        if (addr)
-//            linphone_address_destroy(addr);
-//    }
-    
     //  12/03/2019
     OutgoingCallViewController *controller = VIEW(OutgoingCallViewController);
     if (controller != nil) {
         [controller setPhoneNumberForView: address];
     }
     [[PhoneMainView instance] changeCurrentView:[OutgoingCallViewController compositeViewDescription] push:TRUE];
-    
-//    CallView *controller = VIEW(CallView);
-//    if (controller != nil) {
-//        controller.phoneNumber = address;
-//    }
-//    [[PhoneMainView instance] changeCurrentView:[CallView compositeViewDescription] push:TRUE];
 }
 
 - (void)updateIcon {

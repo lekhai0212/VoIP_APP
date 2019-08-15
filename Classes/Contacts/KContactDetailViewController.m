@@ -58,9 +58,6 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     [WriteLogsUtils writeForGoToScreen: @"KContactDetailViewController"];
     
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"Get contact info with id: %d", appDelegate.idContact]
-                         toFilePath:appDelegate.logFilePath];
-    
     detailsContact = [ContactUtils getContactWithId: appDelegate.idContact];
     if (![AppUtils isNullOrEmpty:detailsContact._sipPhone]) {
         isPBXContact = YES;
@@ -225,7 +222,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     
     if ([phoneString hasPrefix:@"84"]) {
         phoneString = [phoneString substringFromIndex: 2];
-        phoneString = [NSString stringWithFormat:@"0%@", phoneString];
+        phoneString = SFM(@"0%@", phoneString);
     }
     return phoneString;
 }
@@ -321,7 +318,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)onIconCallClicked: (UIButton *)sender
 {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Call from %@ to %@", __FUNCTION__, USERNAME, sender.currentTitle] toFilePath:appDelegate.logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] call to: %@", __FUNCTION__, sender.currentTitle) toFilePath:appDelegate.logFilePath];
     
     if (![AppUtils isNullOrEmpty: sender.currentTitle]) {
         NSString *phoneNumber = [AppUtils removeAllSpecialInString: sender.currentTitle];

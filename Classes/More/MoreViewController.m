@@ -106,7 +106,7 @@ static UICompositeViewDescription *compositeDescription = nil;
             NSString *ext = [accountID substringFromIndex: 5];
             lbPBXAccount.text = ext;
             
-            lbPBXAccount.text = [NSString stringWithFormat:@"Số nội bộ: %@", ext];
+            lbPBXAccount.text = SFM(@"Số nội bộ: %@", ext);
             
             PhoneObject *contact = [ContactUtils getContactPhoneObjectWithNumber: ext];
             if (contact != nil) {
@@ -114,13 +114,12 @@ static UICompositeViewDescription *compositeDescription = nil;
             }else{
                 _lbName.text = ext;
             }
-            NSLog(@"%@", contact);
         }else{
-            lbPBXAccount.text = [NSString stringWithFormat:@"Số nội bộ: %@", @"Không có"];
+            lbPBXAccount.text = SFM(@"Số nội bộ: %@", @"Không có");
             _lbName.text = @"Tài khoản: Chưa có";
         }
         
-        NSString *pbxKeyAvatar = [NSString stringWithFormat:@"%@_%@", @"pbxAvatar", accountID];
+        NSString *pbxKeyAvatar = SFM(@"%@_%@", @"pbxAvatar", accountID);
         NSString *avatar = [[NSUserDefaults standardUserDefaults] objectForKey: pbxKeyAvatar];
         if (avatar != nil && ![avatar isEqualToString:@""]){
             _imgAvatar.image = [UIImage imageWithData: [NSData dataFromBase64String: avatar]];
@@ -338,21 +337,27 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)clearPushTokenOfUser {
     
     [LinphoneAppDelegate sharedInstance]._updateTokenSuccess = NO;
-    NSString *params = [NSString stringWithFormat:@"pushtoken=%@&username=%@", @"", USERNAME];
+    NSString *params = SFM(@"pushtoken=%@&username=%@", @"", USERNAME);
     [webService callGETWebServiceWithFunction:update_token_func andParams:params];
     
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, params] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] params: %@", __FUNCTION__, params) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
 }
 
 - (void)startResetValueWhenLogout
 {
     linphone_core_clear_proxy_config(LC);
+    [self performSelector:@selector(goToSignView) withObject:nil afterDelay:1.0];
+}
+
+- (void)goToSignView {
     [icWaiting stopAnimating];
     icWaiting.hidden = YES;
     [LinphoneAppDelegate sharedInstance].configPushToken = NO;
     
     [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:switch_dnd];
+    [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:key_password];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    
     
     [[PhoneMainView instance] changeCurrentView:[SignInViewController compositeViewDescription]];
 }
@@ -368,7 +373,8 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 #pragma mark - Webservice delegate
 - (void)failedToCallWebService:(NSString *)link andError:(id)error {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] link: %@\nError: %@", __FUNCTION__ , link, @[error]] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] link: %@, error: %@", __FUNCTION__, link, @[error]) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+    
     [icWaiting stopAnimating];
     icWaiting.hidden = TRUE;
     
@@ -387,12 +393,13 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (void)successfulToCallWebService:(NSString *)link withData:(NSDictionary *)data {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] link: %@\nData: %@", __FUNCTION__ , link, @[data]] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-    [icWaiting stopAnimating];
-    icWaiting.hidden = TRUE;
+    [WriteLogsUtils writeLogContent:SFM(@"[%s] link: %@, data: %@", __FUNCTION__, link, @[data]) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
     if ([link isEqualToString: update_token_func]) {
         if (isEnableDND) {
+            [icWaiting stopAnimating];
+            icWaiting.hidden = TRUE;
+            
             [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:switch_dnd];
             [[NSUserDefaults standardUserDefaults] synchronize];
             
@@ -400,6 +407,9 @@ static UICompositeViewDescription *compositeDescription = nil;
             isEnableDND = FALSE;
             
         }else if (isDisableDND){
+            [icWaiting stopAnimating];
+            icWaiting.hidden = TRUE;
+            
             [[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:switch_dnd];
             [[NSUserDefaults standardUserDefaults] synchronize];
             
@@ -408,6 +418,9 @@ static UICompositeViewDescription *compositeDescription = nil;
         }else{
             [self startResetValueWhenLogout];
         }
+    }else{
+        [icWaiting stopAnimating];
+        icWaiting.hidden = TRUE;
     }
 }
 
@@ -418,11 +431,9 @@ static UICompositeViewDescription *compositeDescription = nil;
 #pragma mark - Switch Custom Delegate
 - (void)switchButtonEnabled
 {
-    BOOL networkReady = [DeviceUtils checkNetworkAvailable];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] with networkReady = %d", __FUNCTION__, networkReady] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-    
-    if (!networkReady) {
+    if (![DeviceUtils checkNetworkAvailable]) {
         [self.view makeToast:text_check_network duration:2.0 position:CSToastPositionCenter];
         return;
     }
@@ -435,11 +446,9 @@ static UICompositeViewDescription *compositeDescription = nil;
 }
 
 - (void)switchButtonDisabled {
-    BOOL networkReady = [DeviceUtils checkNetworkAvailable];
+    [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] with networkReady = %d", __FUNCTION__, networkReady] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
-    
-    if (!networkReady) {
+    if (![DeviceUtils checkNetworkAvailable]) {
         [self.view makeToast:text_check_network duration:2.0 position:CSToastPositionCenter];
         return;
     }
@@ -454,17 +463,17 @@ static UICompositeViewDescription *compositeDescription = nil;
 
 - (void)updateCustomerTokenIOS {
     if (USERNAME != nil && ![AppUtils isNullOrEmpty: [LinphoneAppDelegate sharedInstance]._deviceToken]) {
-        NSString *destToken = [NSString stringWithFormat:@"ios%@", [LinphoneAppDelegate sharedInstance]._deviceToken];
-        NSString *params = [NSString stringWithFormat:@"pushtoken=%@&username=%@", destToken, USERNAME];
+        NSString *destToken = SFM(@"ios%@", [LinphoneAppDelegate sharedInstance]._deviceToken);
+        NSString *params = SFM(@"pushtoken=%@&username=%@", destToken, USERNAME);
         [webService callGETWebServiceWithFunction:update_token_func andParams:params];
         
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] params = %@", __FUNCTION__, params] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+        [WriteLogsUtils writeLogContent:SFM(@"[%s] params: %@", __FUNCTION__, params) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     }else{
         [icWaiting stopAnimating];
         icWaiting.hidden = YES;
         [self.view makeToast:@"Không tìm thấy push token" duration:2.0 position:CSToastPositionCenter];
         
-        [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] Không tìm thấy push token", __FUNCTION__] toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
+        [WriteLogsUtils writeLogContent:SFM(@"[%s] >>>>> Không tìm thấy push token <<<<<", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     }
 }
 

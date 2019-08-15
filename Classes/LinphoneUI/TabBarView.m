@@ -26,7 +26,7 @@
 @end
 
 @implementation TabBarView
-@synthesize viewIpadMenu, btnDialerIpad, btnCallHistoryIpad, btnContactsIpad, btnMoreIpad, lbMenuTopSepa;
+@synthesize viewIpadMenu, btnDialerIpad, btnCallHistoryIpad, btnContactsIpad, btnMoreIpad, lbMenuTopSepa, lbVersionUpdate;
 
 #pragma mark - ViewController Functions
 
@@ -45,6 +45,19 @@
     [self.lbTopSepa mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self.view);
         make.height.mas_equalTo(1);
+    }];
+    
+    lbVersionUpdate.hidden = TRUE;
+    lbVersionUpdate.clipsToBounds = TRUE;
+    lbVersionUpdate.layer.cornerRadius = 20.0/2;
+    lbVersionUpdate.backgroundColor = UIColor.redColor;
+    lbVersionUpdate.textColor = UIColor.whiteColor;
+    lbVersionUpdate.font = [UIFont fontWithName:MYRIADPRO_REGULAR size:14.0];
+    lbVersionUpdate.text = @"1";
+    [lbVersionUpdate mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.view).offset(5.0);
+        make.right.equalTo(self.view).offset(-5.0);
+        make.width.height.mas_equalTo(20.0);
     }];
     //  ---
     

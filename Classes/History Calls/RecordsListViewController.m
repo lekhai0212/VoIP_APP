@@ -125,8 +125,9 @@ static UICompositeViewDescription *compositeDescription = nil;
     if (listChoosed.count > 0) {
         btnSend.enabled = YES;
         btnDelete.enabled = YES;
-        [btnSend setTitle:[NSString stringWithFormat:@"Gửi (%d)", (int)listChoosed.count] forState:UIControlStateNormal];
-        [btnDelete setTitle:[NSString stringWithFormat:@"Xoá (%d)", (int)listChoosed.count] forState:UIControlStateNormal];
+        
+        [btnSend setTitle:SFM(@"Gửi (%d)", (int)listChoosed.count) forState:UIControlStateNormal];
+        [btnDelete setTitle:SFM(@"Xoá (%d)", (int)listChoosed.count) forState:UIControlStateNormal];
     }else{
         btnSend.enabled = NO;
         btnDelete.enabled = NO;
@@ -322,7 +323,7 @@ static UICompositeViewDescription *compositeDescription = nil;
     if (listChoosed.count > 0) {
         for (int i=0; i<listChoosed.count; i++) {
             NSString *filename = [listChoosed objectAtIndex: i];
-            NSString *subPath = [NSString stringWithFormat:@"%@/%@", recordsFolderName, filename];
+            NSString *subPath = SFM(@"%@/%@", recordsFolderName, filename);
             NSString *path = [documentDir stringByAppendingPathComponent: subPath];
             if ([[NSFileManager defaultManager] fileExistsAtPath: path]) {
                 BOOL removedSuccess = [AppUtils deleteFileWithPath: path];
@@ -354,7 +355,7 @@ static UICompositeViewDescription *compositeDescription = nil;
 - (void)openAudioRecordFileWithName: (NSString *)filename {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *url = [paths objectAtIndex:0];
-    NSString *localFile = [NSString stringWithFormat:@"%@/%@/%@", url, recordsFolderName, filename];
+    NSString *localFile = SFM(@"%@/%@/%@", url, recordsFolderName, filename);
     NSURL *audioURL = [NSURL fileURLWithPath: localFile];
     //init player
     AVPlayer *player = [AVPlayer playerWithURL: audioURL];
@@ -384,7 +385,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         for (int i=0; i<listChoosed.count; i++)
         {
             NSString *fileName = [listChoosed objectAtIndex: i];
-            NSString *path = [NgnFileUtils getPathOfFileWithSubDir:[NSString stringWithFormat:@"%@/%@", recordsFolderName, fileName]];
+            NSString *path = [NgnFileUtils getPathOfFileWithSubDir:SFM(@"%@/%@", recordsFolderName, fileName)];
             NSData *fileData = [[NSFileManager defaultManager] contentsAtPath: path];
             if (fileData != nil) {
                 [mc addAttachmentData:fileData mimeType:@"audio/wav" fileName:fileName];

@@ -68,50 +68,45 @@ static UICompositeViewDescription *compositeDescription = nil;
         [self.view makeToast:text_check_network duration:1.5 position:CSToastPositionBottom style:nil];
         return;
     }
-    
-    //  Add new by Khai Le on 23/03/2018
-    linkToAppStore = [self checkNewVersionOnAppStore];
-    if (![AppUtils isNullOrEmpty: linkToAppStore] && ![AppUtils isNullOrEmpty: appStoreVersion]) {
-        NSString *content = SFM(@"Phiên bản hiện tại trên App Store là %@. Bạn có muốn cập nhật không?", appStoreVersion);
-        
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:[[[NSBundle mainBundle] localizedInfoDictionary] objectForKey:@"CFBundleDisplayName"] message:content delegate:self cancelButtonTitle:text_close otherButtonTitles:text_update, nil];
-        alert.tag = 2;
-        [alert show];
-    }else{
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:[[[NSBundle mainBundle] localizedInfoDictionary] objectForKey:@"CFBundleDisplayName"] message:text_newest_version delegate:self cancelButtonTitle:text_close otherButtonTitles:nil, nil];
-        [alert show];
-    }
-    return;
-    //  -----
+    [self startCheckNewVersionFromAppStore];
 }
 
 #pragma mark - my functions
 
-- (NSString *)checkNewVersionOnAppStore {
-    return @"";
-    
-    NSDictionary* infoDictionary = [[NSBundle mainBundle] infoDictionary];
-    NSString* appID = infoDictionary[@"CFBundleIdentifier"];
-    if (appID.length > 0) {
-        NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"http://itunes.apple.com/lookup?bundleId=%@", appID]];
-        NSData* data = [NSData dataWithContentsOfURL:url];
-        
-        if (data) {
-            NSDictionary* lookup = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+- (void)startCheckNewVersionFromAppStore {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSDictionary* infoDictionary = [[NSBundle mainBundle] infoDictionary];
+        NSString* appID = infoDictionary[@"CFBundleIdentifier"];
+        if (appID.length > 0) {
+            NSURL* url = [NSURL URLWithString:SFM(@"http://itunes.apple.com/lookup?bundleId=%@", appID)];
+            NSData* data = [NSData dataWithContentsOfURL:url];
             
-            if ([lookup[@"resultCount"] integerValue] == 1){
-                appStoreVersion = lookup[@"results"][0][@"version"];
-                NSString* currentVersion = infoDictionary[@"CFBundleShortVersionString"];
-                
-                if ([appStoreVersion compare:currentVersion options:NSNumericSearch] == NSOrderedDescending) {
-                    // app needs to be updated
-                    return lookup[@"results"][0][@"trackViewUrl"] ? lookup[@"results"][0][@"trackViewUrl"] : @"";
+            if (data) {
+                NSDictionary* lookup = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+                if ([lookup[@"resultCount"] integerValue] == 1){
+                    appStoreVersion = lookup[@"results"][0][@"version"];
+                    NSString* currentVersion = infoDictionary[@"CFBundleShortVersionString"];
+                    
+                    if ([appStoreVersion compare:currentVersion options:NSNumericSearch] == NSOrderedDescending) {
+                        // app needs to be updated
+                        linkToAppStore = lookup[@"results"][0][@"trackViewUrl"] ? lookup[@"results"][0][@"trackViewUrl"] : @"";
+                    }
                 }
             }
         }
-    }
-    
-    return @"";
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (![AppUtils isNullOrEmpty: linkToAppStore] && ![AppUtils isNullOrEmpty: appStoreVersion]) {
+                NSString *content = SFM(@"Phiên bản hiện tại trên App Store là %@. Bạn có muốn cập nhật không?", appStoreVersion);
+                
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:[[[NSBundle mainBundle] localizedInfoDictionary] objectForKey:@"CFBundleDisplayName"] message:content delegate:self cancelButtonTitle:text_close otherButtonTitles:text_update, nil];
+                alert.tag = 2;
+                [alert show];
+            }else{
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:[[[NSBundle mainBundle] localizedInfoDictionary] objectForKey:@"CFBundleDisplayName"] message:text_newest_version delegate:self cancelButtonTitle:text_close otherButtonTitles:nil, nil];
+                [alert show];
+            }
+        });
+    });
 }
 
 //  setup ui trong view

@@ -105,8 +105,7 @@ static UICompositeViewDescription *compositeDescription = nil;
         {
             NSIndexPath *curIndex = [listSelect objectAtIndex: i];
             NSString *fileName = [listFiles objectAtIndex: curIndex.row];
-            NSString *path = [NgnFileUtils getPathOfFileWithSubDir:[NSString stringWithFormat:@"%@/%@", logsFolderName, fileName]];
-            
+            NSString *path = [NgnFileUtils getPathOfFileWithSubDir:SFM(@"%@/%@", logsFolderName, fileName)];
             NSString* content = [NSString stringWithContentsOfFile:path
                                                           encoding:NSUTF8StringEncoding
                                                              error:NULL];
