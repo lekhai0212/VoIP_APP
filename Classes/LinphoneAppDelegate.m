@@ -489,9 +489,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:)
                                                  name:kReachabilityChangedNotification object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadContactListAfterAddSuccess)
-                                                 name:reloadContactAfterAdd object:nil];
-    
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(registrationUpdateEvent:)
                                                name:kLinphoneRegistrationUpdate object:nil];
     
@@ -627,12 +624,6 @@
         NSString *params = [NSString stringWithFormat:@"username=%@", USERNAME];
         [webService callGETWebServiceWithFunction:GetServerGroup andParams:params];
     }
-}
-
-- (void)reloadContactListAfterAddSuccess {
-    [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s]", __FUNCTION__] toFilePath:logFilePath];
-    
-    [self getContactsListForFirstLoad];
 }
 
 - (void) registerForVoIPPushes {
@@ -1612,8 +1603,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [self getAllIDContactInPhoneBook];
         dispatch_async(dispatch_get_main_queue(), ^(void){
             contactLoaded = YES;
-            [[NSNotificationCenter defaultCenter] postNotificationName:finishLoadContacts
-                                                                object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:finishLoadContacts object:nil];
             [WriteLogsUtils writeLogContent:[NSString stringWithFormat:@"[%s] GET PHONE'S CONTACT FINISH. POST EVENT finishLoadContacts", __FUNCTION__] toFilePath:logFilePath];
         });
     });
@@ -1746,8 +1736,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 }
                 
                 aContact._avatar = [self getAvatarOfContact: aPerson];
-                aContact._listPhone = listPhone;
-                [listContacts addObject: aContact];
+                aContact._listPhone = [[NSMutableArray alloc] initWithArray: listPhone];
+                if (aContact != nil && aContact != NULL) {
+                    [listContacts addObject: aContact];
+                }
                 
                 //  Added by Khai Le on 09/10/2018
                 ContactDetailObj *anItem = [aContact._listPhone firstObject];
@@ -1772,61 +1764,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             }
         }
     }
-}
-
-- (ContactObject *)getContactInPhoneBookWithIdRecord: (int)idRecord
-{
-    addressListBook = ABAddressBookCreate();
-    ABRecordRef aPerson = ABAddressBookGetPersonWithRecordID(addressListBook, idRecord);
-    
-    ContactObject *aContact = [[ContactObject alloc] init];
-    aContact.person = aPerson;
-    aContact._id_contact = idRecord;
-    aContact._fullName = [AppUtils getNameOfContact: aPerson];
-    NSArray *nameInfo = [AppUtils getFirstNameAndLastNameOfContact: aPerson];
-    aContact._firstName = [nameInfo objectAtIndex: 0];
-    aContact._lastName = [nameInfo objectAtIndex: 1];
-    
-    if (![aContact._fullName isEqualToString:@""]) {
-        NSString *convertName = [AppUtils convertUTF8CharacterToCharacter: aContact._fullName];
-        aContact._nameForSearch = [AppUtils getNameForSearchOfConvertName: convertName];
-    }
-    
-    //  Email
-    ABMultiValueRef map = ABRecordCopyValue(aPerson, kABPersonEmailProperty);
-    if (map) {
-        for (int i = 0; i < ABMultiValueGetCount(map); ++i) {
-            ABMultiValueIdentifier identifier = ABMultiValueGetIdentifierAtIndex(map, i);
-            NSInteger index = ABMultiValueGetIndexForIdentifier(map, identifier);
-            if (index != -1) {
-                NSString *valueRef = CFBridgingRelease(ABMultiValueCopyValueAtIndex(map, index));
-                if (valueRef != NULL && ![valueRef isEqualToString:@""]) {
-                    //  just get one email for contact
-                    aContact._email = valueRef;
-                    break;
-                }
-            }
-        }
-        CFRelease(map);
-    }
-    
-    //  Company
-    CFStringRef companyRef  = ABRecordCopyValue(aPerson, kABPersonOrganizationProperty);
-    if (companyRef != NULL && companyRef != nil){
-        NSString *company = (__bridge NSString *)companyRef;
-        if (company != nil && ![company isEqualToString:@""]){
-            aContact._company = company;
-        }
-    }
-    
-    aContact._avatar = [self getAvatarOfContact: aPerson];
-    aContact._listPhone = [self getListPhoneOfContactPerson: aPerson withName: aContact._fullName];
-    
-    if (aContact._listPhone.count > 0) {
-        ContactDetailObj *anItem = [aContact._listPhone firstObject];
-        aContact._sipPhone = anItem._valueStr;
-    }
-    return aContact;
 }
 
 - (NSMutableArray *)getPBXContactPhone: (int)pbxContactId
@@ -1969,23 +1906,16 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 - (NSString *)getAvatarOfContact: (ABRecordRef)aPerson
 {
-    NSString *avatar = @"";
     if (aPerson != nil) {
         NSData  *imgData = (__bridge NSData *)ABPersonCopyImageData(aPerson);
         if (imgData != nil) {
-            UIImage *imageAvatar = [UIImage imageWithData: imgData];
-            CGRect rect = CGRectMake(0,0,120,120);
-            UIGraphicsBeginImageContext(rect.size );
-            [imageAvatar drawInRect:rect];
-            UIImage *picture1 = UIGraphicsGetImageFromCurrentImageContext();
-            UIGraphicsEndImageContext();
-            NSData *tmpImgData = UIImagePNGRepresentation(picture1);
-            if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
-                avatar = [tmpImgData base64EncodedStringWithOptions: 0];
+            NSString *result = [imgData base64EncodedStringWithOptions: 0];
+            if (![AppUtils isNullOrEmpty: result]) {
+                return result;
             }
         }
     }
-    return avatar;
+    return @"";
 }
 
 // copy database
@@ -2524,5 +2454,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
     return resultStr;
 }
+
+//  1.  Đồng bộ contacts thấy dính thread background
+//  2.  VUA LOAD APP, bấm qua màn hình contacts list khi chưa load contact xong sẽ ko có header cho tableview
 
 @end

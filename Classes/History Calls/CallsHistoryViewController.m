@@ -253,10 +253,8 @@ static UICompositeViewDescription *compositeDescription = nil;
         [_iconMissed setTitleColor:noActiveColor forState:UIControlStateNormal];
         [_iconRecord setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     }
-    
     _btnEdit.tag = 0;
     [_btnEdit setImage:[UIImage imageNamed:@"ic_trash"] forState:UIControlStateNormal];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"cancelDeleteCallHistory" object:nil];
 }
 
 

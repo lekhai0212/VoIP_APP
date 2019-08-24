@@ -65,17 +65,17 @@
     
     [self getHistoryCallForUser];
     
-    _tbListCalls.hidden = YES;
+    _tbListCalls.hidden = TRUE;
     isDeleted = false;
+    if (listDelete != nil) {
+        [listDelete removeAllObjects];
+    }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteHistoryCallsPressed:)
                                                  name:deleteHistoryCallsChoosed object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getHistoryCallForUser)
                                                  name:reloadHistoryCall object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cancelDeleteCallHistory)
-                                                 name:@"cancelDeleteCallHistory" object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -110,13 +110,13 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             if (listCalls.count == 0) {
-                _tbListCalls.hidden = YES;
-                _lbNoCalls.hidden = NO;
+                _tbListCalls.hidden = TRUE;
+                _lbNoCalls.hidden = FALSE;
                 [[NSNotificationCenter defaultCenter] postNotificationName:showOrHideDeleteCallHistoryButton
                                                                     object:@"0"];
             }else {
-                _tbListCalls.hidden = NO;
-                _lbNoCalls.hidden = YES;
+                _tbListCalls.hidden = FALSE;
+                _lbNoCalls.hidden = TRUE;
                 [_tbListCalls reloadData];
                 [[NSNotificationCenter defaultCenter] postNotificationName:showOrHideDeleteCallHistoryButton
                                                                     object:@"1"];
@@ -143,10 +143,6 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (listCalls.count == 0) {
-        NSLog(@"LUPA");
-    }
-    
     static NSString *identifier = @"HistoryCallCell";
     HistoryCallCell *cell = (HistoryCallCell *)[tableView dequeueReusableCellWithIdentifier: identifier];
     if (cell == nil) {
@@ -161,8 +157,8 @@
     cell._lbPhone.text = aCall._phoneNumber;
     cell._phoneNumber = aCall._phoneNumber;
     
-    [cell updateFrameForHotline: NO];
-    cell._lbPhone.hidden = NO;
+    [cell updateFrameForHotline: FALSE];
+    cell._lbPhone.hidden = FALSE;
     
     if ([AppUtils isNullOrEmpty: aCall._phoneName]) {
         NSString *groupName = [AppUtils getGroupNameWithQueueNumber: aCall._phoneNumber];
@@ -184,9 +180,9 @@
     
     //  Show missed notification
     if (aCall.newMissedCall > 0) {
-        cell.lbMissed.hidden = NO;
+        cell.lbMissed.hidden = FALSE;
     }else{
-        cell.lbMissed.hidden = YES;
+        cell.lbMissed.hidden = TRUE;
     }
     
     NSString *strDate = [AppUtils getDateStringFromTimeInterval: aCall.timeInt];
@@ -196,11 +192,11 @@
     cell.lbDate.text = strDate;
     
     if (isDeleted) {
-        cell._cbDelete.hidden = NO;
-        cell._btnCall.hidden = YES;
+        cell._cbDelete.hidden = FALSE;
+        cell._btnCall.hidden = TRUE;
     }else{
-        cell._cbDelete.hidden = YES;
-        cell._btnCall.hidden = NO;
+        cell._cbDelete.hidden = TRUE;
+        cell._btnCall.hidden = FALSE;
     }
     
     if ([aCall._callDirection isEqualToString: incomming_call]) {
@@ -229,10 +225,10 @@
         if (aCall.newMissedCall > 5) {
             strMissed = @"+5";
         }
-        cell.lbMissed.hidden = NO;
+        cell.lbMissed.hidden = FALSE;
         cell.lbMissed.text = strMissed;
     }else{
-        cell.lbMissed.hidden = YES;
+        cell.lbMissed.hidden = TRUE;
     }
     
     if (aCall.callType == AUDIO_CALL_TYPE) {
@@ -257,10 +253,10 @@
         HistoryCallCell *curCell = [tableView cellForRowAtIndexPath: indexPath];
         if ([listDelete containsObject: [NSNumber numberWithInt:curCell._cbDelete._idHisCall]]) {
             [listDelete removeObject: [NSNumber numberWithInt:curCell._cbDelete._idHisCall]];
-            [curCell._cbDelete setOn:false animated:true];
+            [curCell._cbDelete setOn:FALSE animated:TRUE];
         }else{
             [listDelete addObject: [NSNumber numberWithInt:curCell._cbDelete._idHisCall]];
-            [curCell._cbDelete setOn:true animated:true];
+            [curCell._cbDelete setOn:TRUE animated:TRUE];
         }
         
         [[NSNotificationCenter defaultCenter] postNotificationName:updateNumberHistoryCallRemove
@@ -269,7 +265,7 @@
         KHistoryCallObject *aCall = [[[listCalls objectAtIndex:indexPath.section] valueForKey:@"rows"] objectAtIndex: indexPath.row];
         DetailHistoryCNViewController *controller = VIEW(DetailHistoryCNViewController);
         if (controller != nil) {
-            [controller setPhoneNumberForView:aCall._phoneNumber andDate:aCall._callDate onlyMissed: NO];
+            [controller setPhoneNumberForView:aCall._phoneNumber andDate:aCall._callDate onlyMissed: FALSE];
         }
         [[PhoneMainView instance] changeCurrentView:[DetailHistoryCNViewController compositeViewDescription] push:true];
     }
@@ -284,10 +280,10 @@
     HistoryCallCell *curCell = [_tbListCalls cellForRowAtIndexPath: indexPath];
     if ([listDelete containsObject:[NSNumber numberWithInt:curCell._cbDelete._idHisCall]]) {
         [listDelete removeObject: [NSNumber numberWithInt:curCell._cbDelete._idHisCall]];
-        [curCell._cbDelete setOn:false animated:true];
+        [curCell._cbDelete setOn:FALSE animated:TRUE];
     }else{
         [listDelete addObject: [NSNumber numberWithInt:curCell._cbDelete._idHisCall]];
-        [curCell._cbDelete setOn:true animated:true];
+        [curCell._cbDelete setOn:TRUE animated:TRUE];
     }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:updateNumberHistoryCallRemove
@@ -363,7 +359,7 @@
     NSNumber *object = [notif object];
     if ([object isKindOfClass:[NSNumber class]]) {
         if ([object intValue] == 0) {
-            isDeleted = NO;
+            isDeleted = FALSE;
             
             if (listDelete != nil && listDelete.count > 0) {
                 for (int iCount=0; iCount<listDelete.count; iCount++) {
@@ -373,23 +369,16 @@
                         NSString *phoneNumber = [callInfo objectForKey:@"phone_number"];
                         if (phoneNumber != nil && ![phoneNumber isEqualToString:@""]) {
                             NSString *date = [callInfo objectForKey:@"date"];
-                            [NSDatabase removeHistoryCallsOfUser:phoneNumber onDate:date ofAccount:USERNAME onlyMissed: NO];
+                            [NSDatabase removeHistoryCallsOfUser:phoneNumber onDate:date ofAccount:USERNAME onlyMissed: FALSE];
                         }
                     }
                 }
             }
             [self reGetListCallsForHistory];
         }else{
-            isDeleted = YES;
+            isDeleted = TRUE;
         }
     }
-    [_tbListCalls reloadData];
-}
-
-- (void)cancelDeleteCallHistory {
-    return;
-    isDeleted = NO;
-    [listDelete removeAllObjects];
     [_tbListCalls reloadData];
 }
 

@@ -55,7 +55,7 @@
     if (tbDatas == nil) {
         tbDatas = [[NSMutableArray alloc] init];
     }
-    [tbDatas removeAllObjects];
+    [tbDatas removeAllObjects]; 
     
     if (![LinphoneAppDelegate sharedInstance].contactLoaded)
     {

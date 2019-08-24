@@ -340,13 +340,4 @@ static UICompositeViewDescription *compositeDescription = nil;
     [self.view makeToast:text_phone_empty duration:2.0 position:CSToastPositionCenter];
 }
 
-- (void)updateContactListAfterDeleteContact: (ContactObject *)contact {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"contactId = %d", contact._id_contact];
-    NSArray *filter = [appDelegate.listInfoPhoneNumber filteredArrayUsingPredicate: predicate];
-    if (filter.count > 0) {
-        [appDelegate.listInfoPhoneNumber removeObjectsInArray: filter];
-    }
-    [appDelegate.listContacts removeObject: contact];
-}
-
 @end

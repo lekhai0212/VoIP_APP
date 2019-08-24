@@ -665,8 +665,6 @@
         ABRecordRef aPerson = (__bridge ABRecordRef)[arrayOfAllPeople objectAtIndex:peopleCounter];
         
         ABRecordID idContact = ABRecordGetRecordID(aPerson);
-        NSLog(@"-----id: %d", idContact);
-        
         NSString *sipNumber = (__bridge NSString *)ABRecordCopyValue(aPerson, kABPersonFirstNamePhoneticProperty);
         if (sipNumber != nil && [sipNumber isEqualToString: keySyncPBX])
         {
