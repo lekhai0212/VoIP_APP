@@ -44,6 +44,7 @@
     _lbNoCalls.textColor = UIColor.grayColor;
     _lbNoCalls.textAlignment = NSTextAlignmentCenter;
     _lbNoCalls.text = text_no_calls;
+    _lbNoCalls.hidden = TRUE;
     [_lbNoCalls mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.bottom.right.equalTo(self.view);
     }];
@@ -66,10 +67,6 @@
     
     _tbListCalls.hidden = YES;
     isDeleted = false;
-    
-    //  Sự kiện click trên icon Edit
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(beginEditHistoryView)
-                                                 name:editHistoryCallView object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteHistoryCallsPressed:)
                                                  name:deleteHistoryCallsChoosed object:nil];
@@ -101,12 +98,13 @@
 {
     [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
+    if (listCalls == nil) {
+        listCalls = [[NSMutableArray alloc] init];
+    }
+    [listCalls removeAllObjects];
+    [_tbListCalls reloadData];
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        if (listCalls == nil) {
-            listCalls = [[NSMutableArray alloc] init];
-        }
-        [listCalls removeAllObjects];
-        
         NSArray *tmpArr = [NSDatabase getHistoryCallListOfUser:USERNAME isMissed: false];
         [listCalls addObjectsFromArray: tmpArr];
         
@@ -127,12 +125,6 @@
     });
 }
 
-//  Click trên button Edit
-- (void)beginEditHistoryView {
-    isDeleted = true;
-    [_tbListCalls reloadData];
-}
-
 //  Get lại danh sách các cuộc gọi sau khi xoá
 - (void)reGetListCallsForHistory {
     [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
@@ -151,6 +143,10 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (listCalls.count == 0) {
+        NSLog(@"LUPA");
+    }
+    
     static NSString *identifier = @"HistoryCallCell";
     HistoryCallCell *cell = (HistoryCallCell *)[tableView dequeueReusableCellWithIdentifier: identifier];
     if (cell == nil) {
@@ -391,6 +387,7 @@
 }
 
 - (void)cancelDeleteCallHistory {
+    return;
     isDeleted = NO;
     [listDelete removeAllObjects];
     [_tbListCalls reloadData];

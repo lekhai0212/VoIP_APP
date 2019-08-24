@@ -64,9 +64,6 @@
     
     [self getMissedHistoryCallForUser];
     
-    //  Sự kiện click trên icon Edit
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(beginEditHistoryView)
-                                                 name:editHistoryCallView object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteHistoryCallsPressed:)
                                                  name:deleteHistoryCallsChoosed object:nil];
@@ -94,14 +91,14 @@
 {
     [WriteLogsUtils writeLogContent:SFM(@"[%s]", __FUNCTION__) toFilePath:[LinphoneAppDelegate sharedInstance].logFilePath];
     
+    if (listCalls == nil) {
+        listCalls = [[NSMutableArray alloc] init];
+    }
+    [listCalls removeAllObjects];
+    [_tbListCalls reloadData];
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        if (listCalls == nil) {
-            listCalls = [[NSMutableArray alloc] init];
-        }
-        [listCalls removeAllObjects];
-        
         [listCalls addObjectsFromArray: [NSDatabase getHistoryCallListOfUser:USERNAME isMissed: true]];
-        
         dispatch_async(dispatch_get_main_queue(), ^{
             if (listCalls.count == 0) {
                 _tbListCalls.hidden = YES;
@@ -117,12 +114,6 @@
             }
         });
     });
-}
-
-//  Click trên button Edit
-- (void)beginEditHistoryView {
-    isDeleted = true;
-    [_tbListCalls reloadData];
 }
 
 //  Click trên button xoá
@@ -150,6 +141,9 @@
 
 #pragma mark - UITableview
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    if (listCalls.count == 0) {
+        NSLog(@"LUPA");
+    }
     return listCalls.count;
 }
 
@@ -160,6 +154,9 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     static NSString *identifier = @"HistoryCallCell";
     
+    if (listCalls.count == 0) {
+        NSLog(@"LUPA");
+    }
     HistoryCallCell *cell = (HistoryCallCell *)[tableView dequeueReusableCellWithIdentifier:identifier];
     if (cell == nil) {
         NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"HistoryCallCell" owner:self options:nil];
@@ -403,6 +400,7 @@
 }
 
 - (void)cancelDeleteCallHistory {
+    return;
     isDeleted = NO;
     [listDelete removeAllObjects];
     [_tbListCalls reloadData];

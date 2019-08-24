@@ -242,7 +242,6 @@
 #define k11SendMailAfterSaveConversation    @"k11SendMailAfterSaveConversation"
 
 #define finishLoadContacts      @"finishLoadContacts"
-#define editHistoryCallView     @"editHistoryCallView"
 #define finishRemoveHistoryCall @"finishRemoveHistoryCall"
 #define reloadHistoryCall       @"reloadHistoryCall"
 #define syncPBXContactsFinish   @"syncPBXContactsFinish"
